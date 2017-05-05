@@ -60,6 +60,7 @@ void IntroPage::initializePage() {
     // send a signal to check for drives
     emit driveListRequested();
 }
+
 bool IntroPage::isComplete() const {
     // this should return false unless we have a non-empty result from
     // GetDevices()
@@ -155,10 +156,11 @@ KewlPage::KewlPage(QWidget *parent)
 
 void KewlPage::initializePage()
 {
-    qDebug() << "drive name: " << selected_drive << ", index: " << selected_drive->device_num;
+    qDebug() << "drive name: " << selected_drive->name << ", index: " << selected_drive->device_num;
 }
 
 bool KewlPage::validatePage() {
+    qDebug() << "in validatePage";
     if (selected_drive == NULL) {
         qDebug() << "ERROR: no drive selected";
     } else {

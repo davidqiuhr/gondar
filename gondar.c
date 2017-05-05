@@ -22,6 +22,9 @@ but inherits that project's license should it be distributed.
 #include "shared.h"
 #include "deviceguy.h"
 
+//TODO(kendall): not sure if i actually need this alias; what does it clarify?
+#define REGKEY_HKLM                 HKEY_LOCAL_MACHINE
+
 /* Convenient to have around */
 #define KB                   1024LL
 #define MB                1048576LL
@@ -178,6 +181,120 @@ DECLSPEC_IMPORT CONFIGRET WINAPI CM_Get_Parent(PDEVINST pdnDevInst, DEVINST dnDe
 DECLSPEC_IMPORT CONFIGRET WINAPI CM_Get_Sibling(PDEVINST pdnDevInst, DEVINST dnDevInst, ULONG ulFlags);
 // This last one is unknown from MinGW32 and needs to be fetched from the DLL
 PF_TYPE_DECL(WINAPI, CONFIGRET, CM_Get_DevNode_Registry_PropertyA, (DEVINST, ULONG, PULONG, PVOID, PULONG, ULONG));
+
+//from registry.c
+/* Read a generic registry key value. If a short key_name is used, assume that it belongs to
+   the application and create the app subkey if required */
+static __inline BOOL _GetRegistryKey(HKEY key_root, const char* key_name, DWORD reg_type, LPBYTE dest, DWORD dest_size)
+{
+	const char software_prefix[] = "SOFTWARE\\";
+	char long_key_name[MAX_PATH] = { 0 };
+	BOOL r = FALSE;
+	size_t i;
+	LONG s;
+	HKEY hSoftware = NULL, hApp = NULL;
+	DWORD dwDisp, dwType = -1, dwSize = dest_size;
+
+	memset(dest, 0, dest_size);
+
+	if (key_name == NULL)
+		return FALSE;
+
+	for (i=safe_strlen(key_name); i>0; i--) {
+		if (key_name[i] == '\\')
+			break;
+	}
+
+	if (i != 0) {
+		// Prefix with "SOFTWARE" if needed
+		if (_strnicmp(key_name, software_prefix, sizeof(software_prefix) - 1) != 0) {
+			strcpy(long_key_name, software_prefix);
+			safe_strcat(long_key_name, sizeof(long_key_name), key_name);
+			long_key_name[sizeof(software_prefix) + i - 1] = 0;
+		} else {
+			safe_strcpy(long_key_name, sizeof(long_key_name), key_name);
+			long_key_name[i] = 0;
+		}
+		i++;
+		if (RegOpenKeyExA(key_root, long_key_name, 0, KEY_READ, &hApp) != ERROR_SUCCESS) {
+			hApp = NULL;
+			goto out;
+		}
+	} else {
+		if (RegOpenKeyExA(key_root, "SOFTWARE", 0, KEY_READ|KEY_CREATE_SUB_KEY, &hSoftware) != ERROR_SUCCESS) {
+			hSoftware = NULL;
+			goto out;
+		}
+    //TODO(kendall): what should the official name of this tool be?
+		if (RegCreateKeyExA(hSoftware, "Neverware\\Gondar", 0, NULL, 0,
+			KEY_SET_VALUE | KEY_QUERY_VALUE | KEY_CREATE_SUB_KEY, NULL, &hApp, &dwDisp) != ERROR_SUCCESS) {
+			hApp = NULL;
+			goto out;
+		}
+	}
+
+	s = RegQueryValueExA(hApp, &key_name[i], NULL, &dwType, (LPBYTE)dest, &dwSize);
+	// No key means default value of 0 or empty string
+	if ((s == ERROR_FILE_NOT_FOUND) || ((s == ERROR_SUCCESS) && (dwType == reg_type) && (dwSize > 0))) {
+		r = TRUE;
+	}
+out:
+	if (hSoftware != NULL)
+		RegCloseKey(hSoftware);
+	if (hApp != NULL)
+		RegCloseKey(hApp);
+	return r;
+}
+
+#define GetRegistryKey32(root, key, pval) _GetRegistryKey(root, key, REG_DWORD, (LPBYTE)pval, sizeof(DWORD))
+
+static __inline int32_t ReadRegistryKey32(HKEY root, const char* key) {
+	DWORD val;
+	GetRegistryKey32(root, key, &val);
+	return (int32_t)val;
+}
+// from stdfn.c
+/*
+ * Returns true if:
+ * 1. The OS supports UAC, UAC is on, and the current process runs elevated, or
+ * 2. The OS doesn't support UAC or UAC is off, and the process is being run by a member of the admin group
+ */
+//TODO(kendall): include whatever this includes
+BOOL IsCurrentProcessElevated()
+{
+  BOOL r = FALSE;
+  DWORD size;
+  HANDLE token = INVALID_HANDLE_VALUE;
+  TOKEN_ELEVATION te;
+  SID_IDENTIFIER_AUTHORITY auth = { SECURITY_NT_AUTHORITY };
+  PSID psid;
+
+  if (ReadRegistryKey32(REGKEY_HKLM, "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\EnableLUA") == 1) {
+    printf("Note: UAC is active");
+    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &token)) {
+      printf("Could not get current process token:");
+      goto out;
+    }
+    if (!GetTokenInformation(token, TokenElevation, &te, sizeof(te), &size)) {
+      printf("Could not get token information:");
+      goto out;
+    }
+    r = (te.TokenIsElevated != 0);
+  }
+  else {
+    printf("Note: UAC is either disabled or not available");
+    if (!AllocateAndInitializeSid(&auth, 2, SECURITY_BUILTIN_DOMAIN_RID,
+      DOMAIN_ALIAS_RID_ADMINS, 0, 0, 0, 0, 0, 0, &psid))
+      goto out;
+    if (!CheckTokenMembership(NULL, psid, &r))
+      r = FALSE;
+    FreeSid(psid);
+  }
+
+out:
+  safe_closehandle(token);
+  return r;
+}
 
 // from drive.c
 /*
@@ -787,6 +904,13 @@ out:
 	return ret;
 }
 #define get_token_data_file(token, filename) get_token_data_file_indexed(token, filename, 1)
+
+// Could have used a #define, but this is clearer
+BOOL GetDriveLetters(DWORD DriveIndex, char* drive_letters)
+{
+  return _GetDriveLettersAndType(DriveIndex, drive_letters, NULL);
+}
+
 /*
  * Return the drive letter and volume label
  * If the drive doesn't have a volume assigned, space is returned for the letter
@@ -1118,7 +1242,6 @@ BOOL right_to_left_mode = FALSE;
 
 char app_dir[512];
 char system_dir[512];
-char APPLICATION_NAME[] = "hope";
 // ^ new stuff for detecting devices
 
 /* We need a redef of these MS structure */
@@ -1843,7 +1966,7 @@ BOOL RefreshDriveLayout(HANDLE hDrive)
   } \
   DriveIndex -= DRIVE_INDEX_MIN; } while (0)
 
-bool WriteImage(HANDLE source_img, HANDLE phys_disk) {
+BOOL WriteImage(HANDLE source_img, HANDLE phys_disk) {
     return 0;
 }
 
@@ -2009,12 +2132,6 @@ int GetDriveNumber(HANDLE hDrive)
     return -1;
   }
   return r;
-}
-
-// Could have used a #define, but this is clearer
-BOOL GetDriveLetters(DWORD DriveIndex, char* drive_letters)
-{
-  return _GetDriveLettersAndType(DriveIndex, drive_letters, NULL);
 }
 
 DeviceGuyList * GetDeviceList() {
