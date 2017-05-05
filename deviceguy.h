@@ -10,6 +10,7 @@ A linkedlist of device info passed between the C and C++ layer
 
 #include <inttypes.h>
 
+//TODO(kendall): rename to something more thoughtful
 typedef struct DeviceGuy {
     uint32_t device_num;
     const char * name;
