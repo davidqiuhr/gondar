@@ -17,11 +17,4 @@ int main(int argc, char *argv[])
     GondarWizard wizard;
     wizard.show();
     return app.exec();
-    /*
-    DeviceGuyList * devlist = GetDeviceList();
-    DeviceGuyList_print(devlist);
-    char * image_path = "c:\\cloudready.bin";
-    Install(devlist->head, image_path);
-    */
-    return 0;
 }
