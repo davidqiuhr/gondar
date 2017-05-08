@@ -6,8 +6,8 @@ issue: https://github.com/mxe/mxe/issues/1762
 
 to build for linux:
 
-   qmake
-   make
+    qmake
+    make
 
 to build for windows:
 run the command included in winqmake
