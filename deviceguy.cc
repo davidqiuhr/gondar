@@ -8,32 +8,28 @@
 
 #include "shared.h"
 
-const uint32_t MAX_NAME_LENGTH = 64;
-
-DeviceGuy * DeviceGuy_init(uint32_t device_num, char * name) {
-    DeviceGuy * self = malloc(sizeof(DeviceGuy));
+DeviceGuy * DeviceGuy_init(uint32_t device_num, const char * name) {
+    DeviceGuy * self = new DeviceGuy();
     memset(self, 0, sizeof(DeviceGuy));
     self->device_num = device_num;
     // the name that came in is just a temporary buffer; we'll need to strcpy
-    self->name = malloc(MAX_NAME_LENGTH); 
-    memset(self->name, 0, MAX_NAME_LENGTH);
-    // maybe my strcpy is bad?
-    strcpy(self->name, name);
-    printf("kendall: new deviceguy; device_num=%d, name=%s, next=%d, prev=%d\n",
+    strncpy(self->name, name, MAX_NAME_LENGTH);
+    self->name[MAX_NAME_LENGTH - 1] = '\0';
+    printf("kendall: new deviceguy; device_num=%d, name=%s, next=%p, prev=%p\n",
             self->device_num, self->name, self->next, self->prev);
     return self;
 }
 
 DeviceGuyList * DeviceGuyList_init() {
-    DeviceGuyList * self = malloc(sizeof(DeviceGuyList));
+    DeviceGuyList * self = new DeviceGuyList();
     memset(self, 0, sizeof(DeviceGuyList));
     self->head = NULL;
     self->tail = NULL;
     return self;
 }
 
-void DeviceGuyList_append(DeviceGuyList * self, uint32_t device_num, char * name) {
-    printf("kendall: in append with self=%d, device_num=%d, name=%s\n", self, device_num, name);
+void DeviceGuyList_append(DeviceGuyList * self, uint32_t device_num, const char * name) {
+    printf("kendall: in append with self=%p, device_num=%d, name=%s\n", self, device_num, name);
     DeviceGuy * newguy = DeviceGuy_init(device_num, name);
     if (self->head == NULL) {
         //FIXME(kendall): when i set self->head to newguy, everything breaks 
@@ -82,9 +78,8 @@ void DeviceGuyList_free(DeviceGuyList * self) {
     DeviceGuy * next;
     while (itr != NULL) {
         next = itr->next; 
-        free(itr->name);
-        free(itr);
+        delete itr;
         itr = next;
     }
-    free(self);
+    delete self;
 }

@@ -173,7 +173,8 @@ void KewlPage::writeToDrive() {
     if (!isWriting) {
         qDebug() << "actually starting install!";
         isWriting = true;
-        Install(selected_drive, "c:\\cloudready.bin");
+        char image_path[] = "c:\\cloudready.bin";
+        Install(selected_drive, image_path);
         qDebug() << "install call returned";
         writeFinished = true;
     }

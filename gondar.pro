@@ -10,13 +10,14 @@ HEADERS       = gondarwizard.h \
 SOURCES       = gondarwizard.cc \
                 downloader.cc \
                 main.cc \
-                deviceguy.c
+                deviceguy.cc
 RESOURCES     = gondarwizard.qrc
 
 win32 {
   INCLUDEPATH += ms-sys/inc
   SOURCES += gondar.c
 } else {
+  QMAKE_CXXFLAGS += -Wmissing-declarations
   SOURCES += stubs.cc  
 }
 
