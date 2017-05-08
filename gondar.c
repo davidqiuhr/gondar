@@ -365,7 +365,7 @@ static BOOL _GetDriveLettersAndType(DWORD DriveIndex, char* drive_letters, UINT*
 			continue;
 		}
 
-		drive_number = GetDriveNumber(hDrive, logical_drive);
+		drive_number = GetDriveNumber(hDrive);
 		safe_closehandle(hDrive);
 		if (drive_number == DriveIndex) {
 			r = TRUE;
