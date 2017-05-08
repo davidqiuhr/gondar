@@ -179,6 +179,9 @@ DECLSPEC_IMPORT CONFIGRET WINAPI CM_Get_Sibling(PDEVINST pdnDevInst, DEVINST dnD
 // This last one is unknown from MinGW32 and needs to be fetched from the DLL
 PF_TYPE_DECL(WINAPI, CONFIGRET, CM_Get_DevNode_Registry_PropertyA, (DEVINST, ULONG, PULONG, PVOID, PULONG, ULONG));
 
+static int GetDriveNumber(HANDLE hDrive);
+static BOOL GetDriveLetters(DWORD DriveIndex, char* drive_letters);
+
 // from drive.c
 /*
  * Open a drive or volume with optional write and lock access
