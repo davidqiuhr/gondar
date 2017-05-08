@@ -1195,10 +1195,8 @@ static void GetDevices(DeviceGuyList * device_list)
   // Hash table and String Array used to match a Device ID with the parent hub's Device Interface Path
   htab_table htab_devid = HTAB_EMPTY;
   StrArray dev_if_path;
-  char letter_name[] = " (?:)";
   char drive_name[] = "?:\\";
-  char uefi_togo_check[] = "?:\\EFI\\Rufus\\ntfs_x64.efi";
-  BOOL r = FALSE, found = FALSE, post_backslash;
+  BOOL post_backslash;
   HDEVINFO dev_info = NULL;
   SP_DEVINFO_DATA dev_info_data;
   SP_DEVICE_INTERFACE_DATA devint_data;
@@ -1208,9 +1206,9 @@ static void GetDevices(DeviceGuyList * device_list)
   DWORD uasp_start = ARRAYSIZE(usbstor_name), card_start = ARRAYSIZE(genstor_name);
   ULONG list_size[ARRAYSIZE(usbstor_name)] = { 0 }, list_start[ARRAYSIZE(usbstor_name)] = { 0 }, full_list_size, ulFlags;
   HANDLE hDrive;
-  int s, score, drive_number, remove_drive;
-  char drive_letters[27], *device_id, *devid_list = NULL, entry_msg[128];
-  char *p, *label, *entry, buffer[MAX_PATH], str[MAX_PATH], *method_str;
+  int s, score, drive_number;
+  char drive_letters[27], *device_id, *devid_list = NULL;
+  char *p, *label, buffer[MAX_PATH], str[MAX_PATH], *method_str;
   usb_device_props props;
 
   StrArrayCreate(&dev_if_path, 128);
@@ -1845,10 +1843,6 @@ static BOOL RefreshDriveLayout(HANDLE hDrive)
     goto out; \
   } \
   DriveIndex -= DRIVE_INDEX_MIN; } while (0)
-
-static bool WriteImage(HANDLE source_img, HANDLE phys_disk) {
-    return 0;
-}
 
 // not really from drive.c, but more or less.
 /*
