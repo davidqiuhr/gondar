@@ -205,8 +205,8 @@ KewlPage::KewlPage(QWidget *parent)
     : QWizardPage(parent)
 {
     setTitle(tr("Writing to disk will like, totally wipe your drive, dude."));
-    QObject::connect(this, SIGNAL(WriteDriveRequested()),
-                     this, SLOT(WriteToDrive()));
+    QObject::connect(this, SIGNAL(writeDriveRequested()),
+                     this, SLOT(writeToDrive()));
 }
 
 void KewlPage::initializePage()
@@ -219,7 +219,8 @@ bool KewlPage::validatePage() {
     if (selected_drive == NULL) {
         qDebug() << "ERROR: no drive selected";
     } else {
-        emit WriteDriveRequested();
+        qDebug() << "emitting WriteDriveRequested()";
+        emit writeDriveRequested();
     }
     return writeFinished;
 }

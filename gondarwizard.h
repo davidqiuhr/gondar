@@ -119,7 +119,7 @@ protected:
 public slots:
     void writeToDrive();
 signals:
-    void WriteDriveRequested();
+    void writeDriveRequested();
 };
 
 #endif /* GONDARWIZARD */
