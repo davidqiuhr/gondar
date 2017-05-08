@@ -17,10 +17,16 @@ win32 {
   INCLUDEPATH += ms-sys/inc
   SOURCES += gondar.c
 } else {
-  QMAKE_CXXFLAGS += -Wmissing-declarations
   SOURCES += stubs.cc  
 }
 
+*gcc* {
+  QMAKE_CFLAGS += -Wextra -Wmissing-declarations
+}
+
+*g++* {
+  QMAKE_CXXFLAGS += -Wextra -Wmissing-declarations
+}
 
 # install
 target.path = .

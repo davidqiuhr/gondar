@@ -260,7 +260,7 @@ static __inline int32_t ReadRegistryKey32(HKEY root, const char* key) {
  * 2. The OS doesn't support UAC or UAC is off, and the process is being run by a member of the admin group
  */
 //TODO(kendall): include whatever this includes
-BOOL IsCurrentProcessElevated()
+static BOOL IsCurrentProcessElevated()
 {
   BOOL r = FALSE;
   DWORD size;
@@ -371,7 +371,7 @@ out:
  * Return the path to access the physical drive, or NULL on error.
  * The string is allocated and must be freed (to ensure concurrent access)
  */
-char* GetPhysicalName(DWORD DriveIndex)
+static char* GetPhysicalName(DWORD DriveIndex)
 { 
   BOOL success = FALSE;
   char physical_name[24];
@@ -386,7 +386,7 @@ out:
 /*
  * Return a handle to the physical drive identified by DriveIndex
  */
-HANDLE GetPhysicalHandle(DWORD DriveIndex, BOOL bLockDrive, BOOL bWriteAccess)
+static HANDLE GetPhysicalHandle(DWORD DriveIndex, BOOL bLockDrive, BOOL bWriteAccess)
 {
   HANDLE hPhysical = INVALID_HANDLE_VALUE;
   char* PhysicalPath = GetPhysicalName(DriveIndex);
@@ -398,7 +398,7 @@ HANDLE GetPhysicalHandle(DWORD DriveIndex, BOOL bLockDrive, BOOL bWriteAccess)
 /*
  * Return the drive size
  */
-uint64_t GetDriveSize(DWORD DriveIndex)
+static uint64_t GetDriveSize(DWORD DriveIndex)
 { 
   BOOL r;
   HANDLE hPhysical;
@@ -418,6 +418,53 @@ uint64_t GetDriveSize(DWORD DriveIndex)
   return DiskGeometry->DiskSize.QuadPart;
 }
 
+/* We need a redef of these MS structure */
+typedef struct {
+  DWORD DeviceType;
+  ULONG DeviceNumber;
+  ULONG PartitionNumber;
+} STORAGE_DEVICE_NUMBER_REDEF;
+
+typedef struct {
+  DWORD NumberOfDiskExtents;
+  // The one from MS uses ANYSIZE_ARRAY, which can lead to all kind of problems
+  DISK_EXTENT Extents[8];
+} VOLUME_DISK_EXTENTS_REDEF;
+
+/*
+ * Who would have thought that Microsoft would make it so unbelievably hard to
+ * get the frickin' device number for a drive? You have to use TWO different
+ * methods to have a chance to get it!
+ */
+//FIXME(kendall): is path really just for debugging?
+static int GetDriveNumber(HANDLE hDrive)
+{
+  STORAGE_DEVICE_NUMBER_REDEF DeviceNumber;
+  VOLUME_DISK_EXTENTS_REDEF DiskExtents;
+  DWORD size;
+  int r = -1;
+
+  if (!DeviceIoControl(hDrive, IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS, NULL, 0,
+    &DiskExtents, sizeof(DiskExtents), &size, NULL) || (size <= 0) || (DiskExtents.NumberOfDiskExtents < 1) ) {
+    // DiskExtents are NO_GO (which is the case for external USB HDDs...)
+    if(!DeviceIoControl(hDrive, IOCTL_STORAGE_GET_DEVICE_NUMBER, NULL, 0,
+      &DeviceNumber, sizeof(DeviceNumber), &size, NULL ) || (size <= 0)) {
+      printf("Could not get device number for device: ");
+      return -1;
+    }
+    r = (int)DeviceNumber.DeviceNumber;
+  } else if (DiskExtents.NumberOfDiskExtents >= 2) {
+    printf("Ignoring drive as it spans multiple disks (RAID?)");
+    return -1;
+  } else {
+    r = (int)DiskExtents.Extents[0].DiskNumber;
+  }
+  if (r >= MAX_DRIVES) {
+    printf("Device Number for device is too big (%d) - ignoring device", r);
+    return -1;
+  }
+  return r;
+}
 // some kewl heuristics from smart.c
 
 /*
@@ -482,7 +529,7 @@ static BOOL _GetDriveLettersAndType(DWORD DriveIndex, char* drive_letters, UINT*
 			continue;
 		}
 
-		drive_number = GetDriveNumber(hDrive, logical_drive);
+		drive_number = GetDriveNumber(hDrive);
 		safe_closehandle(hDrive);
 		if (drive_number == DriveIndex) {
 			r = TRUE;
@@ -500,7 +547,7 @@ out:
 	return r;
 }
 // There's already a GetDriveType in the Windows API
-UINT GetDriveTypeFromIndex(DWORD DriveIndex)
+static UINT GetDriveTypeFromIndex(DWORD DriveIndex)
 {
 	UINT drive_type;
 	_GetDriveLettersAndType(DriveIndex, NULL, &drive_type);
@@ -549,7 +596,7 @@ UINT GetDriveTypeFromIndex(DWORD DriveIndex)
  *   from the above) => there is no magic API we can query that will tell us what we're
  *   really looking at.
  */
-int IsHDD(DWORD DriveIndex, uint16_t vid, uint16_t pid, const char* strid)
+static int IsHDD(DWORD DriveIndex, uint16_t vid, uint16_t pid, const char* strid)
 {
 	int score = 0;
 	size_t i, mlen, ilen;
@@ -860,7 +907,7 @@ static wchar_t* get_token_data_line(const wchar_t* wtoken, wchar_t* wline)
  * Parse a file (ANSI or UTF-8 or UTF-16) and return the data for the 'index'th occurrence of 'token'
  * The returned string is UTF-8 and MUST be freed by the caller
  */
-char* get_token_data_file_indexed(const char* token, const char* filename, int index)
+static char* get_token_data_file_indexed(const char* token, const char* filename, int index)
 {
 	int i = 0;
 	wchar_t *wtoken = NULL, *wdata= NULL, *wfilename = NULL;
@@ -906,7 +953,7 @@ out:
 #define get_token_data_file(token, filename) get_token_data_file_indexed(token, filename, 1)
 
 // Could have used a #define, but this is clearer
-BOOL GetDriveLetters(DWORD DriveIndex, char* drive_letters)
+static BOOL GetDriveLetters(DWORD DriveIndex, char* drive_letters)
 {
   return _GetDriveLettersAndType(DriveIndex, drive_letters, NULL);
 }
@@ -915,7 +962,7 @@ BOOL GetDriveLetters(DWORD DriveIndex, char* drive_letters)
  * Return the drive letter and volume label
  * If the drive doesn't have a volume assigned, space is returned for the letter
  */
-BOOL GetDriveLabel(DWORD DriveIndex, char* letters, char** label)
+static BOOL GetDriveLabel(DWORD DriveIndex, char* letters, char** label)
 {
 	HANDLE hPhysical;
 	DWORD size;
@@ -961,7 +1008,7 @@ BOOL GetDriveLabel(DWORD DriveIndex, char* letters, char** label)
 /*
  * GET_DRIVE_GEOMETRY is used to tell if there is an actual media
  */
-BOOL IsMediaPresent(DWORD DriveIndex)
+static BOOL IsMediaPresent(DWORD DriveIndex)
 {
   BOOL r;
   HANDLE hPhysical;
@@ -1010,7 +1057,7 @@ typedef DWORD DEVNODE, DEVINST;
 /*
  * String array manipulation
  */
-void StrArrayCreate(StrArray* arr, uint32_t initial_size)
+static void StrArrayCreate(StrArray* arr, uint32_t initial_size)
 { 
   if (arr == NULL) return; 
   arr->Max = initial_size; arr->Index = 0;
@@ -1019,7 +1066,7 @@ void StrArrayCreate(StrArray* arr, uint32_t initial_size)
     printf("Could not allocate string array\n");
 }
 
-int32_t StrArrayAdd(StrArray* arr, const char* str, BOOL duplicate)
+static int32_t StrArrayAdd(StrArray* arr, const char* str, BOOL duplicate)
 { 
   char** old_table;
   if ((arr == NULL) || (arr->String == NULL) || (str == NULL))  
@@ -1042,7 +1089,7 @@ int32_t StrArrayAdd(StrArray* arr, const char* str, BOOL duplicate)
   return arr->Index++;
 }
 
-void StrArrayClear(StrArray* arr)
+static void StrArrayClear(StrArray* arr)
 {
   size_t i;
   if ((arr == NULL) || (arr->String == NULL))
@@ -1053,7 +1100,7 @@ void StrArrayClear(StrArray* arr)
   arr->Index = 0;
 }
 
-void StrArrayDestroy(StrArray* arr)
+static void StrArrayDestroy(StrArray* arr)
 {
   StrArrayClear(arr);
   if (arr != NULL)
@@ -1083,7 +1130,7 @@ static uint32_t isprime(uint32_t number)
  * This is done for more effective indexing as explained in the
  * comment for the hash function.
  */
-BOOL htab_create(uint32_t nel, htab_table* htab)
+static BOOL htab_create(uint32_t nel, htab_table* htab)
 {
   if (htab == NULL) {
     return FALSE;
@@ -1112,7 +1159,7 @@ BOOL htab_create(uint32_t nel, htab_table* htab)
 }
 
 /* After using the hash table it has to be destroyed.  */
-void htab_destroy(htab_table* htab)
+static void htab_destroy(htab_table* htab)
 {
   size_t i;
 
@@ -1147,7 +1194,7 @@ static __inline void ToUpper(char* str)
  * the stored and the parameter value. This helps to prevent unnecessary
  * expensive calls of strcmp.
  */
-uint32_t htab_hash(char* str, htab_table* htab)
+static uint32_t htab_hash(char* str, htab_table* htab)
 {
   uint32_t hval, hval2;
   uint32_t idx;
@@ -1244,13 +1291,6 @@ char app_dir[512];
 char system_dir[512];
 // ^ new stuff for detecting devices
 
-/* We need a redef of these MS structure */
-typedef struct {
-  DWORD DeviceType;
-  ULONG DeviceNumber;
-  ULONG PartitionNumber;
-} STORAGE_DEVICE_NUMBER_REDEF;
-
 /*
  * Working with drive indexes quite risky (left unchecked,inadvertently passing 0 as
  * index would return a handle to C:, which we might then proceed to unknowingly
@@ -1264,12 +1304,6 @@ typedef struct {
   } \
   DriveIndex -= DRIVE_INDEX_MIN; } while (0)
 
-typedef struct {
-  DWORD NumberOfDiskExtents;
-  // The one from MS uses ANYSIZE_ARRAY, which can lead to all kind of problems
-  DISK_EXTENT Extents[8];
-} VOLUME_DISK_EXTENTS_REDEF;
-
 DWORD FormatStatus;
 
 char drive_letters[27];
@@ -1278,7 +1312,7 @@ char drive_letters[27];
 /*
  * Refresh the list of USB devices
  */
-void GetDevices(DeviceGuyList * device_list)
+static void GetDevices(DeviceGuyList * device_list)
 {
   DWORD drive_index = -1; // this value is set for each device as we iterate.
                           // the value initialized here should never be used
@@ -1746,7 +1780,7 @@ out:
 /*
  * Unmount of volume using the DISMOUNT_VOLUME ioctl
  */
-BOOL UnmountVolume(HANDLE hDrive)
+static BOOL UnmountVolume(HANDLE hDrive)
 {
   DWORD size;
 
@@ -1763,7 +1797,7 @@ BOOL UnmountVolume(HANDLE hDrive)
  * See http://msdn.microsoft.com/en-us/library/cc542456.aspx
  * The returned string is allocated and must be freed
  */
-char* GetLogicalName(DWORD DriveIndex, BOOL bKeepTrailingBackslash, BOOL bSilent)
+static char* GetLogicalName(DWORD DriveIndex, BOOL bKeepTrailingBackslash, BOOL bSilent)
 {
   BOOL success = FALSE;
   char volume_name[MAX_PATH];
@@ -1925,7 +1959,7 @@ out:
  * Returns INVALID_HANDLE_VALUE on error or NULL if no logical path exists (typical
  * of unpartitioned drives)
  */
-HANDLE GetLogicalHandle(DWORD DriveIndex, BOOL bLockDrive, BOOL bWriteAccess, BOOL bWriteShare)
+static HANDLE GetLogicalHandle(DWORD DriveIndex, BOOL bLockDrive, BOOL bWriteAccess, BOOL bWriteShare)
 {
   HANDLE hLogical = INVALID_HANDLE_VALUE;
   char* LogicalPath = GetLogicalName(DriveIndex, FALSE, FALSE);
@@ -1941,7 +1975,7 @@ HANDLE GetLogicalHandle(DWORD DriveIndex, BOOL bLockDrive, BOOL bWriteAccess, BO
 }
 
 //from drive.c
-BOOL RefreshDriveLayout(HANDLE hDrive)
+static BOOL RefreshDriveLayout(HANDLE hDrive)
 {
   BOOL r;
   DWORD size;
@@ -1966,7 +2000,7 @@ BOOL RefreshDriveLayout(HANDLE hDrive)
   } \
   DriveIndex -= DRIVE_INDEX_MIN; } while (0)
 
-BOOL WriteImage(HANDLE source_img, HANDLE phys_disk) {
+static BOOL WriteImage(HANDLE source_img, HANDLE phys_disk) {
     return 0;
 }
 
@@ -1977,7 +2011,7 @@ BOOL WriteImage(HANDLE source_img, HANDLE phys_disk) {
 
 // ok, this could be useful in general.  i can return DiskGeometry->whatever
 
-uint64_t GetSectorSize(DWORD DriveIndex)
+static uint64_t GetSectorSize(DWORD DriveIndex)
 {
   BOOL r;
   HANDLE hPhysical;
@@ -2097,41 +2131,6 @@ static BOOL WriteDrive(HANDLE hPhysicalDrive, HANDLE hSourceImage, uint64_t sect
 out:
 	safe_mm_free(buffer);
 	return ret;
-}
-
-/*
- * Who would have thought that Microsoft would make it so unbelievably hard to
- * get the frickin' device number for a drive? You have to use TWO different
- * methods to have a chance to get it!
- */
-//FIXME(kendall): is path really just for debugging?
-int GetDriveNumber(HANDLE hDrive)
-{
-  STORAGE_DEVICE_NUMBER_REDEF DeviceNumber;
-  VOLUME_DISK_EXTENTS_REDEF DiskExtents;
-  DWORD size;
-  int r = -1;
-
-  if (!DeviceIoControl(hDrive, IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS, NULL, 0,
-    &DiskExtents, sizeof(DiskExtents), &size, NULL) || (size <= 0) || (DiskExtents.NumberOfDiskExtents < 1) ) {
-    // DiskExtents are NO_GO (which is the case for external USB HDDs...)
-    if(!DeviceIoControl(hDrive, IOCTL_STORAGE_GET_DEVICE_NUMBER, NULL, 0,
-      &DeviceNumber, sizeof(DeviceNumber), &size, NULL ) || (size <= 0)) {
-      printf("Could not get device number for device: ");
-      return -1;
-    }
-    r = (int)DeviceNumber.DeviceNumber;
-  } else if (DiskExtents.NumberOfDiskExtents >= 2) {
-    printf("Ignoring drive as it spans multiple disks (RAID?)");
-    return -1;
-  } else {
-    r = (int)DiskExtents.Extents[0].DiskNumber;
-  }
-  if (r >= MAX_DRIVES) {
-    printf("Device Number for device is too big (%d) - ignoring device", r);
-    return -1;
-  }
-  return r;
 }
 
 DeviceGuyList * GetDeviceList() {

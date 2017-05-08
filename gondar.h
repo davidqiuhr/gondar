@@ -6,6 +6,6 @@
 
 DeviceGuyList * GetDeviceList();
 void Install(DeviceGuy * target_device, char * image_path);
-BOOL IsCurrentProcessElevated();
+static BOOL IsCurrentProcessElevated();
 
 #endif
