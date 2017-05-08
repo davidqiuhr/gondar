@@ -47,7 +47,7 @@ AdminCheckPage::AdminCheckPage(QWidget *parent)
     layout->addWidget(label);
     setLayout(layout);
 
-    // the next button should be grayed out until the user inserts a USB
+    // the next button is grayed out if user does not have appropriate rights
     QObject::connect(this, SIGNAL(isAdminRequested()),
                      this, SLOT(getIsAdmin()));
     QObject::connect(this, SIGNAL(isAdminReady()),
