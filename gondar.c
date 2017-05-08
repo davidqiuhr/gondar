@@ -260,7 +260,7 @@ static __inline int32_t ReadRegistryKey32(HKEY root, const char* key) {
  * 2. The OS doesn't support UAC or UAC is off, and the process is being run by a member of the admin group
  */
 //TODO(kendall): include whatever this includes
-static BOOL IsCurrentProcessElevated()
+BOOL IsCurrentProcessElevated()
 {
   BOOL r = FALSE;
   DWORD size;
