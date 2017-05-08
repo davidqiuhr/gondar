@@ -59,7 +59,6 @@ AdminCheckPage::AdminCheckPage(QWidget *parent)
 void AdminCheckPage::initializePage() {
     tim = new QTimer(this);
     connect(tim, SIGNAL(timeout()), SLOT(getIsAdmin()));
-    // send a signal to check for drives
     emit isAdminRequested();
 }
 
