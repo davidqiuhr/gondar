@@ -22,9 +22,6 @@ but inherits that project's license should it be distributed.
 #include "shared.h"
 #include "deviceguy.h"
 
-//TODO(kendall): not sure if i actually need this alias; what does it clarify?
-#define REGKEY_HKLM                 HKEY_LOCAL_MACHINE
-
 /* Convenient to have around */
 #define KB                   1024LL
 #define MB                1048576LL
@@ -269,7 +266,7 @@ BOOL IsCurrentProcessElevated()
   SID_IDENTIFIER_AUTHORITY auth = { SECURITY_NT_AUTHORITY };
   PSID psid;
 
-  if (ReadRegistryKey32(REGKEY_HKLM, "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\EnableLUA") == 1) {
+  if (ReadRegistryKey32(HKEY_LOCAL_MACHINE, "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\EnableLUA") == 1) {
     printf("Note: UAC is active");
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &token)) {
       printf("Could not get current process token:");
