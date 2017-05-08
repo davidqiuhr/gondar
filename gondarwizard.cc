@@ -52,6 +52,8 @@ AdminCheckPage::AdminCheckPage(QWidget *parent)
                      this, SLOT(getIsAdmin()));
     QObject::connect(this, SIGNAL(isAdminReady()),
                      this, SLOT(showIsAdmin()));
+    QObject::connect(this, SIGNAL(isNotAdminReady()),
+                     this, SLOT(showIsNotAdmin()));
 }
 
 void AdminCheckPage::initializePage() {
@@ -70,7 +72,7 @@ void AdminCheckPage::getIsAdmin() {
     is_admin = IsCurrentProcessElevated();
     if (!is_admin) {
         emit isNotAdminReady(); 
-        tim->start(1000);
+        tim->stop();
     } else {
         tim->stop();
         emit isAdminReady();
