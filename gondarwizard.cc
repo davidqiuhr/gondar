@@ -26,6 +26,7 @@ GondarButton::GondarButton(const QString & text,
 GondarWizard::GondarWizard(QWidget *parent)
     : QWizard(parent)
 {
+    addPage(new AdminCheckPage);
     addPage(new IntroPage);
     addPage(new ConclusionPage);
     addPage(new KewlPage);
