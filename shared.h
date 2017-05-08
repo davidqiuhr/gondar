@@ -12,7 +12,6 @@ files
 
 #define TRUE 1
 #define FALSE 0
-//TODO(kendall): ifndef BOOL
 #define BOOL uint32_t
 
 #define safe_sprintf(dst, count, ...) do {_snprintf(dst, count, __VA_ARGS__); (dst)[(count)-1] = 0; } while(0)

@@ -6,8 +6,6 @@
 
 DeviceGuyList * GetDeviceList();
 void Install(DeviceGuy * target_device, char * image_path);
-
-//FIXME(kendall): temp?
 BOOL IsCurrentProcessElevated();
 
 #endif
