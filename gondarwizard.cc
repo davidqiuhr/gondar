@@ -206,7 +206,7 @@ KewlPage::KewlPage(QWidget *parent)
 {
     setTitle(tr("Writing to disk will like, totally wipe your drive, dude."));
     QObject::connect(this, SIGNAL(WriteDriveRequested()),
-                     this, SLOT(WriteDrive()));
+                     this, SLOT(WriteToDrive()));
 }
 
 void KewlPage::initializePage()
