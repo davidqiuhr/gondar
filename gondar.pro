@@ -14,6 +14,7 @@ SOURCES       = gondarwizard.cc \
 RESOURCES     = gondarwizard.qrc
 
 win32 {
+  INCLUDEPATH += ms-sys/inc
   SOURCES += gondar.c
 } else {
   SOURCES += stubs.cc  
@@ -26,9 +27,6 @@ INSTALLS += target
 
 TEMPLATE = app
 TARGET = gondar
-INCLUDEPATH += .
-INCLUDEPATH += ms-sys/inc
-CFLAGS = -O0 -g
 
 win32 {
   LIBS += -lsetupapi -lole32 -lgdi32 -lwininet -lshlwapi -lcrypt32 -lwintrust -lcomdlg32 -luuid
