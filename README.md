@@ -10,7 +10,7 @@ To build for linux:
     
 To build debug:
 
-	qmake CONFIG+=debug && make
+    qmake CONFIG+=debug && make
 
 to build for windows:
 run the command included in winqmake
