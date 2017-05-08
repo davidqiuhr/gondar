@@ -1792,7 +1792,7 @@ static BOOL UnmountVolume(HANDLE hDrive)
  * See http://msdn.microsoft.com/en-us/library/cc542456.aspx
  * The returned string is allocated and must be freed
  */
-static char* GetLogicalName(DWORD DriveIndex, BOOL bKeepTrailingBackslash, BOOL bSilent)
+static char* GetLogicalName(DWORD DriveIndex, BOOL bKeepTrailingBackslash)
 {
   BOOL success = FALSE;
   char volume_name[MAX_PATH];
@@ -1957,7 +1957,7 @@ out:
 static HANDLE GetLogicalHandle(DWORD DriveIndex, BOOL bLockDrive, BOOL bWriteAccess, BOOL bWriteShare)
 {
   HANDLE hLogical = INVALID_HANDLE_VALUE;
-  char* LogicalPath = GetLogicalName(DriveIndex, FALSE, FALSE);
+  char* LogicalPath = GetLogicalName(DriveIndex, FALSE);
 
   if (LogicalPath == NULL) {
     printf("No logical drive found (unpartitioned?)\n");
