@@ -32,6 +32,59 @@ GondarWizard::GondarWizard(QWidget *parent)
     setWindowTitle(tr("Cloudready USB Creation Utility"));
 }
 
+AdminCheckPage::AdminCheckPage(QWidget *parent)
+    : QWizardPage(parent)
+{
+    setTitle(tr("Insert USB Drive"));
+    setPixmap(QWizard::WatermarkPixmap, QPixmap(":/images/frogmariachis.png"));
+
+    label = new QLabel("Please wait...");
+    is_admin = false; // assume false until we discover otherwise.
+                      // this holds the user at this screen
+
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->addWidget(label);
+    setLayout(layout);
+
+    // the next button should be grayed out until the user inserts a USB
+    QObject::connect(this, SIGNAL(isAdminRequested()),
+                     this, SLOT(getIsAdmin()));
+    QObject::connect(this, SIGNAL(isAdminReady()),
+                     this, SLOT(showIsAdmin()));
+}
+
+void AdminCheckPage::initializePage() {
+    tim = new QTimer(this);
+    connect(tim, SIGNAL(timeout()), SLOT(getIsAdmin()));
+    // send a signal to check for drives
+    emit isAdminRequested();
+}
+
+bool AdminCheckPage::isComplete() const {
+    return is_admin;
+}
+
+void AdminCheckPage::getIsAdmin() {
+    qDebug() << "kendall: getIsAdmin fires";
+    is_admin = IsCurrentProcessElevated();
+    if (!is_admin) {
+        emit isNotAdminReady(); 
+        tim->start(1000);
+    } else {
+        tim->stop();
+        emit isAdminReady();
+    }
+}
+
+void AdminCheckPage::showIsAdmin() {
+    label->setText("User has admin rights.");
+    emit completeChanged();
+}
+
+void AdminCheckPage::showIsNotAdmin() {
+    label->setText("User does not have admin rights.");
+}
+
 IntroPage::IntroPage(QWidget *parent)
     : QWizardPage(parent)
 {
