@@ -132,7 +132,6 @@ protected:
     bool validatePage() override;
 
 private:
-    QLabel *label;
     QLabel *drivesLabel;
     QGroupBox *drivesBox;
     QButtonGroup * radioGroup;

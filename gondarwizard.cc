@@ -211,7 +211,6 @@ void DeviceSelectPage::initializePage()
     // Line up widgets horizontally
     // use QVBoxLayout for vertically, H for horizontal
     QVBoxLayout *layout = new QVBoxLayout;
-    layout->addWidget(label);
     layout->addWidget(drivesLabel);
 
     radioGroup = new QButtonGroup();
