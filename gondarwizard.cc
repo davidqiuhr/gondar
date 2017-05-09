@@ -9,7 +9,7 @@ extern "C" {
   #include "deviceguy.h"
 }
 
-//FIXME(kendall): move this into the wizard and send signals to individual
+//TODO(kendall): move this into the wizard and send signals to individual
 // pages
 DeviceGuyList * drivelist = NULL;
 DeviceGuy * selected_drive = NULL;
@@ -27,8 +27,10 @@ GondarWizard::GondarWizard(QWidget *parent)
     : QWizard(parent)
 {
     addPage(new AdminCheckPage);
-    addPage(new IntroPage);
-    addPage(new ConclusionPage);
+    addPage(new ImageSelectPage);
+    addPage(new DownloadProgressPage);
+    addPage(new UsbInsertPage);
+    addPage(new DeviceSelectPage);
     addPage(new KewlPage);
     setWindowTitle(tr("Cloudready USB Creation Utility"));
 }
@@ -87,7 +89,48 @@ void AdminCheckPage::showIsNotAdmin() {
     label->setText("User does not have admin rights.");
 }
 
-IntroPage::IntroPage(QWidget *parent)
+ImageSelectPage::ImageSelectPage(QWidget *parent)
+    : QWizardPage(parent)
+{
+    setTitle(tr("Select Remote Image"));
+}
+
+void ImageSelectPage::initializePage() {
+    label = new QLabel("Target image url:");
+    urlLineEdit = new QLineEdit;
+    //TODO(kendall): make required
+    registerField("imageurl", urlLineEdit);
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->addWidget(label);
+    layout->addWidget(urlLineEdit);
+    setLayout(layout);
+}
+
+DownloadProgressPage::DownloadProgressPage(QWidget *parent)
+    : QWizardPage(parent)
+{
+    setTitle(tr("Select Remote Image"));
+    download_finished = false;
+}
+
+void DownloadProgressPage::initializePage() {
+    label = new QLabel("Downloading...");
+    qDebug() << "url = " << field("imageurl");
+    QObject::connect(&manager, SIGNAL(finished()), this, SLOT(markComplete()));
+    manager.doDownload(field("imageurl").toString());
+}
+
+void DownloadProgressPage::markComplete() {
+    download_finished = true;
+    label->setText("Download is complete.");
+    emit completeChanged(); 
+}
+
+bool DownloadProgressPage::isComplete() const {
+    return download_finished; 
+}
+
+UsbInsertPage::UsbInsertPage(QWidget *parent)
     : QWizardPage(parent)
 {
     setTitle(tr("Insert USB Drive"));
@@ -108,7 +151,7 @@ IntroPage::IntroPage(QWidget *parent)
                      this, SLOT(showDriveList()));
 }
 
-void IntroPage::initializePage() {
+void UsbInsertPage::initializePage() {
     tim = new QTimer(this);
     //tim->setSingleShot(true);
     connect(tim, SIGNAL(timeout()), SLOT(getDriveList()));
@@ -116,7 +159,7 @@ void IntroPage::initializePage() {
     emit driveListRequested();
 }
 
-bool IntroPage::isComplete() const {
+bool UsbInsertPage::isComplete() const {
     // this should return false unless we have a non-empty result from
     // GetDevices()
     if (drivelist == NULL) {
@@ -127,7 +170,7 @@ bool IntroPage::isComplete() const {
     }
 }
 
-void IntroPage::getDriveList() {
+void UsbInsertPage::getDriveList() {
     qDebug() << "kendall: getDriveList fires";
     drivelist = GetDeviceList();
     qDebug() << "kendall: we finish getting the drivelist";
@@ -141,12 +184,12 @@ void IntroPage::getDriveList() {
     }
 }
 
-void IntroPage::showDriveList() {
+void UsbInsertPage::showDriveList() {
     qDebug() << "kendall: in showDriveList";
     emit completeChanged();
 }
 
-ConclusionPage::ConclusionPage(QWidget *parent)
+DeviceSelectPage::DeviceSelectPage(QWidget *parent)
     : QWizardPage(parent)
 {
     // this page should just say 'hi how are you' while it stealthily loads
@@ -156,11 +199,8 @@ ConclusionPage::ConclusionPage(QWidget *parent)
 
 }
 
-void ConclusionPage::initializePage()
+void DeviceSelectPage::initializePage()
 {
-    label = new QLabel("Target image url:");
-    urlLineEdit = new QLineEdit;
-    registerField("imageurl", urlLineEdit);
     drivesLabel = new QLabel("Select Drive:");
     if (drivelist == NULL) {
         qDebug() << "kendall: drivelist was null?!";
@@ -171,7 +211,6 @@ void ConclusionPage::initializePage()
     // use QVBoxLayout for vertically, H for horizontal
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(label);
-    layout->addWidget(urlLineEdit);
     layout->addWidget(drivesLabel);
 
     radioGroup = new QButtonGroup();
@@ -188,13 +227,12 @@ void ConclusionPage::initializePage()
     setLayout(layout);
 }
 
-bool ConclusionPage::validatePage() {
+bool DeviceSelectPage::validatePage() {
     //TODO(kendall): check for NULL on bad cast
     GondarButton * selected = dynamic_cast<GondarButton *>(radioGroup->checkedButton());
     if (selected == NULL) {
         return false;
     } else {
-        //FIXME(kendall): what we actually want here afterall is a DeviceGuy.
         unsigned int selected_index = selected->index;
         selected_drive = DeviceGuyList_getByIndex(drivelist, selected_index);
         return true;

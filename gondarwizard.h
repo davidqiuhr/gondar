@@ -63,12 +63,46 @@ private:
     bool is_admin;
 };
 
-class IntroPage : public QWizardPage
+class ImageSelectPage : public QWizardPage
 {
     Q_OBJECT
 
 public:
-    IntroPage(QWidget *parent = 0);
+    ImageSelectPage(QWidget *parent = 0);
+
+protected:
+    void initializePage() override;
+private:
+    QLabel *label;
+    QLineEdit *urlLineEdit;
+};
+
+class DownloadProgressPage : public QWizardPage
+{
+    Q_OBJECT
+
+public:
+    DownloadProgressPage(QWidget *parent = 0);
+
+protected:
+    void initializePage() override;
+    bool isComplete() const;
+
+public slots:
+    void markComplete();
+
+private:
+    DownloadManager manager;
+    bool download_finished;
+    QLabel * label;
+};
+
+class UsbInsertPage : public QWizardPage
+{
+    Q_OBJECT
+
+public:
+    UsbInsertPage(QWidget *parent = 0);
 
 protected:
     void initializePage() override;
@@ -86,12 +120,12 @@ signals:
     void driveListReady();
 };
 
-class ConclusionPage : public QWizardPage
+class DeviceSelectPage : public QWizardPage
 {
     Q_OBJECT
 
 public:
-    ConclusionPage(QWidget *parent = 0);
+    DeviceSelectPage(QWidget *parent = 0);
 
 protected:
     void initializePage() override;
@@ -99,9 +133,7 @@ protected:
 
 private:
     QLabel *label;
-    //DownloadManager manager;
     QLabel *drivesLabel;
-    QLineEdit *urlLineEdit;
     QGroupBox *drivesBox;
     QButtonGroup * radioGroup;
 };
