@@ -24,7 +24,8 @@ public slots:
     void downloadFinished(QNetworkReply *reply);
     void sslErrors(const QList<QSslError> &errors);
 
-private:
+public signals:
+    void finished(); 
 };
 
 #endif /* DOWNLOADER_H */

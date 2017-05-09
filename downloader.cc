@@ -41,6 +41,8 @@ void DownloadManager::doDownload(const QUrl &url)
 
 QString DownloadManager::saveFileName(const QUrl &url)
 {
+    return QString("kewlimg");
+    /*
     QString path = url.path();
     QString basename = QFileInfo(path).fileName();
 
@@ -58,6 +60,7 @@ QString DownloadManager::saveFileName(const QUrl &url)
     }
 
     return basename;
+    */
 }
 
 bool DownloadManager::saveToDisk(const QString &filename, QIODevice *data)
