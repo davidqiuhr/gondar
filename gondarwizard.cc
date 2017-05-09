@@ -117,7 +117,8 @@ void DownloadProgressPage::initializePage() {
     label = new QLabel("Downloading...");
     qDebug() << "url = " << field("imageurl");
     QObject::connect(&manager, SIGNAL(finished()), this, SLOT(markComplete()));
-    manager.doDownload(field("imageurl").toString());
+    //manager.doDownload(field("imageurl").toString());
+    manager.append(field("imageurl").toString());
 }
 
 void DownloadProgressPage::markComplete() {

@@ -1,48 +1,38 @@
-
-// download stuff
-#include <QCoreApplication>
-#include <QFile>
-#include <QFileInfo>
-#include <QList>
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QSslError>
-#include <QStringList>
-#include <QTimer>
-#include <QUrl>
-#include <stdio.h>
-
 #include "downloader.h"
 
-// download stuff
-class QSslError;
+#include <QFileInfo>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QString>
+#include <QStringList>
+#include <QTimer>
+#include <stdio.h>
 
-QT_USE_NAMESPACE
-
-
-DownloadManager::DownloadManager()
+DownloadManager::DownloadManager(QObject *parent)
+    : QObject(parent), downloadedCount(0), totalCount(0)
 {
-    connect(&manager, SIGNAL(finished(QNetworkReply*)),
-            SLOT(downloadFinished(QNetworkReply*)));
 }
 
-void DownloadManager::doDownload(const QUrl &url)
+void DownloadManager::append(const QStringList &urlList)
 {
-    QNetworkRequest request(url);
-    QNetworkReply *reply = manager.get(request);
+    foreach (QString url, urlList)
+        append(QUrl::fromEncoded(url.toLocal8Bit()));
 
-#ifndef QT_NO_SSL
-    connect(reply, SIGNAL(sslErrors(QList<QSslError>)), SLOT(sslErrors(QList<QSslError>)));
-#endif
+    if (downloadQueue.isEmpty())
+        QTimer::singleShot(0, this, SIGNAL(finished()));
+}
 
-    currentDownloads.append(reply);
+void DownloadManager::append(const QUrl &url)
+{
+    if (downloadQueue.isEmpty())
+        QTimer::singleShot(0, this, SLOT(startNextDownload()));
+
+    downloadQueue.enqueue(url);
+    ++totalCount;
 }
 
 QString DownloadManager::saveFileName(const QUrl &url)
 {
-    return QString("kewlimg");
-    /*
     QString path = url.path();
     QString basename = QFileInfo(path).fileName();
 
@@ -60,60 +50,86 @@ QString DownloadManager::saveFileName(const QUrl &url)
     }
 
     return basename;
-    */
 }
 
-bool DownloadManager::saveToDisk(const QString &filename, QIODevice *data)
+void DownloadManager::startNextDownload()
 {
-    QFile file(filename);
-    if (!file.open(QIODevice::WriteOnly)) {
-        fprintf(stderr, "Could not open %s for writing: %s\n",
-                qPrintable(filename),
-                qPrintable(file.errorString()));
-        return false;
+    if (downloadQueue.isEmpty()) {
+        printf("%d/%d files downloaded successfully\n", downloadedCount, totalCount);
+        emit finished();
+        return;
     }
 
-    file.write(data->readAll());
-    file.close();
+    QUrl url = downloadQueue.dequeue();
 
-    return true;
+    QString filename = saveFileName(url);
+    output.setFileName(filename);
+    if (!output.open(QIODevice::WriteOnly)) {
+        fprintf(stderr, "Problem opening save file '%s' for download '%s': %s\n",
+                qPrintable(filename), url.toEncoded().constData(),
+                qPrintable(output.errorString()));
+
+        startNextDownload();
+        return;                 // skip this download
+    }
+
+    QNetworkRequest request(url);
+    currentDownload = manager.get(request);
+    //connect(currentDownload, SIGNAL(downloadProgress(qint64,qint64)),
+    //        SLOT(downloadProgress(qint64,qint64)));
+    connect(currentDownload, SIGNAL(finished()),
+            SLOT(downloadFinished()));
+    connect(currentDownload, SIGNAL(readyRead()),
+            SLOT(downloadReadyRead()));
+
+    // prepare the output
+    printf("Downloading %s...\n", url.toEncoded().constData());
+    downloadTime.start();
 }
 
-void DownloadManager::execute()
+//FIXME(kendall): we want to implement a progress bar here, but that logic should be moved into the GUI layer
+/*
+void DownloadManager::downloadProgress(qint64 bytesReceived, qint64 bytesTotal)
 {
-    qDebug() << "calling execute";
-    doDownload(url);
-}
+    progressBar.setStatus(bytesReceived, bytesTotal);
 
-void DownloadManager::sslErrors(const QList<QSslError> &sslErrors)
-{
-#ifndef QT_NO_SSL
-    foreach (const QSslError &error, sslErrors)
-        fprintf(stderr, "SSL error: %s\n", qPrintable(error.errorString()));
-#else
-    Q_UNUSED(sslErrors);
-#endif
-}
-
-void DownloadManager::downloadFinished(QNetworkReply *reply)
-{
-    QUrl url = reply->url();
-    if (reply->error()) {
-        fprintf(stderr, "Download of %s failed: %s\n",
-                url.toEncoded().constData(),
-                qPrintable(reply->errorString()));
+    // calculate the download speed
+    double speed = bytesReceived * 1000.0 / downloadTime.elapsed();
+    QString unit;
+    if (speed < 1024) {
+        unit = "bytes/sec";
+    } else if (speed < 1024*1024) {
+        speed /= 1024;
+        unit = "kB/s";
     } else {
-        QString filename = saveFileName(url);
-        if (saveToDisk(filename, reply))
-            printf("Download of %s succeeded (saved to %s)\n",
-                   url.toEncoded().constData(), qPrintable(filename));
+        speed /= 1024*1024;
+        unit = "MB/s";
     }
 
-    currentDownloads.removeAll(reply);
-    reply->deleteLater();
+    progressBar.setMessage(QString::fromLatin1("%1 %2")
+                           .arg(speed, 3, 'f', 1).arg(unit));
+    progressBar.update();
+}
+*/
 
-    if (currentDownloads.isEmpty())
-        qDebug() << "file's done!";
-        // all downloads finished
-        //QCoreApplication::instance()->quit();
+void DownloadManager::downloadFinished()
+{
+    //progressBar.clear();
+    output.close();
+
+    if (currentDownload->error()) {
+        // download failed
+        fprintf(stderr, "Failed: %s\n", qPrintable(currentDownload->errorString()));
+    } else {
+        printf("Succeeded.\n");
+        ++downloadedCount;
+    }
+
+    currentDownload->deleteLater();
+    startNextDownload();
+}
+
+void DownloadManager::downloadReadyRead()
+{
+    output.write(currentDownload->readAll());
 }
