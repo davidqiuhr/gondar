@@ -221,6 +221,7 @@ void DeviceSelectPage::initializePage()
                                                     itr->device_num,
                                                     this);
         radioGroup->addButton(cur_radio);
+        //FIXME(kendall): occassionally get a warning about null pointer
         layout->addWidget(cur_radio);
         itr = itr->next;
     }
