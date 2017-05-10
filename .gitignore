@@ -1,6 +1,7 @@
+*.exe
 *.o
 .qmake.stash
-Makefile
+Makefile*
 gondar
 moc_*
 qrc_*
