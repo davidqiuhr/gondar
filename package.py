@@ -56,7 +56,7 @@ def main():
     build_image(image_name)
     volume = (output_path, '/opt/host')
     run_container(image_name,
-                  'cp', '/opt/gondar/release/gondar.exe', '/opt/host/',
+                  'cp', '-r', '/opt/gondar/release/', '/opt/host',
                   volumes=[volume])
 
 
