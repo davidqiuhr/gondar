@@ -1,6 +1,6 @@
 QT = core network widgets
 
-CONFIG += console
+CONFIG += console static
 
 HEADERS       = gondarwizard.h \
                 downloader.h \
@@ -37,4 +37,7 @@ TARGET = gondar
 
 win32 {
   LIBS += -lsetupapi -lole32 -lgdi32 -lwininet -lshlwapi -lcrypt32 -lwintrust -lcomdlg32 -luuid
+
+  # Needed for static linking
+  LIBS += -lqwindows -lQt5PlatformSupport
 }
