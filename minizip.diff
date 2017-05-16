@@ -1,0 +1,50 @@
+diff --git a/minishared.h b/minishared.h
+index c04fcc4..4ee93c6 100644
+--- a/minishared.h
++++ b/minishared.h
+@@ -5,6 +5,8 @@
+ extern "C" {
+ #endif
+ 
++#include "neverware.h"
++
+ #ifdef _WIN32
+ #  define MKDIR(d) _mkdir(d)
+ #  define CHDIR(d) _chdir(d)
+diff --git a/neverware.h b/neverware.h
+new file mode 100644
+index 0000000..a115945
+--- /dev/null
++++ b/neverware.h
+@@ -0,0 +1,31 @@
++#ifndef NEVERWARE_H_
++#define NEVERWARE_H_
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++//FIXME(kendall): work plz
++#if (!defined(_WIN32)) && (!defined(WIN32)) && (!defined(__APPLE__))
++#  ifndef __USE_FILE_OFFSET64
++#    define __USE_FILE_OFFSET64
++#  endif
++#  ifndef __USE_LARGEFILE64
++#    define __USE_LARGEFILE64
++#  endif
++#  ifndef _LARGEFILE64_SOURCE
++#    define _LARGEFILE64_SOURCE
++#  endif
++#  ifndef _FILE_OFFSET_BIT
++#    define _FILE_OFFSET_BIT 64
++#  endif
++#endif
++
++#define fopen64 fopen
++#define fseeko64 fseek
++#define ftello64 ftell
++
++#include <inttypes.h> 
++#include "ioapi.h"
++
++#endif /* NEVERWARE_H_ */
