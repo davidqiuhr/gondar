@@ -1,8 +1,2 @@
-*.exe
-*.o
-.qmake.stash
-Makefile*
-gondar
-moc_*
-qrc_*
+/build/
 /package/

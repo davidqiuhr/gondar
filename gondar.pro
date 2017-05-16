@@ -40,4 +40,9 @@ win32 {
 
   # Needed for static linking
   LIBS += -lqwindows
+
+  equals(QT_MAJOR_VERSION, 5):lessThan(QT_MINOR_VERSION, 7) {
+    # Needed for static linking in Qt5.6, but breaks the build in Qt5.8
+    LIBS += -lQt5PlatformSupport
+  }
 }
