@@ -4,7 +4,9 @@
 
 #include "gondarwizard.h"
 
+extern "C" {
 #include "neverware_unzipper.h"
+}
 
 #include <QtPlugin>
 
@@ -18,6 +20,6 @@ int main(int argc, char *argv[])
     wizard.show();
     return app.exec();
     */
-    unzip();
+    neverware_unzip();
     return 0;
 }
