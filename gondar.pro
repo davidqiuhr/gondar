@@ -17,7 +17,6 @@ SOURCES       = gondarwizard.cc \
 RESOURCES     = gondarwizard.qrc
 
 INCLUDEPATH += minizip 
-INCLUDEPATH += minizip/aes
 
 win32 {
   INCLUDEPATH += ms-sys/inc
@@ -41,7 +40,7 @@ INSTALLS += target
 TEMPLATE = app
 TARGET = gondar
 
-LIBS += -lz -laes -lminizip
+LIBS += -lminizip -lz -laes
 LIBPATH += minizip/native
 
 win32 {
