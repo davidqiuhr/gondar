@@ -41,7 +41,7 @@ TEMPLATE = app
 TARGET = gondar
 
 LIBS += -lminizip -lz -laes
-LIBPATH += minizip/native
+LIBPATH += minizip/winders
 
 win32 {
   LIBS += -lsetupapi -lole32 -lgdi32 -lwininet -lshlwapi -lcrypt32 -lwintrust -lcomdlg32 -luuid

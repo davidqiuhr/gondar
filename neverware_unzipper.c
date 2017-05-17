@@ -192,7 +192,7 @@ int miniunz_extract_all(unzFile uf, int opt_extract_without_path, int opt_overwr
 // i guess the good news is for now it will always be called
 // chromiumos_image.bin
 int neverware_unzip() {
-    const char *zipfilename = "cloudready.zip";
+    const char *zipfilename = "cloudready-free-56.3.82-64-bit.bin.zip";
     unzFile uf = NULL;
 #ifdef USEWIN32IOAPI
     zlib_filefunc64_def ffunc;

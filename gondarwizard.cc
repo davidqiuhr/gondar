@@ -7,6 +7,7 @@
 extern "C" {
   #include "gondar.h"
   #include "deviceguy.h"
+  #include "neverware_unzipper.h"
 }
 
 //TODO(kendall): move this into the wizard and send signals to individual
@@ -117,13 +118,14 @@ void DownloadProgressPage::initializePage() {
     label = new QLabel("Downloading...");
     qDebug() << "url = " << field("imageurl");
     QObject::connect(&manager, SIGNAL(finished()), this, SLOT(markComplete()));
-    //manager.doDownload(field("imageurl").toString());
     manager.append(field("imageurl").toString());
 }
 
 void DownloadProgressPage::markComplete() {
     download_finished = true;
     label->setText("Download is complete.");
+    // now that the download is finished, let's unzip the build.
+    neverware_unzip();
     emit completeChanged(); 
 }
 
@@ -270,8 +272,7 @@ void KewlPage::writeToDrive() {
     if (!isWriting) {
         qDebug() << "actually starting install!";
         isWriting = true;
-        //char image_path[] = "c:\\cloudready.bin";
-        char image_path[] = "kewlimg";
+        char image_path[] = "chromiumos_image.bin";
         Install(selected_drive, image_path);
         qDebug() << "install call returned";
         writeFinished = true;
