@@ -6,12 +6,18 @@ HEADERS       = gondarwizard.h \
                 downloader.h \
                 deviceguy.h \
                 shared.h \
-                gondar.h
+                gondar.h \
+                neverware_unzipper.h
 SOURCES       = gondarwizard.cc \
                 downloader.cc \
                 main.cc \
-                deviceguy.cc
+                deviceguy.cc \
+                neverware_unzipper.c \
+                minizip/minishared.c
 RESOURCES     = gondarwizard.qrc
+
+INCLUDEPATH += minizip 
+INCLUDEPATH += minizip/aes
 
 win32 {
   INCLUDEPATH += ms-sys/inc
@@ -34,6 +40,9 @@ INSTALLS += target
 
 TEMPLATE = app
 TARGET = gondar
+
+LIBS += -lz -laes -lminizip
+LIBPATH += minizip/native
 
 win32 {
   LIBS += -lsetupapi -lole32 -lgdi32 -lwininet -lshlwapi -lcrypt32 -lwintrust -lcomdlg32 -luuid

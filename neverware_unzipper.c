@@ -1,4 +1,6 @@
 
+#include "neverware_unzipper.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -186,8 +188,10 @@ int miniunz_extract_all(unzFile uf, int opt_extract_without_path, int opt_overwr
     return 0;
 }
 
-int main(int argc, char ** argv) {
-
+//TODO(kendall): let's eventually return the name of the file
+// i guess the good news is for now it will always be called
+// chromiumos_image.bin
+int unzip() {
     const char *zipfilename = "cloudready.zip";
     unzFile uf = NULL;
 #ifdef USEWIN32IOAPI
