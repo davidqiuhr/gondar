@@ -1,4 +1,6 @@
 
+// this code modified from minizip/miniunz.c
+
 #include "neverware_unzipper.h"
 
 #include <stdio.h>
