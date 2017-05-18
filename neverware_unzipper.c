@@ -188,11 +188,25 @@ int miniunz_extract_all(unzFile uf, int opt_extract_without_path, int opt_overwr
     return 0;
 }
 
+char * filename_from_url(const char * url) {
+    //TODO(kendall): i sure hope this string is null-terminated
+    //TODO(kendall): clean up this memory somewhere
+    char * urlcpy = malloc(strlen(url));
+    strcpy(urlcpy, url);
+    char * tok = strtok(urlcpy, "/");
+    char * filename;
+    do {
+        filename = tok;
+        tok = strtok(NULL, "/");
+    } while (tok != NULL);
+    //TODO(kendall): check to ensure the file ends in ".zip"
+    return filename;
+}
 //TODO(kendall): let's eventually return the name of the file
 // i guess the good news is for now it will always be called
 // chromiumos_image.bin
-int neverware_unzip() {
-    const char *zipfilename = "cloudready-free-56.3.82-64-bit.bin.zip";
+int neverware_unzip(const char * url) {
+    char * zipfilename = filename_from_url(url);
     unzFile uf = NULL;
 #ifdef USEWIN32IOAPI
     zlib_filefunc64_def ffunc;

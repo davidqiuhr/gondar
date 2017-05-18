@@ -125,7 +125,8 @@ void DownloadProgressPage::markComplete() {
     download_finished = true;
     label->setText("Download is complete.");
     // now that the download is finished, let's unzip the build.
-    neverware_unzip();
+    const char * url = field("imageurl").toString().toStdString().c_str();
+    neverware_unzip(url);
     emit completeChanged(); 
 }
 
