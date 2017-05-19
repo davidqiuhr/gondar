@@ -9,14 +9,7 @@ RUN dnf install -y \
 	kernel-devel \
 	make \
 	mingw64-qt5-qmake \
-	mingw64-qt5-qtbase-static \
-	git \
-	cmake \
-	make \
-	automake \
-	gcc \
-	gcc-c++ \
-	kernel-devel
+	mingw64-qt5-qtbase-static
 
 WORKDIR /opt/gondar
 RUN git clone https://github.com/nmoinvaz/minizip

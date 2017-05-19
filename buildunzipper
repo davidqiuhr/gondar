@@ -1,2 +1,0 @@
-#! /bin/bash
-gcc neverware_unzipper.c ./minizip/minishared.c -I ./minizip -L./minizip/native -lminizip -laes -lz
