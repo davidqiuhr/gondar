@@ -1,6 +1,12 @@
 FROM fedora:25
 
 RUN dnf install -y \
+	automake \
+	cmake \
+	gcc \
+	gcc-c++ \
+	git \
+	kernel-devel \
 	make \
 	mingw64-qt5-qmake \
 	mingw64-qt5-qtbase-static \
@@ -13,10 +19,10 @@ RUN dnf install -y \
 	kernel-devel
 
 WORKDIR /opt/gondar
-RUN git clone https://github.com/nmoinvaz/minizip
+RUN git clone --branch 1.1 https://github.com/nmoinvaz/minizip
 WORKDIR /opt/gondar/minizip
-RUN mkdir winders
-WORKDIR /opt/gondar/minizip/winders
+RUN mkdir build
+WORKDIR /opt/gondar/minizip/build
 RUN mingw64-cmake ..
 RUN make
 RUN ln -s libminizip.dll.a libminizip.a
