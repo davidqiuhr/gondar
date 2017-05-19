@@ -19,8 +19,9 @@ RUN dnf install -y \
 	kernel-devel
 
 WORKDIR /opt/gondar
-RUN git clone --branch 1.1 https://github.com/nmoinvaz/minizip
+RUN git clone https://github.com/nmoinvaz/minizip
 WORKDIR /opt/gondar/minizip
+RUN git checkout dc3ad01e3d5928e9105f770b7e896a8e9fe0d3b4
 RUN mkdir build
 WORKDIR /opt/gondar/minizip/build
 RUN mingw64-cmake ..
