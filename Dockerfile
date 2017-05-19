@@ -19,6 +19,8 @@ RUN mkdir winders
 WORKDIR /opt/gondar/minizip/winders
 RUN mingw64-cmake ..
 RUN make
+RUN ln -s libminizip.dll.a libminizip.a
+RUN ln -s libaes.dll.a libaes.a
 
 WORKDIR /opt/gondar
 ADD *.c *.cc *.h *.pro *.qrc /opt/gondar/

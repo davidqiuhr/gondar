@@ -38,7 +38,6 @@ def run_container(image_name, *cmd, **kwargs):
     volumes = kwargs.get('volumes', [])
 
     full_cmd = ('sudo', 'docker', 'run', '--rm=true')
-    #full_cmd = ('sudo', 'docker', 'run')
     for volume in volumes:
         full_cmd += ('--volume', '{}:{}'.format(*volume))
 
