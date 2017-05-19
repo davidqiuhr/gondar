@@ -10,8 +10,6 @@ extern "C" {
   #include "neverware_unzipper.h"
 }
 
-//TODO(kendall): move this into the wizard and send signals to individual
-// pages
 DeviceGuyList * drivelist = NULL;
 DeviceGuy * selected_drive = NULL;
 
@@ -73,7 +71,7 @@ void AdminCheckPage::getIsAdmin() {
     qDebug() << "kendall: getIsAdmin fires";
     is_admin = IsCurrentProcessElevated();
     if (!is_admin) {
-        emit isNotAdminReady(); 
+        emit isNotAdminReady();
         tim->stop();
     } else {
         tim->stop();
@@ -127,11 +125,11 @@ void DownloadProgressPage::markComplete() {
     // now that the download is finished, let's unzip the build.
     const char * url = field("imageurl").toString().toStdString().c_str();
     neverware_unzip(url);
-    emit completeChanged(); 
+    emit completeChanged();
 }
 
 bool DownloadProgressPage::isComplete() const {
-    return download_finished; 
+    return download_finished;
 }
 
 UsbInsertPage::UsbInsertPage(QWidget *parent)
