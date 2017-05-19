@@ -12,7 +12,7 @@ RUN dnf install -y \
 	mingw64-qt5-qtbase-static
 
 WORKDIR /opt/gondar
-RUN git clone https://github.com/nmoinvaz/minizip
+RUN git clone --branch 1.1 https://github.com/nmoinvaz/minizip
 WORKDIR /opt/gondar/minizip
 RUN mkdir winders
 WORKDIR /opt/gondar/minizip/winders
