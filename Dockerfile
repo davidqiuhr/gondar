@@ -14,8 +14,8 @@ RUN dnf install -y \
 WORKDIR /opt/gondar
 RUN git clone --branch 1.1 https://github.com/nmoinvaz/minizip
 WORKDIR /opt/gondar/minizip
-RUN mkdir winders
-WORKDIR /opt/gondar/minizip/winders
+RUN mkdir build
+WORKDIR /opt/gondar/minizip/build
 RUN mingw64-cmake ..
 RUN make
 RUN ln -s libminizip.dll.a libminizip.a
