@@ -13,20 +13,13 @@ To build for linux:
     cd build
     qmake ..
     make
-    
+
 Note the `build` directory; the name doesn't matter but this ensures
 your source directory doesn't get cluttered with build output.
-    
+
 To configure a debug build run qmake like this:
 
     qmake CONFIG+=debug
     
 With the appropriate packages installed you can also create a Windows
 build by replacing the `qmake` command with `mingw64-qmake-qt5`.
-
-## zip stuff
-`git clone https://github.com/nmoinvaz/minizip`
-### build the built-in example
-
-apply minizip.diff then run:
-`gcc minishared.c miniunz.c -L. -lminizip -laes -lz`
