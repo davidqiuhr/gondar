@@ -13,10 +13,10 @@ To build for linux:
     cd build
     qmake ..
     make
-
+    
 Note the `build` directory; the name doesn't matter but this ensures
 your source directory doesn't get cluttered with build output.
-
+    
 To configure a debug build run qmake like this:
 
     qmake CONFIG+=debug

@@ -33,7 +33,7 @@ void DownloadManager::append(const QUrl &url)
 
 QString DownloadManager::saveFileName(const QUrl &url)
 {
-    return "kewlimg";
+    return url.fileName();
 }
 
 void DownloadManager::startNextDownload()
