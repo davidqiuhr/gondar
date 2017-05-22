@@ -1,0 +1,22 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1ad720e..5043c67 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -54,7 +54,7 @@ if(UNIX)
+ endif()
+ 
+ # create minizip library
+-add_library(minizip ${MINIZIP_SRC} ${MINIZIP_PUBLIC_HEADERS})
++add_library(minizip STATIC ${MINIZIP_SRC} ${MINIZIP_PUBLIC_HEADERS})
+ target_link_libraries(minizip ZLIB::ZLIB)
+ 
+ option(USE_AES "enables building of aes library" ON)
+@@ -84,7 +84,7 @@ if(USE_AES)
+     aes/pwd2key.h
+     aes/sha1.h)
+ 
+-  add_library(aes ${AES_SRC} ${AES_PUBLIC_HEADERS})
++  add_library(aes STATIC ${AES_SRC} ${AES_PUBLIC_HEADERS})
+ 
+   add_definitions(-DHAVE_AES)
+ 
