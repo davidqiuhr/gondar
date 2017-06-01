@@ -31,7 +31,7 @@ RUN dnf install -y \
 WORKDIR /opt/gondar
 RUN git clone https://github.com/mxe/mxe
 WORKDIR /opt/gondar/mxe
-RUN make qtbase
+RUN make qtbase --jobs=4
 RUN make zlib
 
 WORKDIR /opt/gondar
