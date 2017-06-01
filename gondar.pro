@@ -40,9 +40,8 @@ INSTALLS += target
 TEMPLATE = app
 TARGET = gondar
 
-LIBS += -lminizip -lz -laes
 #TODO(kendall): win32 this and else minizip/native
-LIBPATH += minizip/build
+LIBS += -Lminizip/build -lminizip -lz -laes
 
 win32 {
   LIBS += -lsetupapi -lole32 -lgdi32 -lwininet -lshlwapi -lcrypt32 -lwintrust -lcomdlg32 -luuid
