@@ -56,4 +56,3 @@ win32 {
 }
 
 LIBS += -lminizip -lz -laes
-
