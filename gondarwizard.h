@@ -4,6 +4,8 @@
 
 #include <QWizard>
 #include <QRadioButton>
+#include <QProgressBar>
+#include <QtWidgets>
 
 #include <QString>
 
@@ -58,9 +60,10 @@ signals:
     void isAdminReady();
     void isNotAdminReady();
 private:
-    QLabel *label;
+    QLabel label;
     QTimer *tim;
     bool is_admin;
+    QVBoxLayout layout;
 };
 
 class ImageSelectPage : public QWizardPage
@@ -73,8 +76,9 @@ public:
 protected:
     void initializePage() override;
 private:
-    QLabel *label;
-    QLineEdit *urlLineEdit;
+    QLabel label;
+    QLineEdit urlLineEdit;
+    QVBoxLayout layout;
 };
 
 class DownloadProgressPage : public QWizardPage
@@ -87,14 +91,22 @@ public:
 protected:
     void initializePage() override;
     bool isComplete() const;
+    void notifyUnzip();
 
 public slots:
     void markComplete();
+    void downloadProgress(qint64 sofar, qint64 total);
+    void onDownloadStarted();
+    void startUnzip();
 
 private:
+    bool range_set;
     DownloadManager manager;
+    QProgressBar progress;
     bool download_finished;
-    QLabel * label;
+    QLabel label;
+    const char * url;
+    QVBoxLayout layout;
 };
 
 class UsbInsertPage : public QWizardPage
@@ -109,8 +121,9 @@ protected:
     bool isComplete() const;
 
 private:
-    QLabel *label;
+    QLabel label;
     QTimer *tim;
+    QVBoxLayout layout;
 
 public slots:
     void getDriveList();
@@ -132,9 +145,10 @@ protected:
     bool validatePage() override;
 
 private:
-    QLabel *drivesLabel;
+    QLabel drivesLabel;
     QGroupBox *drivesBox;
     QButtonGroup * radioGroup;
+    QVBoxLayout layout;
 };
 
 class KewlPage: public QWizardPage {

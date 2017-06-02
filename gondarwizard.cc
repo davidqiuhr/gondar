@@ -1,5 +1,7 @@
 
 #include <QtWidgets>
+#include <QNetworkReply>
+#include <QProgressBar>
 
 #include "gondarwizard.h"
 #include "downloader.h"
@@ -25,6 +27,9 @@ GondarButton::GondarButton(const QString & text,
 GondarWizard::GondarWizard(QWidget *parent)
     : QWizard(parent)
 {
+    // these pages are automatically cleaned up
+    // new instances are made whenever navigation moves on to another page
+    // according to qt docs
     addPage(new AdminCheckPage);
     addPage(new ImageSelectPage);
     addPage(new DownloadProgressPage);
@@ -40,13 +45,12 @@ AdminCheckPage::AdminCheckPage(QWidget *parent)
     setTitle(tr("Insert USB Drive"));
     setPixmap(QWizard::WatermarkPixmap, QPixmap(":/images/frogmariachis.png"));
 
-    label = new QLabel("Please wait...");
+    label.setText("Please wait...");
     is_admin = false; // assume false until we discover otherwise.
                       // this holds the user at this screen
 
-    QVBoxLayout *layout = new QVBoxLayout;
-    layout->addWidget(label);
-    setLayout(layout);
+    layout.addWidget(& label);
+    setLayout(& layout);
 
     // the next button is grayed out if user does not have appropriate rights
     QObject::connect(this, SIGNAL(isAdminRequested()),
@@ -80,12 +84,12 @@ void AdminCheckPage::getIsAdmin() {
 }
 
 void AdminCheckPage::showIsAdmin() {
-    label->setText("User has admin rights.");
+    label.setText("User has admin rights.");
     emit completeChanged();
 }
 
 void AdminCheckPage::showIsNotAdmin() {
-    label->setText("User does not have admin rights.");
+    label.setText("User does not have admin rights.");
 }
 
 ImageSelectPage::ImageSelectPage(QWidget *parent)
@@ -95,37 +99,72 @@ ImageSelectPage::ImageSelectPage(QWidget *parent)
 }
 
 void ImageSelectPage::initializePage() {
-    label = new QLabel("Target image url:");
-    urlLineEdit = new QLineEdit;
+    label.setText("Target image url:");
     //TODO(kendall): make required
-    registerField("imageurl", urlLineEdit);
-    QVBoxLayout *layout = new QVBoxLayout;
-    layout->addWidget(label);
-    layout->addWidget(urlLineEdit);
-    setLayout(layout);
+    registerField("imageurl", & urlLineEdit);
+    layout.addWidget(& label);
+    layout.addWidget(& urlLineEdit);
+    setLayout(& layout);
 }
 
 DownloadProgressPage::DownloadProgressPage(QWidget *parent)
     : QWizardPage(parent)
 {
-    setTitle(tr("Select Remote Image"));
+    setTitle(tr("Downloading..."));
     download_finished = false;
+    layout.addWidget(& progress);
+    setLayout(& layout);
+    range_set = false;
+    url = NULL;
 }
 
 void DownloadProgressPage::initializePage() {
-    label = new QLabel("Downloading...");
+    label.setText("Downloading...");
+    layout.addWidget(& label);
+    setLayout(& layout);
     qDebug() << "url = " << field("imageurl");
     QObject::connect(&manager, SIGNAL(finished()), this, SLOT(markComplete()));
     manager.append(field("imageurl").toString());
+    QObject::connect(&manager, SIGNAL(started()), this, SLOT(onDownloadStarted()));
+}
+
+void DownloadProgressPage::onDownloadStarted() {
+    QNetworkReply * cur_download = manager.getCurrentDownload();
+    QObject::connect(cur_download,
+                     &QNetworkReply::downloadProgress,
+                     this,
+                     &DownloadProgressPage::downloadProgress);
+}
+
+void DownloadProgressPage::downloadProgress(qint64 sofar, qint64 total) {
+    if (!range_set) {
+        range_set = true;
+        progress.setRange(0, total);
+    }
+    progress.setValue(sofar);
 }
 
 void DownloadProgressPage::markComplete() {
     download_finished = true;
-    label->setText("Download is complete.");
+    label.setText("Download is complete.");
     // now that the download is finished, let's unzip the build.
-    const char * url = field("imageurl").toString().toStdString().c_str();
-    neverware_unzip(url);
+    notifyUnzip();
+    //TODO(kendall): do the unzip in another thread so progress bar animates
+    url = field("imageurl").toString().toStdString().c_str();
+    startUnzip();
+    // unzip has now completed
     emit completeChanged();
+}
+
+void DownloadProgressPage::startUnzip() {
+    neverware_unzip(url);
+}
+
+void DownloadProgressPage::notifyUnzip() {
+    label.setText("Extracting image...");
+    // setting range and value to zero results in an 'infinite' progress bar
+    progress.setRange(0, 0);
+    progress.setValue(0);
 }
 
 bool DownloadProgressPage::isComplete() const {
@@ -138,13 +177,12 @@ UsbInsertPage::UsbInsertPage(QWidget *parent)
     setTitle(tr("Insert USB Drive"));
     setPixmap(QWizard::WatermarkPixmap, QPixmap(":/images/frogmariachis.png"));
 
-    label = new QLabel("Please insert the destination USB drive to create a "
+    label.setText("Please insert the destination USB drive to create a "
                         "USB Cloudready(tm) bootable USB drive.");;
-    label->setWordWrap(true);
+    label.setWordWrap(true);
 
-    QVBoxLayout *layout = new QVBoxLayout;
-    layout->addWidget(label);
-    setLayout(layout);
+    layout.addWidget(& label);
+    setLayout(& layout);
 
     // the next button should be grayed out until the user inserts a USB
     QObject::connect(this, SIGNAL(driveListRequested()),
@@ -155,7 +193,6 @@ UsbInsertPage::UsbInsertPage(QWidget *parent)
 
 void UsbInsertPage::initializePage() {
     tim = new QTimer(this);
-    //tim->setSingleShot(true);
     connect(tim, SIGNAL(timeout()), SLOT(getDriveList()));
     // send a signal to check for drives
     emit driveListRequested();
@@ -173,9 +210,7 @@ bool UsbInsertPage::isComplete() const {
 }
 
 void UsbInsertPage::getDriveList() {
-    qDebug() << "kendall: getDriveList fires";
     drivelist = GetDeviceList();
-    qDebug() << "kendall: we finish getting the drivelist";
     if (DeviceGuyList_length(drivelist) == 0) {
         DeviceGuyList_free(drivelist); 
         drivelist = NULL;
@@ -187,7 +222,6 @@ void UsbInsertPage::getDriveList() {
 }
 
 void UsbInsertPage::showDriveList() {
-    qDebug() << "kendall: in showDriveList";
     emit completeChanged();
 }
 
@@ -198,35 +232,33 @@ DeviceSelectPage::DeviceSelectPage(QWidget *parent)
     // the usb device list.  or it could ask you to insert your device
     setTitle(tr("Select Drive"));
     setPixmap(QWizard::WatermarkPixmap, QPixmap(":/images/frogmariachis.png"));
-
 }
 
 void DeviceSelectPage::initializePage()
 {
-    drivesLabel = new QLabel("Select Drive:");
+    drivesLabel.setText("Select Drive:");
     if (drivelist == NULL) {
-        qDebug() << "kendall: drivelist was null?!";
         return;
     }
     DeviceGuy * itr = drivelist->head;
     // Line up widgets horizontally
     // use QVBoxLayout for vertically, H for horizontal
-    QVBoxLayout *layout = new QVBoxLayout;
-    layout->addWidget(drivesLabel);
+    layout.addWidget(& drivesLabel);
 
     radioGroup = new QButtonGroup();
     // i could extend the button object to also have a secret index
     // then i could look up index later easily
     while (itr != NULL) {
-        GondarButton * cur_radio = new GondarButton(itr->name,
+        //FIXME(kendall): clean these up
+        GondarButton * curRadio = new GondarButton(itr->name,
                                                     itr->device_num,
                                                     this);
-        radioGroup->addButton(cur_radio);
+        radioGroup->addButton(curRadio);
         //FIXME(kendall): occassionally get a warning about null pointer
-        layout->addWidget(cur_radio);
+        layout.addWidget(curRadio);
         itr = itr->next;
     }
-    setLayout(layout);
+    setLayout(& layout);
 }
 
 bool DeviceSelectPage::validatePage() {
@@ -251,15 +283,12 @@ KewlPage::KewlPage(QWidget *parent)
 
 void KewlPage::initializePage()
 {
-    qDebug() << "drive name: " << selected_drive->name << ", index: " << selected_drive->device_num;
 }
 
 bool KewlPage::validatePage() {
-    qDebug() << "in validatePage";
     if (selected_drive == NULL) {
         qDebug() << "ERROR: no drive selected";
     } else {
-        qDebug() << "emitting WriteDriveRequested()";
         emit writeDriveRequested();
     }
     return writeFinished;
@@ -267,9 +296,8 @@ bool KewlPage::validatePage() {
 
 void KewlPage::writeToDrive() {
     static bool isWriting = false;
-    qDebug() << "received request to write";
     if (!isWriting) {
-        qDebug() << "actually starting install!";
+        qDebug() << "Writing to drive...";
         isWriting = true;
         char image_path[] = "chromiumos_image.bin";
         Install(selected_drive, image_path);
