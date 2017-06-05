@@ -97,7 +97,7 @@ public slots:
     void markComplete();
     void downloadProgress(qint64 sofar, qint64 total);
     void onDownloadStarted();
-    void startUnzip();
+    void onUnzipFinished();
 
 private:
     bool range_set;
@@ -159,12 +159,17 @@ public:
 
 protected:
     void initializePage() override;
+    bool isComplete() const;
     bool validatePage() override;
-
+    void showProgress();
 public slots:
+    void onDoneWriting();
+
+private:
     void writeToDrive();
-signals:
-    void writeDriveRequested();
+    QVBoxLayout layout;
+    QProgressBar progress;
+    bool writeFinished;
 };
 
 #endif /* GONDARWIZARD */

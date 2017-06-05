@@ -5,6 +5,8 @@
 
 #include "gondarwizard.h"
 #include "downloader.h"
+#include "unzipthread.h"
+#include "diskwritethread.h"
 
 extern "C" {
   #include "gondar.h"
@@ -14,8 +16,6 @@ extern "C" {
 
 DeviceGuyList * drivelist = NULL;
 DeviceGuy * selected_drive = NULL;
-
-bool writeFinished = false;
 
 GondarButton::GondarButton(const QString & text,
                            unsigned int device_num,
@@ -151,15 +151,21 @@ void DownloadProgressPage::markComplete() {
     notifyUnzip();
     //TODO(kendall): do the unzip in another thread so progress bar animates
     url = field("imageurl").toString().toStdString().c_str();
-    startUnzip();
+    qDebug() << "debug: url beforehand:" << url;
+    //FIXME(kendall): make thread and start it
+    UnzipThread * uzt = new UnzipThread(this);
+    uzt->setUrl(url);
+    connect(uzt, SIGNAL(complete()), this, SLOT(onUnzipFinished()));
+    uzt->launchThread();
+}
+
+void DownloadProgressPage::onUnzipFinished() {
     // unzip has now completed
+    qDebug() << "main thread has accepted complete";
+    progress.setRange(0, 100);
+    progress.setValue(100);
     emit completeChanged();
 }
-
-void DownloadProgressPage::startUnzip() {
-    neverware_unzip(url);
-}
-
 void DownloadProgressPage::notifyUnzip() {
     label.setText("Extracting image...");
     // setting range and value to zero results in an 'infinite' progress bar
@@ -277,31 +283,51 @@ KewlPage::KewlPage(QWidget *parent)
     : QWizardPage(parent)
 {
     setTitle(tr("Writing to disk will like, totally wipe your drive, dude."));
-    QObject::connect(this, SIGNAL(writeDriveRequested()),
-                     this, SLOT(writeToDrive()));
+    layout.addWidget(& progress);
+    setLayout(& layout);
 }
 
 void KewlPage::initializePage()
 {
-}
-
-bool KewlPage::validatePage() {
+    writeFinished = false;
+    showProgress();
+    // what if we just start writing as soon as we get here
     if (selected_drive == NULL) {
         qDebug() << "ERROR: no drive selected";
     } else {
-        emit writeDriveRequested();
+        writeToDrive();
     }
+}
+
+bool KewlPage::isComplete() const {
+    return writeFinished;
+}
+
+bool KewlPage::validatePage() {
     return writeFinished;
 }
 
 void KewlPage::writeToDrive() {
-    static bool isWriting = false;
-    if (!isWriting) {
-        qDebug() << "Writing to drive...";
-        isWriting = true;
-        char image_path[] = "chromiumos_image.bin";
-        Install(selected_drive, image_path);
-        qDebug() << "install call returned";
-        writeFinished = true;
-    }
+    qDebug() << "Writing to drive...";
+    char image_path[] = "chromiumos_image.bin";
+    showProgress();
+    DiskWriteThread * dwt = new DiskWriteThread(this);
+    dwt->setDrive(selected_drive);
+    dwt->setImagePath(image_path);
+    connect(dwt, SIGNAL(usbcomplete()), this, SLOT(onDoneWriting()));
+    qDebug() << "launching thread...";
+    dwt->launchThread();
+}
+
+void KewlPage::showProgress() {
+    progress.setRange(0, 0);
+    progress.setValue(0);
+}
+
+void KewlPage::onDoneWriting() {
+    qDebug() << "install call returned";
+    writeFinished = true;
+    progress.setRange(0, 100);
+    progress.setValue(100);
+    emit completeChanged();
 }
