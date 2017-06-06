@@ -3,17 +3,16 @@
 #define DISKWRITE_THREAD_H
 
 #include <QThread>
+#include <QString>
 
 #include "deviceguy.h"
-
-#define MAX_STRING 300
 
 class DiskWriteThread : public QThread {
     Q_OBJECT
   public:
     DiskWriteThread(QObject *parent = 0);
     void setDrive(DeviceGuy * drive_in);
-    void setImagePath(const char * image_path_in);
+    void setImagePath(QString * image_path_in);
     ~DiskWriteThread();
     void launchThread();
 
@@ -23,7 +22,7 @@ class DiskWriteThread : public QThread {
   protected:
     void run() override;
     DeviceGuy *  selected_drive;
-    char image_path[MAX_STRING];
+    QString image_path;
 };
 
 #endif /* DISKWRITE_THREAD_H */

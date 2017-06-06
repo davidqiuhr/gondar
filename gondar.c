@@ -2142,7 +2142,7 @@ DeviceGuyList * GetDeviceList() {
     return device_list;
 }
 
-void Install(DeviceGuy * target_device, char * image_path) {
+void Install(DeviceGuy * target_device, const char * image_path) {
     uint64_t device_num = target_device->device_num;
     uint64_t sector_size = GetSectorSize(device_num);
     uint64_t drive_size = GetDriveSize(device_num);

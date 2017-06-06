@@ -106,7 +106,7 @@ private:
     QProgressBar progress;
     bool download_finished;
     QLabel label;
-    const char * url;
+    QString url;
     QVBoxLayout layout;
     UnzipThread * unzipThread;
 };
@@ -173,6 +173,7 @@ private:
     QProgressBar progress;
     bool writeFinished;
     DiskWriteThread * diskWriteThread;
+    QString image_path;
 };
 
 #endif /* GONDARWIZARD */

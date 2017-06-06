@@ -11,15 +11,15 @@ extern "C" {
 
 UnzipThread::UnzipThread(QObject *parent)
     : QThread(parent) {
-    memset(url, 0, MAX_URL);
 }
 
 UnzipThread::~UnzipThread() {
 }
 
-void UnzipThread::setUrl(const char * url_in) {
+void UnzipThread::setUrl(QString * url_in) {
     qDebug() << "setting url=" << url_in;
-    strcpy(url, url_in);
+    url.clear();
+    url.append(url_in);
 }
 
 void UnzipThread::launchThread() {
@@ -30,7 +30,8 @@ void UnzipThread::launchThread() {
 
 void UnzipThread::run() {
     qDebug() << "running unzip on url=" << url;
-    neverware_unzip(url);
+    const char * url_c_str = url.toStdString().c_str();
+    neverware_unzip(url_c_str);
     qDebug() << "worker thread says complete";
     emit complete();
 }

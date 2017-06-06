@@ -115,7 +115,6 @@ DownloadProgressPage::DownloadProgressPage(QWidget *parent)
     layout.addWidget(& progress);
     setLayout(& layout);
     range_set = false;
-    url = NULL;
 }
 
 void DownloadProgressPage::initializePage() {
@@ -150,11 +149,12 @@ void DownloadProgressPage::markComplete() {
     // now that the download is finished, let's unzip the build.
     notifyUnzip();
     //TODO(kendall): do the unzip in another thread so progress bar animates
-    url = field("imageurl").toString().toStdString().c_str();
+    url.clear();
+    url.append(field("imageurl").toString());
     qDebug() << "debug: url beforehand:" << url;
     //FIXME(kendall): make thread and start it
     unzipThread = new UnzipThread(this);
-    unzipThread->setUrl(url);
+    unzipThread->setUrl(& url);
     connect(unzipThread, SIGNAL(complete()), this, SLOT(onUnzipFinished()));
     unzipThread->launchThread();
 }
@@ -309,11 +309,12 @@ bool WriteOperationPage::validatePage() {
 
 void WriteOperationPage::writeToDrive() {
     qDebug() << "Writing to drive...";
-    char image_path[] = "chromiumos_image.bin";
+    image_path.clear();
+    image_path.append("chromiumos_image.bin");
     showProgress();
     diskWriteThread = new DiskWriteThread(this);
     diskWriteThread->setDrive(selected_drive);
-    diskWriteThread->setImagePath(image_path);
+    diskWriteThread->setImagePath(& image_path);
     connect(diskWriteThread, SIGNAL(usbcomplete()), this, SLOT(onDoneWriting()));
     qDebug() << "launching thread...";
     diskWriteThread->launchThread();

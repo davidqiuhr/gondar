@@ -5,7 +5,7 @@
 #include "shared.h"
 
 DeviceGuyList * GetDeviceList();
-void Install(DeviceGuy * target_device, char * image_path);
+void Install(DeviceGuy * target_device, const char * image_path);
 BOOL IsCurrentProcessElevated();
 
 #endif

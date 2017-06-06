@@ -3,14 +3,13 @@
 #define UNZIP_THREAD_H
 
 #include <QThread>
-
-#define MAX_URL 300
+#include <QString>
 
 class UnzipThread : public QThread {
     Q_OBJECT
   public:
     UnzipThread(QObject *parent = 0);
-    void setUrl(const char * url_in);
+    void setUrl(QString * url_in);
     ~UnzipThread();
     void launchThread();
 
@@ -19,7 +18,7 @@ class UnzipThread : public QThread {
 
   protected:
     void run() override;
-    char url[MAX_URL];
+    QString url;
 };
 
 #endif /* UNZIP_THREAD_H */
