@@ -10,7 +10,7 @@ build-minizip: update-submodules
 		cd build/minizip && \
 		cmake ../../minizip && \
 		cmake --build . && \
-		mkdir native && \
+		mkdir -p native && \
 		cp lib*.a native
 
 
