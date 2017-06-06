@@ -36,6 +36,7 @@ GondarWizard::GondarWizard(QWidget *parent)
     addPage(new UsbInsertPage);
     addPage(new DeviceSelectPage);
     addPage(new KewlPage);
+    setWizardStyle(QWizard::ModernStyle);
     setWindowTitle(tr("Cloudready USB Creation Utility"));
 }
 
