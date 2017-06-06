@@ -7,12 +7,11 @@ CloudReady releases and burn it onto a USB stick for immediate use.
 We're primarily targeting Windows 10 for compatibility.
 
 ## Building
-### With docker
-To build in one step with docker, run:
+### With package.py
+To make a build in one step, run:
 ```
 ./package.py
 ```
-
 `package.py` will handle building everything for you using mxe in a docker
 container.  Check out `./Dockerfile` to see how that happens.
     
