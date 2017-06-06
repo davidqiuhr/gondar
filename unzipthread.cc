@@ -24,7 +24,7 @@ void UnzipThread::setUrl(QString * url_in) {
 
 void UnzipThread::launchThread() {
     if (!isRunning()) {
-        start(LowPriority);
+        start();
     }
 }
 

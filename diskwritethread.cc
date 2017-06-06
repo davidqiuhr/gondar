@@ -29,7 +29,7 @@ void DiskWriteThread::setImagePath(QString * image_path_in) {
 
 void DiskWriteThread::launchThread() {
     if (!isRunning()) {
-        start(LowPriority);
+        start();
     }
 }
 
