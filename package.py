@@ -8,6 +8,7 @@ package directory is inside the workspace.
 
 from __future__ import print_function
 
+import argparse
 import os
 import subprocess
 
@@ -48,8 +49,15 @@ def run_container(image_name, *cmd, **kwargs):
     run_cmd(*full_cmd)
 
 
+def parse_args():
+    """Parse some args"""
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.parse_args()
+
+
 def main():
     """Build gondar in a Docker container and copy to host."""
+    parse_args()
     image_name = 'gondar-build'
     output_path = get_output_path('package')
 
