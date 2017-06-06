@@ -33,8 +33,8 @@ qmake CONFIG+=debug
 
 1. Install dependencies (distro specific):
 
-	Fedora:
-	
-	    dnf install cmake qt5-qtbase-devel
+    Fedora:
+    
+        dnf install cmake qt5-qtbase-devel
 
 2. make -f Makefile.linux
