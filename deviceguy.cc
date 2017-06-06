@@ -20,6 +20,9 @@ DeviceGuy * DeviceGuy_init(uint32_t device_num, const char * name) {
     return self;
 }
 
+void DeviceGuy_copy(DeviceGuy * src, DeviceGuy * dst) {
+    memcpy(dst, src, sizeof(DeviceGuy));
+}
 DeviceGuyList * DeviceGuyList_init() {
     DeviceGuyList * self = new DeviceGuyList();
     memset(self, 0, sizeof(DeviceGuyList));

@@ -22,7 +22,7 @@ class DiskWriteThread : public QThread {
   protected:
     void run() override;
   private:
-    DeviceGuy *  selected_drive;
+    DeviceGuy selected_drive;
     QString image_path;
 };
 
