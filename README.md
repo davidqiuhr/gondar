@@ -21,7 +21,7 @@ To configure a debub build, modify `gondar.pro` with
 qmake CONFIG+=debug
 ```
 
-### With MXE
+### With MXE directly
 
 * Get MXE `git clone https://github.com/mxe/mxe`
 
