@@ -78,7 +78,9 @@ protected:
     void initializePage() override;
 private:
     QLabel label;
-    QLineEdit urlLineEdit;
+    QButtonGroup radioGroup;
+    QRadioButton free32bit;
+    QRadioButton free64bit;
     QVBoxLayout layout;
 };
 
@@ -149,7 +151,7 @@ protected:
 private:
     QLabel drivesLabel;
     QGroupBox *drivesBox;
-    QButtonGroup * radioGroup;
+    QButtonGroup radioGroup;
     QVBoxLayout layout;
 };
 
