@@ -2,7 +2,7 @@
 
 """Build Gondar with mingw in a Docker container.
 
-The output executable is copied to package/gondar.exe. On Jenkins the
+The output executable is copied to package/release/gondar.exe. On Jenkins the
 package directory is inside the workspace.
 """
 
