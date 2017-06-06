@@ -2,7 +2,7 @@
 [Crummy Wizard!](https://www.youtube.com/watch?v=1TVjEGqJoMg)
 
 Gondar is a project that aims to allows users to download one of our latest
-releases and burn it onto a USB stick for immediate use.
+CloudReady releases and burn it onto a USB stick for immediate use.
 
 We're primarily targeting Windows 10 for compatibility.
 
@@ -17,8 +17,8 @@ We're primarily targeting Windows 10 for compatibility.
 
 * run the command included in winqmake
 
-### On Linux
-To build in one step, run:
+### With docker
+To build in one step with docker, run:
 ```
 ./package.py
 ```
