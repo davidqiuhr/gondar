@@ -101,15 +101,10 @@ ImageSelectPage::ImageSelectPage(QWidget *parent)
 
 void ImageSelectPage::initializePage() {
     label.setText("Target image url:");
-    //TODO(kendall): populate buttons for button group 
-     
+    //TODO(kendall): make required
+    registerField("imageurl", & urlLineEdit);
     layout.addWidget(& label);
-    free32bit.setText(QString("32 bit"));
-    free64bit.setText(QString("64 bit"));
-    radioGroup.addButton(& free32bit);
-    radioGroup.addButton(& free64bit);
-    layout.addWidget(& free32bit);
-    layout.addWidget(& free64bit);
+    layout.addWidget(& urlLineEdit);
     setLayout(& layout);
 }
 
@@ -257,6 +252,7 @@ void DeviceSelectPage::initializePage()
     // use QVBoxLayout for vertically, H for horizontal
     layout.addWidget(& drivesLabel);
 
+    radioGroup = new QButtonGroup();
     // i could extend the button object to also have a secret index
     // then i could look up index later easily
     while (itr != NULL) {
@@ -264,7 +260,7 @@ void DeviceSelectPage::initializePage()
         GondarButton * curRadio = new GondarButton(itr->name,
                                                     itr->device_num,
                                                     this);
-        radioGroup.addButton(curRadio);
+        radioGroup->addButton(curRadio);
         //FIXME(kendall): occassionally get a warning about null pointer
         layout.addWidget(curRadio);
         itr = itr->next;
@@ -274,7 +270,7 @@ void DeviceSelectPage::initializePage()
 
 bool DeviceSelectPage::validatePage() {
     //TODO(kendall): check for NULL on bad cast
-    GondarButton * selected = dynamic_cast<GondarButton *>((& radioGroup)->checkedButton());
+    GondarButton * selected = dynamic_cast<GondarButton *>(radioGroup->checkedButton());
     if (selected == NULL) {
         return false;
     } else {
