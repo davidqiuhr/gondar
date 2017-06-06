@@ -157,7 +157,7 @@ void DownloadProgressPage::markComplete() {
     unzipThread = new UnzipThread(this);
     unzipThread->setUrl(& url);
     connect(unzipThread, SIGNAL(complete()), this, SLOT(onUnzipFinished()));
-    unzipThread->launchThread();
+    unzipThread->start();
 }
 
 void DownloadProgressPage::onUnzipFinished() {
@@ -318,7 +318,7 @@ void WriteOperationPage::writeToDrive() {
     diskWriteThread->setImagePath(& image_path);
     connect(diskWriteThread, SIGNAL(usbcomplete()), this, SLOT(onDoneWriting()));
     qDebug() << "launching thread...";
-    diskWriteThread->launchThread();
+    diskWriteThread->start();
 }
 
 void WriteOperationPage::showProgress() {

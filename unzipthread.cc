@@ -22,12 +22,6 @@ void UnzipThread::setUrl(QString * url_in) {
     url.append(url_in);
 }
 
-void UnzipThread::launchThread() {
-    if (!isRunning()) {
-        start();
-    }
-}
-
 void UnzipThread::run() {
     qDebug() << "running unzip on url=" << url;
     const char * url_c_str = url.toStdString().c_str();

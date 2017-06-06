@@ -11,7 +11,6 @@ class UnzipThread : public QThread {
     UnzipThread(QObject *parent = 0);
     void setUrl(QString * url_in);
     ~UnzipThread();
-    void launchThread();
 
   signals:
     void complete();

@@ -25,12 +25,6 @@ void DiskWriteThread::setImagePath(QString * image_path_in) {
     image_path.append(image_path_in);
 }
 
-void DiskWriteThread::launchThread() {
-    if (!isRunning()) {
-        start();
-    }
-}
-
 void DiskWriteThread::run() {
     qDebug() << "running diskwrite on image=" << image_path;
     const char * image_path_c_str = image_path.toStdString().c_str();

@@ -14,7 +14,6 @@ class DiskWriteThread : public QThread {
     void setDrive(DeviceGuy * drive_in);
     void setImagePath(QString * image_path_in);
     ~DiskWriteThread();
-    void launchThread();
 
   signals:
     void usbcomplete();
