@@ -35,7 +35,7 @@ GondarWizard::GondarWizard(QWidget *parent)
     addPage(new DownloadProgressPage);
     addPage(new UsbInsertPage);
     addPage(new DeviceSelectPage);
-    addPage(new KewlPage);
+    addPage(new WriteOperationPage);
     setWindowTitle(tr("Cloudready USB Creation Utility"));
 }
 
@@ -153,10 +153,10 @@ void DownloadProgressPage::markComplete() {
     url = field("imageurl").toString().toStdString().c_str();
     qDebug() << "debug: url beforehand:" << url;
     //FIXME(kendall): make thread and start it
-    UnzipThread * uzt = new UnzipThread(this);
-    uzt->setUrl(url);
-    connect(uzt, SIGNAL(complete()), this, SLOT(onUnzipFinished()));
-    uzt->launchThread();
+    unzipThread = new UnzipThread(this);
+    unzipThread->setUrl(url);
+    connect(unzipThread, SIGNAL(complete()), this, SLOT(onUnzipFinished()));
+    unzipThread->launchThread();
 }
 
 void DownloadProgressPage::onUnzipFinished() {
@@ -279,7 +279,7 @@ bool DeviceSelectPage::validatePage() {
     }
 }
 
-KewlPage::KewlPage(QWidget *parent)
+WriteOperationPage::WriteOperationPage(QWidget *parent)
     : QWizardPage(parent)
 {
     setTitle(tr("Writing to disk will like, totally wipe your drive, dude."));
@@ -287,7 +287,7 @@ KewlPage::KewlPage(QWidget *parent)
     setLayout(& layout);
 }
 
-void KewlPage::initializePage()
+void WriteOperationPage::initializePage()
 {
     writeFinished = false;
     showProgress();
@@ -299,32 +299,32 @@ void KewlPage::initializePage()
     }
 }
 
-bool KewlPage::isComplete() const {
+bool WriteOperationPage::isComplete() const {
     return writeFinished;
 }
 
-bool KewlPage::validatePage() {
+bool WriteOperationPage::validatePage() {
     return writeFinished;
 }
 
-void KewlPage::writeToDrive() {
+void WriteOperationPage::writeToDrive() {
     qDebug() << "Writing to drive...";
     char image_path[] = "chromiumos_image.bin";
     showProgress();
-    DiskWriteThread * dwt = new DiskWriteThread(this);
-    dwt->setDrive(selected_drive);
-    dwt->setImagePath(image_path);
-    connect(dwt, SIGNAL(usbcomplete()), this, SLOT(onDoneWriting()));
+    diskWriteThread = new DiskWriteThread(this);
+    diskWriteThread->setDrive(selected_drive);
+    diskWriteThread->setImagePath(image_path);
+    connect(diskWriteThread, SIGNAL(usbcomplete()), this, SLOT(onDoneWriting()));
     qDebug() << "launching thread...";
-    dwt->launchThread();
+    diskWriteThread->launchThread();
 }
 
-void KewlPage::showProgress() {
+void WriteOperationPage::showProgress() {
     progress.setRange(0, 0);
     progress.setValue(0);
 }
 
-void KewlPage::onDoneWriting() {
+void WriteOperationPage::onDoneWriting() {
     qDebug() << "install call returned";
     writeFinished = true;
     progress.setRange(0, 100);
