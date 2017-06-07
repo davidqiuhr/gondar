@@ -1,8 +1,8 @@
 # qmake is called different things in different distributions
-ifeq (which qmake-qt5,0)
-	QMAKE="qmake-qt5"
+ifneq (, $(shell which qmake-qt5))
+    QMAKE=qmake-qt5
 else
-	QMAKE="qmake"
+    QMAKE=qmake
 endif
 
 
