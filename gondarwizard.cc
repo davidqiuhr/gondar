@@ -154,8 +154,7 @@ void DownloadProgressPage::markComplete() {
     url.append(field("imageurl").toString());
     qDebug() << "debug: url beforehand:" << url;
     //FIXME(kendall): make thread and start it
-    unzipThread = new UnzipThread(this);
-    unzipThread->setUrl(& url);
+    unzipThread = new UnzipThread(& url, this);
     connect(unzipThread, SIGNAL(complete()), this, SLOT(onUnzipFinished()));
     unzipThread->start();
 }

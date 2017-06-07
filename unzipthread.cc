@@ -9,17 +9,13 @@ extern "C" {
   #include "neverware_unzipper.h"
 }
 
-UnzipThread::UnzipThread(QObject *parent)
+UnzipThread::UnzipThread(QString * url_in, QObject *parent)
     : QThread(parent) {
+    url.clear();
+    url.append(url_in);
 }
 
 UnzipThread::~UnzipThread() {
-}
-
-void UnzipThread::setUrl(QString * url_in) {
-    qDebug() << "setting url=" << url_in;
-    url.clear();
-    url.append(url_in);
 }
 
 void UnzipThread::run() {

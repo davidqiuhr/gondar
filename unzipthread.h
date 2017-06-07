@@ -8,8 +8,7 @@
 class UnzipThread : public QThread {
     Q_OBJECT
   public:
-    UnzipThread(QObject *parent = 0);
-    void setUrl(QString * url_in);
+    UnzipThread(QString * url_in, QObject *parent = 0);
     ~UnzipThread();
 
   signals:
