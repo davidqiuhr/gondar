@@ -26,7 +26,7 @@ win32 {
 }
 
 *gcc* {
-  QMAKE_CFLAGS += -Wextra -Wmissing-declarations -std=c++11
+  QMAKE_CFLAGS += -Wextra -Wmissing-declarations
 }
 
 *g++* {
