@@ -26,7 +26,7 @@ typedef struct DeviceGuyList {
 } DeviceGuyList;
 
 DeviceGuy * DeviceGuy_init(uint32_t device_num, const char * name);
-void DeviceGuy_copy(DeviceGuy * src, DeviceGuy * dst);
+void DeviceGuy_copy(const DeviceGuy * src, DeviceGuy * dst);
 DeviceGuyList * DeviceGuyList_init();
 void DeviceGuyList_append(DeviceGuyList * self, uint32_t index, const char * name);
 void DeviceGuyList_print(DeviceGuyList * self); 
