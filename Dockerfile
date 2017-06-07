@@ -8,7 +8,7 @@ WORKDIR /opt/gondar
 RUN mkdir -p build/minizip-mxe
 WORKDIR /opt/gondar/build/minizip-mxe
 ENV PATH=$PATH:/opt/gondar/mxe/usr/bin
-RUN /opt/gondar/mxe/usr/bin/i686-w64-mingw32.static-cmake ../../minizip
+RUN /opt/mxe/usr/bin/i686-w64-mingw32.static-cmake ../../minizip
 RUN make
 
 WORKDIR /opt/gondar
