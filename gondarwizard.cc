@@ -8,11 +8,9 @@
 #include "unzipthread.h"
 #include "diskwritethread.h"
 
-extern "C" {
-  #include "gondar.h"
-  #include "deviceguy.h"
-  #include "neverware_unzipper.h"
-}
+#include "gondar.h"
+#include "deviceguy.h"
+#include "neverware_unzipper.h"
 
 DeviceGuyList * drivelist = NULL;
 DeviceGuy * selected_drive = NULL;

@@ -1,0 +1,44 @@
+# qmake is called different things in different distributions
+ifneq (, $(shell which qmake-qt5))
+    QMAKE=qmake-qt5
+else
+    QMAKE=qmake
+endif
+
+
+all: build-gondar
+
+
+# Build libminizip.a and libaes.a
+build-minizip: update-submodules
+	mkdir -p build/minizip && \
+		cd build/minizip && \
+		cmake ../../minizip && \
+		cmake --build . && \
+		mkdir -p native && \
+		cp lib*.a native
+
+
+# Build gondar executable
+build-gondar: build-minizip
+	mkdir -p build && \
+		cd build && \
+		${QMAKE} .. && \
+		make -j
+
+
+clean:
+	rm -rf build
+
+
+update-submodules:
+	git submodule update --init
+
+
+# The targets under "build-" are phony targets because those targets
+# handle the real dependency tracking internally
+.PHONY: all \
+		build/gondar \
+		build/minizip/libminizip.a \
+		clean \
+		update-submodules

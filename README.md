@@ -29,3 +29,16 @@ qmake CONFIG+=debug
 
 * run the command included in winqmake
 
+### Build for Linux
+
+1. Install dependencies (distro specific):
+
+    Fedora:
+    
+        dnf install cmake qt5-qtbase-devel
+
+    Ubuntu:
+
+        aptitude install cmake qt5-default
+
+2. make -f Makefile.linux

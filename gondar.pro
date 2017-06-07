@@ -30,11 +30,11 @@ win32 {
 }
 
 *gcc* {
-  QMAKE_CFLAGS += -Wextra -Wmissing-declarations
+  QMAKE_CFLAGS += -Wextra -Wmissing-declarations -std=c++11
 }
 
 *g++* {
-  QMAKE_CXXFLAGS += -Wextra -Wmissing-declarations
+  QMAKE_CXXFLAGS += -Wextra -Wmissing-declarations -std=c++11
 }
 
 # install
