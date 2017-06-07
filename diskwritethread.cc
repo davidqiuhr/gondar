@@ -7,13 +7,13 @@
 #include "gondar.h"
 
 DiskWriteThread::DiskWriteThread(DeviceGuy * drive_in,
-                                 const QString* image_path_in,
+                                 const QString & image_path_in,
                                  QObject *parent)
     : QThread(parent) {
     DeviceGuy_copy(drive_in, & selected_drive);
     selected_drive.next = NULL;
     selected_drive.prev = NULL;
-    image_path = * image_path_in;
+    image_path = image_path_in;
 }
 
 DiskWriteThread::~DiskWriteThread() {

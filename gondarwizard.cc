@@ -305,7 +305,7 @@ void WriteOperationPage::writeToDrive() {
     image_path.clear();
     image_path.append("chromiumos_image.bin");
     showProgress();
-    diskWriteThread = new DiskWriteThread(selected_drive, & image_path, this);
+    diskWriteThread = new DiskWriteThread(selected_drive, image_path, this);
     connect(diskWriteThread, SIGNAL(usbcomplete()), this, SLOT(onDoneWriting()));
     qDebug() << "launching thread...";
     diskWriteThread->start();
