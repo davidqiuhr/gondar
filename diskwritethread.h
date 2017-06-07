@@ -10,9 +10,9 @@
 class DiskWriteThread : public QThread {
     Q_OBJECT
   public:
-    DiskWriteThread(QObject *parent = 0);
-    void setDrive(DeviceGuy * drive_in);
-    void setImagePath(QString * image_path_in);
+    DiskWriteThread(DeviceGuy * drive_in,
+                    QString * image_path_in,
+                    QObject *parent = 0);
     ~DiskWriteThread();
 
   signals:

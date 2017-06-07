@@ -106,7 +106,7 @@ private:
     QProgressBar progress;
     bool download_finished;
     QLabel label;
-    QString url;
+    QUrl url;
     QVBoxLayout layout;
     UnzipThread * unzipThread;
 };

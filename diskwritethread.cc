@@ -9,20 +9,15 @@ extern "C" {
 #include "gondar.h"
 }
 
-DiskWriteThread::DiskWriteThread(QObject *parent)
+DiskWriteThread::DiskWriteThread(DeviceGuy * drive_in,
+                                 QString* image_path_in,
+                                 QObject *parent)
     : QThread(parent) {
+    DeviceGuy_copy(drive_in, & selected_drive);
+    image_path = * image_path_in;
 }
 
 DiskWriteThread::~DiskWriteThread() {
-}
-
-void DiskWriteThread::setDrive(DeviceGuy * drive_in) {
-    DeviceGuy_copy(drive_in, & selected_drive);
-}
-
-void DiskWriteThread::setImagePath(QString * image_path_in) {
-    image_path.clear();
-    image_path.append(image_path_in);
 }
 
 void DiskWriteThread::run() {

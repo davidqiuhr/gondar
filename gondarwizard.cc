@@ -73,7 +73,6 @@ bool AdminCheckPage::isComplete() const {
 }
 
 void AdminCheckPage::getIsAdmin() {
-    qDebug() << "kendall: getIsAdmin fires";
     is_admin = IsCurrentProcessElevated();
     if (!is_admin) {
         emit isNotAdminReady();
@@ -149,11 +148,8 @@ void DownloadProgressPage::markComplete() {
     label.setText("Download is complete.");
     // now that the download is finished, let's unzip the build.
     notifyUnzip();
-    //TODO(kendall): do the unzip in another thread so progress bar animates
-    url.clear();
-    url.append(field("imageurl").toString());
+    url = field("imageurl").toString();
     qDebug() << "debug: url beforehand:" << url;
-    //FIXME(kendall): make thread and start it
     unzipThread = new UnzipThread(& url, this);
     connect(unzipThread, SIGNAL(complete()), this, SLOT(onUnzipFinished()));
     unzipThread->start();
@@ -260,7 +256,6 @@ void DeviceSelectPage::initializePage()
                                                     itr->device_num,
                                                     this);
         radioGroup->addButton(curRadio);
-        //FIXME(kendall): occassionally get a warning about null pointer
         layout.addWidget(curRadio);
         itr = itr->next;
     }
@@ -312,9 +307,7 @@ void WriteOperationPage::writeToDrive() {
     image_path.clear();
     image_path.append("chromiumos_image.bin");
     showProgress();
-    diskWriteThread = new DiskWriteThread(this);
-    diskWriteThread->setDrive(selected_drive);
-    diskWriteThread->setImagePath(& image_path);
+    diskWriteThread = new DiskWriteThread(selected_drive, & image_path, this);
     connect(diskWriteThread, SIGNAL(usbcomplete()), this, SLOT(onDoneWriting()));
     qDebug() << "launching thread...";
     diskWriteThread->start();

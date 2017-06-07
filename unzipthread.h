@@ -3,12 +3,12 @@
 #define UNZIP_THREAD_H
 
 #include <QThread>
-#include <QString>
+#include <QUrl>
 
 class UnzipThread : public QThread {
     Q_OBJECT
   public:
-    UnzipThread(QString * url_in, QObject *parent = 0);
+    UnzipThread(QUrl * url_in, QObject *parent = 0);
     ~UnzipThread();
 
   signals:
@@ -16,7 +16,7 @@ class UnzipThread : public QThread {
 
   protected:
     void run() override;
-    QString url;
+    QUrl url;
 };
 
 #endif /* UNZIP_THREAD_H */
