@@ -12,7 +12,6 @@ RUN make
 
 WORKDIR /opt/gondar
 ADD *.c *.cc *.h *.pro *.qrc /opt/gondar/
-WORKDIR /opt/gondar
 ADD images /opt/gondar/images
 
 ENV PATH=$PATH:/opt/mxe/usr/bin
