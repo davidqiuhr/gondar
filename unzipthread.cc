@@ -18,5 +18,4 @@ void UnzipThread::run() {
     const char * url_c_str = url.toString().toStdString().c_str();
     neverware_unzip(url_c_str);
     qDebug() << "worker thread says complete";
-    emit complete();
 }

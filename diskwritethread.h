@@ -15,9 +15,6 @@ class DiskWriteThread : public QThread {
                     QObject *parent = 0);
     ~DiskWriteThread();
 
-  signals:
-    void usbcomplete();
-
   protected:
     void run() override;
   private:

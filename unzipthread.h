@@ -11,9 +11,6 @@ class UnzipThread : public QThread {
     UnzipThread(const QUrl * url_in, QObject *parent = 0);
     ~UnzipThread();
 
-  signals:
-    void complete();
-
   protected:
     void run() override;
     QUrl url;

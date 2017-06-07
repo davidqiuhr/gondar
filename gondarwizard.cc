@@ -149,7 +149,7 @@ void DownloadProgressPage::markComplete() {
     url = field("imageurl").toString();
     qDebug() << "debug: url beforehand:" << url;
     unzipThread = new UnzipThread(& url, this);
-    connect(unzipThread, SIGNAL(complete()), this, SLOT(onUnzipFinished()));
+    connect(unzipThread, SIGNAL(finished()), this, SLOT(onUnzipFinished()));
     unzipThread->start();
 }
 
@@ -306,7 +306,7 @@ void WriteOperationPage::writeToDrive() {
     image_path.append("chromiumos_image.bin");
     showProgress();
     diskWriteThread = new DiskWriteThread(selected_drive, image_path, this);
-    connect(diskWriteThread, SIGNAL(usbcomplete()), this, SLOT(onDoneWriting()));
+    connect(diskWriteThread, SIGNAL(finished()), this, SLOT(onDoneWriting()));
     qDebug() << "launching thread...";
     diskWriteThread->start();
 }

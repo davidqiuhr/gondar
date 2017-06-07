@@ -24,5 +24,4 @@ void DiskWriteThread::run() {
     const char * image_path_c_str = image_path.toStdString().c_str();
     Install(& selected_drive, image_path_c_str);
     qDebug() << "worker thread says complete";
-    emit usbcomplete();
 }
