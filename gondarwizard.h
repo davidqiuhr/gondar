@@ -9,11 +9,8 @@
 
 #include <QString>
 
+#include "deviceguy.h"
 #include "downloader.h"
-
-extern "C" {
-    #include "deviceguy.h"
-}
 
 class QCheckBox;
 class QGroupBox;
