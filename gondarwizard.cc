@@ -36,6 +36,11 @@ GondarWizard::GondarWizard(QWidget *parent)
     addPage(new KewlPage);
     setWizardStyle(QWizard::ModernStyle);
     setWindowTitle(tr("Cloudready USB Creation Utility"));
+
+    // Only show next buttons for all screens
+    QList<QWizard::WizardButton> button_layout;
+    button_layout << QWizard::NextButton;
+    setButtonLayout(button_layout);
 }
 
 AdminCheckPage::AdminCheckPage(QWidget *parent)
