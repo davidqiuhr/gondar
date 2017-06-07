@@ -6,11 +6,9 @@
 #include "gondarwizard.h"
 #include "downloader.h"
 
-extern "C" {
-  #include "gondar.h"
-  #include "deviceguy.h"
-  #include "neverware_unzipper.h"
-}
+#include "gondar.h"
+#include "deviceguy.h"
+#include "neverware_unzipper.h"
 
 DeviceGuyList * drivelist = NULL;
 DeviceGuy * selected_drive = NULL;
