@@ -1,9 +1,6 @@
 #include <QtGlobal>
 
-// TODO(nicholasbishop): move the extern C to the header file
-extern "C" {
 #include "gondar.h"
-}
 
 DeviceGuyList* GetDeviceList() {
   auto* list = DeviceGuyList_init();
