@@ -37,4 +37,8 @@ qmake CONFIG+=debug
     
         dnf install cmake qt5-qtbase-devel
 
+    Ubuntu:
+
+        aptitude install cmake qt5-default
+
 2. make -f Makefile.linux
