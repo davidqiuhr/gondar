@@ -6,9 +6,10 @@
 #include <QRadioButton>
 #include <QProgressBar>
 #include <QtWidgets>
-
 #include <QString>
 
+#include "diskwritethread.h"
+#include "unzipthread.h"
 #include "deviceguy.h"
 #include "downloader.h"
 
@@ -94,7 +95,7 @@ public slots:
     void markComplete();
     void downloadProgress(qint64 sofar, qint64 total);
     void onDownloadStarted();
-    void startUnzip();
+    void onUnzipFinished();
 
 private:
     bool range_set;
@@ -102,8 +103,9 @@ private:
     QProgressBar progress;
     bool download_finished;
     QLabel label;
-    const char * url;
+    QUrl url;
     QVBoxLayout layout;
+    UnzipThread * unzipThread;
 };
 
 class UsbInsertPage : public QWizardPage
@@ -148,20 +150,27 @@ private:
     QVBoxLayout layout;
 };
 
-class KewlPage: public QWizardPage {
+class WriteOperationPage: public QWizardPage {
     Q_OBJECT
 
 public:
-    KewlPage(QWidget *parent = 0);
+    WriteOperationPage(QWidget *parent = 0);
 
 protected:
     void initializePage() override;
+    bool isComplete() const;
     bool validatePage() override;
-
+    void showProgress();
 public slots:
+    void onDoneWriting();
+
+private:
     void writeToDrive();
-signals:
-    void writeDriveRequested();
+    QVBoxLayout layout;
+    QProgressBar progress;
+    bool writeFinished;
+    DiskWriteThread * diskWriteThread;
+    QString image_path;
 };
 
 #endif /* GONDARWIZARD */

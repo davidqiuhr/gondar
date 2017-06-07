@@ -20,6 +20,12 @@ DeviceGuy * DeviceGuy_init(uint32_t device_num, const char * name) {
     return self;
 }
 
+void DeviceGuy_copy(const DeviceGuy * src, DeviceGuy * dst) {
+    * dst = * src;
+    // we have no interest in copying the list-ness of this structure
+    dst->next = NULL;
+    dst->prev = NULL;
+}
 DeviceGuyList * DeviceGuyList_init() {
     DeviceGuyList * self = new DeviceGuyList();
     memset(self, 0, sizeof(DeviceGuyList));
@@ -32,7 +38,6 @@ void DeviceGuyList_append(DeviceGuyList * self, uint32_t device_num, const char 
     printf("kendall: in append with self=%p, device_num=%d, name=%s\n", self, device_num, name);
     DeviceGuy * newguy = DeviceGuy_init(device_num, name);
     if (self->head == NULL) {
-        //FIXME(kendall): when i set self->head to newguy, everything breaks 
         self->head = newguy;
         self->tail = newguy;
     }

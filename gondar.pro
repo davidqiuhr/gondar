@@ -7,12 +7,16 @@ HEADERS       = gondarwizard.h \
                 deviceguy.h \
                 shared.h \
                 gondar.h \
-                neverware_unzipper.h
+                neverware_unzipper.h \
+                unzipthread.h \
+                diskwritethread.h
 SOURCES       = gondarwizard.cc \
                 downloader.cc \
                 main.cc \
                 deviceguy.cc \
                 neverware_unzipper.c \
+                unzipthread.cc \
+                diskwritethread.cc \
                 minizip/minishared.c
 RESOURCES     = gondarwizard.qrc
 

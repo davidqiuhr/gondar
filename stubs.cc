@@ -9,7 +9,7 @@ DeviceGuyList* GetDeviceList() {
   return list;
 }
 
-void Install(DeviceGuy * target_device, char * image_path) {
+void Install(DeviceGuy * target_device, const char * image_path) {
   Q_UNUSED(target_device);
   Q_UNUSED(image_path);
 }
