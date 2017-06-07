@@ -1,4 +1,9 @@
-QMAKE=qmake-qt5
+# qmake is called different things in different distributions
+ifeq (which qmake-qt5,0)
+	QMAKE="qmake-qt5"
+else
+	QMAKE="qmake"
+endif
 
 
 all: build-gondar
