@@ -3,11 +3,9 @@
 
 #include <QtWidgets>
 
-extern "C" {
-  #include "neverware_unzipper.h"
-}
+#include "neverware_unzipper.h"
 
-UnzipThread::UnzipThread(QUrl * url_in, QObject *parent)
+UnzipThread::UnzipThread(const QUrl * url_in, QObject *parent)
     : QThread(parent) {
     url = * url_in;
 }
