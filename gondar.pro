@@ -30,7 +30,7 @@ win32 {
 }
 
 *gcc* {
-  QMAKE_CFLAGS += -Wextra -Wmissing-declarations -std=c++11
+  QMAKE_CFLAGS += -Wextra -Wmissing-declarations
 }
 
 *g++* {
@@ -45,7 +45,7 @@ TEMPLATE = app
 TARGET = gondar
 
 win32 {
-  LIBS += -Lbuild
+  LIBS += -Lbuild/minizip-mxe
   LIBS += -lsetupapi -lole32 -lgdi32 -lwininet -lshlwapi -lcrypt32 -lwintrust -lcomdlg32 -luuid
 
   # Needed for static linking
@@ -56,7 +56,7 @@ win32 {
     LIBS += -lQt5PlatformSupport
   }
 } else {
-  LIBS += -Lnative
+  LIBS += -Lnative/minizip-mxe
 }
 
 LIBS += -lminizip -lz -laes
