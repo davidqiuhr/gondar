@@ -41,7 +41,7 @@ TEMPLATE = app
 TARGET = gondar
 
 win32 {
-  LIBS += -Lminizip/build
+  LIBS += -Lbuild/minizip-mxe
   LIBS += -lsetupapi -lole32 -lgdi32 -lwininet -lshlwapi -lcrypt32 -lwintrust -lcomdlg32 -luuid
 
   # Needed for static linking
@@ -52,7 +52,7 @@ win32 {
     LIBS += -lQt5PlatformSupport
   }
 } else {
-  LIBS += -Lminizip/native
+  LIBS += -Lnative/minizip-mxe
 }
 
 LIBS += -lminizip -lz -laes
