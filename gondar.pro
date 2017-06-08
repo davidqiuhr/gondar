@@ -2,21 +2,21 @@ QT = core network widgets
 
 CONFIG += console static
 
-HEADERS       = gondarwizard.h \
-                downloader.h \
-                deviceguy.h \
-                shared.h \
-                gondar.h \
-                neverware_unzipper.h \
-                unzipthread.h \
-                diskwritethread.h
-SOURCES       = gondarwizard.cc \
-                downloader.cc \
-                main.cc \
-                deviceguy.cc \
-                neverware_unzipper.c \
-                unzipthread.cc \
-                diskwritethread.cc \
+HEADERS       = src/gondarwizard.h \
+                src/downloader.h \
+                src/deviceguy.h \
+                src/shared.h \
+                src/gondar.h \
+                src/neverware_unzipper.h \
+                src/unzipthread.h \
+                src/diskwritethread.h
+SOURCES       = src/gondarwizard.cc \
+                src/downloader.cc \
+                src/main.cc \
+                src/deviceguy.cc \
+                src/neverware_unzipper.c \
+                src/unzipthread.cc \
+                src/diskwritethread.cc \
                 minizip/minishared.c
 RESOURCES     = gondarwizard.qrc
 
@@ -24,9 +24,9 @@ INCLUDEPATH += minizip
 
 win32 {
   INCLUDEPATH += ms-sys/inc
-  SOURCES += gondar.c
+  SOURCES += src/gondar.c
 } else {
-  SOURCES += stubs.cc  
+  SOURCES += src/stubs.cc  
 }
 
 *gcc* {
