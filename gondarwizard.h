@@ -48,18 +48,11 @@ public:
 protected:
     void initializePage() override;
     bool isComplete() const;
-
-public slots:
-    void getIsAdmin();
     void showIsAdmin();
     void showIsNotAdmin();
-signals:
-    void isAdminRequested();
-    void isAdminReady();
-    void isNotAdminReady();
+
 private:
     QLabel label;
-    QTimer *tim;
     bool is_admin;
     QVBoxLayout layout;
 };
@@ -120,16 +113,15 @@ protected:
     bool isComplete() const;
 
 private:
+    void showDriveList();
     QLabel label;
     QTimer *tim;
     QVBoxLayout layout;
 
 public slots:
     void getDriveList();
-    void showDriveList();
 signals:
     void driveListRequested();
-    void driveListReady();
 };
 
 class DeviceSelectPage : public QWizardPage
