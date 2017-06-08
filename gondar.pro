@@ -56,7 +56,7 @@ win32 {
     LIBS += -lQt5PlatformSupport
   }
 } else {
-  LIBS += -Lnative/minizip-mxe
+  LIBS += -Lminizip
 }
 
 LIBS += -lminizip -lz -laes
