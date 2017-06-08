@@ -177,8 +177,6 @@ UsbInsertPage::UsbInsertPage(QWidget *parent)
     // the next button should be grayed out until the user inserts a USB
     QObject::connect(this, SIGNAL(driveListRequested()),
                      this, SLOT(getDriveList()));
-    QObject::connect(this, SIGNAL(driveListReady()),
-                     this, SLOT(showDriveList()));
 }
 
 void UsbInsertPage::initializePage() {
@@ -207,7 +205,7 @@ void UsbInsertPage::getDriveList() {
         tim->start(1000);
     } else {
         tim->stop();
-        emit driveListReady();
+        showDriveList();
     }
 }
 

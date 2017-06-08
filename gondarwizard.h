@@ -113,16 +113,15 @@ protected:
     bool isComplete() const;
 
 private:
+    void showDriveList();
     QLabel label;
     QTimer *tim;
     QVBoxLayout layout;
 
 public slots:
     void getDriveList();
-    void showDriveList();
 signals:
     void driveListRequested();
-    void driveListReady();
 };
 
 class DeviceSelectPage : public QWizardPage
