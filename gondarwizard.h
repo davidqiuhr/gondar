@@ -48,18 +48,11 @@ public:
 protected:
     void initializePage() override;
     bool isComplete() const;
-
-public slots:
-    void getIsAdmin();
     void showIsAdmin();
     void showIsNotAdmin();
-signals:
-    void isAdminRequested();
-    void isAdminReady();
-    void isNotAdminReady();
+
 private:
     QLabel label;
-    QTimer *tim;
     bool is_admin;
     QVBoxLayout layout;
 };

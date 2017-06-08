@@ -55,35 +55,20 @@ AdminCheckPage::AdminCheckPage(QWidget *parent)
 
     layout.addWidget(& label);
     setLayout(& layout);
-
-    // the next button is grayed out if user does not have appropriate rights
-    QObject::connect(this, SIGNAL(isAdminRequested()),
-                     this, SLOT(getIsAdmin()));
-    QObject::connect(this, SIGNAL(isAdminReady()),
-                     this, SLOT(showIsAdmin()));
-    QObject::connect(this, SIGNAL(isNotAdminReady()),
-                     this, SLOT(showIsNotAdmin()));
 }
 
 void AdminCheckPage::initializePage() {
-    tim = new QTimer(this);
-    connect(tim, SIGNAL(timeout()), SLOT(getIsAdmin()));
-    emit isAdminRequested();
+    is_admin = IsCurrentProcessElevated();
+    if (!is_admin) {
+        showIsNotAdmin();
+    } else {
+        showIsAdmin();
+    }
 }
 
 bool AdminCheckPage::isComplete() const {
+    // the next button is grayed out if user does not have appropriate rights
     return is_admin;
-}
-
-void AdminCheckPage::getIsAdmin() {
-    is_admin = IsCurrentProcessElevated();
-    if (!is_admin) {
-        emit isNotAdminReady();
-        tim->stop();
-    } else {
-        tim->stop();
-        emit isAdminReady();
-    }
 }
 
 void AdminCheckPage::showIsAdmin() {
