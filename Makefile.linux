@@ -14,9 +14,7 @@ build-minizip: update-submodules
 	mkdir -p build/minizip && \
 		cd build/minizip && \
 		cmake ../../minizip && \
-		cmake --build . && \
-		mkdir -p native && \
-		cp lib*.a native
+		cmake --build .
 
 
 # Build gondar executable
