@@ -1,4 +1,11 @@
-# MXE Build for Gondar
+# Dockerfiles for building Gondar and its dependencies
+
+## gondar-win32
+
+Builds Gondar for Win32 using MXE. This is used in `package.py`, or
+you can run it manually from the root directory of the repository:
+
+    docker build -f docker/mxe.Dockerfile .
 
 ## mxe.Dockerfile
 

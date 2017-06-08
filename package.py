@@ -21,7 +21,9 @@ def run_cmd(*args):
 
 def build_image(image_name):
     """Build the Dockerfile from the current directory."""
-    run_cmd('sudo', 'docker', 'build', '--tag', image_name, '.')
+    run_cmd('sudo', 'docker', 'build',
+            '--file', 'docker/gondar-win32.Dockerfile',
+            '--tag', image_name, '.')
 
 
 def get_output_path(subdir):
