@@ -1,5 +1,12 @@
 # Dockerfiles for building Gondar and its dependencies
 
+## gondar-linux
+
+Builds a non-functioning Gondar for Linux. This is mainly so that the
+Jenkins PR builder can make check that the Linux version still
+compiles. Using a Docker container allows us to avoid installing new
+dependencies on the Jenkins nodes.
+
 ## gondar-win32
 
 Builds Gondar for Win32 using MXE. This is used in `package.py`, or
