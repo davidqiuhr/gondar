@@ -1,11 +1,20 @@
 # Dockerfiles for building Gondar and its dependencies
 
+## gondar-linux
+
+Builds Gondar for Linux. The Linux build doesn't have much
+functionality, but is useful as a development tool. This Dockerfile is
+used on Jenkins to ensure the Linux build doesn't break. You can run
+it manually with:
+
+	docker build -f docker/gondar-linux.Dockerfile .
+
 ## gondar-win32
 
 Builds Gondar for Win32 using MXE. This is used in `package.py`, or
 you can run it manually from the root directory of the repository:
 
-    docker build -f docker/mxe.Dockerfile .
+    docker build -f docker/gondar-win32.Dockerfile .
 
 ## mxe.Dockerfile
 

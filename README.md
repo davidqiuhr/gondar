@@ -12,8 +12,9 @@ To make a build in one step, run:
 ```
 ./package.py
 ```
-`package.py` will handle building everything for you using mxe in a docker
-container.  Check out `./Dockerfile` to see how that happens.
+`package.py` will handle building everything for you using mxe in a
+docker container.  Check out `docker/gondar-win32.Dockerfile` to see
+how that happens.
     
 To configure a debub build, modify `gondar.pro` with 
 
