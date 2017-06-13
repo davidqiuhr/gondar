@@ -17,8 +17,6 @@ DeviceGuy * selected_drive = NULL;
 
 const QUrl * thirtyTwoUrl = new QUrl("https://ddnynf025unax.cloudfront.net/cloudready-free-56.3.80-32-bit/cloudready-free-56.3.80-32-bit.bin.zip");
 const QUrl * sixtyFourUrl = new QUrl("https://ddnynf025unax.cloudfront.net/cloudready-free-56.3.82-64-bit/cloudready-free-56.3.82-64-bit.bin.zip");
-const QString thirtyTwoText("32-bit");
-const QString sixtyFourText("64-bit");
 
 GondarButton::GondarButton(const QString & text,
                            unsigned int device_num,
@@ -93,8 +91,8 @@ ImageSelectPage::ImageSelectPage(QWidget *parent)
 {
     setTitle(tr("Select 32 or 64-bit"));
     label.setText("64-bit should be appropriate for most machines.  Choose 32-bit for netbooks or other machines with 32-bit processors");
-    thirtyTwo.setText(thirtyTwoText);
-    sixtyFour.setText(sixtyFourText);
+    thirtyTwo.setText("32-bit");
+    sixtyFour.setText("64-bit");
     sixtyFour.setChecked(true);
     bitnessButtons.addButton(& thirtyTwo);
     bitnessButtons.addButton(& sixtyFour);
