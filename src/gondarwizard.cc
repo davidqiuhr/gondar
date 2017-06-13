@@ -93,12 +93,13 @@ ImageSelectPage::ImageSelectPage(QWidget *parent)
 {
     setTitle(tr("Select 32 or 64-bit"));
     label.setText("64-bit should be appropriate for most machines.  Choose 32-bit for netbooks or other machines with 32-bit processors");
-    QRadioButton * thirtyTwo = new QRadioButton(thirtyTwoText);
-    QRadioButton * sixtyFour = new QRadioButton(sixtyFourText);
-    bitnessButtons.addButton(thirtyTwo);
-    bitnessButtons.addButton(sixtyFour);
-    layout.addWidget(thirtyTwo);
-    layout.addWidget(sixtyFour);
+    thirtyTwo.setText(thirtyTwoText);
+    sixtyFour.setText(sixtyFourText);
+    sixtyFour.setChecked(true);
+    bitnessButtons.addButton(& thirtyTwo);
+    bitnessButtons.addButton(& sixtyFour);
+    layout.addWidget(& thirtyTwo);
+    layout.addWidget(& sixtyFour);
     setLayout(& layout);
 }
 

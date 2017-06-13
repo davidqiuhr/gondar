@@ -75,6 +75,8 @@ private:
     QLabel label;
     QVBoxLayout layout;
     QButtonGroup bitnessButtons;
+    QRadioButton thirtyTwo;
+    QRadioButton sixtyFour;
 };
 
 class DownloadProgressPage : public QWizardPage
