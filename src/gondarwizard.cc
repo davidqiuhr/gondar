@@ -100,6 +100,7 @@ ImageSelectPage::ImageSelectPage(QWidget *parent)
     bitnessButtons->addButton(sixtyFour);
     layout.addWidget(thirtyTwo);
     layout.addWidget(sixtyFour);
+    setLayout(& layout);
 }
 
 void ImageSelectPage::initializePage() {
