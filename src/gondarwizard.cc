@@ -54,10 +54,10 @@ GondarWizard::GondarWizard(QWidget *parent)
 AdminCheckPage::AdminCheckPage(QWidget *parent)
     : QWizardPage(parent)
 {
-    setTitle(tr("Cloudready USB Creation Requirements"));
+    setTitle(tr("Insert USB Drive"));
     setPixmap(QWizard::WatermarkPixmap, QPixmap(":/images/frogmariachis.png"));
 
-    label.setText("Checking user rights...");
+    label.setText("Please wait...");
     is_admin = false; // assume false until we discover otherwise.
                       // this holds the user at this screen
 
@@ -80,7 +80,7 @@ bool AdminCheckPage::isComplete() const {
 }
 
 void AdminCheckPage::showIsAdmin() {
-    label.setText("You'll need:\nA USB\nA Strong Sense of Purpose");
+    label.setText("User has admin rights.");
     emit completeChanged();
 }
 
@@ -108,7 +108,7 @@ void ImageSelectPage::initializePage() {
 
 bool ImageSelectPage::validatePage() {
     GondarWizard * wiz = dynamic_cast<GondarWizard *>(wizard());
-    wiz->bitnessSelected = dynamic_cast<QRadioButton *>(bitnessButtons->checkedButton()); 
+    wiz->bitnessSelected = dynamic_cast<QRadioButton *>(bitnessButtons->checkedButton());
     return true;
 }
 DownloadProgressPage::DownloadProgressPage(QWidget *parent)
@@ -128,7 +128,7 @@ void DownloadProgressPage::initializePage() {
     GondarWizard * wiz = dynamic_cast<GondarWizard *>(wizard());
     QRadioButton * selected = wiz->bitnessSelected;
     if (selected->text() == thirtyTwoText) {
-        url = thirtyTwoUrl; 
+        url = thirtyTwoUrl;
     } else if (selected->text() == sixtyFourText) {
         url = sixtyFourUrl;
     } else {
