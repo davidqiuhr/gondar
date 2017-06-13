@@ -110,11 +110,6 @@ ImageSelectPage::ImageSelectPage(QWidget *parent)
 void ImageSelectPage::initializePage() {
 }
 
-bool ImageSelectPage::validatePage() {
-    GondarWizard * wiz = dynamic_cast<GondarWizard *>(wizard());
-    wiz->bitnessSelected = dynamic_cast<QRadioButton *>(bitnessButtons.checkedButton());
-    return true;
-}
 DownloadProgressPage::DownloadProgressPage(QWidget *parent)
     : QWizardPage(parent)
 {
@@ -130,11 +125,9 @@ void DownloadProgressPage::initializePage() {
     layout.addWidget(& label);
     setLayout(& layout);
     GondarWizard * wiz = dynamic_cast<GondarWizard *>(wizard());
-    QRadioButton * selected = wiz->bitnessSelected;
-    QRadioButton * thirtyTwo = & dynamic_cast<ImageSelectPage *>(
-                                  wiz->page(1))->thirtyTwo;
-    QRadioButton * sixtyFour = & dynamic_cast<ImageSelectPage *>(
-                                  wiz->page(1))->sixtyFour;
+    QRadioButton * selected = dynamic_cast<QRadioButton *>(wiz->imageSelectPage->bitnessButtons.checkedButton());
+    QRadioButton * thirtyTwo = & wiz->imageSelectPage->thirtyTwo;
+    QRadioButton * sixtyFour = & wiz->imageSelectPage->sixtyFour;
     if (selected == thirtyTwo) {
         url = thirtyTwoUrl;
     } else if (selected == sixtyFour) {
