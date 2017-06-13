@@ -95,9 +95,8 @@ ImageSelectPage::ImageSelectPage(QWidget *parent)
     label.setText("64-bit should be appropriate for most machines.  Choose 32-bit for netbooks or other machines with 32-bit processors");
     QRadioButton * thirtyTwo = new QRadioButton(thirtyTwoText);
     QRadioButton * sixtyFour = new QRadioButton(sixtyFourText);
-    bitnessButtons = new QButtonGroup();
-    bitnessButtons->addButton(thirtyTwo);
-    bitnessButtons->addButton(sixtyFour);
+    bitnessButtons.addButton(thirtyTwo);
+    bitnessButtons.addButton(sixtyFour);
     layout.addWidget(thirtyTwo);
     layout.addWidget(sixtyFour);
     setLayout(& layout);
@@ -108,7 +107,7 @@ void ImageSelectPage::initializePage() {
 
 bool ImageSelectPage::validatePage() {
     GondarWizard * wiz = dynamic_cast<GondarWizard *>(wizard());
-    wiz->bitnessSelected = dynamic_cast<QRadioButton *>(bitnessButtons->checkedButton());
+    wiz->bitnessSelected = dynamic_cast<QRadioButton *>(bitnessButtons.checkedButton());
     return true;
 }
 DownloadProgressPage::DownloadProgressPage(QWidget *parent)

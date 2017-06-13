@@ -74,7 +74,7 @@ protected:
 private:
     QLabel label;
     QVBoxLayout layout;
-    QButtonGroup * bitnessButtons;
+    QButtonGroup bitnessButtons;
 };
 
 class DownloadProgressPage : public QWizardPage
