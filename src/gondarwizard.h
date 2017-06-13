@@ -16,7 +16,6 @@
 class QCheckBox;
 class QGroupBox;
 class QLabel;
-class QLineEdit;
 class QRadioButton;
 
 class GondarButton : public QRadioButton {
@@ -35,7 +34,7 @@ class GondarWizard : public QWizard
 
 public:
     GondarWizard(QWidget *parent = 0);
-
+    QRadioButton * bitnessSelected;
 };
 
 class AdminCheckPage : public QWizardPage
@@ -66,10 +65,11 @@ public:
 
 protected:
     void initializePage() override;
+    bool validatePage() override;
 private:
     QLabel label;
-    QLineEdit urlLineEdit;
     QVBoxLayout layout;
+    QButtonGroup * bitnessButtons;
 };
 
 class DownloadProgressPage : public QWizardPage
@@ -96,9 +96,9 @@ private:
     QProgressBar progress;
     bool download_finished;
     QLabel label;
-    QUrl url;
     QVBoxLayout layout;
     UnzipThread * unzipThread;
+    const QUrl * url;
 };
 
 class UsbInsertPage : public QWizardPage

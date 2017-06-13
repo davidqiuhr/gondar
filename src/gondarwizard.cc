@@ -15,6 +15,11 @@
 DeviceGuyList * drivelist = NULL;
 DeviceGuy * selected_drive = NULL;
 
+const QUrl * thirtyTwoUrl = new QUrl("https://ddnynf025unax.cloudfront.net/cloudready-free-56.3.80-32-bit/cloudready-free-56.3.80-32-bit.bin.zip");
+const QUrl * sixtyFourUrl = new QUrl("https://ddnynf025unax.cloudfront.net/cloudready-free-56.3.82-64-bit/cloudready-free-56.3.82-64-bit.bin.zip");
+const QString thirtyTwoText("32-bit");
+const QString sixtyFourText("64-bit");
+
 GondarButton::GondarButton(const QString & text,
                            unsigned int device_num,
                            QWidget *parent)
@@ -41,15 +46,18 @@ GondarWizard::GondarWizard(QWidget *parent)
     QList<QWizard::WizardButton> button_layout;
     button_layout << QWizard::NextButton;
     setButtonLayout(button_layout);
+
+    // initialize bitness selected
+    bitnessSelected = NULL;
 }
 
 AdminCheckPage::AdminCheckPage(QWidget *parent)
     : QWizardPage(parent)
 {
-    setTitle(tr("Insert USB Drive"));
+    setTitle(tr("Cloudready USB Creation Requirements"));
     setPixmap(QWizard::WatermarkPixmap, QPixmap(":/images/frogmariachis.png"));
 
-    label.setText("Please wait...");
+    label.setText("Checking user rights...");
     is_admin = false; // assume false until we discover otherwise.
                       // this holds the user at this screen
 
@@ -72,7 +80,7 @@ bool AdminCheckPage::isComplete() const {
 }
 
 void AdminCheckPage::showIsAdmin() {
-    label.setText("User has admin rights.");
+    label.setText("You'll need:\nA USB\nA Strong Sense of Purpose");
     emit completeChanged();
 }
 
@@ -83,18 +91,25 @@ void AdminCheckPage::showIsNotAdmin() {
 ImageSelectPage::ImageSelectPage(QWidget *parent)
     : QWizardPage(parent)
 {
-    setTitle(tr("Select Remote Image"));
+    setTitle(tr("Select 32 or 64-bit"));
+    label.setText("64-bit should be appropriate for most machines.  Choose 32-bit for netbooks or other machines with 32-bit processors");
+    QRadioButton * thirtyTwo = new QRadioButton(thirtyTwoText);
+    QRadioButton * sixtyFour = new QRadioButton(sixtyFourText);
+    bitnessButtons = new QButtonGroup();
+    bitnessButtons->addButton(thirtyTwo);
+    bitnessButtons->addButton(sixtyFour);
+    layout.addWidget(thirtyTwo);
+    layout.addWidget(sixtyFour);
 }
 
 void ImageSelectPage::initializePage() {
-    label.setText("Target image url:");
-    //TODO(kendall): make required
-    registerField("imageurl", & urlLineEdit);
-    layout.addWidget(& label);
-    layout.addWidget(& urlLineEdit);
-    setLayout(& layout);
 }
 
+bool ImageSelectPage::validatePage() {
+    GondarWizard * wiz = dynamic_cast<GondarWizard *>(wizard());
+    wiz->bitnessSelected = dynamic_cast<QRadioButton *>(bitnessButtons->checkedButton()); 
+    return true;
+}
 DownloadProgressPage::DownloadProgressPage(QWidget *parent)
     : QWizardPage(parent)
 {
@@ -109,9 +124,19 @@ void DownloadProgressPage::initializePage() {
     label.setText("Downloading...");
     layout.addWidget(& label);
     setLayout(& layout);
-    qDebug() << "url = " << field("imageurl");
+    GondarWizard * wiz = dynamic_cast<GondarWizard *>(wizard());
+    QRadioButton * selected = wiz->bitnessSelected;
+    if (selected->text() == thirtyTwoText) {
+        url = thirtyTwoUrl; 
+    } else if (selected->text() == sixtyFourText) {
+        url = sixtyFourUrl;
+    } else {
+        qDebug() << "uh oh!";
+        return;
+    }
+    qDebug() << "using url= " << url;
     QObject::connect(&manager, SIGNAL(finished()), this, SLOT(markComplete()));
-    manager.append(field("imageurl").toString());
+    manager.append(url->toString());
     QObject::connect(&manager, SIGNAL(started()), this, SLOT(onDownloadStarted()));
 }
 
@@ -136,9 +161,7 @@ void DownloadProgressPage::markComplete() {
     label.setText("Download is complete.");
     // now that the download is finished, let's unzip the build.
     notifyUnzip();
-    url = field("imageurl").toString();
-    qDebug() << "debug: url beforehand:" << url;
-    unzipThread = new UnzipThread(& url, this);
+    unzipThread = new UnzipThread(url, this);
     connect(unzipThread, SIGNAL(finished()), this, SLOT(onUnzipFinished()));
     unzipThread->start();
 }
