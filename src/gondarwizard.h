@@ -34,6 +34,11 @@ class GondarWizard : public QWizard
 
 public:
     GondarWizard(QWidget *parent = 0);
+    // There's an elaborate state-sharing solution via the 'field' mechanism
+    // supported by QWizard.  I found the logic for that to be easy for sharing
+    // some data types and convoluted for others.  In this case, a later page
+    // makes a decision based on a radio button seleciton in an earlier page,
+    // so putting the shared state in the wizard seems more straightforward
     QRadioButton * bitnessSelected;
 };
 
