@@ -31,12 +31,18 @@ GondarWizard::GondarWizard(QWidget *parent)
     // these pages are automatically cleaned up
     // new instances are made whenever navigation moves on to another page
     // according to qt docs
-    addPage(new AdminCheckPage);
-    addPage(new ImageSelectPage);
-    addPage(new DownloadProgressPage);
-    addPage(new UsbInsertPage);
-    addPage(new DeviceSelectPage);
-    addPage(new WriteOperationPage);
+    adminCheckPage = new AdminCheckPage;
+    addPage(adminCheckPage);
+    imageSelectPage = new ImageSelectPage;
+    addPage(imageSelectPage);
+    downloadProgressPage = new DownloadProgressPage;
+    addPage(downloadProgressPage);
+    usbInsertPage = new UsbInsertPage;
+    addPage(usbInsertPage);
+    deviceSelectPage = new DeviceSelectPage;
+    addPage(deviceSelectPage);
+    writeOperationPage = new WriteOperationPage;
+    addPage(writeOperationPage);
     setWizardStyle(QWizard::ModernStyle);
     setWindowTitle(tr("Cloudready USB Creation Utility"));
 

@@ -18,6 +18,13 @@ class QGroupBox;
 class QLabel;
 class QRadioButton;
 
+class AdminCheckPage;
+class ImageSelectPage;
+class DownloadProgressPage;
+class UsbInsertPage;
+class DeviceSelectPage;
+class WriteOperationPage;
+
 class GondarButton : public QRadioButton {
     Q_OBJECT
 
@@ -40,6 +47,12 @@ public:
     // makes a decision based on a radio button seleciton in an earlier page,
     // so putting the shared state in the wizard seems more straightforward
     QRadioButton * bitnessSelected;
+    AdminCheckPage * adminCheckPage;
+    ImageSelectPage * imageSelectPage;
+    DownloadProgressPage * downloadProgressPage;
+    UsbInsertPage * usbInsertPage;
+    DeviceSelectPage * deviceSelectPage;
+    WriteOperationPage * writeOperationPage;
 };
 
 class AdminCheckPage : public QWizardPage
@@ -85,6 +98,12 @@ class DownloadProgressPage : public QWizardPage
 
 public:
     DownloadProgressPage(QWidget *parent = 0);
+    AdminCheckPage * adminCheckPage;
+    ImageSelectPage * imageSelectPage;
+    DownloadProgressPage * downloadProgressPage;
+    UsbInsertPage * usbInsertPage;
+    DeviceSelectPage * deviceSelectPage;
+    WriteOperationPage * writeOperationPage;
 
 protected:
     void initializePage() override;
