@@ -67,7 +67,9 @@ class ImageSelectPage : public QWizardPage
 
 public:
     ImageSelectPage(QWidget *parent = 0);
-
+    // used later for comparison by other pages in the wizard
+    QRadioButton thirtyTwo;
+    QRadioButton sixtyFour;
 protected:
     void initializePage() override;
     bool validatePage() override;
@@ -75,8 +77,6 @@ private:
     QLabel label;
     QVBoxLayout layout;
     QButtonGroup bitnessButtons;
-    QRadioButton thirtyTwo;
-    QRadioButton sixtyFour;
 };
 
 class DownloadProgressPage : public QWizardPage

@@ -127,9 +127,13 @@ void DownloadProgressPage::initializePage() {
     setLayout(& layout);
     GondarWizard * wiz = dynamic_cast<GondarWizard *>(wizard());
     QRadioButton * selected = wiz->bitnessSelected;
-    if (selected->text() == thirtyTwoText) {
+    QRadioButton * thirtyTwo = & dynamic_cast<ImageSelectPage *>(
+                                  wiz->page(1))->thirtyTwo;
+    QRadioButton * sixtyFour = & dynamic_cast<ImageSelectPage *>(
+                                  wiz->page(1))->sixtyFour;
+    if (selected == thirtyTwo) {
         url = thirtyTwoUrl;
-    } else if (selected->text() == sixtyFourText) {
+    } else if (selected == sixtyFour) {
         url = sixtyFourUrl;
     } else {
         qDebug() << "uh oh!";
