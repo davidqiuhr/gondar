@@ -18,13 +18,6 @@ class QGroupBox;
 class QLabel;
 class QRadioButton;
 
-class AdminCheckPage;
-class ImageSelectPage;
-class DownloadProgressPage;
-class UsbInsertPage;
-class DeviceSelectPage;
-class WriteOperationPage;
-
 class GondarButton : public QRadioButton {
     Q_OBJECT
 
@@ -64,8 +57,6 @@ public:
     QButtonGroup bitnessButtons;
     QRadioButton thirtyTwo;
     QRadioButton sixtyFour;
-protected:
-    void initializePage() override;
 private:
     QLabel label;
     QVBoxLayout layout;
@@ -77,12 +68,6 @@ class DownloadProgressPage : public QWizardPage
 
 public:
     DownloadProgressPage(QWidget *parent = 0);
-    AdminCheckPage * adminCheckPage;
-    ImageSelectPage * imageSelectPage;
-    DownloadProgressPage * downloadProgressPage;
-    UsbInsertPage * usbInsertPage;
-    DeviceSelectPage * deviceSelectPage;
-    WriteOperationPage * writeOperationPage;
 
 protected:
     void initializePage() override;

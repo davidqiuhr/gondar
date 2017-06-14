@@ -101,9 +101,6 @@ ImageSelectPage::ImageSelectPage(QWidget *parent)
     setLayout(& layout);
 }
 
-void ImageSelectPage::initializePage() {
-}
-
 DownloadProgressPage::DownloadProgressPage(QWidget *parent)
     : QWizardPage(parent)
 {
