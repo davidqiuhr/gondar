@@ -35,26 +35,6 @@ public:
     unsigned int index = 0;
 };
 
-class GondarWizard : public QWizard
-{
-    Q_OBJECT
-
-public:
-    GondarWizard(QWidget *parent = 0);
-    // There's an elaborate state-sharing solution via the 'field' mechanism
-    // supported by QWizard.  I found the logic for that to be easy for sharing
-    // some data types and convoluted for others.  In this case, a later page
-    // makes a decision based on a radio button seleciton in an earlier page,
-    // so putting the shared state in the wizard seems more straightforward
-    QRadioButton * bitnessSelected;
-    AdminCheckPage * adminCheckPage;
-    ImageSelectPage * imageSelectPage;
-    DownloadProgressPage * downloadProgressPage;
-    UsbInsertPage * usbInsertPage;
-    DeviceSelectPage * deviceSelectPage;
-    WriteOperationPage * writeOperationPage;
-};
-
 class AdminCheckPage : public QWizardPage
 {
     Q_OBJECT
@@ -188,6 +168,27 @@ private:
     bool writeFinished;
     DiskWriteThread * diskWriteThread;
     QString image_path;
+};
+
+class GondarWizard : public QWizard
+{
+    Q_OBJECT
+
+public:
+    GondarWizard(QWidget *parent = 0);
+    // There's an elaborate state-sharing solution via the 'field' mechanism
+    // supported by QWizard.  I found the logic for that to be easy for sharing
+    // some data types and convoluted for others.  In this case, a later page
+    // makes a decision based on a radio button seleciton in an earlier page,
+    // so putting the shared state in the wizard seems more straightforward
+    AdminCheckPage adminCheckPage;
+    ImageSelectPage imageSelectPage;
+    DownloadProgressPage downloadProgressPage;
+    UsbInsertPage usbInsertPage;
+    DeviceSelectPage deviceSelectPage;
+    WriteOperationPage writeOperationPage;
+
+    QRadioButton * bitnessSelected;
 };
 
 #endif /* GONDARWIZARD */

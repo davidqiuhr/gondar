@@ -31,18 +31,12 @@ GondarWizard::GondarWizard(QWidget *parent)
     // these pages are automatically cleaned up
     // new instances are made whenever navigation moves on to another page
     // according to qt docs
-    adminCheckPage = new AdminCheckPage;
-    addPage(adminCheckPage);
-    imageSelectPage = new ImageSelectPage;
-    addPage(imageSelectPage);
-    downloadProgressPage = new DownloadProgressPage;
-    addPage(downloadProgressPage);
-    usbInsertPage = new UsbInsertPage;
-    addPage(usbInsertPage);
-    deviceSelectPage = new DeviceSelectPage;
-    addPage(deviceSelectPage);
-    writeOperationPage = new WriteOperationPage;
-    addPage(writeOperationPage);
+    addPage(& adminCheckPage);
+    addPage(& imageSelectPage);
+    addPage(& downloadProgressPage);
+    addPage(& usbInsertPage);
+    addPage(& deviceSelectPage);
+    addPage(& writeOperationPage);
     setWizardStyle(QWizard::ModernStyle);
     setWindowTitle(tr("Cloudready USB Creation Utility"));
 
@@ -125,9 +119,9 @@ void DownloadProgressPage::initializePage() {
     layout.addWidget(& label);
     setLayout(& layout);
     GondarWizard * wiz = dynamic_cast<GondarWizard *>(wizard());
-    QRadioButton * selected = dynamic_cast<QRadioButton *>(wiz->imageSelectPage->bitnessButtons.checkedButton());
-    QRadioButton * thirtyTwo = & wiz->imageSelectPage->thirtyTwo;
-    QRadioButton * sixtyFour = & wiz->imageSelectPage->sixtyFour;
+    QRadioButton * selected = dynamic_cast<QRadioButton *>(wiz->imageSelectPage.bitnessButtons.checkedButton());
+    QRadioButton * thirtyTwo = & wiz->imageSelectPage.thirtyTwo;
+    QRadioButton * sixtyFour = & wiz->imageSelectPage.sixtyFour;
     if (selected == thirtyTwo) {
         url = thirtyTwoUrl;
     } else if (selected == sixtyFour) {
