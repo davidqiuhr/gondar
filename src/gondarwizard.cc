@@ -101,6 +101,21 @@ ImageSelectPage::ImageSelectPage(QWidget *parent)
     setLayout(& layout);
 }
 
+QUrl * ImageSelectPage::getUrl() {
+    GondarWizard * wiz = dynamic_cast<GondarWizard *>(wizard());
+    QUrl * thirtyTwoUrl = & wiz->thirtyTwoUrl;
+    QUrl * sixtyFourUrl = & wiz->sixtyFourUrl;
+    QAbstractButton * selected = bitnessButtons.checkedButton();
+    if (selected == & thirtyTwo) {
+        return thirtyTwoUrl;
+    } else if (selected == & sixtyFour) {
+        return sixtyFourUrl;
+    } else {
+        //TODO: decide what this behavior should be
+        return sixtyFourUrl;
+    }
+}
+
 DownloadProgressPage::DownloadProgressPage(QWidget *parent)
     : QWizardPage(parent)
 {
@@ -116,19 +131,7 @@ void DownloadProgressPage::initializePage() {
     layout.addWidget(& label);
     setLayout(& layout);
     GondarWizard * wiz = dynamic_cast<GondarWizard *>(wizard());
-    QAbstractButton * selected = wiz->imageSelectPage.bitnessButtons.checkedButton();
-    QRadioButton * thirtyTwo = & wiz->imageSelectPage.thirtyTwo;
-    QRadioButton * sixtyFour = & wiz->imageSelectPage.sixtyFour;
-    QUrl * thirtyTwoUrl = & wiz->thirtyTwoUrl;
-    QUrl * sixtyFourUrl = & wiz->sixtyFourUrl;
-    if (selected == thirtyTwo) {
-        url = thirtyTwoUrl;
-    } else if (selected == sixtyFour) {
-        url = sixtyFourUrl;
-    } else {
-        qDebug() << "uh oh!";
-        return;
-    }
+    url = wiz->imageSelectPage.getUrl();
     qDebug() << "using url= " << url;
     QObject::connect(&manager, SIGNAL(finished()), this, SLOT(markComplete()));
     manager.append(url->toString());

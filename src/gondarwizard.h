@@ -53,11 +53,11 @@ class ImageSelectPage : public QWizardPage
 
 public:
     ImageSelectPage(QWidget *parent = 0);
-    // used later for comparison by other pages in the wizard
+    QUrl * getUrl();
+private:
     QButtonGroup bitnessButtons;
     QRadioButton thirtyTwo;
     QRadioButton sixtyFour;
-private:
     QLabel label;
     QVBoxLayout layout;
 };
