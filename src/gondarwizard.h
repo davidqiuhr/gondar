@@ -16,7 +16,6 @@
 class QCheckBox;
 class QGroupBox;
 class QLabel;
-class QLineEdit;
 class QRadioButton;
 
 class GondarButton : public QRadioButton {
@@ -27,15 +26,6 @@ public:
                  unsigned int device_num,
                  QWidget *parent = 0);
     unsigned int index = 0;
-};
-
-class GondarWizard : public QWizard
-{
-    Q_OBJECT
-
-public:
-    GondarWizard(QWidget *parent = 0);
-
 };
 
 class AdminCheckPage : public QWizardPage
@@ -63,13 +53,15 @@ class ImageSelectPage : public QWizardPage
 
 public:
     ImageSelectPage(QWidget *parent = 0);
-
-protected:
-    void initializePage() override;
+    QUrl getUrl();
 private:
+    QButtonGroup bitnessButtons;
+    QRadioButton thirtyTwo;
+    QRadioButton sixtyFour;
     QLabel label;
-    QLineEdit urlLineEdit;
     QVBoxLayout layout;
+    QUrl thirtyTwoUrl;
+    QUrl sixtyFourUrl;
 };
 
 class DownloadProgressPage : public QWizardPage
@@ -96,9 +88,9 @@ private:
     QProgressBar progress;
     bool download_finished;
     QLabel label;
-    QUrl url;
     QVBoxLayout layout;
     UnzipThread * unzipThread;
+    QUrl url;
 };
 
 class UsbInsertPage : public QWizardPage
@@ -163,6 +155,27 @@ private:
     bool writeFinished;
     DiskWriteThread * diskWriteThread;
     QString image_path;
+};
+
+class GondarWizard : public QWizard
+{
+    Q_OBJECT
+
+public:
+    GondarWizard(QWidget *parent = 0);
+    // There's an elaborate state-sharing solution via the 'field' mechanism
+    // supported by QWizard.  I found the logic for that to be easy for sharing
+    // some data types and convoluted for others.  In this case, a later page
+    // makes a decision based on a radio button seleciton in an earlier page,
+    // so putting the shared state in the wizard seems more straightforward
+    AdminCheckPage adminCheckPage;
+    ImageSelectPage imageSelectPage;
+    DownloadProgressPage downloadProgressPage;
+    UsbInsertPage usbInsertPage;
+    DeviceSelectPage deviceSelectPage;
+    WriteOperationPage writeOperationPage;
+
+    QRadioButton * bitnessSelected;
 };
 
 #endif /* GONDARWIZARD */

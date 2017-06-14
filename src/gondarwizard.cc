@@ -15,6 +15,7 @@
 DeviceGuyList * drivelist = NULL;
 DeviceGuy * selected_drive = NULL;
 
+
 GondarButton::GondarButton(const QString & text,
                            unsigned int device_num,
                            QWidget *parent)
@@ -28,12 +29,12 @@ GondarWizard::GondarWizard(QWidget *parent)
     // these pages are automatically cleaned up
     // new instances are made whenever navigation moves on to another page
     // according to qt docs
-    addPage(new AdminCheckPage);
-    addPage(new ImageSelectPage);
-    addPage(new DownloadProgressPage);
-    addPage(new UsbInsertPage);
-    addPage(new DeviceSelectPage);
-    addPage(new WriteOperationPage);
+    addPage(& adminCheckPage);
+    addPage(& imageSelectPage);
+    addPage(& downloadProgressPage);
+    addPage(& usbInsertPage);
+    addPage(& deviceSelectPage);
+    addPage(& writeOperationPage);
     setWizardStyle(QWizard::ModernStyle);
     setWindowTitle(tr("Cloudready USB Creation Utility"));
 
@@ -41,6 +42,9 @@ GondarWizard::GondarWizard(QWidget *parent)
     QList<QWizard::WizardButton> button_layout;
     button_layout << QWizard::NextButton;
     setButtonLayout(button_layout);
+
+    // initialize bitness selected
+    bitnessSelected = NULL;
 }
 
 AdminCheckPage::AdminCheckPage(QWidget *parent)
@@ -83,16 +87,30 @@ void AdminCheckPage::showIsNotAdmin() {
 ImageSelectPage::ImageSelectPage(QWidget *parent)
     : QWizardPage(parent)
 {
-    setTitle(tr("Select Remote Image"));
+    setTitle(tr("Select 32 or 64-bit"));
+    label.setText("64-bit should be appropriate for most machines.  Choose 32-bit for netbooks or other machines with 32-bit processors");
+    thirtyTwo.setText("32-bit");
+    sixtyFour.setText("64-bit");
+    sixtyFour.setChecked(true);
+    bitnessButtons.addButton(& thirtyTwo);
+    bitnessButtons.addButton(& sixtyFour);
+    layout.addWidget(& thirtyTwo);
+    layout.addWidget(& sixtyFour);
+    setLayout(& layout);
+    thirtyTwoUrl.setUrl("https://ddnynf025unax.cloudfront.net/cloudready-free-56.3.80-32-bit/cloudready-free-56.3.80-32-bit.bin.zip");
+    sixtyFourUrl.setUrl("https://ddnynf025unax.cloudfront.net/cloudready-free-56.3.82-64-bit/cloudready-free-56.3.82-64-bit.bin.zip");
 }
 
-void ImageSelectPage::initializePage() {
-    label.setText("Target image url:");
-    //TODO(kendall): make required
-    registerField("imageurl", & urlLineEdit);
-    layout.addWidget(& label);
-    layout.addWidget(& urlLineEdit);
-    setLayout(& layout);
+QUrl ImageSelectPage::getUrl() {
+    QAbstractButton * selected = bitnessButtons.checkedButton();
+    if (selected == & thirtyTwo) {
+        return thirtyTwoUrl;
+    } else if (selected == & sixtyFour) {
+        return sixtyFourUrl;
+    } else {
+        //TODO: decide what this behavior should be
+        return sixtyFourUrl;
+    }
 }
 
 DownloadProgressPage::DownloadProgressPage(QWidget *parent)
@@ -109,9 +127,11 @@ void DownloadProgressPage::initializePage() {
     label.setText("Downloading...");
     layout.addWidget(& label);
     setLayout(& layout);
-    qDebug() << "url = " << field("imageurl");
+    GondarWizard * wiz = dynamic_cast<GondarWizard *>(wizard());
+    url = wiz->imageSelectPage.getUrl();
+    qDebug() << "using url= " << url;
     QObject::connect(&manager, SIGNAL(finished()), this, SLOT(markComplete()));
-    manager.append(field("imageurl").toString());
+    manager.append(url.toString());
     QObject::connect(&manager, SIGNAL(started()), this, SLOT(onDownloadStarted()));
 }
 
@@ -136,8 +156,6 @@ void DownloadProgressPage::markComplete() {
     label.setText("Download is complete.");
     // now that the download is finished, let's unzip the build.
     notifyUnzip();
-    url = field("imageurl").toString();
-    qDebug() << "debug: url beforehand:" << url;
     unzipThread = new UnzipThread(& url, this);
     connect(unzipThread, SIGNAL(finished()), this, SLOT(onUnzipFinished()));
     unzipThread->start();
