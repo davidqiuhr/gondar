@@ -116,7 +116,7 @@ void DownloadProgressPage::initializePage() {
     layout.addWidget(& label);
     setLayout(& layout);
     GondarWizard * wiz = dynamic_cast<GondarWizard *>(wizard());
-    QRadioButton * selected = dynamic_cast<QRadioButton *>(wiz->imageSelectPage.bitnessButtons.checkedButton());
+    QAbstractButton * selected = wiz->imageSelectPage.bitnessButtons.checkedButton();
     QRadioButton * thirtyTwo = & wiz->imageSelectPage.thirtyTwo;
     QRadioButton * sixtyFour = & wiz->imageSelectPage.sixtyFour;
     QUrl * thirtyTwoUrl = & wiz->thirtyTwoUrl;
