@@ -15,8 +15,6 @@
 DeviceGuyList * drivelist = NULL;
 DeviceGuy * selected_drive = NULL;
 
-const QUrl * thirtyTwoUrl = new QUrl("https://ddnynf025unax.cloudfront.net/cloudready-free-56.3.80-32-bit/cloudready-free-56.3.80-32-bit.bin.zip");
-const QUrl * sixtyFourUrl = new QUrl("https://ddnynf025unax.cloudfront.net/cloudready-free-56.3.82-64-bit/cloudready-free-56.3.82-64-bit.bin.zip");
 
 GondarButton::GondarButton(const QString & text,
                            unsigned int device_num,
@@ -47,6 +45,8 @@ GondarWizard::GondarWizard(QWidget *parent)
 
     // initialize bitness selected
     bitnessSelected = NULL;
+    thirtyTwoUrl.setUrl("https://ddnynf025unax.cloudfront.net/cloudready-free-56.3.80-32-bit/cloudready-free-56.3.80-32-bit.bin.zip");
+    sixtyFourUrl.setUrl("https://ddnynf025unax.cloudfront.net/cloudready-free-56.3.82-64-bit/cloudready-free-56.3.82-64-bit.bin.zip");
 }
 
 AdminCheckPage::AdminCheckPage(QWidget *parent)
@@ -122,6 +122,8 @@ void DownloadProgressPage::initializePage() {
     QRadioButton * selected = dynamic_cast<QRadioButton *>(wiz->imageSelectPage.bitnessButtons.checkedButton());
     QRadioButton * thirtyTwo = & wiz->imageSelectPage.thirtyTwo;
     QRadioButton * sixtyFour = & wiz->imageSelectPage.sixtyFour;
+    QUrl * thirtyTwoUrl = & wiz->thirtyTwoUrl;
+    QUrl * sixtyFourUrl = & wiz->sixtyFourUrl;
     if (selected == thirtyTwo) {
         url = thirtyTwoUrl;
     } else if (selected == sixtyFour) {

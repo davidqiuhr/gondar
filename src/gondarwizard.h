@@ -189,6 +189,8 @@ public:
     WriteOperationPage writeOperationPage;
 
     QRadioButton * bitnessSelected;
+    QUrl thirtyTwoUrl;
+    QUrl sixtyFourUrl;
 };
 
 #endif /* GONDARWIZARD */
