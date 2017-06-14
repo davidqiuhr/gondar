@@ -131,7 +131,7 @@ private:
     QLabel drivesLabel;
     QGroupBox *drivesBox;
     QButtonGroup * radioGroup;
-    QVBoxLayout layout;
+    QVBoxLayout * layout;
 };
 
 class WriteOperationPage: public QWizardPage {
@@ -176,6 +176,10 @@ public:
     WriteOperationPage writeOperationPage;
 
     QRadioButton * bitnessSelected;
+    void showUsualButtons();
+    void showFinishButtons();
+private slots:
+    void handleMakeAnother();
 };
 
 #endif /* GONDARWIZARD */
