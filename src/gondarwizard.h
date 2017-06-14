@@ -60,6 +60,8 @@ private:
     QRadioButton sixtyFour;
     QLabel label;
     QVBoxLayout layout;
+    QUrl thirtyTwoUrl;
+    QUrl sixtyFourUrl;
 };
 
 class DownloadProgressPage : public QWizardPage
@@ -174,8 +176,6 @@ public:
     WriteOperationPage writeOperationPage;
 
     QRadioButton * bitnessSelected;
-    QUrl thirtyTwoUrl;
-    QUrl sixtyFourUrl;
 };
 
 #endif /* GONDARWIZARD */

@@ -45,8 +45,6 @@ GondarWizard::GondarWizard(QWidget *parent)
 
     // initialize bitness selected
     bitnessSelected = NULL;
-    thirtyTwoUrl.setUrl("https://ddnynf025unax.cloudfront.net/cloudready-free-56.3.80-32-bit/cloudready-free-56.3.80-32-bit.bin.zip");
-    sixtyFourUrl.setUrl("https://ddnynf025unax.cloudfront.net/cloudready-free-56.3.82-64-bit/cloudready-free-56.3.82-64-bit.bin.zip");
 }
 
 AdminCheckPage::AdminCheckPage(QWidget *parent)
@@ -99,20 +97,19 @@ ImageSelectPage::ImageSelectPage(QWidget *parent)
     layout.addWidget(& thirtyTwo);
     layout.addWidget(& sixtyFour);
     setLayout(& layout);
+    thirtyTwoUrl.setUrl("https://ddnynf025unax.cloudfront.net/cloudready-free-56.3.80-32-bit/cloudready-free-56.3.80-32-bit.bin.zip");
+    sixtyFourUrl.setUrl("https://ddnynf025unax.cloudfront.net/cloudready-free-56.3.82-64-bit/cloudready-free-56.3.82-64-bit.bin.zip");
 }
 
 QUrl * ImageSelectPage::getUrl() {
-    GondarWizard * wiz = dynamic_cast<GondarWizard *>(wizard());
-    QUrl * thirtyTwoUrl = & wiz->thirtyTwoUrl;
-    QUrl * sixtyFourUrl = & wiz->sixtyFourUrl;
     QAbstractButton * selected = bitnessButtons.checkedButton();
     if (selected == & thirtyTwo) {
-        return thirtyTwoUrl;
+        return & thirtyTwoUrl;
     } else if (selected == & sixtyFour) {
-        return sixtyFourUrl;
+        return & sixtyFourUrl;
     } else {
         //TODO: decide what this behavior should be
-        return sixtyFourUrl;
+        return & sixtyFourUrl;
     }
 }
 
