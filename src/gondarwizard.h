@@ -53,7 +53,7 @@ class ImageSelectPage : public QWizardPage
 
 public:
     ImageSelectPage(QWidget *parent = 0);
-    QUrl * getUrl();
+    QUrl getUrl();
 private:
     QButtonGroup bitnessButtons;
     QRadioButton thirtyTwo;
@@ -90,7 +90,7 @@ private:
     QLabel label;
     QVBoxLayout layout;
     UnzipThread * unzipThread;
-    const QUrl * url;
+    QUrl url;
 };
 
 class UsbInsertPage : public QWizardPage

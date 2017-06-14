@@ -101,15 +101,15 @@ ImageSelectPage::ImageSelectPage(QWidget *parent)
     sixtyFourUrl.setUrl("https://ddnynf025unax.cloudfront.net/cloudready-free-56.3.82-64-bit/cloudready-free-56.3.82-64-bit.bin.zip");
 }
 
-QUrl * ImageSelectPage::getUrl() {
+QUrl ImageSelectPage::getUrl() {
     QAbstractButton * selected = bitnessButtons.checkedButton();
     if (selected == & thirtyTwo) {
-        return & thirtyTwoUrl;
+        return thirtyTwoUrl;
     } else if (selected == & sixtyFour) {
-        return & sixtyFourUrl;
+        return sixtyFourUrl;
     } else {
         //TODO: decide what this behavior should be
-        return & sixtyFourUrl;
+        return sixtyFourUrl;
     }
 }
 
@@ -131,7 +131,7 @@ void DownloadProgressPage::initializePage() {
     url = wiz->imageSelectPage.getUrl();
     qDebug() << "using url= " << url;
     QObject::connect(&manager, SIGNAL(finished()), this, SLOT(markComplete()));
-    manager.append(url->toString());
+    manager.append(url.toString());
     QObject::connect(&manager, SIGNAL(started()), this, SLOT(onDownloadStarted()));
 }
 
@@ -156,7 +156,7 @@ void DownloadProgressPage::markComplete() {
     label.setText("Download is complete.");
     // now that the download is finished, let's unzip the build.
     notifyUnzip();
-    unzipThread = new UnzipThread(url, this);
+    unzipThread = new UnzipThread(& url, this);
     connect(unzipThread, SIGNAL(finished()), this, SLOT(onUnzipFinished()));
     unzipThread->start();
 }
