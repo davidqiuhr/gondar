@@ -45,6 +45,33 @@ GondarWizard::GondarWizard(QWidget *parent)
 
     // initialize bitness selected
     bitnessSelected = NULL;
+    setButtonText(QWizard::CustomButton1, tr("Make Another USB"));
+    connect(this, SIGNAL(customButtonClicked(int)),
+            this, SLOT(handleMakeAnother()));
+}
+
+// handle event when 'make another usb' button pressed
+void GondarWizard::handleMakeAnother() {
+    // we set the page to usbInsertPage and show usual buttons
+    showUsualButtons();
+    // works as long as usbInsertPage is not the last page in wizard
+    setStartId(usbInsertPage.nextId() - 1);
+    restart();
+}
+void GondarWizard::showUsualButtons() {
+    // Only show next buttons for all screens
+    QList<QWizard::WizardButton> button_layout;
+    button_layout << QWizard::NextButton;
+    setButtonLayout(button_layout);
+}
+
+// show 'make another usb' button along with finish button at end of wizard
+void GondarWizard::showFinishButtons() {
+    QList<QWizard::WizardButton> button_layout;
+    button_layout << QWizard::FinishButton;
+    button_layout << QWizard::CustomButton1;
+    setOption(QWizard::HaveCustomButton1, true);
+    setButtonLayout(button_layout);
 }
 
 AdminCheckPage::AdminCheckPage(QWidget *parent)
@@ -200,6 +227,11 @@ UsbInsertPage::UsbInsertPage(QWidget *parent)
 void UsbInsertPage::initializePage() {
     tim = new QTimer(this);
     connect(tim, SIGNAL(timeout()), SLOT(getDriveList()));
+    // if the page is visited again, delete the old drivelist
+    if (drivelist != NULL) {
+      DeviceGuyList_free(drivelist);
+      drivelist = NULL;
+    }
     // send a signal to check for drives
     emit driveListRequested();
 }
@@ -238,10 +270,15 @@ DeviceSelectPage::DeviceSelectPage(QWidget *parent)
     // the usb device list.  or it could ask you to insert your device
     setTitle(tr("Select Drive"));
     setPixmap(QWizard::WatermarkPixmap, QPixmap(":/images/frogmariachis.png"));
+    layout = NULL;
 }
 
 void DeviceSelectPage::initializePage()
 {
+    if (layout != NULL) {
+        delete layout;
+    }
+    layout = new QVBoxLayout;
     drivesLabel.setText("Select Drive:");
     if (drivelist == NULL) {
         return;
@@ -249,7 +286,7 @@ void DeviceSelectPage::initializePage()
     DeviceGuy * itr = drivelist->head;
     // Line up widgets horizontally
     // use QVBoxLayout for vertically, H for horizontal
-    layout.addWidget(& drivesLabel);
+    layout->addWidget(& drivesLabel);
 
     radioGroup = new QButtonGroup();
     // i could extend the button object to also have a secret index
@@ -260,10 +297,10 @@ void DeviceSelectPage::initializePage()
                                                     itr->device_num,
                                                     this);
         radioGroup->addButton(curRadio);
-        layout.addWidget(curRadio);
+        layout->addWidget(curRadio);
         itr = itr->next;
     }
-    setLayout(& layout);
+    setLayout(layout);
 }
 
 bool DeviceSelectPage::validatePage() {
@@ -327,5 +364,7 @@ void WriteOperationPage::onDoneWriting() {
     writeFinished = true;
     progress.setRange(0, 100);
     progress.setValue(100);
+    GondarWizard * wiz = dynamic_cast<GondarWizard *>(wizard());
+    wiz->showFinishButtons();
     emit completeChanged();
 }
