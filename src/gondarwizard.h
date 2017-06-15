@@ -42,9 +42,9 @@ protected:
     void showIsNotAdmin();
 
 private:
+    QLabel label;
     bool is_admin;
     QVBoxLayout layout;
-    QLabel label;
 };
 
 class ImageSelectPage : public QWizardPage
