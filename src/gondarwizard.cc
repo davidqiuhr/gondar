@@ -150,7 +150,7 @@ DownloadProgressPage::DownloadProgressPage(QWidget *parent)
     : QWizardPage(parent)
 {
     setTitle("CloudReady Download");
-    setSubTitle("Your image is currently downloading.");
+    setSubTitle("Your installer is currently downloading.");
     setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
     download_finished = false;
     layout.addWidget(& progress);
