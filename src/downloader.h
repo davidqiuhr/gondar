@@ -59,37 +59,36 @@
 #include <QUrl>
 #include <QNetworkAccessManager>
 
-class DownloadManager: public QObject
-{
-    Q_OBJECT
-public:
-    DownloadManager(QObject *parent = 0);
+class DownloadManager : public QObject {
+  Q_OBJECT
+ public:
+  DownloadManager(QObject* parent = 0);
 
-    void append(const QUrl &url);
-    void append(const QStringList &urlList);
-    QString saveFileName(const QUrl &url);
-    QNetworkReply * getCurrentDownload();
+  void append(const QUrl& url);
+  void append(const QStringList& urlList);
+  QString saveFileName(const QUrl& url);
+  QNetworkReply* getCurrentDownload();
 
-signals:
-    void started();
-    void finished();
+ signals:
+  void started();
+  void finished();
 
-private slots:
-    void startNextDownload();
-    //void downloadProgress(qint64 bytesReceived, qint64 bytesTotal);
-    void downloadFinished();
-    void downloadReadyRead();
+ private slots:
+  void startNextDownload();
+  // void downloadProgress(qint64 bytesReceived, qint64 bytesTotal);
+  void downloadFinished();
+  void downloadReadyRead();
 
-private:
-    QNetworkAccessManager manager;
-    QQueue<QUrl> downloadQueue;
-    QNetworkReply *currentDownload;
-    QFile output;
-    QTime downloadTime;
-    //TextProgressBar progressBar;
+ private:
+  QNetworkAccessManager manager;
+  QQueue<QUrl> downloadQueue;
+  QNetworkReply* currentDownload;
+  QFile output;
+  QTime downloadTime;
+  // TextProgressBar progressBar;
 
-    int downloadedCount;
-    int totalCount;
+  int downloadedCount;
+  int totalCount;
 };
 
 #endif /* DOWNLOADER_H */

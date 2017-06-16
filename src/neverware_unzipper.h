@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-int neverware_unzip(const char * url);
+int neverware_unzip(const char* url);
 
 #ifdef __cplusplus
 }
