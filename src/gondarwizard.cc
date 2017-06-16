@@ -74,13 +74,13 @@ void GondarWizard::showFinishButtons() {
     setButtonLayout(button_layout);
 }
 
+// note that even though this is called the admin check page, it will in most
+// cases be a welcome page, unless the user is missing admin rights
 AdminCheckPage::AdminCheckPage(QWidget *parent)
     : QWizardPage(parent)
 {
-    setTitle(tr("Insert USB Drive"));
-    setPixmap(QWizard::WatermarkPixmap, QPixmap(":/images/frogmariachis.png"));
+    setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
 
-    label.setText("Please wait...");
     is_admin = false; // assume false until we discover otherwise.
                       // this holds the user at this screen
 
@@ -103,21 +103,27 @@ bool AdminCheckPage::isComplete() const {
 }
 
 void AdminCheckPage::showIsAdmin() {
-    label.setText("User has admin rights.");
+    setTitle("Welcome to the CloudReady USB Creation Utility");
+    // note that a subtitle must be set  on a page in order for logo to display
+    setSubTitle("This utility will create a USB device that can be used to install CloudReady on any computer.");
+    label.setText("<p>You will need:</p><ul><li>8GB or 16GB USB stick</li><li>20 minutes for USB installer creation</li></ul>");
+    label.setWordWrap(true);
     emit completeChanged();
 }
 
 void AdminCheckPage::showIsNotAdmin() {
-    label.setText("User does not have admin rights.");
+    setTitle("User does not have administrator rights");
+    setSubTitle("The current user does not have adminstrator rights or the program was run without sufficient rights to create a USB.  Please re-run the program with sufficient rights.");
 }
 
 ImageSelectPage::ImageSelectPage(QWidget *parent)
     : QWizardPage(parent)
 {
-    setTitle(tr("Select 32 or 64-bit"));
-    label.setText("64-bit should be appropriate for most machines.  Choose 32-bit for netbooks or other machines with 32-bit processors");
+    setTitle("Which version of CloudReady do you need?");
+    setSubTitle("64-bit should be suitable for most computers made after 2007.  Choose 32-bit for older computers or devices with Intel Atom CPUs.");
+    setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
     thirtyTwo.setText("32-bit");
-    sixtyFour.setText("64-bit");
+    sixtyFour.setText("64-bit (recommended)");
     sixtyFour.setChecked(true);
     bitnessButtons.addButton(& thirtyTwo);
     bitnessButtons.addButton(& sixtyFour);
@@ -143,7 +149,9 @@ QUrl ImageSelectPage::getUrl() {
 DownloadProgressPage::DownloadProgressPage(QWidget *parent)
     : QWizardPage(parent)
 {
-    setTitle(tr("Downloading..."));
+    setTitle("CloudReady Download");
+    setSubTitle("Your installer is currently downloading.");
+    setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
     download_finished = false;
     layout.addWidget(& progress);
     setLayout(& layout);
@@ -151,8 +159,6 @@ DownloadProgressPage::DownloadProgressPage(QWidget *parent)
 }
 
 void DownloadProgressPage::initializePage() {
-    label.setText("Downloading...");
-    layout.addWidget(& label);
     setLayout(& layout);
     GondarWizard * wiz = dynamic_cast<GondarWizard *>(wizard());
     url = wiz->imageSelectPage.getUrl();
@@ -180,7 +186,6 @@ void DownloadProgressPage::downloadProgress(qint64 sofar, qint64 total) {
 
 void DownloadProgressPage::markComplete() {
     download_finished = true;
-    label.setText("Download is complete.");
     // now that the download is finished, let's unzip the build.
     notifyUnzip();
     unzipThread = new UnzipThread(& url, this);
@@ -193,10 +198,11 @@ void DownloadProgressPage::onUnzipFinished() {
     qDebug() << "main thread has accepted complete";
     progress.setRange(0, 100);
     progress.setValue(100);
+    setSubTitle("Download and extraction complete!");
     emit completeChanged();
 }
 void DownloadProgressPage::notifyUnzip() {
-    label.setText("Extracting image...");
+    setSubTitle("Extracting compressed image...");
     // setting range and value to zero results in an 'infinite' progress bar
     progress.setRange(0, 0);
     progress.setValue(0);
@@ -209,11 +215,14 @@ bool DownloadProgressPage::isComplete() const {
 UsbInsertPage::UsbInsertPage(QWidget *parent)
     : QWizardPage(parent)
 {
-    setTitle(tr("Insert USB Drive"));
-    setPixmap(QWizard::WatermarkPixmap, QPixmap(":/images/frogmariachis.png"));
+    setTitle("Please insert an 8GB or 16GB USB storage device");
+    setSubTitle("In the next step, the selected device will be permanantly erased and turned into a CloudReady installer.");
+    setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
 
-    label.setText("Please insert the destination USB drive to create a "
-                        "USB Cloudready(tm) bootable USB drive.");;
+    label.setText("Sandisk devices are not recommended.  "
+                  "Devices with more than 16GB of space may be unreliable.  "
+                  "The next screen will become available once a valid "
+                  "destination drive is detected.");
     label.setWordWrap(true);
 
     layout.addWidget(& label);
@@ -268,8 +277,9 @@ DeviceSelectPage::DeviceSelectPage(QWidget *parent)
 {
     // this page should just say 'hi how are you' while it stealthily loads
     // the usb device list.  or it could ask you to insert your device
-    setTitle(tr("Select Drive"));
-    setPixmap(QWizard::WatermarkPixmap, QPixmap(":/images/frogmariachis.png"));
+    setTitle("USB device selection");
+    setSubTitle("Choose your target device from the list of devices below.");
+    setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
     layout = NULL;
 }
 
@@ -318,7 +328,9 @@ bool DeviceSelectPage::validatePage() {
 WriteOperationPage::WriteOperationPage(QWidget *parent)
     : QWizardPage(parent)
 {
-    setTitle(tr("Writing to disk will like, totally wipe your drive, dude."));
+    setTitle("Creating your CloudReady USB installer");
+    setSubTitle("This process may take up to 20 minutes.");
+    setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
     layout.addWidget(& progress);
     setLayout(& layout);
 }
@@ -360,6 +372,8 @@ void WriteOperationPage::showProgress() {
 }
 
 void WriteOperationPage::onDoneWriting() {
+    setTitle("CloudReady USB created!");
+    setSubTitle("You may now either exit or create another USB.");
     qDebug() << "install call returned";
     writeFinished = true;
     progress.setRange(0, 100);

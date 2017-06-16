@@ -58,7 +58,6 @@ private:
     QButtonGroup bitnessButtons;
     QRadioButton thirtyTwo;
     QRadioButton sixtyFour;
-    QLabel label;
     QVBoxLayout layout;
     QUrl thirtyTwoUrl;
     QUrl sixtyFourUrl;
@@ -87,7 +86,6 @@ private:
     DownloadManager manager;
     QProgressBar progress;
     bool download_finished;
-    QLabel label;
     QVBoxLayout layout;
     UnzipThread * unzipThread;
     QUrl url;
