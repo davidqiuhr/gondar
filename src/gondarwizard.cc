@@ -31,9 +31,9 @@ GondarWizard::GondarWizard(QWidget *parent)
     // according to qt docs
     addPage(& adminCheckPage);
     addPage(& imageSelectPage);
-    addPage(& downloadProgressPage);
     addPage(& usbInsertPage);
     addPage(& deviceSelectPage);
+    addPage(& downloadProgressPage);
     addPage(& writeOperationPage);
     setWizardStyle(QWizard::ModernStyle);
     setWindowTitle(tr("Cloudready USB Creation Utility"));
@@ -69,8 +69,7 @@ void GondarWizard::showUsualButtons() {
 void GondarWizard::showFinishButtons() {
     QList<QWizard::WizardButton> button_layout;
     button_layout << QWizard::FinishButton;
-    button_layout << QWizard::CustomButton1;
-    setOption(QWizard::HaveCustomButton1, true);
+    //TODO(kendall): add CustomButton1 and support "Make Another USB" flow
     setButtonLayout(button_layout);
 }
 
@@ -200,6 +199,8 @@ void DownloadProgressPage::onUnzipFinished() {
     progress.setValue(100);
     setSubTitle("Download and extraction complete!");
     emit completeChanged();
+    // immediately progress to writeOperationPage
+    wizard()->next();
 }
 void DownloadProgressPage::notifyUnzip() {
     setSubTitle("Extracting compressed image...");
