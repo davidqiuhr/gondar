@@ -5,6 +5,7 @@ CONFIG += console static
 HEADERS       = src/gondarwizard.h \
                 src/downloader.h \
                 src/deviceguy.h \
+                src/image_select_page.h \
                 src/shared.h \
                 src/gondar.h \
                 src/neverware_unzipper.h \
@@ -14,6 +15,7 @@ SOURCES       = src/gondarwizard.cc \
                 src/downloader.cc \
                 src/main.cc \
                 src/deviceguy.cc \
+                src/image_select_page.cc \
                 src/neverware_unzipper.c \
                 src/unzipthread.cc \
                 src/diskwritethread.cc \
