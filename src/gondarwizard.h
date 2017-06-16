@@ -120,6 +120,7 @@ class DeviceSelectPage : public QWizardPage
 
 public:
     DeviceSelectPage(QWidget *parent = 0);
+    int nextId() const;
 
 protected:
     void initializePage() override;
@@ -176,6 +177,9 @@ public:
     QRadioButton * bitnessSelected;
     void showUsualButtons();
     void showFinishButtons();
+    bool isDownloaded;
+    // this enum determines page order
+    enum { Page_adminCheck, Page_imageSelect, Page_usbInsert, Page_deviceSelect, Page_downloadProgress, Page_writeOperation };
 private slots:
     void handleMakeAnother();
 };

@@ -43,3 +43,14 @@ qmake CONFIG+=debug
         aptitude install cmake qt5-default
 
 2. make -f Makefile.linux
+
+### Code style
+
+LLVM's
+[clang-format](http://releases.llvm.org/4.0.0/tools/clang/docs/ClangFormat.html) tool
+is used to keep the code style consistent. Conveniently, that tool has
+a preset for Chromium code, and since we mostly work on Chromium code
+that seems like a nice default.
+
+To format all the source files run `make format`. You can also run
+`clang-format` directly.
