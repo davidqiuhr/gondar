@@ -39,8 +39,6 @@ GondarWizard::GondarWizard(QWidget* parent) : QWizard(parent) {
   button_layout << QWizard::NextButton;
   setButtonLayout(button_layout);
 
-  // initialize bitness selected
-  bitnessSelected = NULL;
   setButtonText(QWizard::CustomButton1, tr("Make Another USB"));
   connect(this, SIGNAL(customButtonClicked(int)), this,
           SLOT(handleMakeAnother()));

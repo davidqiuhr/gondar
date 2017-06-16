@@ -168,7 +168,6 @@ class GondarWizard : public QWizard {
   DeviceSelectPage deviceSelectPage;
   WriteOperationPage writeOperationPage;
 
-  QRadioButton* bitnessSelected;
   void showUsualButtons();
   void showFinishButtons();
  private slots:
