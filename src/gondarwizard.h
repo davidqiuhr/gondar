@@ -67,10 +67,10 @@ class DownloadProgressPage : public QWizardPage {
 
  public:
   DownloadProgressPage(QWidget* parent = 0);
+  bool isComplete() const;
 
  protected:
   void initializePage() override;
-  bool isComplete() const;
   void notifyUnzip();
 
  public slots:
@@ -172,7 +172,6 @@ class GondarWizard : public QWizard {
   QRadioButton* bitnessSelected;
   void showUsualButtons();
   void showFinishButtons();
-  bool isDownloaded;
   // this enum determines page order
   enum {
     Page_adminCheck,

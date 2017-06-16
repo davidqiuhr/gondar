@@ -41,8 +41,6 @@ GondarWizard::GondarWizard(QWidget* parent) : QWizard(parent) {
 
   // initialize bitness selected
   bitnessSelected = NULL;
-  // the wizard has not downloaded an image yet for usb creation
-  isDownloaded = false;
   setButtonText(QWizard::CustomButton1, tr("Make Another USB"));
   connect(this, SIGNAL(customButtonClicked(int)), this,
           SLOT(handleMakeAnother()));
@@ -206,8 +204,6 @@ void DownloadProgressPage::onUnzipFinished() {
   progress.setValue(100);
   setSubTitle("Download and extraction complete!");
   // do not repeat download for additional usbs
-  GondarWizard* wiz = dynamic_cast<GondarWizard*>(wizard());
-  wiz->isDownloaded = true;
   emit completeChanged();
   // immediately progress to writeOperationPage
   wizard()->next();
@@ -334,7 +330,7 @@ bool DeviceSelectPage::validatePage() {
 
 int DeviceSelectPage::nextId() const {
   GondarWizard* wiz = dynamic_cast<GondarWizard*>(wizard());
-  if (wiz->isDownloaded) {
+  if (wiz->downloadProgressPage.isComplete()) {
     return GondarWizard::Page_writeOperation;
   } else {
     return GondarWizard::Page_downloadProgress;
