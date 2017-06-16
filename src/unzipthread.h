@@ -6,14 +6,14 @@
 #include <QUrl>
 
 class UnzipThread : public QThread {
-    Q_OBJECT
-  public:
-    UnzipThread(const QUrl * url_in, QObject *parent = 0);
-    ~UnzipThread();
+  Q_OBJECT
+ public:
+  UnzipThread(const QUrl* url_in, QObject* parent = 0);
+  ~UnzipThread();
 
-  protected:
-    void run() override;
-    QUrl url;
+ protected:
+  void run() override;
+  QUrl url;
 };
 
 #endif /* UNZIP_THREAD_H */
