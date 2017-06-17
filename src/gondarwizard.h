@@ -37,7 +37,7 @@ class AdminCheckPage : public QWizardPage {
 
  protected:
   void initializePage() override;
-  bool isComplete() const;
+  bool isComplete() const override;
   void showIsAdmin();
   void showIsNotAdmin();
 
@@ -52,10 +52,10 @@ class DownloadProgressPage : public QWizardPage {
 
  public:
   DownloadProgressPage(QWidget* parent = 0);
+  bool isComplete() const override;
 
  protected:
   void initializePage() override;
-  bool isComplete() const;
   void notifyUnzip();
 
  public slots:
@@ -82,7 +82,7 @@ class UsbInsertPage : public QWizardPage {
 
  protected:
   void initializePage() override;
-  bool isComplete() const;
+  bool isComplete() const override;
 
  private:
   void showDriveList();
@@ -101,6 +101,7 @@ class DeviceSelectPage : public QWizardPage {
 
  public:
   DeviceSelectPage(QWidget* parent = 0);
+  int nextId() const override;
 
  protected:
   void initializePage() override;
@@ -121,7 +122,7 @@ class WriteOperationPage : public QWizardPage {
 
  protected:
   void initializePage() override;
-  bool isComplete() const;
+  bool isComplete() const override;
   bool validatePage() override;
   void showProgress();
  public slots:
@@ -153,9 +154,17 @@ class GondarWizard : public QWizard {
   DeviceSelectPage deviceSelectPage;
   WriteOperationPage writeOperationPage;
 
-  QRadioButton* bitnessSelected;
   void showUsualButtons();
   void showFinishButtons();
+  // this enum determines page order
+  enum {
+    Page_adminCheck,
+    Page_imageSelect,
+    Page_usbInsert,
+    Page_deviceSelect,
+    Page_downloadProgress,
+    Page_writeOperation
+  };
  private slots:
   void handleMakeAnother();
 };
