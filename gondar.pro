@@ -2,7 +2,8 @@ QT = core network widgets
 
 CONFIG += console static
 
-HEADERS       = src/gondarwizard.h \
+HEADERS       = src/admin_check_page.h \
+                src/gondarwizard.h \
                 src/downloader.h \
                 src/deviceguy.h \
                 src/image_select_page.h \
@@ -11,7 +12,8 @@ HEADERS       = src/gondarwizard.h \
                 src/neverware_unzipper.h \
                 src/unzipthread.h \
                 src/diskwritethread.h
-SOURCES       = src/gondarwizard.cc \
+SOURCES       = src/admin_check_page.cc \
+                src/gondarwizard.cc \
                 src/downloader.cc \
                 src/main.cc \
                 src/deviceguy.cc \
