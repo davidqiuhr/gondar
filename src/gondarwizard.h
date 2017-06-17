@@ -169,7 +169,6 @@ class GondarWizard : public QWizard {
   DeviceSelectPage deviceSelectPage;
   WriteOperationPage writeOperationPage;
 
-  QRadioButton* bitnessSelected;
   void showUsualButtons();
   void showFinishButtons();
   // this enum determines page order
