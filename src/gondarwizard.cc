@@ -203,7 +203,6 @@ void DownloadProgressPage::onUnzipFinished() {
   progress.setRange(0, 100);
   progress.setValue(100);
   setSubTitle("Download and extraction complete!");
-  // do not repeat download for additional usbs
   emit completeChanged();
   // immediately progress to writeOperationPage
   wizard()->next();
