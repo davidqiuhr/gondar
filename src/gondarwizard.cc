@@ -25,12 +25,12 @@ GondarWizard::GondarWizard(QWidget* parent) : QWizard(parent) {
   // these pages are automatically cleaned up
   // new instances are made whenever navigation moves on to another page
   // according to qt docs
-  addPage(&adminCheckPage);
-  addPage(&imageSelectPage);
-  addPage(&usbInsertPage);
-  addPage(&deviceSelectPage);
-  addPage(&downloadProgressPage);
-  addPage(&writeOperationPage);
+  setPage(Page_adminCheck, &adminCheckPage);
+  setPage(Page_imageSelect, &imageSelectPage);
+  setPage(Page_usbInsert, &usbInsertPage);
+  setPage(Page_deviceSelect, &deviceSelectPage);
+  setPage(Page_downloadProgress, &downloadProgressPage);
+  setPage(Page_writeOperation, &writeOperationPage);
   setWizardStyle(QWizard::ModernStyle);
   setWindowTitle(tr("Cloudready USB Creation Utility"));
 
@@ -58,6 +58,7 @@ void GondarWizard::showUsualButtons() {
   // Only show next buttons for all screens
   QList<QWizard::WizardButton> button_layout;
   button_layout << QWizard::NextButton;
+  setOption(QWizard::HaveCustomButton1, false);
   setButtonLayout(button_layout);
 }
 
@@ -65,7 +66,8 @@ void GondarWizard::showUsualButtons() {
 void GondarWizard::showFinishButtons() {
   QList<QWizard::WizardButton> button_layout;
   button_layout << QWizard::FinishButton;
-  // TODO(kendall): add CustomButton1 and support "Make Another USB" flow
+  button_layout << QWizard::CustomButton1;
+  setOption(QWizard::HaveCustomButton1, true);
   setButtonLayout(button_layout);
 }
 
@@ -325,6 +327,15 @@ bool DeviceSelectPage::validatePage() {
   }
 }
 
+int DeviceSelectPage::nextId() const {
+  GondarWizard* wiz = dynamic_cast<GondarWizard*>(wizard());
+  if (wiz->downloadProgressPage.isComplete()) {
+    return GondarWizard::Page_writeOperation;
+  } else {
+    return GondarWizard::Page_downloadProgress;
+  }
+}
+
 WriteOperationPage::WriteOperationPage(QWidget* parent) : QWizardPage(parent) {
   setTitle("Creating your CloudReady USB installer");
   setSubTitle("This process may take up to 20 minutes.");
@@ -335,7 +346,6 @@ WriteOperationPage::WriteOperationPage(QWidget* parent) : QWizardPage(parent) {
 
 void WriteOperationPage::initializePage() {
   writeFinished = false;
-  showProgress();
   // what if we just start writing as soon as we get here
   if (selected_drive == NULL) {
     qDebug() << "ERROR: no drive selected";
