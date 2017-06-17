@@ -4,6 +4,7 @@ CONFIG += console static
 
 HEADERS       = src/gondarwizard.h \
                 src/downloader.h \
+                src/device.h \
                 src/deviceguy.h \
                 src/image_select_page.h \
                 src/shared.h \
