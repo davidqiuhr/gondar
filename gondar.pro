@@ -34,7 +34,7 @@ win32 {
 }
 
 *g++* {
-  QMAKE_CXXFLAGS += -Wextra -Wmissing-declarations -std=c++11
+  QMAKE_CXXFLAGS += -Wextra -Wmissing-declarations -std=c++11 -Wsuggest-override
 }
 
 # install

@@ -36,7 +36,7 @@ class AdminCheckPage : public QWizardPage {
 
  protected:
   void initializePage() override;
-  bool isComplete() const;
+  bool isComplete() const override;
   void showIsAdmin();
   void showIsNotAdmin();
 
@@ -67,7 +67,7 @@ class DownloadProgressPage : public QWizardPage {
 
  public:
   DownloadProgressPage(QWidget* parent = 0);
-  bool isComplete() const;
+  bool isComplete() const override;
 
  protected:
   void initializePage() override;
@@ -97,7 +97,7 @@ class UsbInsertPage : public QWizardPage {
 
  protected:
   void initializePage() override;
-  bool isComplete() const;
+  bool isComplete() const override;
 
  private:
   void showDriveList();
@@ -116,7 +116,7 @@ class DeviceSelectPage : public QWizardPage {
 
  public:
   DeviceSelectPage(QWidget* parent = 0);
-  int nextId() const;
+  int nextId() const override;
 
  protected:
   void initializePage() override;
@@ -137,7 +137,7 @@ class WriteOperationPage : public QWizardPage {
 
  protected:
   void initializePage() override;
-  bool isComplete() const;
+  bool isComplete() const override;
   bool validatePage() override;
   void showProgress();
  public slots:
