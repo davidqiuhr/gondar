@@ -12,6 +12,7 @@
 #include "unzipthread.h"
 #include "deviceguy.h"
 #include "downloader.h"
+#include "image_select_page.h"
 
 class QCheckBox;
 class QGroupBox;
@@ -44,22 +45,6 @@ class AdminCheckPage : public QWizardPage {
   QLabel label;
   bool is_admin;
   QVBoxLayout layout;
-};
-
-class ImageSelectPage : public QWizardPage {
-  Q_OBJECT
-
- public:
-  ImageSelectPage(QWidget* parent = 0);
-  QUrl getUrl();
-
- private:
-  QButtonGroup bitnessButtons;
-  QRadioButton thirtyTwo;
-  QRadioButton sixtyFour;
-  QVBoxLayout layout;
-  QUrl thirtyTwoUrl;
-  QUrl sixtyFourUrl;
 };
 
 class DownloadProgressPage : public QWizardPage {
