@@ -116,7 +116,7 @@ class DeviceSelectPage : public QWizardPage {
 
  public:
   DeviceSelectPage(QWidget* parent = 0);
-  int nextId() const;
+  int nextId() const override;
 
  protected:
   void initializePage() override;
