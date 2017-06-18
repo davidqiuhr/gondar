@@ -2,24 +2,24 @@ QT = core network widgets
 
 CONFIG += console static
 
-HEADERS       = src/gondarwizard.h \
+HEADERS       = src/deviceguy.h \
+                src/diskwritethread.h \
                 src/downloader.h \
-                src/deviceguy.h \
-                src/image_select_page.h \
-                src/shared.h \
                 src/gondar.h \
+                src/gondarwizard.h \
+                src/image_select_page.h \
                 src/neverware_unzipper.h \
-                src/unzipthread.h \
-                src/diskwritethread.h
-SOURCES       = src/gondarwizard.cc \
-                src/downloader.cc \
-                src/main.cc \
+                src/shared.h \
+                src/unzipthread.h
+SOURCES       = minizip/minishared.c \
                 src/deviceguy.cc \
-                src/image_select_page.cc \
-                src/neverware_unzipper.c \
-                src/unzipthread.cc \
                 src/diskwritethread.cc \
-                minizip/minishared.c
+                src/downloader.cc \
+                src/gondarwizard.cc \
+                src/image_select_page.cc \
+                src/main.cc \
+                src/neverware_unzipper.c \
+                src/unzipthread.cc
 RESOURCES     = gondarwizard.qrc
 
 INCLUDEPATH += minizip
