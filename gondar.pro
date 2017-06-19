@@ -37,6 +37,14 @@ win32 {
 
 *g++* {
   QMAKE_CXXFLAGS += -Wextra -Wmissing-declarations -std=c++11 -Wsuggest-override
+
+  # Mark Qt headers in the MXE build as system headers. Without this
+  # the above compiler warning options apply to Qt headers, which can
+  # spew a lot of warnings.
+  win32 {
+    QMAKE_CXXFLAGS += -isystem ../mxe/usr/i686-w64-mingw32.static/qt5/include/QtCore
+    QMAKE_CXXFLAGS += -isystem ../mxe/usr/i686-w64-mingw32.static/qt5/include/QtWidgets
+  }
 }
 
 # install
