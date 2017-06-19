@@ -28,10 +28,10 @@
 
 #include "minishared.h"
 
-int miniunz_extract_currentfile(unzFile uf,
-                                int opt_extract_without_path,
-                                int* popt_overwrite,
-                                const char* password) {
+static int miniunz_extract_currentfile(unzFile uf,
+                                       int opt_extract_without_path,
+                                       int* popt_overwrite,
+                                       const char* password) {
   unz_file_info64 file_info = {0};
   FILE* fout = NULL;
   void* buf = NULL;
@@ -155,10 +155,10 @@ int miniunz_extract_currentfile(unzFile uf,
   return err;
 }
 
-int miniunz_extract_all(unzFile uf,
-                        int opt_extract_without_path,
-                        int opt_overwrite,
-                        const char* password) {
+static int miniunz_extract_all(unzFile uf,
+                               int opt_extract_without_path,
+                               int opt_overwrite,
+                               const char* password) {
   int err = unzGoToFirstFile(uf);
   if (err != UNZ_OK) {
     printf("error %d with zipfile in unzGoToFirstFile\n", err);
@@ -180,7 +180,7 @@ int miniunz_extract_all(unzFile uf,
   return 0;
 }
 
-char* filename_from_url(const char* url) {
+static char* filename_from_url(const char* url) {
   // TODO(kendall): i sure hope this string is null-terminated
   // TODO(kendall): clean up this memory somewhere
   char* urlcpy = malloc(strlen(url));

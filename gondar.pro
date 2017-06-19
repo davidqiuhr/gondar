@@ -33,6 +33,8 @@ win32 {
 
 *gcc* {
   QMAKE_CFLAGS += -Wextra -Wmissing-declarations
+  # Expose fopen64 in stdio.h declarations
+  QMAKE_CFLAGS += -D_LARGEFILE64_SOURCE
 }
 
 *g++* {
