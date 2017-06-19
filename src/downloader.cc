@@ -1,12 +1,12 @@
 #include "downloader.h"
 
+#include <stdio.h>
 #include <QFileInfo>
-#include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QNetworkRequest>
 #include <QString>
 #include <QStringList>
 #include <QTimer>
-#include <stdio.h>
 
 DownloadManager::DownloadManager(QObject* parent)
     : QObject(parent), downloadedCount(0), totalCount(0) {}

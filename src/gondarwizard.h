@@ -2,17 +2,17 @@
 #ifndef GONDARWIZARD_H
 #define GONDARWIZARD_H
 
-#include <QWizard>
-#include <QRadioButton>
 #include <QProgressBar>
-#include <QtWidgets>
+#include <QRadioButton>
 #include <QString>
+#include <QWizard>
+#include <QtWidgets>
 
-#include "diskwritethread.h"
-#include "unzipthread.h"
 #include "deviceguy.h"
+#include "diskwritethread.h"
 #include "downloader.h"
 #include "image_select_page.h"
+#include "unzipthread.h"
 
 class QCheckBox;
 class QGroupBox;

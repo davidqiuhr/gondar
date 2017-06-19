@@ -5,12 +5,12 @@ It is a work in progress and currently not ready for distribution,
 but inherits that project's license should it be distributed.
 */
 
-#include <windows.h>
 #include <setupapi.h>
+#include <windows.h>
 
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <inttypes.h>
 
 #include "gondar.h"
 
@@ -19,8 +19,8 @@ but inherits that project's license should it be distributed.
 #include "hdd_vs_ufd.h"
 
 // kendall specialz
-#include "shared.h"
 #include "deviceguy.h"
+#include "shared.h"
 
 /* Convenient to have around */
 #define KB 1024LL

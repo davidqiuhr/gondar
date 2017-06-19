@@ -53,11 +53,11 @@
 #define DOWNLOADER_H
 
 #include <QFile>
+#include <QNetworkAccessManager>
 #include <QObject>
 #include <QQueue>
 #include <QTime>
 #include <QUrl>
-#include <QNetworkAccessManager>
 
 class DownloadManager : public QObject {
   Q_OBJECT
