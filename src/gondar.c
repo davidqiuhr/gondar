@@ -5,8 +5,9 @@ It is a work in progress and currently not ready for distribution,
 but inherits that project's license should it be distributed.
 */
 
-#include <setupapi.h>
 #include <windows.h>
+
+#include <setupapi.h>
 
 #include <inttypes.h>
 #include <stdio.h>
