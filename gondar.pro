@@ -43,6 +43,7 @@ win32 {
   # spew a lot of warnings.
   win32 {
     QMAKE_CXXFLAGS += -isystem ../mxe/usr/i686-w64-mingw32.static/qt5/include/QtCore
+    QMAKE_CXXFLAGS += -isystem ../mxe/usr/i686-w64-mingw32.static/qt5/include/QtNetwork
     QMAKE_CXXFLAGS += -isystem ../mxe/usr/i686-w64-mingw32.static/qt5/include/QtWidgets
   }
 }
