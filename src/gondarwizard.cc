@@ -266,9 +266,7 @@ void DeviceSelectPage::initializePage() {
       }
   }
   // remove our last listing
-  if (radioGroup != NULL) {
-    delete radioGroup;
-  }
+  delete radioGroup;
 
   if (drivelist == NULL) {
     return;
