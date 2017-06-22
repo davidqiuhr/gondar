@@ -12,7 +12,7 @@
 #include "gondar.h"
 #include "neverware_unzipper.h"
 
-DeviceList drivelist;
+DeviceGuyList* drivelist = NULL;
 DeviceGuy* selected_drive = NULL;
 
 GondarButton::GondarButton(const QString& text,
@@ -109,7 +109,8 @@ void DownloadProgressPage::markComplete() {
   download_finished = true;
   // now that the download is finished, let's unzip the build.
   notifyUnzip();
-  unzipThread = new UnzipThread(&url, this);
+  GondarWizard* wiz = dynamic_cast<GondarWizard*>(wizard());
+  unzipThread = new UnzipThread(&url, this, wiz->filename);
   connect(unzipThread, SIGNAL(finished()), this, SLOT(onUnzipFinished()));
   unzipThread->start();
 }
@@ -161,7 +162,10 @@ void UsbInsertPage::initializePage() {
   tim = new QTimer(this);
   connect(tim, SIGNAL(timeout()), SLOT(getDriveList()));
   // if the page is visited again, delete the old drivelist
-  drivelist->clear();
+  if (drivelist != NULL) {
+    DeviceGuyList_free(drivelist);
+    drivelist = NULL;
+  }
   // send a signal to check for drives
   emit driveListRequested();
 }
@@ -169,14 +173,18 @@ void UsbInsertPage::initializePage() {
 bool UsbInsertPage::isComplete() const {
   // this should return false unless we have a non-empty result from
   // GetDevices()
-  return !drivelist->empty();
+  if (drivelist == NULL) {
+    return false;
+  } else {
+    return true;
+  }
 }
 
 void UsbInsertPage::getDriveList() {
-  drivelist->clear();
-  GetDeviceList(&drivelist);
-
-  if (drivelist->empty()) {
+  drivelist = GetDeviceList();
+  if (DeviceGuyList_length(drivelist) == 0) {
+    DeviceGuyList_free(drivelist);
+    drivelist = NULL;
     tim->start(1000);
   } else {
     tim->stop();
@@ -212,9 +220,10 @@ void DeviceSelectPage::initializePage() {
   // remove our last listing
   delete radioGroup;
 
-  if (drivelist->empty()) {
+  if (drivelist == NULL) {
     return;
   }
+  DeviceGuy* itr = drivelist->head;
   // Line up widgets horizontally
   // use QVBoxLayout for vertically, H for horizontal
   layout->addWidget(&drivesLabel);
@@ -222,10 +231,12 @@ void DeviceSelectPage::initializePage() {
   radioGroup = new QButtonGroup();
   // i could extend the button object to also have a secret index
   // then i could look up index later easily
-  for (const auto& itr : *drivelist) {
-    GondarButton* curRadio = new GondarButton(itr.name, itr.device_num, this);
+  while (itr != NULL) {
+    // FIXME(kendall): clean these up
+    GondarButton* curRadio = new GondarButton(itr->name, itr->device_num, this);
     radioGroup->addButton(curRadio);
     layout->addWidget(curRadio);
+    itr = itr->next;
   }
   setLayout(layout);
 }
@@ -238,7 +249,7 @@ bool DeviceSelectPage::validatePage() {
     return false;
   } else {
     unsigned int selected_index = selected->index;
-    selected_drive = drivelist[selected_index];
+    selected_drive = DeviceGuyList_getByIndex(drivelist, selected_index);
     return true;
   }
 }
@@ -281,7 +292,8 @@ bool WriteOperationPage::validatePage() {
 void WriteOperationPage::writeToDrive() {
   qDebug() << "Writing to drive...";
   image_path.clear();
-  image_path.append("chromiumos_image.bin");
+  GondarWizard* wiz = dynamic_cast<GondarWizard*>(wizard());
+  image_path.append(wiz->filename);
   showProgress();
   diskWriteThread = new DiskWriteThread(selected_drive, image_path, this);
   connect(diskWriteThread, SIGNAL(finished()), this, SLOT(onDoneWriting()));

@@ -148,6 +148,7 @@ class GondarWizard : public QWizard {
     Page_downloadProgress,
     Page_writeOperation
   };
+  char filename[256];
  private slots:
   void handleMakeAnother();
 };

@@ -2,11 +2,11 @@
 
 #include "gondar.h"
 
-void GetDeviceList(DeviceList* list) {
-  const DeviceGuy device0 = {0, "stubdevice0"};
-  const DeviceGuy device1 = {1, "stubdevice1"};
-  DeviceList_append(list, &device0);
-  DeviceList_append(list, &device1);
+DeviceGuyList* GetDeviceList() {
+  auto* list = DeviceGuyList_init();
+  DeviceGuyList_append(list, 0, "stubdevice0");
+  DeviceGuyList_append(list, 1, "stubdevice1");
+  return list;
 }
 
 void Install(DeviceGuy* target_device, const char* image_path) {
