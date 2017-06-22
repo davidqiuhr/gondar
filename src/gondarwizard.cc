@@ -257,10 +257,10 @@ DeviceSelectPage::DeviceSelectPage(QWidget* parent) : QWizardPage(parent) {
 void DeviceSelectPage::initializePage() {
   // while our layout is not empty, remove items from it
   while (!layout->isEmpty()) {
-      QLayoutItem * curItem = layout->takeAt(0);
-      if (curItem->widget() != & drivesLabel) {
-        delete curItem->widget();
-      }
+    QLayoutItem* curItem = layout->takeAt(0);
+    if (curItem->widget() != &drivesLabel) {
+      delete curItem->widget();
+    }
   }
   // remove our last listing
   delete radioGroup;
