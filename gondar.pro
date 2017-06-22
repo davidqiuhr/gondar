@@ -2,7 +2,8 @@ QT = core network widgets
 
 CONFIG += console static
 
-HEADERS       = src/deviceguy.h \
+HEADERS       = src/admin_check_page.h \
+                src/deviceguy.h \
                 src/diskwritethread.h \
                 src/downloader.h \
                 src/gondar.h \
@@ -12,6 +13,7 @@ HEADERS       = src/deviceguy.h \
                 src/shared.h \
                 src/unzipthread.h
 SOURCES       = minizip/minishared.c \
+                src/admin_check_page.cc \
                 src/deviceguy.cc \
                 src/diskwritethread.cc \
                 src/downloader.cc \

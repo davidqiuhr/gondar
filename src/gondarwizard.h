@@ -8,6 +8,7 @@
 #include <QWizard>
 #include <QtWidgets>
 
+#include "admin_check_page.h"
 #include "deviceguy.h"
 #include "diskwritethread.h"
 #include "downloader.h"
@@ -27,24 +28,6 @@ class GondarButton : public QRadioButton {
                unsigned int device_num,
                QWidget* parent = 0);
   unsigned int index = 0;
-};
-
-class AdminCheckPage : public QWizardPage {
-  Q_OBJECT
-
- public:
-  AdminCheckPage(QWidget* parent = 0);
-
- protected:
-  void initializePage() override;
-  bool isComplete() const override;
-  void showIsAdmin();
-  void showIsNotAdmin();
-
- private:
-  QLabel label;
-  bool is_admin;
-  QVBoxLayout layout;
 };
 
 class DownloadProgressPage : public QWizardPage {
