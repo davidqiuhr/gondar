@@ -2,8 +2,8 @@
 #ifndef DISKWRITE_THREAD_H
 #define DISKWRITE_THREAD_H
 
-#include <QThread>
 #include <QString>
+#include <QThread>
 
 #include "deviceguy.h"
 

@@ -19,18 +19,18 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
-#include <windows.h>
-#include <stdio.h>
-#include <shlobj.h>
-#include <ctype.h>
 #include <commdlg.h>
-#include <shellapi.h>
-#include <shlwapi.h>
-#include <setupapi.h>
+#include <ctype.h>
 #include <direct.h>
-#include <share.h>
 #include <fcntl.h>
 #include <io.h>
+#include <setupapi.h>
+#include <share.h>
+#include <shellapi.h>
+#include <shlobj.h>
+#include <shlwapi.h>
+#include <stdio.h>
+#include <windows.h>
 
 #pragma once
 #if defined(_MSC_VER)

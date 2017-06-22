@@ -1,15 +1,15 @@
 
-#include <QtWidgets>
 #include <QNetworkReply>
 #include <QProgressBar>
+#include <QtWidgets>
 
-#include "gondarwizard.h"
-#include "downloader.h"
-#include "unzipthread.h"
 #include "diskwritethread.h"
+#include "downloader.h"
+#include "gondarwizard.h"
+#include "unzipthread.h"
 
-#include "gondar.h"
 #include "deviceguy.h"
+#include "gondar.h"
 #include "neverware_unzipper.h"
 
 DeviceGuyList* drivelist = NULL;
