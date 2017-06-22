@@ -259,10 +259,7 @@ void DeviceSelectPage::initializePage() {
   while (!layout->isEmpty()) {
       QLayoutItem * curItem = layout->takeAt(0);
       if (curItem->widget() != & drivesLabel) {
-        // without this hide, the deleted items are still shown on subsequent
-        // renders of the page
-        curItem->widget()->hide();
-        delete curItem;
+        delete curItem->widget();
       }
   }
   // remove our last listing
