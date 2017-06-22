@@ -248,15 +248,23 @@ DeviceSelectPage::DeviceSelectPage(QWidget* parent) : QWizardPage(parent) {
   setTitle("USB device selection");
   setSubTitle("Choose your target device from the list of devices below.");
   setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
-  layout = NULL;
+  layout = new QVBoxLayout;
+  drivesLabel.setText("Select Drive:");
+  radioGroup = NULL;
+  setLayout(layout);
 }
 
 void DeviceSelectPage::initializePage() {
-  if (layout != NULL) {
-    delete layout;
+  // while our layout is not empty, remove items from it
+  while (!layout->isEmpty()) {
+    QLayoutItem* curItem = layout->takeAt(0);
+    if (curItem->widget() != &drivesLabel) {
+      delete curItem->widget();
+    }
   }
-  layout = new QVBoxLayout;
-  drivesLabel.setText("Select Drive:");
+  // remove our last listing
+  delete radioGroup;
+
   if (drivelist == NULL) {
     return;
   }
@@ -269,7 +277,6 @@ void DeviceSelectPage::initializePage() {
   // i could extend the button object to also have a secret index
   // then i could look up index later easily
   while (itr != NULL) {
-    // FIXME(kendall): clean these up
     GondarButton* curRadio = new GondarButton(itr->name, itr->device_num, this);
     radioGroup->addButton(curRadio);
     layout->addWidget(curRadio);
