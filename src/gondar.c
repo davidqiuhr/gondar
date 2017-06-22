@@ -2431,4 +2431,9 @@ void Install(DeviceGuy* target_device, const char* image_path) {
 
   WriteDrive(phys_handle, source_img, sector_size, drive_size);
   printf("kendall: drive write complete\n");
+  // close the handles we created so that Install() may be called again
+  // within this same run
+  safe_closehandle(phys_handle);
+  safe_closehandle(hLogicalVolume);
+  safe_closehandle(source_img);
 }
