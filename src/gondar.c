@@ -6,11 +6,12 @@ but inherits that project's license should it be distributed.
 */
 
 #include <windows.h>
+
 #include <setupapi.h>
 
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <inttypes.h>
 
 #include "gondar.h"
 
@@ -19,8 +20,8 @@ but inherits that project's license should it be distributed.
 #include "hdd_vs_ufd.h"
 
 // kendall specialz
-#include "shared.h"
 #include "deviceguy.h"
+#include "shared.h"
 
 /* Convenient to have around */
 #define KB 1024LL
@@ -2417,4 +2418,9 @@ void Install(DeviceGuy* target_device, const char* image_path) {
 
   WriteDrive(phys_handle, source_img, sector_size, drive_size);
   printf("kendall: drive write complete\n");
+  // close the handles we created so that Install() may be called again
+  // within this same run
+  safe_closehandle(phys_handle);
+  safe_closehandle(hLogicalVolume);
+  safe_closehandle(source_img);
 }
