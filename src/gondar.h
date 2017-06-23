@@ -8,7 +8,6 @@
 extern "C" {
 #endif
 
-DeviceGuyList* GetDeviceList();
 void Install(DeviceGuy* target_device, const char* image_path);
 BOOL IsCurrentProcessElevated();
 

@@ -1449,7 +1449,7 @@ char drive_letters[27];
 /*
  * Refresh the list of USB devices
  */
-static void GetDevices(DeviceGuyList* device_list) {
+void GetDeviceList(DeviceList* device_list) {
   DWORD drive_index = -1;  // this value is set for each device as we iterate.
                            // the value initialized here should never be used
 
@@ -1982,7 +1982,11 @@ static void GetDevices(DeviceGuyList* device_list) {
       // here we are.  the device has not been eliminated!  that is great!
       // if we don't already have a ret, make this our ret
       printf("kendall: %d qualified\n", drive_index);
-      DeviceGuyList_append(device_list, drive_index, buffer);
+      DeviceGuy device;
+      device.device_num = drive_index;
+      safe_strcpy(device.name, MAX_NAME_LENGTH, buffer);
+      device.name[MAX_NAME_LENGTH - 1] = '\0';
+      DeviceList_append(device_list, &device);
     }
   }
 
@@ -1994,7 +1998,7 @@ out:
   StrArrayDestroy(&dev_if_path);
   htab_destroy(&htab_devid);
 }
-// end GetDevices()
+// end GetDeviceList()
 /*
  * Unmount of volume using the DISMOUNT_VOLUME ioctl
  */
@@ -2383,23 +2387,6 @@ static BOOL WriteDrive(HANDLE hPhysicalDrive,
 out:
   safe_mm_free(buffer);
   return ret;
-}
-
-DeviceGuyList* GetDeviceList() {
-  DeviceGuyList* device_list = DeviceGuyList_init();
-  GetDevices(device_list);
-  BOOL success = FALSE;
-  if (DeviceGuyList_length(device_list) > 0) {
-    success = TRUE;
-  }
-  if (!success) {
-    printf("\n\nkendall: no device detected!\nhave a nice day!\n");
-  } else {
-    printf("\n\nkendall: devices detected!\nhave a nice day!\n");
-    DeviceGuyList_print(device_list);
-  }
-  // DeviceGuyList_free(device_list);
-  return device_list;
 }
 
 void Install(DeviceGuy* target_device, const char* image_path) {
