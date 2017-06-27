@@ -28,10 +28,7 @@
 
 #include "minishared.h"
 
-// TODO(kendall): filename_from_url refers to the end of the url (".zip")
-// whereas this refers to the filename of the internal, zipped guy.
-// why did i name them the same thing
-void get_filename(char* zipfile, char* filename) {
+void get_filename_inside_zip(char* zipfile, char* filename) {
   unzFile* uf = unzOpen64(zipfile);
   unzGoToFirstFile(uf);
   int err = UNZ_OK;
@@ -237,6 +234,6 @@ char* neverware_unzip(const char* url) {
   }
   // FIXME(kendall): leak
   char* filename = calloc(256, 0);
-  get_filename(zipfilename, filename);
+  get_filename_inside_zip(zipfilename, filename);
   return filename;
 }
