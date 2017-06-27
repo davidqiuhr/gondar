@@ -28,6 +28,30 @@
 
 #include "minishared.h"
 
+const int FILENAME_BUFFER_SIZE = 256;
+
+static void get_filename_inside_zip(char* zipfile, char* filename) {
+  unzFile* uf = unzOpen64(zipfile);
+  if (uf == NULL) {
+    printf("error opening unzip file\n");
+    return;
+  }
+  int err = UNZ_OK;
+  err = unzGoToFirstFile(uf);
+  if (err != UNZ_OK) {
+    printf("error %d with zipfile in unzGoToFirstFile\n", err);
+    unzCloseCurrentFile(uf);
+    return;
+  }
+  unz_file_info64 file_info = {0};
+  err =
+      unzGetCurrentFileInfo64(uf, &file_info, filename, FILENAME_BUFFER_SIZE, NULL, 0, NULL, 0);
+  if (err != UNZ_OK) {
+    printf("Error retrieving file info for downloaded zip\n");
+  }
+  unzCloseCurrentFile(uf);
+}
+
 static int miniunz_extract_currentfile(unzFile uf,
                                        int opt_extract_without_path,
                                        int* popt_overwrite,
@@ -50,7 +74,6 @@ static int miniunz_extract_currentfile(unzFile uf,
     printf("error %d with zipfile in unzGetCurrentFileInfo\n", err);
     return err;
   }
-
   p = filename_withoutpath = filename_inzip;
   while (*p != 0) {
     if ((*p == '/') || (*p == '\\'))
@@ -194,10 +217,8 @@ static char* filename_from_url(const char* url) {
   // TODO(kendall): check to ensure the file ends in ".zip"
   return filename;
 }
-// TODO(kendall): let's eventually return the name of the file
-// i guess the good news is for now it will always be called
-// chromiumos_image.bin
-int neverware_unzip(const char* url) {
+
+char* neverware_unzip(const char* url) {
   char* zipfilename = filename_from_url(url);
   unzFile uf = NULL;
 #ifdef USEWIN32IOAPI
@@ -210,7 +231,7 @@ int neverware_unzip(const char* url) {
 
   if (uf == NULL) {
     printf("Cannot open %s\n", zipfilename);
-    return 1;
+    return NULL;
   }
 
   printf("%s opened\n", zipfilename);
@@ -219,7 +240,11 @@ int neverware_unzip(const char* url) {
                                 /*extract_without_path*/ 1,
                                 /*overwrite*/ 1,
                                 /*password*/ NULL);
-
   unzClose(uf);
-  return ret;
+  if (ret != 0) {
+    return NULL;
+  }
+  char* filename = calloc(FILENAME_BUFFER_SIZE, 0);
+  get_filename_inside_zip(zipfilename, filename);
+  return filename;
 }

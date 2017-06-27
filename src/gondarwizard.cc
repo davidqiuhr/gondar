@@ -135,6 +135,10 @@ bool DownloadProgressPage::isComplete() const {
   return download_finished;
 }
 
+const QString& DownloadProgressPage::getImageFileName() {
+    return unzipThread->getFileName();
+}
+
 UsbInsertPage::UsbInsertPage(QWidget* parent) : QWizardPage(parent) {
   setTitle("Please insert an 8GB or 16GB USB storage device");
   setSubTitle(
@@ -291,7 +295,8 @@ bool WriteOperationPage::validatePage() {
 void WriteOperationPage::writeToDrive() {
   qDebug() << "Writing to drive...";
   image_path.clear();
-  image_path.append("chromiumos_image.bin");
+  GondarWizard* wiz = dynamic_cast<GondarWizard*>(wizard());
+  image_path.append(wiz->downloadProgressPage.getImageFileName());
   showProgress();
   diskWriteThread = new DiskWriteThread(selected_drive, image_path, this);
   connect(diskWriteThread, SIGNAL(finished()), this, SLOT(onDoneWriting()));
