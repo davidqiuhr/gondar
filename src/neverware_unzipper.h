@@ -5,8 +5,8 @@
 extern "C" {
 #endif
 
-char * neverware_unzip(const char* url);
-void get_filename(char * zipfile, char * filename);
+char* neverware_unzip(const char* url);
+void get_filename(char* zipfile, char* filename);
 
 #ifdef __cplusplus
 }

@@ -28,22 +28,18 @@
 
 #include "minishared.h"
 
-//TODO(kendall): filename_from_url refers to the end of the url (".zip")
+// TODO(kendall): filename_from_url refers to the end of the url (".zip")
 // whereas this refers to the filename of the internal, zipped guy.
 // why did i name them the same thing
-void get_filename(char * zipfile, char * filename) {
-    unzFile * uf = unzOpen64(zipfile);
-    unzGoToFirstFile(uf);
-    int err = UNZ_OK;
-    unz_file_info64 file_info = {0};
-  err = unzGetCurrentFileInfo64(uf,
-                                & file_info,
-                                filename,
-                                256,
-                                NULL, 0, NULL, 0);
+void get_filename(char* zipfile, char* filename) {
+  unzFile* uf = unzOpen64(zipfile);
+  unzGoToFirstFile(uf);
+  int err = UNZ_OK;
+  unz_file_info64 file_info = {0};
+  err =
+      unzGetCurrentFileInfo64(uf, &file_info, filename, 256, NULL, 0, NULL, 0);
   unzCloseCurrentFile(uf);
 }
-
 
 static int miniunz_extract_currentfile(unzFile uf,
                                        int opt_extract_without_path,
@@ -213,7 +209,7 @@ static char* filename_from_url(const char* url) {
 // TODO(kendall): let's eventually return the name of the file
 // i guess the good news is for now it will always be called
 // chromiumos_image.bin
-char * neverware_unzip(const char* url) {
+char* neverware_unzip(const char* url) {
   char* zipfilename = filename_from_url(url);
   unzFile uf = NULL;
 #ifdef USEWIN32IOAPI
@@ -239,8 +235,8 @@ char * neverware_unzip(const char* url) {
   if (ret != 0) {
     return NULL;
   }
-  //FIXME(kendall): leak
-  char * filename = calloc(256, 0);
+  // FIXME(kendall): leak
+  char* filename = calloc(256, 0);
   get_filename(zipfilename, filename);
   return filename;
 }
