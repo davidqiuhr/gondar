@@ -109,7 +109,6 @@ void DownloadProgressPage::markComplete() {
   download_finished = true;
   // now that the download is finished, let's unzip the build.
   notifyUnzip();
-  GondarWizard* wiz = dynamic_cast<GondarWizard*>(wizard());
   unzipThread = new UnzipThread(&url, this);
   connect(unzipThread, SIGNAL(finished()), this, SLOT(onUnzipFinished()));
   unzipThread->start();

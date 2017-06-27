@@ -32,6 +32,10 @@ const int FILENAME_BUFFER_SIZE = 256;
 
 static void get_filename_inside_zip(char* zipfile, char* filename) {
   unzFile* uf = unzOpen64(zipfile);
+  if (uf == NULL) {
+    printf("error opening unzip file\n");
+    return;
+  }
   int err = UNZ_OK;
   err = unzGoToFirstFile(uf);
   if (err != UNZ_OK) {
