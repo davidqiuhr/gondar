@@ -8,7 +8,7 @@
 class UnzipThread : public QThread {
   Q_OBJECT
  public:
-  UnzipThread(const QUrl* url_in, QObject* parent = 0, char* filename_in = 0);
+  UnzipThread(const QUrl* url_in, char* filename_in, QObject* parent = 0);
   ~UnzipThread();
 
  protected:

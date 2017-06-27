@@ -5,7 +5,9 @@
 
 #include "neverware_unzipper.h"
 
-UnzipThread::UnzipThread(const QUrl* url_in, QObject* parent, char* filename_in)
+UnzipThread::UnzipThread(const QUrl* url_in,
+                         char* filename_in,
+                         QObject* parent)
     : QThread(parent) {
   url = *url_in;
   filename = filename_in;
