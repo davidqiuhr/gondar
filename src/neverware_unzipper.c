@@ -244,7 +244,6 @@ char* neverware_unzip(const char* url) {
   if (ret != 0) {
     return NULL;
   }
-  // FIXME(kendall): leak
   char* filename = calloc(FILENAME_BUFFER_SIZE, 0);
   get_filename_inside_zip(zipfilename, filename);
   return filename;
