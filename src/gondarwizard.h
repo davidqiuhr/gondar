@@ -36,6 +36,7 @@ class DownloadProgressPage : public QWizardPage {
  public:
   DownloadProgressPage(QWidget* parent = 0);
   bool isComplete() const override;
+  const QString& getImageFileName();
 
  protected:
   void initializePage() override;
@@ -54,6 +55,7 @@ class DownloadProgressPage : public QWizardPage {
   bool download_finished;
   QVBoxLayout layout;
   QUrl url;
+  UnzipThread* unzipThread;
 };
 
 class UsbInsertPage : public QWizardPage {
@@ -147,7 +149,6 @@ class GondarWizard : public QWizard {
     Page_downloadProgress,
     Page_writeOperation
   };
-  UnzipThread* unzipThread;
  private slots:
   void handleMakeAnother();
 };
