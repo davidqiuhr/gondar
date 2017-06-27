@@ -10,7 +10,7 @@ DiskWriteThread::DiskWriteThread(DeviceGuy* drive_in,
                                  const QString& image_path_in,
                                  QObject* parent)
     : QThread(parent) {
-  selected_drive = *drive_in;
+  DeviceGuy_copy(drive_in, &selected_drive);
   image_path = image_path_in;
 }
 
