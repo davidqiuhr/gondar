@@ -30,7 +30,11 @@
 
 void get_filename_inside_zip(char* zipfile, char* filename) {
   unzFile* uf = unzOpen64(zipfile);
-  unzGoToFirstFile(uf);
+  int err = unzGoToFirstFile(uf);
+  if (err != UNZ_OK) {
+    printf("error %d with zipfile in unzGoToFirstFile\n", err);
+    return;
+  }
   int err = UNZ_OK;
   unz_file_info64 file_info = {0};
   err =
