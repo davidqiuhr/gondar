@@ -1,8 +1,6 @@
 #ifndef NEVERWARE_UNZIPPER_H
 #define NEVERWARE_UNZIPPER_H
 
-#define FILENAME_BUFFER_SIZE 256
-
 #ifdef __cplusplus
 extern "C" {
 #endif

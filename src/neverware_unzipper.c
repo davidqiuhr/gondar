@@ -28,6 +28,8 @@
 
 #include "minishared.h"
 
+const int FILENAME_BUFFER_SIZE = 256;
+
 void get_filename_inside_zip(char* zipfile, char* filename) {
   unzFile* uf = unzOpen64(zipfile);
   int err = UNZ_OK;
