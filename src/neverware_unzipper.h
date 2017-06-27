@@ -6,7 +6,6 @@ extern "C" {
 #endif
 
 char* neverware_unzip(const char* url);
-void get_filename_inside_zip(char* zipfile, char* filename);
 
 #ifdef __cplusplus
 }
