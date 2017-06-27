@@ -35,6 +35,9 @@ void get_filename_inside_zip(char* zipfile, char* filename) {
   unz_file_info64 file_info = {0};
   err =
       unzGetCurrentFileInfo64(uf, &file_info, filename, 256, NULL, 0, NULL, 0);
+  if (err != UNZ_OK) {
+    printf("Error retrieving file info for downloaded zip\n");
+  }
   unzCloseCurrentFile(uf);
 }
 
