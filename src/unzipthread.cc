@@ -19,8 +19,7 @@ const QString& UnzipThread::getFileName() const {
 void UnzipThread::run() {
   const char* url_c_str = url.toString().toStdString().c_str();
   char * binfile_name = neverware_unzip(url_c_str);
-  filename.clear();
-  filename.append(binfile_name);
+  filename = binfile_name;
   free(binfile_name);
   qDebug() << "worker thread says complete";
 }
