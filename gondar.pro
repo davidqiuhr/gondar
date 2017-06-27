@@ -28,6 +28,7 @@ RESOURCES     = gondarwizard.qrc
 INCLUDEPATH += minizip
 
 win32 {
+  RC_FILE       = gondar.rc
   INCLUDEPATH += ms-sys/inc
   SOURCES += src/gondar.c
 } else {
