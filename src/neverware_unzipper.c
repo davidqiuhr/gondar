@@ -30,15 +30,15 @@
 
 void get_filename_inside_zip(char* zipfile, char* filename) {
   unzFile* uf = unzOpen64(zipfile);
-  int err = unzGoToFirstFile(uf);
+  int err = UNZ_OK;
+  err = unzGoToFirstFile(uf);
   if (err != UNZ_OK) {
     printf("error %d with zipfile in unzGoToFirstFile\n", err);
     return;
   }
-  int err = UNZ_OK;
   unz_file_info64 file_info = {0};
   err =
-      unzGetCurrentFileInfo64(uf, &file_info, filename, 256, NULL, 0, NULL, 0);
+      unzGetCurrentFileInfo64(uf, &file_info, filename, FILENAME_BUFFER_SIZE, NULL, 0, NULL, 0);
   if (err != UNZ_OK) {
     printf("Error retrieving file info for downloaded zip\n");
   }
@@ -238,7 +238,7 @@ char* neverware_unzip(const char* url) {
     return NULL;
   }
   // FIXME(kendall): leak
-  char* filename = calloc(256, 0);
+  char* filename = calloc(FILENAME_BUFFER_SIZE, 0);
   get_filename_inside_zip(zipfilename, filename);
   return filename;
 }
