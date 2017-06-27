@@ -8,15 +8,16 @@
 class UnzipThread : public QThread {
   Q_OBJECT
  public:
-  UnzipThread(const QUrl* url_in, char* filename_in, QObject* parent = 0);
+  UnzipThread(const QUrl* url_in, QObject* parent = 0);
   ~UnzipThread();
+  QString * getFilename();
 
  protected:
   void run() override;
   QUrl url;
 
  private:
-  char* filename;
+  QString filename;
 };
 
 #endif /* UNZIP_THREAD_H */

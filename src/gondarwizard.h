@@ -13,7 +13,6 @@
 #include "diskwritethread.h"
 #include "downloader.h"
 #include "image_select_page.h"
-#include "neverware_unzipper.h"
 #include "unzipthread.h"
 
 class QCheckBox;
@@ -54,7 +53,6 @@ class DownloadProgressPage : public QWizardPage {
   QProgressBar progress;
   bool download_finished;
   QVBoxLayout layout;
-  UnzipThread* unzipThread;
   QUrl url;
 };
 
@@ -149,7 +147,7 @@ class GondarWizard : public QWizard {
     Page_downloadProgress,
     Page_writeOperation
   };
-  char filename[FILENAME_BUFFER_SIZE];
+  UnzipThread* unzipThread;
  private slots:
   void handleMakeAnother();
 };

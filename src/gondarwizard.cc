@@ -110,9 +110,9 @@ void DownloadProgressPage::markComplete() {
   // now that the download is finished, let's unzip the build.
   notifyUnzip();
   GondarWizard* wiz = dynamic_cast<GondarWizard*>(wizard());
-  unzipThread = new UnzipThread(&url, wiz->filename, this);
-  connect(unzipThread, SIGNAL(finished()), this, SLOT(onUnzipFinished()));
-  unzipThread->start();
+  wiz->unzipThread = new UnzipThread(&url, this);
+  connect(wiz->unzipThread, SIGNAL(finished()), this, SLOT(onUnzipFinished()));
+  wiz->unzipThread->start();
 }
 
 void DownloadProgressPage::onUnzipFinished() {
@@ -293,7 +293,7 @@ void WriteOperationPage::writeToDrive() {
   qDebug() << "Writing to drive...";
   image_path.clear();
   GondarWizard* wiz = dynamic_cast<GondarWizard*>(wizard());
-  image_path.append(wiz->filename);
+  image_path.append(wiz->unzipThread->getFilename());
   showProgress();
   diskWriteThread = new DiskWriteThread(selected_drive, image_path, this);
   connect(diskWriteThread, SIGNAL(finished()), this, SLOT(onDoneWriting()));
