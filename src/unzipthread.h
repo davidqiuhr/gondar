@@ -10,7 +10,7 @@ class UnzipThread : public QThread {
  public:
   UnzipThread(const QUrl* url_in, QObject* parent = 0);
   ~UnzipThread();
-  QString * getFilename();
+  const QString& getFilename() const;
 
  protected:
   void run() override;

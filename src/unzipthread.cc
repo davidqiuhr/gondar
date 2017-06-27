@@ -13,8 +13,8 @@ UnzipThread::UnzipThread(const QUrl* url_in,
 
 UnzipThread::~UnzipThread() {}
 
-QString * UnzipThread::getFilename() {
-  return & filename;
+const QString& UnzipThread::getFilename() const {
+  return filename;
 }
 void UnzipThread::run() {
   const char* url_c_str = url.toString().toStdString().c_str();
