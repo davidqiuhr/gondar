@@ -203,9 +203,7 @@ static char* filename_from_url(const char* url) {
   // TODO(kendall): check to ensure the file ends in ".zip"
   return filename;
 }
-// TODO(kendall): let's eventually return the name of the file
-// i guess the good news is for now it will always be called
-// chromiumos_image.bin
+
 char* neverware_unzip(const char* url) {
   char* zipfilename = filename_from_url(url);
   unzFile uf = NULL;
