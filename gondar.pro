@@ -20,7 +20,7 @@ SOURCES       = minizip/minishared.c \
                 src/gondarwizard.cc \
                 src/image_select_page.cc \
                 src/main.cc \
-                src/neverware_unzipper.c \
+                src/neverware_unzipper.cc \
                 src/unzipthread.cc
 RESOURCES     = gondarwizard.qrc
 
