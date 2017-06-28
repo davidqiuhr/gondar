@@ -2281,8 +2281,14 @@ static BOOL WriteDrive(HANDLE hPhysicalDrive,
   DWORD rSize, wSize, BufSize;
   // ok; i found the logic for this in vhd.c.  we have the handles
   LARGE_INTEGER liImageSize;
+  // GetFileSizeEx() is recommended on newer windows, but GetFileSize() works
+  // as a fallback
   if (!GetFileSizeEx(hSourceImage, &liImageSize)) {
-    printf("Could not get image size\n");
+    printf("Could not get image size using newer method, trying older...\n");
+    if (!GetFileSize(hSourceImage, &liImageSize)) {
+      printf("Could not get image size even using older method\n");
+      return FALSE;
+    }
   }
   uint64_t projected_size = (uint64_t)liImageSize.QuadPart;
 

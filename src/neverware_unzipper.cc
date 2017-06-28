@@ -248,7 +248,7 @@ char* neverware_unzip(const char* url) {
   if (ret != 0) {
     return NULL;
   }
-  char* filename = static_cast<char*>(calloc(FILENAME_BUFFER_SIZE, 0));
+  char* filename = static_cast<char*>(calloc(FILENAME_BUFFER_SIZE, 1));
   get_filename_inside_zip(zipfilename, filename);
   return filename;
 }
