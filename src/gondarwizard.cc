@@ -136,7 +136,7 @@ bool DownloadProgressPage::isComplete() const {
 }
 
 const QString& DownloadProgressPage::getImageFileName() {
-    return unzipThread->getFileName();
+  return unzipThread->getFileName();
 }
 
 UsbInsertPage::UsbInsertPage(QWidget* parent) : QWizardPage(parent) {
