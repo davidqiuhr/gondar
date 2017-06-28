@@ -7,7 +7,7 @@ eval(CHROMEOVER = $$chromeover) {
 
 QT = core network widgets
 
-CONFIG += console static
+CONFIG += static
 
 
 HEADERS       = src/admin_check_page.h \
