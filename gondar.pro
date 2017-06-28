@@ -2,6 +2,7 @@ QT = core network widgets
 
 CONFIG += console static
 
+
 HEADERS       = src/admin_check_page.h \
                 src/deviceguy.h \
                 src/diskwritethread.h \
@@ -58,7 +59,7 @@ target.path = .
 INSTALLS += target
 
 TEMPLATE = app
-TARGET = gondar
+TARGET = cloudready-usb-creator
 
 win32 {
   LIBS += -Lbuild/minizip-mxe
