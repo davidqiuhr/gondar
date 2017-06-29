@@ -24,6 +24,7 @@ DiskWriteThread::~DiskWriteThread() {}
 
 void DiskWriteThread::run() {
   qDebug() << "running diskwrite on image=" << image_path;
+  // hold on to string in this scope so c string pointer does not invalidate
   std::string image_path_str = image_path.toStdString();
   const char* image_path_c_str = image_path_str.c_str();
   int64_t image_size = getFileSize(image_path_c_str);
