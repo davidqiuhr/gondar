@@ -29,6 +29,9 @@ void DiskWriteThread::run() {
   int64_t image_size = getFileSize(image_path_c_str);
   if (image_size == -1) {
     qDebug() << "Error: could not detect image size";
+    // TODO: propagate error up to user
+    // no real reason to continue with what will be a failed call to install
+    return;
   }
   Install(&selected_drive, image_path_c_str, image_size);
   qDebug() << "worker thread says complete";
