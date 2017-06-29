@@ -2275,13 +2275,16 @@ static uint64_t GetSectorSize(DWORD DriveIndex) {
 static BOOL WriteDrive(HANDLE hPhysicalDrive,
                        HANDLE hSourceImage,
                        uint64_t sector_size,
-                       uint64_t drive_size
+                       uint64_t drive_size,
                        int64_t image_size) {
   BOOL s, ret = FALSE;
   LARGE_INTEGER li;
   DWORD rSize, wSize, BufSize;
   // ok; i found the logic for this in vhd.c.  we have the handles
-  uint64_t projected_size = (uint64_t)image_size.QuadPart;
+
+  // previous logic (rufus) also casted a signed int into an unsigned int here,
+  // just using LARGE_INTEGER union as a middleman
+  uint64_t projected_size = (uint64_t)image_size;
 
   uint64_t wb, target_size = projected_size;
   uint8_t* buffer = NULL;

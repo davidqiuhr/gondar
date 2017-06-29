@@ -19,6 +19,7 @@ class DiskWriteThread : public QThread {
   void run() override;
 
  private:
+  int64_t getFileSize(const char* path);
   DeviceGuy selected_drive;
   QString image_path;
 };
