@@ -2275,16 +2275,16 @@ static uint64_t GetSectorSize(DWORD DriveIndex) {
 static BOOL WriteDrive(HANDLE hPhysicalDrive,
                        HANDLE hSourceImage,
                        uint64_t sector_size,
-                       uint64_t drive_size) {
+                       uint64_t drive_size,
+                       int64_t image_size) {
   BOOL s, ret = FALSE;
   LARGE_INTEGER li;
   DWORD rSize, wSize, BufSize;
   // ok; i found the logic for this in vhd.c.  we have the handles
-  LARGE_INTEGER liImageSize;
-  if (!GetFileSizeEx(hSourceImage, &liImageSize)) {
-    printf("Could not get image size\n");
-  }
-  uint64_t projected_size = (uint64_t)liImageSize.QuadPart;
+
+  // previous logic (rufus) also casted a signed int into an unsigned int here,
+  // just using LARGE_INTEGER union as a middleman
+  uint64_t projected_size = (uint64_t)image_size;
 
   uint64_t wb, target_size = projected_size;
   uint8_t* buffer = NULL;
@@ -2402,7 +2402,8 @@ DeviceGuyList* GetDeviceList() {
   return device_list;
 }
 
-void Install(DeviceGuy* target_device, const char* image_path) {
+void Install(DeviceGuy* target_device, const char* image_path,
+             int64_t image_size) {
   uint64_t device_num = target_device->device_num;
   uint64_t sector_size = GetSectorSize(device_num);
   uint64_t drive_size = GetDriveSize(device_num);
@@ -2429,7 +2430,7 @@ void Install(DeviceGuy* target_device, const char* image_path) {
     printf("kendall: physical handle invalid!\n");
   }
 
-  WriteDrive(phys_handle, source_img, sector_size, drive_size);
+  WriteDrive(phys_handle, source_img, sector_size, drive_size, image_size);
   printf("kendall: drive write complete\n");
   // close the handles we created so that Install() may be called again
   // within this same run
