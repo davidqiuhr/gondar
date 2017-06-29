@@ -15,9 +15,11 @@ DiskWriteThread::DiskWriteThread(DeviceGuy* drive_in,
 }
 
 int64_t DiskWriteThread::getFileSize(const char* path) {
-    // returns 0 on file not found
-    // TODO: is this guaranteed?
-    return QFile(path).size();
+  QFile file(path);
+  if (!file.exists()) {
+    return -1;
+  }
+  return file.size();
 }
 
 DiskWriteThread::~DiskWriteThread() {}
