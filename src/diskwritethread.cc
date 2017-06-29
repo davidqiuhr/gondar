@@ -18,10 +18,6 @@ DiskWriteThread::~DiskWriteThread() {}
 
 void DiskWriteThread::run() {
   qDebug() << "running diskwrite on image=" << image_path;
-  // we must save the byte array, as otherwise the pointer could become invalid
-  // before we try to access it
-  QByteArray image_path_bytes = image_path.toLatin1();
-  const char* image_path_c_str = image_path_bytes.data();
-  Install(&selected_drive, image_path_c_str);
+  Install(&selected_drive, image_path.toStdString().c_str());
   qDebug() << "worker thread says complete";
 }
