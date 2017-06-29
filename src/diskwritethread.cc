@@ -27,6 +27,9 @@ void DiskWriteThread::run() {
   std::string image_path_str = image_path.toStdString();
   const char* image_path_c_str = image_path_str.c_str();
   int64_t image_size = getFileSize(image_path_c_str);
+  if (image_size == -1) {
+    qDebug() << "Error: could not detect image size";
+  }
   Install(&selected_drive, image_path_c_str, image_size);
   qDebug() << "worker thread says complete";
 }
