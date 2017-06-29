@@ -5,7 +5,9 @@
 #include <QVBoxLayout>
 #include <QWizardPage>
 
-class AdminCheckPage : public QWizardPage {
+#include "gondarpage.h"
+
+class AdminCheckPage : public GondarPage {
   Q_OBJECT
 
  public:

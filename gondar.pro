@@ -8,6 +8,7 @@ HEADERS       = src/admin_check_page.h \
                 src/diskwritethread.h \
                 src/downloader.h \
                 src/gondar.h \
+                src/gondarpage.h \
                 src/gondarwizard.h \
                 src/image_select_page.h \
                 src/log.h \
@@ -20,6 +21,7 @@ SOURCES       = minizip/minishared.c \
                 src/deviceguy.cc \
                 src/diskwritethread.cc \
                 src/downloader.cc \
+                src/gondarpage.cc \
                 src/gondarwizard.cc \
                 src/image_select_page.cc \
                 src/log.cc \

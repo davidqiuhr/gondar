@@ -7,7 +7,9 @@
 #include <QVBoxLayout>
 #include <QWizardPage>
 
-class ImageSelectPage : public QWizardPage {
+#include "gondarpage.h"
+
+class ImageSelectPage : public GondarPage {
   Q_OBJECT
 
  public:

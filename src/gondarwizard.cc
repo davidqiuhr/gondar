@@ -1,11 +1,13 @@
 
+#include "gondarwizard.h"
+
 #include <QNetworkReply>
 #include <QProgressBar>
 #include <QtWidgets>
 
 #include "diskwritethread.h"
 #include "downloader.h"
-#include "gondarwizard.h"
+#include "gondarpage.h"
 #include "unzipthread.h"
 
 #include "deviceguy.h"
@@ -22,6 +24,7 @@ GondarButton::GondarButton(const QString& text,
   index = device_num;
 }
 GondarWizard::GondarWizard(QWidget* parent) : QWizard(parent) {
+
   // these pages are automatically cleaned up
   // new instances are made whenever navigation moves on to another page
   // according to qt docs
@@ -31,46 +34,33 @@ GondarWizard::GondarWizard(QWidget* parent) : QWizard(parent) {
   setPage(Page_deviceSelect, &deviceSelectPage);
   setPage(Page_downloadProgress, &downloadProgressPage);
   setPage(Page_writeOperation, &writeOperationPage);
+  setPage(Page_error, &errorPage);
   setWizardStyle(QWizard::ModernStyle);
   setWindowTitle(tr("Cloudready USB Creation Utility"));
 
-  // Only show next buttons for all screens
-  QList<QWizard::WizardButton> button_layout;
-  button_layout << QWizard::NextButton;
-  setButtonLayout(button_layout);
-
-  setButtonText(QWizard::CustomButton1, tr("Make Another USB"));
-  connect(this, SIGNAL(customButtonClicked(int)), this,
-          SLOT(handleMakeAnother()));
+  setOption(QWizard::HaveCustomButton1, false);
+  setOption(QWizard::NoCancelButton, true);
+  setOption(QWizard::NoBackButtonOnLastPage, true);
 }
 
 // handle event when 'make another usb' button pressed
 void GondarWizard::handleMakeAnother() {
   // we set the page to usbInsertPage and show usual buttons
-  showUsualButtons();
+  //showUsualButtons();
   // works as long as usbInsertPage is not the last page in wizard
   setStartId(usbInsertPage.nextId() - 1);
   restart();
 }
-void GondarWizard::showUsualButtons() {
-  // Only show next buttons for all screens
-  QList<QWizard::WizardButton> button_layout;
-  button_layout << QWizard::NextButton;
-  setOption(QWizard::HaveCustomButton1, false);
-  setButtonLayout(button_layout);
-}
 
-// show 'make another usb' button along with finish button at end of wizard
-void GondarWizard::showFinishButtons() {
-  QList<QWizard::WizardButton> button_layout;
-  button_layout << QWizard::FinishButton;
-  button_layout << QWizard::CustomButton1;
-  setOption(QWizard::HaveCustomButton1, true);
-  setButtonLayout(button_layout);
+// display the error screen with appropriate contents
+void GondarWizard::goToErrorPage(QString errorStringIn) {
+  errorPage.setErrorString(errorStringIn);
+  setStartId(Page_error);
+  restart();
 }
 
 DownloadProgressPage::DownloadProgressPage(QWidget* parent)
-    : QWizardPage(parent) {
+    : GondarPage(parent) {
   setTitle("CloudReady Download");
   setSubTitle("Your installer is currently downloading.");
   setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
@@ -81,20 +71,23 @@ DownloadProgressPage::DownloadProgressPage(QWidget* parent)
 }
 
 void DownloadProgressPage::initializePage() {
+  // we don't support going back and redownloading right now
+  // there's no real reason why we could not do this.  it just does not work
+  // right now
+  setCommitPage(true);
   setLayout(&layout);
   GondarWizard* wiz = dynamic_cast<GondarWizard*>(wizard());
   const QUrl url = wiz->imageSelectPage.getUrl();
   qDebug() << "using url= " << url;
-  QObject::connect(&manager, SIGNAL(finished()), this, SLOT(markComplete()));
+  connect(&manager, SIGNAL(finished()), this, SLOT(markComplete()));
   manager.append(url.toString());
-  QObject::connect(&manager, SIGNAL(started()), this,
-                   SLOT(onDownloadStarted()));
+  connect(&manager, SIGNAL(started()), this, SLOT(onDownloadStarted()));
 }
 
 void DownloadProgressPage::onDownloadStarted() {
   QNetworkReply* cur_download = manager.getCurrentDownload();
-  QObject::connect(cur_download, &QNetworkReply::downloadProgress, this,
-                   &DownloadProgressPage::downloadProgress);
+  connect(cur_download, &QNetworkReply::downloadProgress, this,
+          &DownloadProgressPage::downloadProgress);
 }
 
 void DownloadProgressPage::downloadProgress(qint64 sofar, qint64 total) {
@@ -139,7 +132,7 @@ const QString& DownloadProgressPage::getImageFileName() {
   return unzipThread->getFileName();
 }
 
-UsbInsertPage::UsbInsertPage(QWidget* parent) : QWizardPage(parent) {
+UsbInsertPage::UsbInsertPage(QWidget* parent) : GondarPage(parent) {
   setTitle("Please insert an 8GB or 16GB USB storage device");
   setSubTitle(
       "In the next step, the selected device will be permanantly erased and "
@@ -157,8 +150,7 @@ UsbInsertPage::UsbInsertPage(QWidget* parent) : QWizardPage(parent) {
   setLayout(&layout);
 
   // the next button should be grayed out until the user inserts a USB
-  QObject::connect(this, SIGNAL(driveListRequested()), this,
-                   SLOT(getDriveList()));
+  connect(this, SIGNAL(driveListRequested()), this, SLOT(getDriveList()));
 }
 
 void UsbInsertPage::initializePage() {
@@ -199,7 +191,7 @@ void UsbInsertPage::showDriveList() {
   emit completeChanged();
 }
 
-DeviceSelectPage::DeviceSelectPage(QWidget* parent) : QWizardPage(parent) {
+DeviceSelectPage::DeviceSelectPage(QWidget* parent) : GondarPage(parent) {
   // this page should just say 'hi how are you' while it stealthily loads
   // the usb device list.  or it could ask you to insert your device
   setTitle("USB device selection");
@@ -266,7 +258,7 @@ int DeviceSelectPage::nextId() const {
   }
 }
 
-WriteOperationPage::WriteOperationPage(QWidget* parent) : QWizardPage(parent) {
+WriteOperationPage::WriteOperationPage(QWidget* parent) : GondarPage(parent) {
   setTitle("Creating your CloudReady USB installer");
   setSubTitle("This process may take up to 20 minutes.");
   setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
@@ -316,7 +308,71 @@ void WriteOperationPage::onDoneWriting() {
   writeFinished = true;
   progress.setRange(0, 100);
   progress.setValue(100);
+  //wiz->showFinishButtons();
   GondarWizard* wiz = dynamic_cast<GondarWizard*>(wizard());
-  wiz->showFinishButtons();
+  wiz->setOption(QWizard::HaveCustomButton1, true);
+
   emit completeChanged();
+}
+
+// though error page follows in index, this is the end of the wizard for
+// healthy flows
+int WriteOperationPage::nextId() const {
+  return -1;
+}
+
+void WriteOperationPage::setVisible(bool visible) {
+  QWizardPage::setVisible(visible);
+  GondarWizard* wiz = dynamic_cast<GondarWizard*>(wizard());
+  if (visible) {
+    wiz->setButtonText(QWizard::CustomButton1, "Make Another USB");
+    //wiz->setOption(QWizard::HaveCustomButton1, true);
+    connect(wiz, SIGNAL(customButtonClicked(int)),
+            wiz, SLOT(handleMakeAnother()));
+  } else {
+    wiz->setOption(QWizard::HaveCustomButton1, false);
+    disconnect(wiz, SIGNAL(customButtonClicked(int)),
+               wiz, SLOT(handleMakeAnother()));
+  }
+}
+
+ErrorPage::ErrorPage(QWidget* parent) : GondarPage(parent) {
+  setTitle("An Error has occurred");
+  setSubTitle("X_0 Jimbo");
+  setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
+  layout.addWidget(&label);
+  label.setText("");
+  setLayout(&layout);
+}
+
+void ErrorPage::initializePage() {
+  label.setText(errorString);
+  //GondarWizard* wiz = dynamic_cast<GondarWizard*>(wizard());
+  //wiz->showErrorButtons();
+  //debug
+  //setFinalPage(true);
+}
+
+void ErrorPage::setErrorString(QString errorStringIn) {
+  errorString = errorStringIn;
+}
+
+// though error page follows in index, this is the end of the wizard for
+// healthy flows
+int ErrorPage::nextId() const {
+  return -1;
+}
+
+void ErrorPage::setVisible(bool visible) {
+  QWizardPage::setVisible(visible);
+  if (visible) {
+    wizard()->setButtonText(QWizard::CustomButton1, "Exit");
+    wizard()->setOption(QWizard::HaveCustomButton1, true);
+    connect(wizard(), SIGNAL(customButtonClicked(int)),
+            QApplication::instance(), SLOT(quit()));
+  } else {
+    wizard()->setOption(QWizard::HaveCustomButton1, false);
+    disconnect(wizard(), SIGNAL(customButtonClicked(int)),
+               QApplication::instance(), SLOT(quit()));
+  }
 }

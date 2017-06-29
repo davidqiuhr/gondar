@@ -1,6 +1,6 @@
 #include "image_select_page.h"
 
-ImageSelectPage::ImageSelectPage(QWidget* parent) : QWizardPage(parent) {
+ImageSelectPage::ImageSelectPage(QWidget* parent) : GondarPage(parent) {
   setTitle("Which version of CloudReady do you need?");
   setSubTitle(
       "64-bit should be suitable for most computers made after 2007.  Choose "

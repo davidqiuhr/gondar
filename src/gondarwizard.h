@@ -12,6 +12,7 @@
 #include "deviceguy.h"
 #include "diskwritethread.h"
 #include "downloader.h"
+#include "gondarpage.h"
 #include "image_select_page.h"
 #include "unzipthread.h"
 
@@ -30,7 +31,7 @@ class GondarButton : public QRadioButton {
   unsigned int index = 0;
 };
 
-class DownloadProgressPage : public QWizardPage {
+class DownloadProgressPage : public GondarPage {
   Q_OBJECT
 
  public:
@@ -57,7 +58,7 @@ class DownloadProgressPage : public QWizardPage {
   UnzipThread* unzipThread;
 };
 
-class UsbInsertPage : public QWizardPage {
+class UsbInsertPage : public GondarPage {
   Q_OBJECT
 
  public:
@@ -79,12 +80,13 @@ class UsbInsertPage : public QWizardPage {
   void driveListRequested();
 };
 
-class DeviceSelectPage : public QWizardPage {
+class DeviceSelectPage : public GondarPage {
   Q_OBJECT
 
  public:
   DeviceSelectPage(QWidget* parent = 0);
   int nextId() const override;
+
 
  protected:
   void initializePage() override;
@@ -97,7 +99,7 @@ class DeviceSelectPage : public QWizardPage {
   QVBoxLayout* layout;
 };
 
-class WriteOperationPage : public QWizardPage {
+class WriteOperationPage : public GondarPage {
   Q_OBJECT
 
  public:
@@ -108,6 +110,8 @@ class WriteOperationPage : public QWizardPage {
   bool isComplete() const override;
   bool validatePage() override;
   void showProgress();
+  int nextId() const override;
+  void setVisible(bool visible) override;
  public slots:
   void onDoneWriting();
 
@@ -120,25 +124,45 @@ class WriteOperationPage : public QWizardPage {
   QString image_path;
 };
 
+class ErrorPage : public GondarPage {
+  Q_OBJECT
+
+ public:
+  ErrorPage(QWidget* parent = 0);
+  void setErrorString(QString errorString);
+ protected:
+  void initializePage() override;
+  int nextId() const override;
+  void setVisible(bool visible) override;
+ private:
+  QVBoxLayout layout;
+  QString errorString;
+  QLabel label;
+};
+
 class GondarWizard : public QWizard {
   Q_OBJECT
 
  public:
   GondarWizard(QWidget* parent = 0);
+
+  void goToErrorPage(QString errorStringIn);
   // There's an elaborate state-sharing solution via the 'field' mechanism
   // supported by QWizard.  I found the logic for that to be easy for sharing
   // some data types and convoluted for others.  In this case, a later page
   // makes a decision based on a radio button seleciton in an earlier page,
   // so putting the shared state in the wizard seems more straightforward
   AdminCheckPage adminCheckPage;
+  ErrorPage errorPage;
   ImageSelectPage imageSelectPage;
   DownloadProgressPage downloadProgressPage;
   UsbInsertPage usbInsertPage;
   DeviceSelectPage deviceSelectPage;
   WriteOperationPage writeOperationPage;
 
-  void showUsualButtons();
-  void showFinishButtons();
+  //void showUsualButtons();
+  //void showFinishButtons();
+  //void showErrorButtons();
   // this enum determines page order
   enum {
     Page_adminCheck,
@@ -146,7 +170,8 @@ class GondarWizard : public QWizard {
     Page_usbInsert,
     Page_deviceSelect,
     Page_downloadProgress,
-    Page_writeOperation
+    Page_writeOperation,
+    Page_error
   };
  private slots:
   void handleMakeAnother();
