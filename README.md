@@ -59,7 +59,7 @@ To format all the source files run `make format`. You can also run
 
 Download and decompress the Windows image:
 
-    aws s3 cp s3://windows-installed-images/win10-installed.raw.lz4 ..
+    aws s3 cp s3://windows-installed-images/win10-installed.raw.lz4 .
     lz4 win10-installed.raw.lz4
 
 Create the backing image for the emulated USB device:
