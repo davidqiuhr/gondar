@@ -69,9 +69,8 @@ Create the backing image for the emulated USB device:
 *TODO(nicholasbishop): could probably also set up a device passthrough
 for testing on actual USB devices...*
 
-Run the VM with four drives: the emulated USB device, the Windows
-installation, the UEFI firmware, and a virtual FAT device containing
-your local package of Gondar:
+Run the VM with three drives: the emulated USB device, the Windows
+installation, and the UEFI firmware:
 
     qemu-kvm \
       -m 4G \
@@ -81,9 +80,11 @@ your local package of Gondar:
       -drive if=none,id=fakeusb,file=fakeusb.raw \
       -drive format=raw,file=../windows-vm/win10-installed.raw \
       -drive if=pflash,format=raw,file=../windows-vm/ovmf.fd \
-      -drive file=fat:./package
+      -net nic -net user,smb=/path/to/gondar
 
-Inside the VM you can open the drive containing the package directory
-and run the gondar executable. Note that the virtual FAT drive doesn't
-read updates from the host system, so if you modify gondar and
-recompile you should restart the VM.
+The `-net` options enable a Samba server to share your gondar build
+between the host and the guest. (Your host must have the Samba server
+installed for this to work.) Set `smb=` to the absolute path on your
+host where your gondar build lives.
+
+Within the guest you can access the shared drive via `\\10.0.2.4\qemu`.
