@@ -2402,7 +2402,8 @@ DeviceGuyList* GetDeviceList() {
   return device_list;
 }
 
-void Install(DeviceGuy* target_device, const char* image_path,
+void Install(DeviceGuy* target_device,
+             const char* image_path,
              int64_t image_size) {
   uint64_t device_num = target_device->device_num;
   uint64_t sector_size = GetSectorSize(device_num);
