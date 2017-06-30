@@ -1,9 +1,11 @@
 #include "downloader.h"
 
 #include <stdio.h>
+#include <QDir>
 #include <QFileInfo>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QStandardPaths>
 #include <QString>
 #include <QStringList>
 #include <QTimer>
@@ -41,8 +43,13 @@ void DownloadManager::startNextDownload() {
 
   QUrl url = downloadQueue.dequeue();
 
+  const QDir dir =
+      QStandardPaths::writableLocation(QStandardPaths::DownloadLocation);
   QString filename = saveFileName(url);
-  output.setFileName(filename);
+
+  output.setFileName(dir.filePath(filename));
+  qInfo() << "Download destination:" << output.fileName();
+
   if (!output.open(QIODevice::WriteOnly)) {
     fprintf(stderr, "Problem opening save file '%s' for download '%s': %s\n",
             qPrintable(filename), url.toEncoded().constData(),
