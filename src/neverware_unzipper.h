@@ -3,6 +3,6 @@
 
 #include <QFileInfo>
 
-char* neverware_unzip(const QFileInfo& input_file);
+QFileInfo neverware_unzip(const QFileInfo& input_file);
 
 #endif /* NEVERWARE_UNZIPPER_H */
