@@ -35,28 +35,23 @@
 // to C++, so there are a lot of cleanups we can do (especially in the
 // string operations)
 
-const int FILENAME_BUFFER_SIZE = 256;
-
-static void get_filename_inside_zip(const char* zipfile, char* filename) {
-  unzFile* uf = static_cast<unzFile*>(unzOpen64(zipfile));
-  if (uf == NULL) {
-    LOG_ERROR << "error opening unzip file";
-    return;
-  }
-  int err = UNZ_OK;
-  err = unzGoToFirstFile(uf);
+static QString get_filename_inside_zip(unzFile uf) {
+  int err = unzGoToFirstFile(uf);
   if (err != UNZ_OK) {
     LOG_ERROR << "error " << err << " with zipfile in unzGoToFirstFile";
-    unzCloseCurrentFile(uf);
-    return;
+    return QString();
   }
+
+  constexpr int FILENAME_BUFFER_SIZE = 256;
+  char filename[FILENAME_BUFFER_SIZE] = {};
   unz_file_info64 file_info = {};
   err = unzGetCurrentFileInfo64(uf, &file_info, filename, FILENAME_BUFFER_SIZE,
                                 NULL, 0, NULL, 0);
   if (err != UNZ_OK) {
-    LOG_ERROR << "Error retrieving file info for downloaded zip";
+    LOG_ERROR << "unzGetCurrentFileInfo64 failed: " << err;
+    return QString();
   }
-  unzCloseCurrentFile(uf);
+  return filename;
 }
 
 static int miniunz_extract_currentfile(unzFile uf,
@@ -239,6 +234,9 @@ QFileInfo neverware_unzip(const QFileInfo& input_file) {
 
   LOG_INFO << zipfilename << " opened";
 
+  const QString filename = get_filename_inside_zip(uf);
+  const QFileInfo binpath = input_file.absoluteDir().absoluteFilePath(filename);
+
   // TODO(nicholasbishop): modify the extraction to not use the
   // current working directory
   const QDir origCwd = QDir::current();
@@ -253,9 +251,6 @@ QFileInfo neverware_unzip(const QFileInfo& input_file) {
   if (ret != 0) {
     return QFileInfo();
   }
-  char* filename = static_cast<char*>(calloc(FILENAME_BUFFER_SIZE, 1));
-  get_filename_inside_zip(zipfilename, filename);
-  QFileInfo binpath = input_file.absoluteDir().absoluteFilePath(filename);
-  free(filename);
+
   return binpath;
 }
