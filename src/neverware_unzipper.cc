@@ -26,6 +26,7 @@
 #include "iowin32.h"
 #endif
 
+#include "log.h"
 #include "minishared.h"
 
 // TODO(nicholasbishop): this file has been minimally converted from C
@@ -37,13 +38,13 @@ const int FILENAME_BUFFER_SIZE = 256;
 static void get_filename_inside_zip(char* zipfile, char* filename) {
   unzFile* uf = static_cast<unzFile*>(unzOpen64(zipfile));
   if (uf == NULL) {
-    printf("error opening unzip file\n");
+    LOG_ERROR << "error opening unzip file";
     return;
   }
   int err = UNZ_OK;
   err = unzGoToFirstFile(uf);
   if (err != UNZ_OK) {
-    printf("error %d with zipfile in unzGoToFirstFile\n", err);
+    LOG_ERROR << "error " << err << " with zipfile in unzGoToFirstFile";
     unzCloseCurrentFile(uf);
     return;
   }
@@ -51,7 +52,7 @@ static void get_filename_inside_zip(char* zipfile, char* filename) {
   err = unzGetCurrentFileInfo64(uf, &file_info, filename, FILENAME_BUFFER_SIZE,
                                 NULL, 0, NULL, 0);
   if (err != UNZ_OK) {
-    printf("Error retrieving file info for downloaded zip\n");
+    LOG_ERROR << "Error retrieving file info for downloaded zip";
   }
   unzCloseCurrentFile(uf);
 }
@@ -75,7 +76,7 @@ static int miniunz_extract_currentfile(unzFile uf,
   err = unzGetCurrentFileInfo64(uf, &file_info, filename_inzip,
                                 sizeof(filename_inzip), NULL, 0, NULL, 0);
   if (err != UNZ_OK) {
-    printf("error %d with zipfile in unzGetCurrentFileInfo\n", err);
+    LOG_ERROR << "error " << err << " with zipfile in unzGetCurrentFileInfo";
     return err;
   }
   p = filename_withoutpath = filename_inzip;
@@ -88,7 +89,7 @@ static int miniunz_extract_currentfile(unzFile uf,
   /* If zip entry is a directory then create it on disk */
   if (*filename_withoutpath == 0) {
     if (opt_extract_without_path == 0) {
-      printf("creating directory: %s\n", filename_inzip);
+      LOG_INFO << "creating directory: " << filename_inzip;
       MKDIR(filename_inzip);
     }
     return err;
@@ -96,13 +97,13 @@ static int miniunz_extract_currentfile(unzFile uf,
 
   buf = (void*)malloc(size_buf);
   if (buf == NULL) {
-    printf("Error allocating memory\n");
+    LOG_ERROR << "Error allocating memory";
     return UNZ_INTERNALERROR;
   }
 
   err = unzOpenCurrentFilePassword(uf, password);
   if (err != UNZ_OK)
-    printf("error %d with zipfile in unzOpenCurrentFilePassword\n", err);
+    LOG_ERROR << "error " << err << " with zipfile in unzOpenCurrentFilePassword";
 
   if (opt_extract_without_path)
     write_filename = filename_withoutpath;
@@ -144,23 +145,23 @@ static int miniunz_extract_currentfile(unzFile uf,
       fout = fopen64(write_filename, "wb");
     }
     if (fout == NULL)
-      printf("error opening %s\n", write_filename);
+      LOG_ERROR << "error opening " << write_filename;
   }
 
   /* Read from the zip, unzip to buffer, and write to disk */
   if (fout != NULL) {
-    printf(" extracting: %s\n", write_filename);
+    LOG_INFO << " extracting: " << write_filename;
 
     do {
       err = unzReadCurrentFile(uf, buf, size_buf);
       if (err < 0) {
-        printf("error %d with zipfile in unzReadCurrentFile\n", err);
+        LOG_ERROR << "error " << err << " with zipfile in unzReadCurrentFile";
         break;
       }
       if (err == 0)
         break;
       if (fwrite(buf, err, 1, fout) != 1) {
-        printf("error %d in writing extracted file\n", errno);
+        LOG_ERROR << "error " << errno << " in writing extracted file";
         err = UNZ_ERRNO;
         break;
       }
@@ -176,7 +177,7 @@ static int miniunz_extract_currentfile(unzFile uf,
 
   errclose = unzCloseCurrentFile(uf);
   if (errclose != UNZ_OK)
-    printf("error %d with zipfile in unzCloseCurrentFile\n", errclose);
+    LOG_ERROR << "error " << errclose << " with zipfile in unzCloseCurrentFile";
 
   free(buf);
   return err;
@@ -188,7 +189,7 @@ static int miniunz_extract_all(unzFile uf,
                                const char* password) {
   int err = unzGoToFirstFile(uf);
   if (err != UNZ_OK) {
-    printf("error %d with zipfile in unzGoToFirstFile\n", err);
+    LOG_ERROR << "error " << err << " with zipfile in unzGoToFirstFile";
     return 1;
   }
 
@@ -201,7 +202,7 @@ static int miniunz_extract_all(unzFile uf,
   } while (err == UNZ_OK);
 
   if (err != UNZ_END_OF_LIST_OF_FILE) {
-    printf("error %d with zipfile in unzGoToNextFile\n", err);
+    LOG_ERROR << "error " << err << " with zipfile in unzGoToNextFile";
     return 1;
   }
   return 0;
@@ -234,11 +235,11 @@ char* neverware_unzip(const char* url) {
 #endif
 
   if (uf == NULL) {
-    printf("Cannot open %s\n", zipfilename);
+    LOG_ERROR << "Cannot open " << zipfilename;
     return NULL;
   }
 
-  printf("%s opened\n", zipfilename);
+  LOG_INFO << zipfilename << " opened";
 
   int ret = miniunz_extract_all(uf,
                                 /*extract_without_path*/ 1,
