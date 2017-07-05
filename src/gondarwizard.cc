@@ -83,7 +83,7 @@ DownloadProgressPage::DownloadProgressPage(QWidget* parent)
 void DownloadProgressPage::initializePage() {
   setLayout(&layout);
   GondarWizard* wiz = dynamic_cast<GondarWizard*>(wizard());
-  url = wiz->imageSelectPage.getUrl();
+  const QUrl url = wiz->imageSelectPage.getUrl();
   qDebug() << "using url= " << url;
   QObject::connect(&manager, SIGNAL(finished()), this, SLOT(markComplete()));
   manager.append(url.toString());
@@ -109,7 +109,7 @@ void DownloadProgressPage::markComplete() {
   download_finished = true;
   // now that the download is finished, let's unzip the build.
   notifyUnzip();
-  unzipThread = new UnzipThread(&url, this);
+  unzipThread = new UnzipThread(manager.outputFileInfo(), this);
   connect(unzipThread, SIGNAL(finished()), this, SLOT(onUnzipFinished()));
   unzipThread->start();
 }

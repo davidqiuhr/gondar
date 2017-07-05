@@ -2,21 +2,21 @@
 #ifndef UNZIP_THREAD_H
 #define UNZIP_THREAD_H
 
+#include <QFileInfo>
 #include <QThread>
-#include <QUrl>
 
 class UnzipThread : public QThread {
   Q_OBJECT
  public:
-  UnzipThread(const QUrl* url_in, QObject* parent = 0);
+  UnzipThread(const QFileInfo& inputFile, QObject* parent = 0);
   ~UnzipThread();
   const QString& getFileName() const;
 
  protected:
   void run() override;
-  QUrl url;
 
  private:
+  QFileInfo inputFile;
   QString filename;
 };
 

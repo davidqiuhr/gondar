@@ -53,6 +53,7 @@
 #define DOWNLOADER_H
 
 #include <QFile>
+#include <QFileInfo>
 #include <QNetworkAccessManager>
 #include <QObject>
 #include <QQueue>
@@ -68,6 +69,8 @@ class DownloadManager : public QObject {
   void append(const QStringList& urlList);
   QString saveFileName(const QUrl& url);
   QNetworkReply* getCurrentDownload();
+
+  QFileInfo outputFileInfo() const;
 
  signals:
   void started();

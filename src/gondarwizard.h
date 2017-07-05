@@ -54,7 +54,6 @@ class DownloadProgressPage : public QWizardPage {
   QProgressBar progress;
   bool download_finished;
   QVBoxLayout layout;
-  QUrl url;
   UnzipThread* unzipThread;
 };
 
