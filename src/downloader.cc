@@ -93,3 +93,7 @@ void DownloadManager::downloadReadyRead() {
 QNetworkReply* DownloadManager::getCurrentDownload() {
   return currentDownload;
 }
+
+QFileInfo DownloadManager::outputFileInfo() const {
+  return QFileInfo(output.fileName());
+}

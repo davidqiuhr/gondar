@@ -35,7 +35,7 @@
 
 const int FILENAME_BUFFER_SIZE = 256;
 
-static void get_filename_inside_zip(char* zipfile, char* filename) {
+static void get_filename_inside_zip(const char* zipfile, char* filename) {
   unzFile* uf = static_cast<unzFile*>(unzOpen64(zipfile));
   if (uf == NULL) {
     LOG_ERROR << "error opening unzip file";
@@ -208,23 +208,9 @@ static int miniunz_extract_all(unzFile uf,
   return 0;
 }
 
-static char* filename_from_url(const char* url) {
-  // TODO(kendall): i sure hope this string is null-terminated
-  // TODO(kendall): clean up this memory somewhere
-  char* urlcpy = static_cast<char*>(malloc(strlen(url)));
-  strcpy(urlcpy, url);
-  char* tok = strtok(urlcpy, "/");
-  char* filename;
-  do {
-    filename = tok;
-    tok = strtok(NULL, "/");
-  } while (tok != NULL);
-  // TODO(kendall): check to ensure the file ends in ".zip"
-  return filename;
-}
-
-char* neverware_unzip(const char* url) {
-  char* zipfilename = filename_from_url(url);
+char* neverware_unzip(const QFileInfo& input_file) {
+  const std::string input_path = input_file.absoluteFilePath().toStdString();
+  const char* zipfilename = input_path.c_str();
   unzFile uf = NULL;
 #ifdef USEWIN32IOAPI
   zlib_filefunc64_def ffunc;
