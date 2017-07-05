@@ -26,6 +26,8 @@
 #include "iowin32.h"
 #endif
 
+#include <QDir>
+
 #include "log.h"
 #include "minishared.h"
 
@@ -208,7 +210,16 @@ static int miniunz_extract_all(unzFile uf,
   return 0;
 }
 
-char* neverware_unzip(const QFileInfo& input_file) {
+static void setCwd(const QDir& dir) {
+  const QString path = dir.absolutePath();
+  if (QDir::setCurrent(path)) {
+    LOG_INFO << "set current working directory to " << path;
+  } else {
+    LOG_ERROR << "failed to set current working directory to " << path;
+  }
+}
+
+QFileInfo neverware_unzip(const QFileInfo& input_file) {
   const std::string input_path = input_file.absoluteFilePath().toStdString();
   const char* zipfilename = input_path.c_str();
   unzFile uf = NULL;
@@ -222,20 +233,28 @@ char* neverware_unzip(const QFileInfo& input_file) {
 
   if (uf == NULL) {
     LOG_ERROR << "Cannot open " << zipfilename;
-    return NULL;
+    return QFileInfo();
   }
 
   LOG_INFO << zipfilename << " opened";
 
+  // TODO(nicholasbishop): modify the extraction to not use the
+  // current working directory
+  const QDir origCwd = QDir::current();
+  setCwd(input_file.absolutePath());
   int ret = miniunz_extract_all(uf,
                                 /*extract_without_path*/ 1,
                                 /*overwrite*/ 1,
                                 /*password*/ NULL);
+  setCwd(origCwd);
+
   unzClose(uf);
   if (ret != 0) {
-    return NULL;
+    return QFileInfo();
   }
   char* filename = static_cast<char*>(calloc(FILENAME_BUFFER_SIZE, 1));
   get_filename_inside_zip(zipfilename, filename);
-  return filename;
+  QFileInfo binpath = input_file.absoluteDir().absoluteFilePath(filename);
+  free(filename);
+  return binpath;
 }

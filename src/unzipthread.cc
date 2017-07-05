@@ -15,8 +15,7 @@ const QString& UnzipThread::getFileName() const {
   return filename;
 }
 void UnzipThread::run() {
-  char* binfile_name = neverware_unzip(inputFile);
-  filename = binfile_name;
-  free(binfile_name);
+  const QFileInfo binfile = neverware_unzip(inputFile);
+  filename = binfile.absoluteFilePath();
   qDebug() << "worker thread says complete";
 }
