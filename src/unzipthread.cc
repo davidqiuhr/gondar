@@ -6,8 +6,7 @@
 #include "neverware_unzipper.h"
 
 UnzipThread::UnzipThread(const QFileInfo& inputFile, QObject* parent)
-    : QThread(parent), inputFile(inputFile) {
-}
+    : QThread(parent), inputFile(inputFile) {}
 
 UnzipThread::~UnzipThread() {}
 

@@ -105,7 +105,8 @@ static int miniunz_extract_currentfile(unzFile uf,
 
   err = unzOpenCurrentFilePassword(uf, password);
   if (err != UNZ_OK)
-    LOG_ERROR << "error " << err << " with zipfile in unzOpenCurrentFilePassword";
+    LOG_ERROR << "error " << err
+              << " with zipfile in unzOpenCurrentFilePassword";
 
   if (opt_extract_without_path)
     write_filename = filename_withoutpath;
