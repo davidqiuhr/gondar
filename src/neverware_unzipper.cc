@@ -1,23 +1,8 @@
-
-// this code modified from minizip/miniunz.c
-
 #include "neverware_unzipper.h"
 
-#include <errno.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
+#include <stdexcept>
 
-#ifdef _WIN32
-#include <direct.h>
-#include <io.h>
-#else
-#include <sys/stat.h>
-#include <unistd.h>
-#include <utime.h>
-#endif
+#include <QDir>
 
 #include "unzip.h"
 
@@ -26,231 +11,135 @@
 #include "iowin32.h"
 #endif
 
-#include <QDir>
-
 #include "log.h"
-#include "minishared.h"
 
-// TODO(nicholasbishop): this file has been minimally converted from C
-// to C++, so there are a lot of cleanups we can do (especially in the
-// string operations)
-
-static QString get_filename_inside_zip(unzFile uf) {
-  int err = unzGoToFirstFile(uf);
-  if (err != UNZ_OK) {
-    LOG_ERROR << "error " << err << " with zipfile in unzGoToFirstFile";
-    return QString();
-  }
-
-  constexpr int FILENAME_BUFFER_SIZE = 256;
-  char filename[FILENAME_BUFFER_SIZE] = {};
-  unz_file_info64 file_info = {};
-  err = unzGetCurrentFileInfo64(uf, &file_info, filename, FILENAME_BUFFER_SIZE,
-                                NULL, 0, NULL, 0);
-  if (err != UNZ_OK) {
-    LOG_ERROR << "unzGetCurrentFileInfo64 failed: " << err;
-    return QString();
-  }
-  return filename;
+// Defined in minizip/miniunz.c
+extern "C" {
+int miniunz_extract_currentfile(unzFile uf,
+                                int opt_extract_without_path,
+                                int* popt_overwrite,
+                                const char* password);
 }
 
-static int miniunz_extract_currentfile(unzFile uf,
-                                       int opt_extract_without_path,
-                                       int* popt_overwrite,
-                                       const char* password) {
-  unz_file_info64 file_info = {};
-  FILE* fout = NULL;
-  void* buf = NULL;
-  uint16_t size_buf = 8192;
-  int err = UNZ_OK;
-  int errclose = UNZ_OK;
-  int skip = 0;
-  char filename_inzip[256] = {0};
-  char* filename_withoutpath = NULL;
-  const char* write_filename = NULL;
-  char* p = NULL;
+namespace {
 
-  err = unzGetCurrentFileInfo64(uf, &file_info, filename_inzip,
-                                sizeof(filename_inzip), NULL, 0, NULL, 0);
-  if (err != UNZ_OK) {
-    LOG_ERROR << "error " << err << " with zipfile in unzGetCurrentFileInfo";
-    return err;
-  }
-  p = filename_withoutpath = filename_inzip;
-  while (*p != 0) {
-    if ((*p == '/') || (*p == '\\'))
-      filename_withoutpath = p + 1;
-    p++;
-  }
+// RAII class for changing the current working directory. When it goes
+// out of scope the working directory is reset.
+class ScopedWorkingDirectory {
+ public:
+  ScopedWorkingDirectory() : orig_dir_(QDir::current()) {}
 
-  /* If zip entry is a directory then create it on disk */
-  if (*filename_withoutpath == 0) {
-    if (opt_extract_without_path == 0) {
-      LOG_INFO << "creating directory: " << filename_inzip;
-      MKDIR(filename_inzip);
+  ~ScopedWorkingDirectory() { setCwd(orig_dir_); }
+
+  static void setCwd(const QDir& dir) {
+    const QString path = dir.absolutePath();
+    if (QDir::setCurrent(path)) {
+      LOG_INFO << "set current working directory to " << path;
+    } else {
+      LOG_ERROR << "failed to set current working directory to " << path;
     }
-    return err;
   }
 
-  buf = (void*)malloc(size_buf);
-  if (buf == NULL) {
-    LOG_ERROR << "Error allocating memory";
-    return UNZ_INTERNALERROR;
-  }
+ private:
+  const QDir orig_dir_;
+};
 
-  err = unzOpenCurrentFilePassword(uf, password);
-  if (err != UNZ_OK)
-    LOG_ERROR << "error " << err
-              << " with zipfile in unzOpenCurrentFilePassword";
+class ZipError : std::runtime_error {
+ public:
+  ZipError(const std::string& what) : std::runtime_error(what) {}
+};
 
-  if (opt_extract_without_path)
-    write_filename = filename_withoutpath;
-  else
-    write_filename = filename_inzip;
+class ZipFile {
+  ZipFile& operator=(ZipFile&) = delete;
+  ZipFile(ZipFile&) = delete;
 
-  /* Determine if the file should be overwritten or not and ask the user if
-   * needed */
-  if ((err == UNZ_OK) && (*popt_overwrite == 0) &&
-      (check_file_exists(write_filename))) {
-    char rep = 0;
-    do {
-      char answer[128];
-      printf("The file %s exists. Overwrite ? [y]es, [n]o, [A]ll: ",
-             write_filename);
-      if (scanf("%1s", answer) != 1)
-        exit(EXIT_FAILURE);
-      rep = answer[0];
-      if ((rep >= 'a') && (rep <= 'z'))
-        rep -= 0x20;
-    } while ((rep != 'Y') && (rep != 'N') && (rep != 'A'));
+ public:
+  // Open a file for unzipping. Throw a ZipError if the open fails, so
+  // the object is never partially constructed.
+  explicit ZipFile(const QFileInfo& zipfile_info)
+      : zipfile_info_(zipfile_info), file_(open(zipfile_info)) {}
 
-    if (rep == 'N')
-      skip = 1;
-    if (rep == 'A')
-      *popt_overwrite = 1;
-  }
-
-  /* Create the file on disk so we can unzip to it */
-  if ((skip == 0) && (err == UNZ_OK)) {
-    fout = fopen64(write_filename, "wb");
-    /* Some zips don't contain directory alone before file */
-    if ((fout == NULL) && (opt_extract_without_path == 0) &&
-        (filename_withoutpath != (char*)filename_inzip)) {
-      char c = *(filename_withoutpath - 1);
-      *(filename_withoutpath - 1) = 0;
-      makedir(write_filename);
-      *(filename_withoutpath - 1) = c;
-      fout = fopen64(write_filename, "wb");
+  ~ZipFile() {
+    const auto rc = unzClose(file_);
+    if (rc != UNZ_OK) {
+      LOG_ERROR << "unzClose failed: " << rc;
     }
-    if (fout == NULL)
-      LOG_ERROR << "error opening " << write_filename;
   }
 
-  /* Read from the zip, unzip to buffer, and write to disk */
-  if (fout != NULL) {
-    LOG_INFO << " extracting: " << write_filename;
+  // Extract the first file in the zip in the same directory as the
+  // zipfile. Throw a ZipError if anything goes wrong.
+  QFileInfo extractFirstFile() {
+    const QString firstFileName = goToFirstFile();
 
-    do {
-      err = unzReadCurrentFile(uf, buf, size_buf);
-      if (err < 0) {
-        LOG_ERROR << "error " << err << " with zipfile in unzReadCurrentFile";
-        break;
+    const int opt_extract_without_path = 1;
+    int opt_overwrite = 1;
+    const char* password = nullptr;
+
+    {
+      ScopedWorkingDirectory scoped_wd;
+      scoped_wd.setCwd(zipfile_info_.absolutePath());
+
+      const auto rc = miniunz_extract_currentfile(
+          file_, opt_extract_without_path, &opt_overwrite, password);
+      if (rc != UNZ_OK) {
+        LOG_ERROR << "miniunz_extract_currentfile failed: " << rc;
+        throw ZipError("miniunz_extract_currentfile failed");
       }
-      if (err == 0)
-        break;
-      if (fwrite(buf, err, 1, fout) != 1) {
-        LOG_ERROR << "error " << errno << " in writing extracted file";
-        err = UNZ_ERRNO;
-        break;
-      }
-    } while (err > 0);
+    }
 
-    if (fout)
-      fclose(fout);
-
-    /* Set the time of the file that has been unzipped */
-    if (err == 0)
-      change_file_date(write_filename, file_info.dos_date);
+    return zipfile_info_.absoluteDir().absoluteFilePath(firstFileName);
   }
 
-  errclose = unzCloseCurrentFile(uf);
-  if (errclose != UNZ_OK)
-    LOG_ERROR << "error " << errclose << " with zipfile in unzCloseCurrentFile";
+ private:
+  static unzFile open(const QFileInfo zipfile_info) {
+    const std::string path = zipfile_info.absoluteFilePath().toStdString();
+    LOG_INFO << "opening zipfile " << path;
 
-  free(buf);
-  return err;
-}
-
-static int miniunz_extract_all(unzFile uf,
-                               int opt_extract_without_path,
-                               int opt_overwrite,
-                               const char* password) {
-  int err = unzGoToFirstFile(uf);
-  if (err != UNZ_OK) {
-    LOG_ERROR << "error " << err << " with zipfile in unzGoToFirstFile";
-    return 1;
-  }
-
-  do {
-    err = miniunz_extract_currentfile(uf, opt_extract_without_path,
-                                      &opt_overwrite, password);
-    if (err != UNZ_OK)
-      break;
-    err = unzGoToNextFile(uf);
-  } while (err == UNZ_OK);
-
-  if (err != UNZ_END_OF_LIST_OF_FILE) {
-    LOG_ERROR << "error " << err << " with zipfile in unzGoToNextFile";
-    return 1;
-  }
-  return 0;
-}
-
-static void setCwd(const QDir& dir) {
-  const QString path = dir.absolutePath();
-  if (QDir::setCurrent(path)) {
-    LOG_INFO << "set current working directory to " << path;
-  } else {
-    LOG_ERROR << "failed to set current working directory to " << path;
-  }
-}
-
-QFileInfo neverware_unzip(const QFileInfo& input_file) {
-  const std::string input_path = input_file.absoluteFilePath().toStdString();
-  const char* zipfilename = input_path.c_str();
-  unzFile uf = NULL;
 #ifdef USEWIN32IOAPI
-  zlib_filefunc64_def ffunc;
-  fill_win32_filefunc64A(&ffunc);
-  uf = unzOpen2_64(zipfilename, &ffunc);
+    static zlib_filefunc64_def ffunc;
+    fill_win32_filefunc64A(&ffunc);
+    unzFile file = unzOpen2_64(path.c_str(), &ffunc);
 #else
-  uf = unzOpen64(zipfilename);
+    unzFile file = unzOpen64(path.c_str());
 #endif
 
-  if (uf == NULL) {
-    LOG_ERROR << "Cannot open " << zipfilename;
-    return QFileInfo();
+    if (!file) {
+      LOG_ERROR << "failed to open zipfile: " << path;
+      throw ZipError("error opening " + path);
+    }
+
+    return file;
   }
 
-  LOG_INFO << zipfilename << " opened";
+  // Move to the first file in the zip and get its name. Throw a
+  // ZipError if anything goes wrong.
+  QString goToFirstFile() {
+    constexpr int FILENAME_BUFFER_SIZE = 256;
+    char filename[FILENAME_BUFFER_SIZE] = {};
+    unz_file_info64 file_info = {};
 
-  const QString filename = get_filename_inside_zip(uf);
-  const QFileInfo binpath = input_file.absoluteDir().absoluteFilePath(filename);
+    void* extrafield = nullptr;
+    const uint16_t extrafield_size = 0;
+    char* comment = nullptr;
+    const uint16_t comment_size = 0;
+    const auto rc =
+        unzGoToFirstFile2(file_, &file_info, filename, FILENAME_BUFFER_SIZE,
+                          extrafield, extrafield_size, comment, comment_size);
 
-  // TODO(nicholasbishop): modify the extraction to not use the
-  // current working directory
-  const QDir origCwd = QDir::current();
-  setCwd(input_file.absolutePath());
-  int ret = miniunz_extract_all(uf,
-                                /*extract_without_path*/ 1,
-                                /*overwrite*/ 1,
-                                /*password*/ NULL);
-  setCwd(origCwd);
+    if (rc != UNZ_OK) {
+      LOG_ERROR << "unzGoToFirstFile2 failed: " << rc;
+      throw ZipError("unzGoToFirstFile2 failed");
+    }
 
-  unzClose(uf);
-  if (ret != 0) {
-    return QFileInfo();
+    return filename;
   }
 
-  return binpath;
+  const QFileInfo zipfile_info_;
+  unzFile file_;
+};
+
+}  // namespace
+
+QFileInfo neverware_unzip(const QFileInfo& input_file) {
+  return ZipFile(input_file).extractFirstFile();
 }
