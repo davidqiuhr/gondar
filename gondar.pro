@@ -15,6 +15,7 @@ HEADERS       = src/admin_check_page.h \
                 src/shared.h \
                 src/unzipthread.h
 SOURCES       = minizip/minishared.c \
+                minizip/miniunz.c \
                 src/admin_check_page.cc \
                 src/deviceguy.cc \
                 src/diskwritethread.cc \
@@ -41,6 +42,9 @@ win32 {
   QMAKE_CFLAGS += -Wextra -Wmissing-declarations
   # Expose fopen64 in stdio.h declarations
   QMAKE_CFLAGS += -D_LARGEFILE64_SOURCE
+
+  # Disable the main() function in minizip/miniunz.c
+  QMAKE_CFLAGS += -DNOMAIN
 }
 
 *g++* {

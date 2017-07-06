@@ -3,6 +3,7 @@
 
 #include <QtWidgets>
 
+#include "log.h"
 #include "neverware_unzipper.h"
 
 UnzipThread::UnzipThread(const QFileInfo& inputFile, QObject* parent)
@@ -14,7 +15,12 @@ const QString& UnzipThread::getFileName() const {
   return filename;
 }
 void UnzipThread::run() {
-  const QFileInfo binfile = neverware_unzip(inputFile);
-  filename = binfile.absoluteFilePath();
+  try {
+    const QFileInfo binfile = neverware_unzip(inputFile);
+    filename = binfile.absoluteFilePath();
+  } catch (const std::exception& exc) {
+    LOG_ERROR << "unzip failed: " << exc.what();
+    filename = QString();
+  }
   qDebug() << "worker thread says complete";
 }
