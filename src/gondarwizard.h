@@ -160,9 +160,6 @@ class GondarWizard : public QWizard {
   DeviceSelectPage deviceSelectPage;
   WriteOperationPage writeOperationPage;
 
-  //void showUsualButtons();
-  //void showFinishButtons();
-  //void showErrorButtons();
   // this enum determines page order
   enum {
     Page_adminCheck,

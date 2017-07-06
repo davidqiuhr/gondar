@@ -45,8 +45,6 @@ GondarWizard::GondarWizard(QWidget* parent) : QWizard(parent) {
 
 // handle event when 'make another usb' button pressed
 void GondarWizard::handleMakeAnother() {
-  // we set the page to usbInsertPage and show usual buttons
-  //showUsualButtons();
   // works as long as usbInsertPage is not the last page in wizard
   setStartId(usbInsertPage.nextId() - 1);
   restart();

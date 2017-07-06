@@ -20,8 +20,6 @@ void AdminCheckPage::initializePage() {
   } else {
     showIsAdmin();
   }
-  // err here?
-  //sendError(QString("test error"));
 }
 
 bool AdminCheckPage::isComplete() const {
