@@ -345,10 +345,6 @@ ErrorPage::ErrorPage(QWidget* parent) : GondarPage(parent) {
 
 void ErrorPage::initializePage() {
   label.setText(errorString);
-  //GondarWizard* wiz = dynamic_cast<GondarWizard*>(wizard());
-  //wiz->showErrorButtons();
-  //debug
-  //setFinalPage(true);
 }
 
 void ErrorPage::setErrorString(QString errorStringIn) {
