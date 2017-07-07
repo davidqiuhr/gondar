@@ -49,10 +49,19 @@ void AdminCheckPage::showIsNotAdmin() {
       "program with sufficient rights.");
 }
 
-int AdminCheckPage::nextId() const {
+// helper function to determine if this build is a chromeover build
+bool AdminCheckPage::isChromeover() {
   #ifdef CHROMEOVER
-    return GondarWizard::Page_chromeoverLogin;
+    return true;
   #else
-    return GondarWizard::Page_imageSelect;
+    return false;
   #endif
+}
+
+int AdminCheckPage::nextId() const {
+  if (isChromeover()) {
+    return GondarWizard::Page_chromeoverLogin;
+  } else {
+    return GondarWizard::Page_imageSelect;
+  }
 }

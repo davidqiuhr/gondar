@@ -19,6 +19,7 @@ class AdminCheckPage : public QWizardPage {
   void showIsNotAdmin();
 
  private:
+  static bool isChromeover();
   QLabel label;
   bool is_admin;
   QVBoxLayout layout;
