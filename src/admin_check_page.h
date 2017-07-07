@@ -10,6 +10,7 @@ class AdminCheckPage : public QWizardPage {
 
  public:
   AdminCheckPage(QWidget* parent = 0);
+  int nextId() const override;
 
  protected:
   void initializePage() override;

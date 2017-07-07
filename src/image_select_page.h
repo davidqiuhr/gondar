@@ -13,6 +13,7 @@ class ImageSelectPage : public QWizardPage {
  public:
   ImageSelectPage(QWidget* parent = 0);
   QUrl getUrl() const;
+  int nextId() const override;
 
  private:
   QButtonGroup bitnessButtons;

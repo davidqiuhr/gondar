@@ -9,6 +9,7 @@
 #include <QtWidgets>
 
 #include "admin_check_page.h"
+#include "chromeover_login_page.h"
 #include "deviceguy.h"
 #include "diskwritethread.h"
 #include "downloader.h"
@@ -131,6 +132,7 @@ class GondarWizard : public QWizard {
   // makes a decision based on a radio button seleciton in an earlier page,
   // so putting the shared state in the wizard seems more straightforward
   AdminCheckPage adminCheckPage;
+  ChromeoverLoginPage chromeoverLoginPage;
   ImageSelectPage imageSelectPage;
   DownloadProgressPage downloadProgressPage;
   UsbInsertPage usbInsertPage;
@@ -142,6 +144,7 @@ class GondarWizard : public QWizard {
   // this enum determines page order
   enum {
     Page_adminCheck,
+    Page_chromeoverLogin,
     Page_imageSelect,
     Page_usbInsert,
     Page_deviceSelect,
