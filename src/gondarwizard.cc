@@ -1,6 +1,7 @@
 
 #include <QNetworkReply>
 #include <QProgressBar>
+#include <QTimer>
 #include <QtWidgets>
 
 #include "diskwritethread.h"
@@ -31,13 +32,11 @@ GondarWizard::GondarWizard(QWidget* parent) : QWizard(parent) {
   setPage(Page_deviceSelect, &deviceSelectPage);
   setPage(Page_downloadProgress, &downloadProgressPage);
   setPage(Page_writeOperation, &writeOperationPage);
+  setPage(Page_error, &errorPage);
   setWizardStyle(QWizard::ModernStyle);
   setWindowTitle(tr("Cloudready USB Creation Utility"));
 
-  // Only show next buttons for all screens
-  QList<QWizard::WizardButton> button_layout;
-  button_layout << QWizard::NextButton;
-  setButtonLayout(button_layout);
+  setOption(QWizard::NoCancelButton);
 
   setButtonText(QWizard::CustomButton1, tr("Make Another USB"));
   connect(this, SIGNAL(customButtonClicked(int)), this,
@@ -47,26 +46,31 @@ GondarWizard::GondarWizard(QWidget* parent) : QWizard(parent) {
 // handle event when 'make another usb' button pressed
 void GondarWizard::handleMakeAnother() {
   // we set the page to usbInsertPage and show usual buttons
-  showUsualButtons();
+  setMakeAnotherButtonVisible(false);
   // works as long as usbInsertPage is not the last page in wizard
   setStartId(usbInsertPage.nextId() - 1);
   restart();
 }
-void GondarWizard::showUsualButtons() {
-  // Only show next buttons for all screens
-  QList<QWizard::WizardButton> button_layout;
-  button_layout << QWizard::NextButton;
-  setOption(QWizard::HaveCustomButton1, false);
-  setButtonLayout(button_layout);
+
+void GondarWizard::postError(const QString& error) {
+  QTimer::singleShot(0, this, [=]() { catchError(error); });
 }
 
-// show 'make another usb' button along with finish button at end of wizard
-void GondarWizard::showFinishButtons() {
-  QList<QWizard::WizardButton> button_layout;
-  button_layout << QWizard::FinishButton;
-  button_layout << QWizard::CustomButton1;
-  setOption(QWizard::HaveCustomButton1, true);
-  setButtonLayout(button_layout);
+void GondarWizard::catchError(const QString& error) {
+  errorPage.setError(error);
+  next();
+}
+
+void GondarWizard::setMakeAnotherButtonVisible(bool visible) {
+  setOption(QWizard::HaveCustomButton1, visible);
+}
+
+int GondarWizard::nextId() const {
+  if (errorPage.error().isEmpty()) {
+    return QWizard::nextId();
+  } else {
+    return Page_error;
+  }
 }
 
 DownloadProgressPage::DownloadProgressPage(QWidget* parent)
@@ -272,6 +276,8 @@ WriteOperationPage::WriteOperationPage(QWidget* parent) : QWizardPage(parent) {
   setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
   layout.addWidget(&progress);
   setLayout(&layout);
+
+  setFinalPage(true);
 }
 
 void WriteOperationPage::initializePage() {
@@ -317,6 +323,6 @@ void WriteOperationPage::onDoneWriting() {
   progress.setRange(0, 100);
   progress.setValue(100);
   GondarWizard* wiz = dynamic_cast<GondarWizard*>(wizard());
-  wiz->showFinishButtons();
+  wiz->setMakeAnotherButtonVisible(true);
   emit completeChanged();
 }

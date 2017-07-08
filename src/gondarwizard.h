@@ -12,6 +12,7 @@
 #include "deviceguy.h"
 #include "diskwritethread.h"
 #include "downloader.h"
+#include "error_page.h"
 #include "image_select_page.h"
 #include "unzipthread.h"
 
@@ -136,9 +137,16 @@ class GondarWizard : public QWizard {
   UsbInsertPage usbInsertPage;
   DeviceSelectPage deviceSelectPage;
   WriteOperationPage writeOperationPage;
+  ErrorPage errorPage;
 
-  void showUsualButtons();
-  void showFinishButtons();
+  // Transition to the terminal error state. This posts an event
+  // rather than directly switching pages, so it's safe to call during
+  // QWizardPage::initializePage.
+  void postError(const QString& error);
+  int nextId() const override;
+
+  void setMakeAnotherButtonVisible(bool visible);
+
   // this enum determines page order
   enum {
     Page_adminCheck,
@@ -146,10 +154,12 @@ class GondarWizard : public QWizard {
     Page_usbInsert,
     Page_deviceSelect,
     Page_downloadProgress,
-    Page_writeOperation
+    Page_writeOperation,
+    Page_error
   };
  private slots:
   void handleMakeAnother();
+  void catchError(const QString& error);
 };
 
 #endif /* GONDARWIZARD */
