@@ -82,8 +82,7 @@ DownloadProgressPage::DownloadProgressPage(QWidget* parent)
 
 void DownloadProgressPage::initializePage() {
   setLayout(&layout);
-  GondarWizard* wiz = dynamic_cast<GondarWizard*>(wizard());
-  const QUrl url = wiz->imageSelectPage.getUrl();
+  const QUrl url = wizard()->imageSelectPage.getUrl();
   qDebug() << "using url= " << url;
   QObject::connect(&manager, SIGNAL(finished()), this, SLOT(markComplete()));
   manager.append(url.toString());
@@ -258,8 +257,7 @@ bool DeviceSelectPage::validatePage() {
 }
 
 int DeviceSelectPage::nextId() const {
-  GondarWizard* wiz = dynamic_cast<GondarWizard*>(wizard());
-  if (wiz->downloadProgressPage.isComplete()) {
+  if (wizard()->downloadProgressPage.isComplete()) {
     return GondarWizard::Page_writeOperation;
   } else {
     return GondarWizard::Page_downloadProgress;
@@ -295,8 +293,7 @@ bool WriteOperationPage::validatePage() {
 void WriteOperationPage::writeToDrive() {
   qDebug() << "Writing to drive...";
   image_path.clear();
-  GondarWizard* wiz = dynamic_cast<GondarWizard*>(wizard());
-  image_path.append(wiz->downloadProgressPage.getImageFileName());
+  image_path.append(wizard()->downloadProgressPage.getImageFileName());
   showProgress();
   diskWriteThread = new DiskWriteThread(selected_drive, image_path, this);
   connect(diskWriteThread, SIGNAL(finished()), this, SLOT(onDoneWriting()));
@@ -316,7 +313,6 @@ void WriteOperationPage::onDoneWriting() {
   writeFinished = true;
   progress.setRange(0, 100);
   progress.setValue(100);
-  GondarWizard* wiz = dynamic_cast<GondarWizard*>(wizard());
-  wiz->showFinishButtons();
+  wizard()->showFinishButtons();
   emit completeChanged();
 }
