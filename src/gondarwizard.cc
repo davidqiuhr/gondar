@@ -70,7 +70,7 @@ void GondarWizard::showFinishButtons() {
 }
 
 DownloadProgressPage::DownloadProgressPage(QWidget* parent)
-    : QWizardPage(parent) {
+    : WizardPage(parent) {
   setTitle("CloudReady Download");
   setSubTitle("Your installer is currently downloading.");
   setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
@@ -139,7 +139,7 @@ const QString& DownloadProgressPage::getImageFileName() {
   return unzipThread->getFileName();
 }
 
-UsbInsertPage::UsbInsertPage(QWidget* parent) : QWizardPage(parent) {
+UsbInsertPage::UsbInsertPage(QWidget* parent) : WizardPage(parent) {
   setTitle("Please insert an 8GB or 16GB USB storage device");
   setSubTitle(
       "In the next step, the selected device will be permanantly erased and "
@@ -199,7 +199,7 @@ void UsbInsertPage::showDriveList() {
   emit completeChanged();
 }
 
-DeviceSelectPage::DeviceSelectPage(QWidget* parent) : QWizardPage(parent) {
+DeviceSelectPage::DeviceSelectPage(QWidget* parent) : WizardPage(parent) {
   // this page should just say 'hi how are you' while it stealthily loads
   // the usb device list.  or it could ask you to insert your device
   setTitle("USB device selection");
@@ -266,7 +266,7 @@ int DeviceSelectPage::nextId() const {
   }
 }
 
-WriteOperationPage::WriteOperationPage(QWidget* parent) : QWizardPage(parent) {
+WriteOperationPage::WriteOperationPage(QWidget* parent) : WizardPage(parent) {
   setTitle("Creating your CloudReady USB installer");
   setSubTitle("This process may take up to 20 minutes.");
   setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
