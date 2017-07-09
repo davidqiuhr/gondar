@@ -3,9 +3,10 @@
 
 #include <QLabel>
 #include <QVBoxLayout>
-#include <QWizardPage>
 
-class AdminCheckPage : public QWizardPage {
+#include "wizard_page.h"
+
+class AdminCheckPage : public gondar::WizardPage {
   Q_OBJECT
 
  public:
