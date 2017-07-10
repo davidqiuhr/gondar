@@ -52,6 +52,7 @@ void GondarWizard::handleMakeAnother() {
 }
 
 // display the error screen with appropriate contents
+//FIXME: should use postError
 void GondarWizard::goToErrorPage(QString errorStringIn) {
   errorPage.setErrorString(errorStringIn);
   setStartId(Page_error);

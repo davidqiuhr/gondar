@@ -23,8 +23,6 @@ void AdminCheckPage::initializePage() {
   } else {
     showIsAdmin();
   }
-  //FIXME(kendall): this currently renders 'jimbo jimbo' beneath 'You will need'
-  wizard()->goToErrorPage(QString("jimbo jimbo"));
 }
 
 bool AdminCheckPage::isComplete() const {
