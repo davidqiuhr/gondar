@@ -12,7 +12,6 @@
 #include "deviceguy.h"
 #include "diskwritethread.h"
 #include "downloader.h"
-#include "gondarpage.h"
 #include "image_select_page.h"
 #include "unzipthread.h"
 #include "wizard_page.h"
@@ -125,7 +124,7 @@ class WriteOperationPage : public gondar::WizardPage {
   QString image_path;
 };
 
-class ErrorPage : public GondarPage {
+class ErrorPage : public gondar::WizardPage {
   Q_OBJECT
 
  public:

@@ -7,7 +7,6 @@
 
 #include "diskwritethread.h"
 #include "downloader.h"
-#include "gondarpage.h"
 #include "unzipthread.h"
 
 #include "deviceguy.h"
@@ -346,7 +345,7 @@ void WriteOperationPage::setVisible(bool visible) {
   }
 }
 
-ErrorPage::ErrorPage(QWidget* parent) : GondarPage(parent) {
+ErrorPage::ErrorPage(QWidget* parent) : WizardPage(parent) {
   setTitle("An Error has occurred");
   setSubTitle("X_0 Jimbo");
   setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
