@@ -4,7 +4,7 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QLineEdit>
-#include <QWizardPage>
+#include "wizard_page.h"
 
 class ChromeoverLoginPage : public gondar::WizardPage {
   Q_OBJECT
