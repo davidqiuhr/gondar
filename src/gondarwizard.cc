@@ -66,6 +66,15 @@ int GondarWizard::nextId() const {
   }
 }
 
+void GondarWizard::postError(const QString& error) {
+  QTimer::singleShot(0, this, [=]() { catchError(error); });
+}
+
+void GondarWizard::catchError(const QString& error) {
+  errorPage.setErrorString(error);
+  next();
+}
+
 DownloadProgressPage::DownloadProgressPage(QWidget* parent)
     : GondarPage(parent) {
   setTitle("CloudReady Download");

@@ -149,6 +149,8 @@ class GondarWizard : public QWizard {
 
   void goToErrorPage(QString errorStringIn);
   int nextId() const override;
+  void postError(const QString& error);
+  void catchError(const QString& error);
   // There's an elaborate state-sharing solution via the 'field' mechanism
   // supported by QWizard.  I found the logic for that to be easy for sharing
   // some data types and convoluted for others.  In this case, a later page
