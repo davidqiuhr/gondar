@@ -22,9 +22,7 @@ GondarButton::GondarButton(const QString& text,
     : QRadioButton(text, parent) {
   index = device_num;
 }
-
 GondarWizard::GondarWizard(QWidget* parent) : QWizard(parent) {
-
   // these pages are automatically cleaned up
   // new instances are made whenever navigation moves on to another page
   // according to qt docs
