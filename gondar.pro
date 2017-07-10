@@ -9,6 +9,12 @@ QT = core network widgets
 
 CONFIG += static
 
+eval(RELEASE = $$release) {
+  !equals(RELEASE, 'true') {
+    CONFIG += console
+  }
+}
+
 
 HEADERS       = src/admin_check_page.h \
                 src/chromeover_login_page.h \
