@@ -5,11 +5,10 @@
 #include <QRadioButton>
 #include <QUrl>
 #include <QVBoxLayout>
-#include <QWizardPage>
 
-#include "gondarpage.h"
+#include "wizard_page.h"
 
-class ImageSelectPage : public GondarPage {
+class ImageSelectPage : public gondar::WizardPage {
   Q_OBJECT
 
  public:

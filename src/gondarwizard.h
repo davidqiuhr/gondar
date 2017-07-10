@@ -15,6 +15,7 @@
 #include "gondarpage.h"
 #include "image_select_page.h"
 #include "unzipthread.h"
+#include "wizard_page.h"
 
 class QCheckBox;
 class QGroupBox;
@@ -31,7 +32,7 @@ class GondarButton : public QRadioButton {
   unsigned int index = 0;
 };
 
-class DownloadProgressPage : public GondarPage {
+class DownloadProgressPage : public gondar::WizardPage {
   Q_OBJECT
 
  public:
@@ -58,7 +59,7 @@ class DownloadProgressPage : public GondarPage {
   UnzipThread* unzipThread;
 };
 
-class UsbInsertPage : public GondarPage {
+class UsbInsertPage : public gondar::WizardPage {
   Q_OBJECT
 
  public:
@@ -80,7 +81,7 @@ class UsbInsertPage : public GondarPage {
   void driveListRequested();
 };
 
-class DeviceSelectPage : public GondarPage {
+class DeviceSelectPage : public gondar::WizardPage {
   Q_OBJECT
 
  public:
@@ -99,7 +100,7 @@ class DeviceSelectPage : public GondarPage {
   QVBoxLayout* layout;
 };
 
-class WriteOperationPage : public GondarPage {
+class WriteOperationPage : public gondar::WizardPage {
   Q_OBJECT
 
  public:
