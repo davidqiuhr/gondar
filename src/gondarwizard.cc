@@ -59,7 +59,11 @@ int GondarWizard::nextId() const {
   if (errorPage.errorEmpty()) {
     return QWizard::nextId();
   } else {
-    return Page_error;
+    if (currentId() == Page_error) {
+      return -1;
+    } else {
+      return Page_error;
+    }
   }
 }
 
