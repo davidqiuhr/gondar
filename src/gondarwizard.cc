@@ -360,12 +360,8 @@ ErrorPage::ErrorPage(QWidget* parent) : WizardPage(parent) {
   setLayout(&layout);
 }
 
-void ErrorPage::initializePage() {
-  label.setText(errorString);
-}
-
 void ErrorPage::setErrorString(QString errorStringIn) {
-  errorString = errorStringIn;
+  label.setText(errorStringIn);
 }
 
 bool ErrorPage::errorEmpty() const {

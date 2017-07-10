@@ -133,7 +133,6 @@ class ErrorPage : public gondar::WizardPage {
   void setErrorString(QString errorString);
   bool errorEmpty() const;
  protected:
-  void initializePage() override;
   int nextId() const override;
   void setVisible(bool visible) override;
  private:
