@@ -2,8 +2,6 @@
 #include "gondar.h"
 #include "gondarwizard.h"
 
-#include "gondarwizard.h"
-
 // note that even though this is called the admin check page, it will in most
 // cases be a welcome page, unless the user is missing admin rights
 AdminCheckPage::AdminCheckPage(QWidget* parent) : WizardPage(parent) {
