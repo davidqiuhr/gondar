@@ -1,5 +1,6 @@
 #include "admin_check_page.h"
 #include "gondar.h"
+#include "gondarwizard.h"
 
 #include "gondarwizard.h"
 
@@ -50,4 +51,21 @@ void AdminCheckPage::showIsNotAdmin() {
       "The current user does not have adminstrator rights or the program was "
       "run without sufficient rights to create a USB.  Please re-run the "
       "program with sufficient rights.");
+}
+
+// helper function to determine if this build is a chromeover build
+bool AdminCheckPage::isChromeover() {
+#ifdef CHROMEOVER
+  return true;
+#else
+  return false;
+#endif
+}
+
+int AdminCheckPage::nextId() const {
+  if (isChromeover()) {
+    return GondarWizard::Page_chromeoverLogin;
+  } else {
+    return GondarWizard::Page_imageSelect;
+  }
 }

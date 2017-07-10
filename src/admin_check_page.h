@@ -11,6 +11,7 @@ class AdminCheckPage : public gondar::WizardPage {
 
  public:
   AdminCheckPage(QWidget* parent = 0);
+  int nextId() const override;
 
  protected:
   void initializePage() override;
@@ -19,6 +20,7 @@ class AdminCheckPage : public gondar::WizardPage {
   void showIsNotAdmin();
 
  private:
+  static bool isChromeover();
   QLabel label;
   bool is_admin;
   QVBoxLayout layout;

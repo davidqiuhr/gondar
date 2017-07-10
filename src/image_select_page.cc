@@ -1,5 +1,7 @@
 #include "image_select_page.h"
 
+#include "gondarwizard.h"
+
 ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
   setTitle("Which version of CloudReady do you need?");
   setSubTitle(
@@ -32,4 +34,8 @@ QUrl ImageSelectPage::getUrl() const {
     // TODO: decide what this behavior should be
     return sixtyFourUrl;
   }
+}
+
+int ImageSelectPage::nextId() const {
+  return GondarWizard::Page_usbInsert;
 }
