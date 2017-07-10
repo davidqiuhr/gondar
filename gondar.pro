@@ -1,9 +1,17 @@
+# pass chromeover/beerover value into code
+eval(CHROMEOVER = $$chromeover) {
+  equals(CHROMEOVER, 'true') {
+    DEFINES += CHROMEOVER
+  }
+}
+
 QT = core network widgets
 
 CONFIG += console static
 
 
 HEADERS       = src/admin_check_page.h \
+                src/chromeover_login_page.h \
                 src/deviceguy.h \
                 src/diskwritethread.h \
                 src/downloader.h \
@@ -18,6 +26,7 @@ HEADERS       = src/admin_check_page.h \
 SOURCES       = minizip/minishared.c \
                 minizip/miniunz.c \
                 src/admin_check_page.cc \
+                src/chromeover_login_page.cc \
                 src/deviceguy.cc \
                 src/diskwritethread.cc \
                 src/downloader.cc \

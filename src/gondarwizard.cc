@@ -26,6 +26,9 @@ GondarWizard::GondarWizard(QWidget* parent) : QWizard(parent) {
   // new instances are made whenever navigation moves on to another page
   // according to qt docs
   setPage(Page_adminCheck, &adminCheckPage);
+  // chromeoverLogin and imageSelect are alternatives to each other
+  // that both progress to usbInsertPage
+  setPage(Page_chromeoverLogin, &chromeoverLoginPage);
   setPage(Page_imageSelect, &imageSelectPage);
   setPage(Page_usbInsert, &usbInsertPage);
   setPage(Page_deviceSelect, &deviceSelectPage);
