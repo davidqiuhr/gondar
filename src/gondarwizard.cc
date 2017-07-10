@@ -51,14 +51,6 @@ void GondarWizard::handleMakeAnother() {
   restart();
 }
 
-// display the error screen with appropriate contents
-//FIXME: should use postError
-void GondarWizard::goToErrorPage(QString errorStringIn) {
-  errorPage.setErrorString(errorStringIn);
-  setStartId(Page_error);
-  restart();
-}
-
 int GondarWizard::nextId() const {
   if (errorPage.errorEmpty()) {
     return QWizard::nextId();
@@ -360,7 +352,7 @@ ErrorPage::ErrorPage(QWidget* parent) : WizardPage(parent) {
   setLayout(&layout);
 }
 
-void ErrorPage::setErrorString(QString errorStringIn) {
+void ErrorPage::setErrorString(const QString& errorStringIn) {
   label.setText(errorStringIn);
 }
 

@@ -130,7 +130,7 @@ class ErrorPage : public gondar::WizardPage {
 
  public:
   ErrorPage(QWidget* parent = 0);
-  void setErrorString(QString errorString);
+  void setErrorString(const QString& errorString);
   bool errorEmpty() const;
  protected:
   int nextId() const override;
@@ -147,7 +147,6 @@ class GondarWizard : public QWizard {
  public:
   GondarWizard(QWidget* parent = 0);
 
-  void goToErrorPage(QString errorStringIn);
   int nextId() const override;
   void postError(const QString& error);
   void catchError(const QString& error);
