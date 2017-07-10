@@ -130,6 +130,7 @@ class ErrorPage : public GondarPage {
  public:
   ErrorPage(QWidget* parent = 0);
   void setErrorString(QString errorString);
+  bool errorEmpty() const;
  protected:
   void initializePage() override;
   int nextId() const override;
@@ -147,6 +148,7 @@ class GondarWizard : public QWizard {
   GondarWizard(QWidget* parent = 0);
 
   void goToErrorPage(QString errorStringIn);
+  int nextId() const override;
   // There's an elaborate state-sharing solution via the 'field' mechanism
   // supported by QWizard.  I found the logic for that to be easy for sharing
   // some data types and convoluted for others.  In this case, a later page

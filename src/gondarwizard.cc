@@ -23,6 +23,7 @@ GondarButton::GondarButton(const QString& text,
     : QRadioButton(text, parent) {
   index = device_num;
 }
+
 GondarWizard::GondarWizard(QWidget* parent) : QWizard(parent) {
 
   // these pages are automatically cleaned up
@@ -55,6 +56,14 @@ void GondarWizard::goToErrorPage(QString errorStringIn) {
   errorPage.setErrorString(errorStringIn);
   setStartId(Page_error);
   restart();
+}
+
+int GondarWizard::nextId() const {
+  if (errorPage.errorEmpty()) {
+    return QWizard::nextId();
+  } else {
+    return Page_error;
+  }
 }
 
 DownloadProgressPage::DownloadProgressPage(QWidget* parent)
@@ -349,6 +358,10 @@ void ErrorPage::initializePage() {
 
 void ErrorPage::setErrorString(QString errorStringIn) {
   errorString = errorStringIn;
+}
+
+bool ErrorPage::errorEmpty() const {
+  return errorString.isEmpty();
 }
 
 // though error page follows in index, this is the end of the wizard for
