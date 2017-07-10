@@ -6,7 +6,7 @@
 #include <QLineEdit>
 #include <QWizardPage>
 
-class ChromeoverLoginPage : public QWizardPage {
+class ChromeoverLoginPage : public gondar::WizardPage {
   Q_OBJECT
 
  public:
