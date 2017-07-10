@@ -21,7 +21,8 @@ HEADERS       = src/admin_check_page.h \
                 src/log.h \
                 src/neverware_unzipper.h \
                 src/shared.h \
-                src/unzipthread.h
+                src/unzipthread.h \
+                src/wizard_page.h
 SOURCES       = minizip/minishared.c \
                 minizip/miniunz.c \
                 src/admin_check_page.cc \
@@ -34,7 +35,8 @@ SOURCES       = minizip/minishared.c \
                 src/log.cc \
                 src/main.cc \
                 src/neverware_unzipper.cc \
-                src/unzipthread.cc
+                src/unzipthread.cc \
+                src/wizard_page.cc
 RESOURCES     = gondarwizard.qrc
 
 INCLUDEPATH += minizip plog/include

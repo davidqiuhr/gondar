@@ -73,7 +73,7 @@ void GondarWizard::showFinishButtons() {
 }
 
 DownloadProgressPage::DownloadProgressPage(QWidget* parent)
-    : QWizardPage(parent) {
+    : WizardPage(parent) {
   setTitle("CloudReady Download");
   setSubTitle("Your installer is currently downloading.");
   setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
@@ -85,8 +85,7 @@ DownloadProgressPage::DownloadProgressPage(QWidget* parent)
 
 void DownloadProgressPage::initializePage() {
   setLayout(&layout);
-  GondarWizard* wiz = dynamic_cast<GondarWizard*>(wizard());
-  const QUrl url = wiz->imageSelectPage.getUrl();
+  const QUrl url = wizard()->imageSelectPage.getUrl();
   qDebug() << "using url= " << url;
   QObject::connect(&manager, SIGNAL(finished()), this, SLOT(markComplete()));
   manager.append(url.toString());
@@ -142,7 +141,7 @@ const QString& DownloadProgressPage::getImageFileName() {
   return unzipThread->getFileName();
 }
 
-UsbInsertPage::UsbInsertPage(QWidget* parent) : QWizardPage(parent) {
+UsbInsertPage::UsbInsertPage(QWidget* parent) : WizardPage(parent) {
   setTitle("Please insert an 8GB or 16GB USB storage device");
   setSubTitle(
       "In the next step, the selected device will be permanantly erased and "
@@ -202,7 +201,7 @@ void UsbInsertPage::showDriveList() {
   emit completeChanged();
 }
 
-DeviceSelectPage::DeviceSelectPage(QWidget* parent) : QWizardPage(parent) {
+DeviceSelectPage::DeviceSelectPage(QWidget* parent) : WizardPage(parent) {
   // this page should just say 'hi how are you' while it stealthily loads
   // the usb device list.  or it could ask you to insert your device
   setTitle("USB device selection");
@@ -261,15 +260,14 @@ bool DeviceSelectPage::validatePage() {
 }
 
 int DeviceSelectPage::nextId() const {
-  GondarWizard* wiz = dynamic_cast<GondarWizard*>(wizard());
-  if (wiz->downloadProgressPage.isComplete()) {
+  if (wizard()->downloadProgressPage.isComplete()) {
     return GondarWizard::Page_writeOperation;
   } else {
     return GondarWizard::Page_downloadProgress;
   }
 }
 
-WriteOperationPage::WriteOperationPage(QWidget* parent) : QWizardPage(parent) {
+WriteOperationPage::WriteOperationPage(QWidget* parent) : WizardPage(parent) {
   setTitle("Creating your CloudReady USB installer");
   setSubTitle("This process may take up to 20 minutes.");
   setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
@@ -298,8 +296,7 @@ bool WriteOperationPage::validatePage() {
 void WriteOperationPage::writeToDrive() {
   qDebug() << "Writing to drive...";
   image_path.clear();
-  GondarWizard* wiz = dynamic_cast<GondarWizard*>(wizard());
-  image_path.append(wiz->downloadProgressPage.getImageFileName());
+  image_path.append(wizard()->downloadProgressPage.getImageFileName());
   showProgress();
   diskWriteThread = new DiskWriteThread(selected_drive, image_path, this);
   connect(diskWriteThread, SIGNAL(finished()), this, SLOT(onDoneWriting()));
@@ -319,7 +316,6 @@ void WriteOperationPage::onDoneWriting() {
   writeFinished = true;
   progress.setRange(0, 100);
   progress.setValue(100);
-  GondarWizard* wiz = dynamic_cast<GondarWizard*>(wizard());
-  wiz->showFinishButtons();
+  wizard()->showFinishButtons();
   emit completeChanged();
 }
