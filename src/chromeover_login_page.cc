@@ -2,10 +2,10 @@
 
 #include "gondarwizard.h"
 
-ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : QWizardPage(parent) {
+ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent)
+    : QWizardPage(parent) {
   setTitle("Login");
-  setSubTitle(
-      "Enter credentials for my.neverware.com.");
+  setSubTitle("Enter credentials for my.neverware.com.");
   setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
   // configure username fields
   usernameLineEditLabel.setBuddy(&usernameLineEdit);
@@ -22,5 +22,5 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : QWizardPage(parent) 
 }
 
 int ChromeoverLoginPage::nextId() const {
-    return GondarWizard::Page_usbInsert;
+  return GondarWizard::Page_usbInsert;
 }

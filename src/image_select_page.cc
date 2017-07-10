@@ -37,5 +37,5 @@ QUrl ImageSelectPage::getUrl() const {
 }
 
 int ImageSelectPage::nextId() const {
-    return GondarWizard::Page_usbInsert;
+  return GondarWizard::Page_usbInsert;
 }

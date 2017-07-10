@@ -51,11 +51,11 @@ void AdminCheckPage::showIsNotAdmin() {
 
 // helper function to determine if this build is a chromeover build
 bool AdminCheckPage::isChromeover() {
-  #ifdef CHROMEOVER
-    return true;
-  #else
-    return false;
-  #endif
+#ifdef CHROMEOVER
+  return true;
+#else
+  return false;
+#endif
 }
 
 int AdminCheckPage::nextId() const {

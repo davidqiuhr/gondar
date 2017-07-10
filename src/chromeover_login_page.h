@@ -2,9 +2,9 @@
 #define CHROMEOVER_LOGIN_PAGE_H
 
 #include <QGridLayout>
-#include <QWizardPage>
-#include <QLineEdit>
 #include <QLabel>
+#include <QLineEdit>
+#include <QWizardPage>
 
 class ChromeoverLoginPage : public QWizardPage {
   Q_OBJECT
