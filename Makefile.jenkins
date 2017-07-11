@@ -9,7 +9,11 @@ gondar-linux:
 	sudo docker build -f docker/gondar-linux.Dockerfile .
 
 gondar-win32:
+ifdef RELEASE
+	python package.py --release
+else
 	python package.py
+endif
 
 .PHONY: \
 	all \
