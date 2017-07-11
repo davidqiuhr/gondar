@@ -7,7 +7,13 @@ eval(CHROMEOVER = $$chromeover) {
 
 QT = core network widgets
 
-CONFIG += console static
+CONFIG += static
+
+eval(RELEASE = $$release) {
+  !equals(RELEASE, 'true') {
+    CONFIG += console
+  }
+}
 
 
 HEADERS       = src/admin_check_page.h \
