@@ -25,7 +25,6 @@ def build_image(image_name, release):
             '--file', 'docker/gondar-win32.Dockerfile',
             '--tag', image_name, '.')
     if (release):
-      print("we add RELEASE=true")
       cmd += ('--build-arg', 'RELEASE=true',)
     run_cmd(*cmd)
 
