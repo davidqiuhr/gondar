@@ -1,11 +1,12 @@
 
+#include "gondarwizard.h"
+
 #include <QNetworkReply>
 #include <QProgressBar>
 #include <QtWidgets>
 
 #include "diskwritethread.h"
 #include "downloader.h"
-#include "gondarwizard.h"
 #include "unzipthread.h"
 
 #include "deviceguy.h"
@@ -34,42 +35,41 @@ GondarWizard::GondarWizard(QWidget* parent) : QWizard(parent) {
   setPage(Page_deviceSelect, &deviceSelectPage);
   setPage(Page_downloadProgress, &downloadProgressPage);
   setPage(Page_writeOperation, &writeOperationPage);
+  setPage(Page_error, &errorPage);
   setWizardStyle(QWizard::ModernStyle);
   setWindowTitle(tr("Cloudready USB Creation Utility"));
 
-  // Only show next buttons for all screens
-  QList<QWizard::WizardButton> button_layout;
-  button_layout << QWizard::NextButton;
-  setButtonLayout(button_layout);
-
-  setButtonText(QWizard::CustomButton1, tr("Make Another USB"));
-  connect(this, SIGNAL(customButtonClicked(int)), this,
-          SLOT(handleMakeAnother()));
+  setOption(QWizard::HaveCustomButton1, false);
+  setOption(QWizard::NoCancelButton, true);
+  setOption(QWizard::NoBackButtonOnLastPage, true);
 }
 
 // handle event when 'make another usb' button pressed
 void GondarWizard::handleMakeAnother() {
-  // we set the page to usbInsertPage and show usual buttons
-  showUsualButtons();
   // works as long as usbInsertPage is not the last page in wizard
   setStartId(usbInsertPage.nextId() - 1);
   restart();
 }
-void GondarWizard::showUsualButtons() {
-  // Only show next buttons for all screens
-  QList<QWizard::WizardButton> button_layout;
-  button_layout << QWizard::NextButton;
-  setOption(QWizard::HaveCustomButton1, false);
-  setButtonLayout(button_layout);
+
+int GondarWizard::nextId() const {
+  if (errorPage.errorEmpty()) {
+    return QWizard::nextId();
+  } else {
+    if (currentId() == Page_error) {
+      return -1;
+    } else {
+      return Page_error;
+    }
+  }
 }
 
-// show 'make another usb' button along with finish button at end of wizard
-void GondarWizard::showFinishButtons() {
-  QList<QWizard::WizardButton> button_layout;
-  button_layout << QWizard::FinishButton;
-  button_layout << QWizard::CustomButton1;
-  setOption(QWizard::HaveCustomButton1, true);
-  setButtonLayout(button_layout);
+void GondarWizard::postError(const QString& error) {
+  QTimer::singleShot(0, this, [=]() { catchError(error); });
+}
+
+void GondarWizard::catchError(const QString& error) {
+  errorPage.setErrorString(error);
+  next();
 }
 
 DownloadProgressPage::DownloadProgressPage(QWidget* parent)
@@ -84,19 +84,22 @@ DownloadProgressPage::DownloadProgressPage(QWidget* parent)
 }
 
 void DownloadProgressPage::initializePage() {
+  // we don't support going back and redownloading right now
+  // there's no real reason why we could not do this.  it just does not work
+  // right now
+  setCommitPage(true);
   setLayout(&layout);
   const QUrl url = wizard()->imageSelectPage.getUrl();
   qDebug() << "using url= " << url;
-  QObject::connect(&manager, SIGNAL(finished()), this, SLOT(markComplete()));
+  connect(&manager, SIGNAL(finished()), this, SLOT(markComplete()));
   manager.append(url.toString());
-  QObject::connect(&manager, SIGNAL(started()), this,
-                   SLOT(onDownloadStarted()));
+  connect(&manager, SIGNAL(started()), this, SLOT(onDownloadStarted()));
 }
 
 void DownloadProgressPage::onDownloadStarted() {
   QNetworkReply* cur_download = manager.getCurrentDownload();
-  QObject::connect(cur_download, &QNetworkReply::downloadProgress, this,
-                   &DownloadProgressPage::downloadProgress);
+  connect(cur_download, &QNetworkReply::downloadProgress, this,
+          &DownloadProgressPage::downloadProgress);
 }
 
 void DownloadProgressPage::downloadProgress(qint64 sofar, qint64 total) {
@@ -159,8 +162,7 @@ UsbInsertPage::UsbInsertPage(QWidget* parent) : WizardPage(parent) {
   setLayout(&layout);
 
   // the next button should be grayed out until the user inserts a USB
-  QObject::connect(this, SIGNAL(driveListRequested()), this,
-                   SLOT(getDriveList()));
+  connect(this, SIGNAL(driveListRequested()), this, SLOT(getDriveList()));
 }
 
 void UsbInsertPage::initializePage() {
@@ -316,6 +318,63 @@ void WriteOperationPage::onDoneWriting() {
   writeFinished = true;
   progress.setRange(0, 100);
   progress.setValue(100);
-  wizard()->showFinishButtons();
+  wizard()->setOption(QWizard::HaveCustomButton1, true);
   emit completeChanged();
+}
+
+// though error page follows in index, this is the end of the wizard for
+// healthy flows
+int WriteOperationPage::nextId() const {
+  return -1;
+}
+
+void WriteOperationPage::setVisible(bool visible) {
+  QWizardPage::setVisible(visible);
+  GondarWizard* wiz = dynamic_cast<GondarWizard*>(wizard());
+  if (visible) {
+    setButtonText(QWizard::CustomButton1, "Make Another USB");
+    connect(wiz, SIGNAL(customButtonClicked(int)), wiz,
+            SLOT(handleMakeAnother()));
+  } else {
+    wiz->setOption(QWizard::HaveCustomButton1, false);
+    disconnect(wiz, SIGNAL(customButtonClicked(int)), wiz,
+               SLOT(handleMakeAnother()));
+  }
+}
+
+ErrorPage::ErrorPage(QWidget* parent) : WizardPage(parent) {
+  setTitle("An error has occurred");
+  setSubTitle(" ");
+  setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
+  layout.addWidget(&label);
+  label.setText("");
+  setLayout(&layout);
+}
+
+void ErrorPage::setErrorString(const QString& errorStringIn) {
+  label.setText(errorStringIn);
+}
+
+bool ErrorPage::errorEmpty() const {
+  return errorString.isEmpty();
+}
+
+// though error page follows in index, this is the end of the wizard for
+// healthy flows
+int ErrorPage::nextId() const {
+  return -1;
+}
+
+void ErrorPage::setVisible(bool visible) {
+  QWizardPage::setVisible(visible);
+  if (visible) {
+    setButtonText(QWizard::CustomButton1, "Exit");
+    wizard()->setOption(QWizard::HaveCustomButton1, true);
+    connect(wizard(), SIGNAL(customButtonClicked(int)),
+            QApplication::instance(), SLOT(quit()));
+  } else {
+    wizard()->setOption(QWizard::HaveCustomButton1, false);
+    disconnect(wizard(), SIGNAL(customButtonClicked(int)),
+               QApplication::instance(), SLOT(quit()));
+  }
 }

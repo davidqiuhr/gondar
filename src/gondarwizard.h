@@ -110,6 +110,8 @@ class WriteOperationPage : public gondar::WizardPage {
   bool isComplete() const override;
   bool validatePage() override;
   void showProgress();
+  int nextId() const override;
+  void setVisible(bool visible) override;
  public slots:
   void onDoneWriting();
 
@@ -122,17 +124,40 @@ class WriteOperationPage : public gondar::WizardPage {
   QString image_path;
 };
 
+class ErrorPage : public gondar::WizardPage {
+  Q_OBJECT
+
+ public:
+  ErrorPage(QWidget* parent = 0);
+  void setErrorString(const QString& errorString);
+  bool errorEmpty() const;
+
+ protected:
+  int nextId() const override;
+  void setVisible(bool visible) override;
+
+ private:
+  QVBoxLayout layout;
+  QString errorString;
+  QLabel label;
+};
+
 class GondarWizard : public QWizard {
   Q_OBJECT
 
  public:
   GondarWizard(QWidget* parent = 0);
+
+  int nextId() const override;
+  void postError(const QString& error);
+  void catchError(const QString& error);
   // There's an elaborate state-sharing solution via the 'field' mechanism
   // supported by QWizard.  I found the logic for that to be easy for sharing
   // some data types and convoluted for others.  In this case, a later page
   // makes a decision based on a radio button seleciton in an earlier page,
   // so putting the shared state in the wizard seems more straightforward
   AdminCheckPage adminCheckPage;
+  ErrorPage errorPage;
   ChromeoverLoginPage chromeoverLoginPage;
   ImageSelectPage imageSelectPage;
   DownloadProgressPage downloadProgressPage;
@@ -140,8 +165,6 @@ class GondarWizard : public QWizard {
   DeviceSelectPage deviceSelectPage;
   WriteOperationPage writeOperationPage;
 
-  void showUsualButtons();
-  void showFinishButtons();
   // this enum determines page order
   enum {
     Page_adminCheck,
@@ -150,7 +173,8 @@ class GondarWizard : public QWizard {
     Page_usbInsert,
     Page_deviceSelect,
     Page_downloadProgress,
-    Page_writeOperation
+    Page_writeOperation,
+    Page_error
   };
  private slots:
   void handleMakeAnother();
