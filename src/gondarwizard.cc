@@ -333,12 +333,12 @@ void WriteOperationPage::setVisible(bool visible) {
   GondarWizard* wiz = dynamic_cast<GondarWizard*>(wizard());
   if (visible) {
     setButtonText(QWizard::CustomButton1, "Make Another USB");
-    connect(wiz, SIGNAL(customButtonClicked(int)),
-            wiz, SLOT(handleMakeAnother()));
+    connect(wiz, SIGNAL(customButtonClicked(int)), wiz,
+            SLOT(handleMakeAnother()));
   } else {
     wiz->setOption(QWizard::HaveCustomButton1, false);
-    disconnect(wiz, SIGNAL(customButtonClicked(int)),
-               wiz, SLOT(handleMakeAnother()));
+    disconnect(wiz, SIGNAL(customButtonClicked(int)), wiz,
+               SLOT(handleMakeAnother()));
   }
 }
 

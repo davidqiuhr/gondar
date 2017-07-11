@@ -131,9 +131,11 @@ class ErrorPage : public gondar::WizardPage {
   ErrorPage(QWidget* parent = 0);
   void setErrorString(const QString& errorString);
   bool errorEmpty() const;
+
  protected:
   int nextId() const override;
   void setVisible(bool visible) override;
+
  private:
   QVBoxLayout layout;
   QString errorString;
