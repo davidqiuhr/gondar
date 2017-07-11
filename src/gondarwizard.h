@@ -88,7 +88,6 @@ class DeviceSelectPage : public gondar::WizardPage {
   DeviceSelectPage(QWidget* parent = 0);
   int nextId() const override;
 
-
  protected:
   void initializePage() override;
   bool validatePage() override;
