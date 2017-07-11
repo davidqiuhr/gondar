@@ -344,8 +344,8 @@ void WriteOperationPage::setVisible(bool visible) {
 }
 
 ErrorPage::ErrorPage(QWidget* parent) : WizardPage(parent) {
-  setTitle("An Error has occurred");
-  setSubTitle("X_0 Jimbo");
+  setTitle("An error has occurred");
+  setSubTitle(" ");
   setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
   layout.addWidget(&label);
   label.setText("");
