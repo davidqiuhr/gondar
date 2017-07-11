@@ -19,11 +19,14 @@ def run_cmd(*args):
     subprocess.check_call(args)
 
 
-def build_image(image_name):
+def build_image(image_name, release):
     """Build the Dockerfile from the current directory."""
-    run_cmd('sudo', 'docker', 'build',
+    cmd = ('sudo', 'docker', 'build',
             '--file', 'docker/gondar-win32.Dockerfile',
             '--tag', image_name, '.')
+    if (release):
+      cmd += ('--build-arg', 'RELEASE=true',)
+    run_cmd(*cmd)
 
 
 def get_output_path(subdir):
@@ -39,7 +42,6 @@ def run_container(image_name, *cmd, **kwargs):
     optional kwarg: volumes=[(host, guest), ...]
     """
     volumes = kwargs.get('volumes', [])
-
     full_cmd = ('sudo', 'docker', 'run', '--rm=true')
     for volume in volumes:
         full_cmd += ('--volume', '{}:{}'.format(*volume))
@@ -54,16 +56,17 @@ def run_container(image_name, *cmd, **kwargs):
 def parse_args():
     """Parse some args"""
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.parse_args()
+    parser.add_argument('--release', action='store_true')
+    return parser.parse_args()
 
 
 def main():
     """Build gondar in a Docker container and copy to host."""
-    parse_args()
+    args = parse_args()
     image_name = 'gondar-build'
     output_path = get_output_path('package')
 
-    build_image(image_name)
+    build_image(image_name, args.release)
     volume = (output_path, '/opt/host')
     run_container(image_name,
                   'cp', '-r', '/opt/gondar/release/', '/opt/host',
