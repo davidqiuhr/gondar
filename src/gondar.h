@@ -14,7 +14,6 @@ DeviceGuyList* GetDeviceList();
 BOOL Install(DeviceGuy* target_device,
              const char* image_path,
              int64_t image_size);
-
 BOOL IsCurrentProcessElevated();
 
 #ifdef __cplusplus
