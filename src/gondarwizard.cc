@@ -358,7 +358,7 @@ void ErrorPage::setErrorString(const QString& errorStringIn) {
 }
 
 bool ErrorPage::errorEmpty() const {
-  return errorString.isEmpty();
+  return label.text().isEmpty();
 }
 
 int ErrorPage::nextId() const {
