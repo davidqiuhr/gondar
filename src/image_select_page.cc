@@ -16,12 +16,8 @@ ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
   layout.addWidget(&thirtyTwo);
   layout.addWidget(&sixtyFour);
   setLayout(&layout);
-  thirtyTwoUrl.setUrl(
-      "https://ddnynf025unax.cloudfront.net/cloudready-free-56.3.80-32-bit/"
-      "cloudready-free-56.3.80-32-bit.bin.zip");
-  sixtyFourUrl.setUrl(
-      "https://ddnynf025unax.cloudfront.net/cloudready-free-56.3.82-64-bit/"
-      "cloudready-free-56.3.82-64-bit.bin.zip");
+  thirtyTwoUrl.setUrl("http://localhost:8080/tiny.zip");
+  sixtyFourUrl.setUrl("http://localhost:8080/tiny.zip");
 }
 
 QUrl ImageSelectPage::getUrl() const {
