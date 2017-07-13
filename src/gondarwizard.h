@@ -117,6 +117,7 @@ class WriteOperationPage : public gondar::WizardPage {
 
  private:
   void writeToDrive();
+  void writeFailed(const QString& errorMessage);
   QVBoxLayout layout;
   QProgressBar progress;
   bool writeFinished;

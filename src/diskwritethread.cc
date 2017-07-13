@@ -1,10 +1,12 @@
 
 #include "diskwritethread.h"
 
-#include <QtWidgets>
+#include <QFile>
+#include <QTimer>
 
 #include "deviceguy.h"
 #include "gondar.h"
+#include "log.h"
 
 static int64_t getFileSize(QString& path) {
   QFile file(path);
@@ -24,15 +26,31 @@ DiskWriteThread::DiskWriteThread(DeviceGuy* drive_in,
 
 DiskWriteThread::~DiskWriteThread() {}
 
+DiskWriteThread::State DiskWriteThread::state() const {
+  return state_;
+}
+
 void DiskWriteThread::run() {
-  qDebug() << "running diskwrite on image=" << image_path;
-  int64_t image_size = getFileSize(image_path);
+  LOG_INFO << "writing " << image_path << " to disk";
+  setState(State::Running);
+
+  const int64_t image_size = getFileSize(image_path);
   if (image_size == -1) {
-    qDebug() << "Error: could not detect image size";
-    // TODO: propagate error up to user
-    // no real reason to continue with what will be a failed call to install
+    LOG_ERROR << "getFileSize failed";
+    setState(State::GetFileSizeFailed);
     return;
   }
-  Install(&selected_drive, image_path.toStdString().c_str(), image_size);
-  qDebug() << "worker thread says complete";
+
+  if (!Install(&selected_drive, image_path.toStdString().c_str(), image_size)) {
+    LOG_ERROR << "Install failed";
+    setState(State::InstallFailed);
+    return;
+  }
+}
+
+void DiskWriteThread::setState(const State state) {
+  // The QThread object (i.e. |this|) is the parent thread, not the
+  // thread it manages. This essentially posts a message to the parent
+  // thread to update the state.
+  QTimer::singleShot(0, this, [=]() { state_ = state; });
 }
