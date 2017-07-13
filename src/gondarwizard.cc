@@ -314,6 +314,26 @@ void WriteOperationPage::showProgress() {
 }
 
 void WriteOperationPage::onDoneWriting() {
+  switch (diskWriteThread->state()) {
+    case DiskWriteThread::State::Initial:
+    case DiskWriteThread::State::Running:
+      // It should not be possible to get here at runtime
+      writeFailed("Internal state error");
+      return;
+
+    case DiskWriteThread::State::GetFileSizeFailed:
+      writeFailed("Error reading the disk image's file size");
+      return;
+
+    case DiskWriteThread::State::InstallFailed:
+      writeFailed("Error writing to the USB device");
+      return;
+
+    case DiskWriteThread::State::Success:
+      // Hooray!
+      break;
+  }
+
   setTitle("CloudReady USB created!");
   setSubTitle("You may now either exit or create another USB.");
   qDebug() << "install call returned";
@@ -342,6 +362,12 @@ void WriteOperationPage::setVisible(bool visible) {
     disconnect(wiz, SIGNAL(customButtonClicked(int)), wiz,
                SLOT(handleMakeAnother()));
   }
+}
+
+void WriteOperationPage::writeFailed(const QString& errorMessage) {
+  wizard()->postError(errorMessage);
+  writeFinished = true;
+  emit completeChanged();
 }
 
 ErrorPage::ErrorPage(QWidget* parent) : WizardPage(parent) {
