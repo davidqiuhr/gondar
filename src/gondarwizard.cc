@@ -331,7 +331,7 @@ int WriteOperationPage::nextId() const {
 }
 
 void WriteOperationPage::setVisible(bool visible) {
-  QWizardPage::setVisible(visible);
+  WizardPage::setVisible(visible);
   GondarWizard* wiz = dynamic_cast<GondarWizard*>(wizard());
   if (visible) {
     setButtonText(QWizard::CustomButton1, "Make Another USB");
@@ -366,7 +366,7 @@ int ErrorPage::nextId() const {
 }
 
 void ErrorPage::setVisible(bool visible) {
-  QWizardPage::setVisible(visible);
+  WizardPage::setVisible(visible);
   if (visible) {
     setButtonText(QWizard::CustomButton1, "Exit");
     wizard()->setOption(QWizard::HaveCustomButton1, true);
