@@ -138,7 +138,6 @@ class ErrorPage : public gondar::WizardPage {
 
  private:
   QVBoxLayout layout;
-  QString errorString;
   QLabel label;
 };
 
