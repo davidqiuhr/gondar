@@ -9,11 +9,12 @@ DeviceGuyList* GetDeviceList() {
   return list;
 }
 
-void Install(DeviceGuy* target_device,
+bool Install(DeviceGuy* target_device,
              const char* image_path,
              int64_t image_size) {
   Q_UNUSED(target_device);
   Q_UNUSED(image_path);
+  return true;
 }
 
 BOOL IsCurrentProcessElevated() {

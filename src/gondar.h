@@ -9,9 +9,12 @@ extern "C" {
 #endif
 
 DeviceGuyList* GetDeviceList();
-void Install(DeviceGuy* target_device,
+
+// Returns true on success
+BOOL Install(DeviceGuy* target_device,
              const char* image_path,
              int64_t image_size);
+
 BOOL IsCurrentProcessElevated();
 
 #ifdef __cplusplus
