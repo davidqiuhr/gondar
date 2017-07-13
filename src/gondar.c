@@ -2432,7 +2432,8 @@ BOOL Install(DeviceGuy* target_device,
     printf("kendall: physical handle invalid!\n");
   }
 
-  ret = WriteDrive(phys_handle, source_img, sector_size, drive_size, image_size);
+  ret =
+      WriteDrive(phys_handle, source_img, sector_size, drive_size, image_size);
 
   // close the handles we created so that Install() may be called again
   // within this same run
