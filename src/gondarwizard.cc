@@ -11,6 +11,7 @@
 
 #include "deviceguy.h"
 #include "gondar.h"
+#include "log.h"
 #include "neverware_unzipper.h"
 
 DeviceGuyList* drivelist = NULL;
@@ -68,6 +69,7 @@ void GondarWizard::postError(const QString& error) {
 }
 
 void GondarWizard::catchError(const QString& error) {
+  LOG_ERROR << "displaying error: " << error;
   errorPage.setErrorString(error);
   next();
 }
