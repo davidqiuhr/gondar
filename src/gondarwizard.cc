@@ -361,8 +361,6 @@ bool ErrorPage::errorEmpty() const {
   return errorString.isEmpty();
 }
 
-// though error page follows in index, this is the end of the wizard for
-// healthy flows
 int ErrorPage::nextId() const {
   return -1;
 }
