@@ -15,7 +15,6 @@ class Test : public QObject {
  private slots:
   void sanity();
 };
-
 }
 
 #endif  // TEST_TEST_H_
