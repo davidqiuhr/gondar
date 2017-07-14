@@ -23,3 +23,6 @@ ADD test /opt/gondar/test
 WORKDIR /opt/gondar/build
 RUN qmake-qt5 ..
 RUN make -j
+
+# Run tests in a headless mode
+RUN TESTARGS="-platform offscreen" make check
