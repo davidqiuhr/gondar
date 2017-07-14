@@ -6,7 +6,7 @@ else
 endif
 
 
-all: build-gondar
+all: build-gondar test
 
 
 # Build libminizip.a and libaes.a
@@ -29,6 +29,10 @@ clean:
 	rm -rf build
 
 
+test:
+	cd build && make check
+
+
 update-submodules:
 	git submodule update --init
 
@@ -39,4 +43,5 @@ update-submodules:
 		build/gondar \
 		build/minizip/libminizip.a \
 		clean \
+		test \
 		update-submodules

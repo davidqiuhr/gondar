@@ -10,6 +10,7 @@ RUN make
 WORKDIR /opt/gondar
 ADD plog /opt/gondar/plog
 ADD src /opt/gondar/src/
+ADD test /opt/gondar/test
 ADD *.pro *.qrc *.rc /opt/gondar/
 ADD images /opt/gondar/images
 ADD windows_resources /opt/gondar/windows_resources
