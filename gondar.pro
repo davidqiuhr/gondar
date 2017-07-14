@@ -1,2 +1,2 @@
 TEMPLATE = subdirs
-SUBDIRS = src/app.pro
+SUBDIRS = src/app.pro test
