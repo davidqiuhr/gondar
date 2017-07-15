@@ -12,11 +12,11 @@ endif
 all: build-gondar test
 
 
-# Build libminizip.a and libaes.a
+# Build libminizip.a
 build-minizip: update-submodules
 	mkdir -p "${BUILD_DIR}/minizip" && \
 		cd ${BUILD_DIR}/minizip && \
-		cmake ../../minizip && \
+		cmake -DUSE_AES=OFF ../../minizip && \
 		cmake --build .
 
 

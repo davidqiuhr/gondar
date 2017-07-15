@@ -10,7 +10,7 @@ RUN dnf install -y \
 # Build minizip
 ADD minizip /opt/gondar/minizip
 WORKDIR /opt/gondar/build/minizip
-RUN cmake ../../minizip
+RUN cmake -DUSE_AES=OFF ../../minizip
 RUN make -j
 
 # Build gondar
