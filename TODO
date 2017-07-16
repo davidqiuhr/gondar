@@ -1,0 +1,19 @@
+more warnings
+
+turn off console in release builds
+
+delete .pro files
+
+update the docs
+
+consolidate infra
+
+upload to github
+
+update package.py
+
+update the docker containers
+
+consolidate resources
+
+fix diskwritethread, we'll have to use a mutex

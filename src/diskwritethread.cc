@@ -2,7 +2,6 @@
 #include "diskwritethread.h"
 
 #include <QFile>
-#include <QTimer>
 
 #include "deviceguy.h"
 #include "gondar.h"
