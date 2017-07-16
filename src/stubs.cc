@@ -14,6 +14,7 @@ BOOL Install(DeviceGuy* target_device,
              int64_t image_size) {
   Q_UNUSED(target_device);
   Q_UNUSED(image_path);
+  Q_UNUSED(image_size);
   return true;
 }
 
