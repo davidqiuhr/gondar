@@ -7,7 +7,7 @@ functionality, but is useful as a development tool. This Dockerfile is
 used on Jenkins to ensure the Linux build doesn't break. You can run
 it manually with:
 
-	docker build -f docker/gondar-linux.Dockerfile .
+    docker build -f docker/gondar-linux.Dockerfile .
 
 ## gondar-win32
 
@@ -35,6 +35,6 @@ ensure reproducible builds of Gondar the MXE environment should be
 tagged with a version. Just use the highest existing version number
 plus one. For example, if the current version is v1, push v2 like this:
 
-	docker build -f mxe.Dockerfile -t neverware/gondar-build-mxe:v2 .
-	
-	docker push neverware/gondar-build-mxe:v2
+    docker build -f mxe.Dockerfile -t neverware/gondar-build-mxe:v2 .
+
+    docker push neverware/gondar-build-mxe:v2

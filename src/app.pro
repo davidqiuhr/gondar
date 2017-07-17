@@ -103,4 +103,4 @@ win32 {
   LIBS += -L../minizip
 }
 
-LIBS += -lminizip -lz -laes
+LIBS += -lminizip -lz
