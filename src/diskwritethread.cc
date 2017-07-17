@@ -2,7 +2,6 @@
 #include "diskwritethread.h"
 
 #include <QFile>
-#include <QTimer>
 
 #include "deviceguy.h"
 #include "gondar.h"
@@ -27,6 +26,7 @@ DiskWriteThread::DiskWriteThread(DeviceGuy* drive_in,
 DiskWriteThread::~DiskWriteThread() {}
 
 DiskWriteThread::State DiskWriteThread::state() const {
+  QMutexLocker locker(&state_mutex_);
   return state_;
 }
 
@@ -49,8 +49,6 @@ void DiskWriteThread::run() {
 }
 
 void DiskWriteThread::setState(const State state) {
-  // The QThread object (i.e. |this|) is the parent thread, not the
-  // thread it manages. This essentially posts a message to the parent
-  // thread to update the state.
-  QTimer::singleShot(0, this, [=]() { state_ = state; });
+  QMutexLocker locker(&state_mutex_);
+  state_ = state;
 }

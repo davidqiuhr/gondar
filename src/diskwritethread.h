@@ -2,6 +2,7 @@
 #ifndef DISKWRITE_THREAD_H
 #define DISKWRITE_THREAD_H
 
+#include <QMutex>
 #include <QString>
 #include <QThread>
 
@@ -29,12 +30,9 @@ class DiskWriteThread : public QThread {
   void run() override;
 
  private:
-  // When the thread wants to update the |state_| member it cannot do
-  // so directly since |state_| is not a thread-safe type. Instead,
-  // the thread calls this method which posts an event to the parent
-  // thread.
   void setState(State state);
 
+  mutable QMutex state_mutex_;
   State state_ = State::Initial;
   DeviceGuy selected_drive;
   QString image_path;
