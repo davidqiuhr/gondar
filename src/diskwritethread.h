@@ -16,7 +16,7 @@ class DiskWriteThread : public QThread {
                   QObject* parent = 0);
   ~DiskWriteThread();
 
-  enum class State : uint32_t {
+  enum class State {
     Initial,
     Running,
     GetFileSizeFailed,
@@ -34,7 +34,6 @@ class DiskWriteThread : public QThread {
 
   mutable QMutex state_mutex_;
   State state_ = State::Initial;
-
   DeviceGuy selected_drive;
   QString image_path;
 };
