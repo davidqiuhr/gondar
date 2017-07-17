@@ -42,7 +42,7 @@ qmake CONFIG+=debug
 
         aptitude install cmake qt5-default
 
-2. make -f Makefile.linux
+2. make
 
 ## Code style
 

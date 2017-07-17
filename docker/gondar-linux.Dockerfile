@@ -14,7 +14,7 @@ RUN cmake ../../minizip
 RUN make -j
 
 # Build gondar
-ADD Makefile.linux *.pro *.qrc /opt/gondar/
+ADD *.pro *.qrc /opt/gondar/
 ADD images /opt/gondar/images
 ADD plog /opt/gondar/plog
 ADD src /opt/gondar/src
