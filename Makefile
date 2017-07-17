@@ -36,7 +36,23 @@ format:
 
 
 help:
-	@echo "usage: make [build-gondar|clean|format|test]"
+	@echo "usage: make [build-gondar|clean|format|jenkins|test]"
+
+
+# The Jenkins entry point. The Jenkins job should be configured to run
+# "make jenkins".
+jenkins: jenkins-linux jenkins-win32
+
+
+jenkins-linux:
+	sudo docker build -f docker/gondar-linux.Dockerfile .
+
+jenkins-win32:
+ifdef RELEASE
+	python package.py --release
+else
+	python package.py
+endif
 
 
 # Run tests in headless mode
@@ -55,5 +71,8 @@ update-submodules:
 		build-minizip \
 		clean \
 		format \
+		jenkins \
+		jenkins-linux \
+		jenkins-win32 \
 		test \
 		update-submodules
