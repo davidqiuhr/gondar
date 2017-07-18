@@ -25,6 +25,8 @@ ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
 }
 
 QUrl ImageSelectPage::getUrl() const {
+  qDebug() << "in getUrl and thirtyTwoUrl=" << thirtyTwoUrl;
+  qDebug() << "in getUrl and sixtyFourUrl=" << sixtyFourUrl;
   QAbstractButton* selected = bitnessButtons.checkedButton();
   if (selected == &thirtyTwo) {
     return thirtyTwoUrl;
@@ -38,4 +40,12 @@ QUrl ImageSelectPage::getUrl() const {
 
 int ImageSelectPage::nextId() const {
   return GondarWizard::Page_usbInsert;
+}
+
+void ImageSelectPage::set32Url(QUrl url_in) {
+  thirtyTwoUrl = url_in;
+}
+
+void ImageSelectPage::set64Url(QUrl url_in) {
+  sixtyFourUrl = url_in;
 }

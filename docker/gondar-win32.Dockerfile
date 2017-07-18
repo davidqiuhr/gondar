@@ -15,5 +15,6 @@ ADD images /opt/gondar/images
 ADD windows_resources /opt/gondar/windows_resources
 
 ARG RELEASE=false
-RUN /opt/mxe/usr/bin/i686-w64-mingw32.static-qmake-qt5 gondar.pro chromeover=false release=$RELEASE
+ARG CHROMEOVER=false
+RUN /opt/mxe/usr/bin/i686-w64-mingw32.static-qmake-qt5 gondar.pro chromeover=$CHROMEOVER release=$RELEASE
 RUN make -j4 release

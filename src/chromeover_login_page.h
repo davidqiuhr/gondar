@@ -4,6 +4,7 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QLineEdit>
+#include <QNetworkReply>
 #include "wizard_page.h"
 
 class ChromeoverLoginPage : public gondar::WizardPage {
@@ -13,12 +14,27 @@ class ChromeoverLoginPage : public gondar::WizardPage {
   ChromeoverLoginPage(QWidget* parent = 0);
   int nextId() const override;
 
+ protected:
+  bool validatePage() override;
+
  private:
+  void startGetToken(QString username, QString password);
+  QString getToken(QNetworkReply* reply);
+  QNetworkAccessManager networkManager;
   QGridLayout layout;
   QLineEdit usernameLineEdit;
   QLabel usernameLineEditLabel;
   QLineEdit passwordLineEdit;
   QLabel passwordLineEditLabel;
+  QLabel meanWordsLabel;
+  int outstandingSites;
+  QString apiToken;
+  bool finished;
+  bool started;
+ public slots:
+  void tokenRequestFinished(QNetworkReply* reply);
+  void sitesRequestFinished(QNetworkReply* reply);
+  void imageUrlRequestFinished(QNetworkReply* reply);
 };
 
 #endif

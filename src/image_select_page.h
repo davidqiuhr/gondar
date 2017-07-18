@@ -15,6 +15,8 @@ class ImageSelectPage : public gondar::WizardPage {
   ImageSelectPage(QWidget* parent = 0);
   QUrl getUrl() const;
   int nextId() const override;
+  void set32Url(QUrl url_in);
+  void set64Url(QUrl url_in);
 
  private:
   QButtonGroup bitnessButtons;
