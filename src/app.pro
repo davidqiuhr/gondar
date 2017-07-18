@@ -86,7 +86,7 @@ target.path = .
 INSTALLS += target
 
 TEMPLATE = app
-TARGET = ../cloudready-usb-creator
+TARGET = cloudready-usb-creator
 
 win32 {
   LIBS += -L../build/minizip-mxe
