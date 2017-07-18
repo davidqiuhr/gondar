@@ -71,6 +71,11 @@ def main():
     run_container(image_name,
                   'cp', '-r', '/opt/gondar/src/release/', '/opt/host',
                   volumes=[volume])
+    # Change ownership of the output from root to the user running
+    # this script
+    run_cmd('sudo', 'chown', '--recursive',
+            '{}:{}'.format(os.getuid(), os.getgid()),
+            output_path)
 
 
 if __name__ == '__main__':
