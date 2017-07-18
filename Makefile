@@ -1,10 +1,18 @@
 BUILD_DIR ?= build
+CMAKE ?= cmake
 
-# qmake is called different things in different distributions
-ifneq (, $(shell which qmake-qt5))
-    QMAKE=qmake-qt5
+# Some distros use different names for qmake and clang-format
+
+ifneq (, $(shell which clang-format))
+    CLANG_FORMAT ?= clang-format
 else
-    QMAKE=qmake
+    CLANG_FORMAT ?= clang-format-4.0
+endif
+
+ifneq (, $(shell which qmake-qt5))
+    QMAKE ?= qmake-qt5
+else
+    QMAKE ?= qmake
 endif
 
 
@@ -13,11 +21,11 @@ all: build-gondar test
 
 
 # Build libminizip.a
-build-minizip: update-submodules
+build-minizip: print-config update-submodules
 	mkdir -p "${BUILD_DIR}/minizip" && \
 		cd ${BUILD_DIR}/minizip && \
-		cmake -DUSE_AES=OFF ../../minizip && \
-		cmake --build .
+		${CMAKE} -DUSE_AES=OFF ../../minizip && \
+		${CMAKE} --build .
 
 
 # Build gondar executable
@@ -32,7 +40,7 @@ clean:
 
 
 format:
-	clang-format -i src/*.{h,c,cc} test/*.{h,cc}
+	${CLANG_FORMAT} -i src/*.{h,c,cc} test/*.{h,cc}
 
 
 help:
@@ -55,6 +63,14 @@ else
 endif
 
 
+print-config:
+	@echo "Build config {"
+	@echo "  BUILD_DIR: ${BUILD_DIR}"
+	@echo "  CMAKE: ${CMAKE}"
+	@echo "  QMAKE: ${QMAKE}"
+	@echo "}"
+
+
 # Run tests in headless mode
 test: build-gondar
 	cd ${BUILD_DIR} && TESTARGS="-platform offscreen" make check
@@ -74,5 +90,6 @@ update-submodules:
 		jenkins \
 		jenkins-linux \
 		jenkins-win32 \
+		print-config \
 		test \
 		update-submodules
