@@ -31,6 +31,7 @@ GondarWizard::GondarWizard(QWidget* parent) : QWizard(parent) {
   // chromeoverLogin and imageSelect are alternatives to each other
   // that both progress to usbInsertPage
   setPage(Page_chromeoverLogin, &chromeoverLoginPage);
+  setPage(Page_siteSelect, &siteSelectPage);
   setPage(Page_imageSelect, &imageSelectPage);
   setPage(Page_usbInsert, &usbInsertPage);
   setPage(Page_deviceSelect, &deviceSelectPage);

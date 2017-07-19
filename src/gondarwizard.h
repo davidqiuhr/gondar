@@ -14,6 +14,7 @@
 #include "diskwritethread.h"
 #include "downloader.h"
 #include "image_select_page.h"
+#include "site_select_page.h"
 #include "unzipthread.h"
 #include "wizard_page.h"
 
@@ -158,6 +159,7 @@ class GondarWizard : public QWizard {
   AdminCheckPage adminCheckPage;
   ErrorPage errorPage;
   ChromeoverLoginPage chromeoverLoginPage;
+  SiteSelectPage siteSelectPage;
   ImageSelectPage imageSelectPage;
   DownloadProgressPage downloadProgressPage;
   UsbInsertPage usbInsertPage;
@@ -168,6 +170,7 @@ class GondarWizard : public QWizard {
   enum {
     Page_adminCheck,
     Page_chromeoverLogin,
+    Page_siteSelect,
     Page_imageSelect,
     Page_usbInsert,
     Page_deviceSelect,

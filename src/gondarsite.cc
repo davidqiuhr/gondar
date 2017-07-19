@@ -1,8 +1,17 @@
 
+#include <QDebug>
 #include "gondarsite.h"
 
-GondarSite::GondarSite(QString siteName, QUrl url32, QUrl url64) {
-  siteName = siteName;
-  url32 = url32;
-  url64 = url64;
+GondarSite::GondarSite(int siteIdIn, QString siteNameIn) {
+  siteId = siteIdIn;
+  siteName = siteNameIn;
+  setText(siteName);
+}
+
+void GondarSite::set32Url(QUrl url) {
+  url32 = url;
+}
+
+void GondarSite::set64Url(QUrl url) {
+  url64 = url;
 }

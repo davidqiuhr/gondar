@@ -4,7 +4,9 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QLineEdit>
+#include <QList>
 #include <QNetworkReply>
+#include "gondarsite.h"
 #include "wizard_page.h"
 
 class ChromeoverLoginPage : public gondar::WizardPage {
@@ -13,6 +15,7 @@ class ChromeoverLoginPage : public gondar::WizardPage {
  public:
   ChromeoverLoginPage(QWidget* parent = 0);
   int nextId() const override;
+  QList<GondarSite*> siteList;
 
  protected:
   bool validatePage() override;

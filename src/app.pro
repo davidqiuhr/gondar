@@ -22,11 +22,13 @@ HEADERS       = admin_check_page.h \
                 diskwritethread.h \
                 downloader.h \
                 gondar.h \
+                gondarsite.h \
                 gondarwizard.h \
                 image_select_page.h \
                 log.h \
                 neverware_unzipper.h \
                 shared.h \
+                site_select_page.h \
                 unzipthread.h \
                 wizard_page.h
 SOURCES       = ../minizip/minishared.c \
@@ -36,11 +38,13 @@ SOURCES       = ../minizip/minishared.c \
                 deviceguy.cc \
                 diskwritethread.cc \
                 downloader.cc \
+                gondarsite.cc \
                 gondarwizard.cc \
                 image_select_page.cc \
                 log.cc \
                 main.cc \
                 neverware_unzipper.cc \
+                site_select_page.cc \
                 unzipthread.cc \
                 wizard_page.cc
 RESOURCES     = ../gondarwizard.qrc
