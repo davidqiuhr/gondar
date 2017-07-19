@@ -79,9 +79,9 @@ test: build-gondar
 update-submodules:
 # Skip submodule update if not in a git workspace
 ifeq ($(realpath .git),)
-		@echo "skipping submodule update"
+	@echo "skipping submodule update"
 else
-		git submodule update --init
+	git submodule update --init
 endif
 
 
