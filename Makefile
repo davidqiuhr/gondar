@@ -77,7 +77,12 @@ test: build-gondar
 
 
 update-submodules:
+# Skip submodule update if not in a git workspace
+ifeq ($(realpath .git),)
+	@echo "skipping submodule update"
+else
 	git submodule update --init
+endif
 
 
 # The targets under "build-" are phony targets because those targets
