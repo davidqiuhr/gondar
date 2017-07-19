@@ -11,6 +11,7 @@
 
 #include "deviceguy.h"
 #include "gondar.h"
+#include "log.h"
 #include "neverware_unzipper.h"
 
 DeviceGuyList* drivelist = NULL;
@@ -68,6 +69,7 @@ void GondarWizard::postError(const QString& error) {
 }
 
 void GondarWizard::catchError(const QString& error) {
+  LOG_ERROR << "displaying error: " << error;
   errorPage.setErrorString(error);
   next();
 }
@@ -312,6 +314,26 @@ void WriteOperationPage::showProgress() {
 }
 
 void WriteOperationPage::onDoneWriting() {
+  switch (diskWriteThread->state()) {
+    case DiskWriteThread::State::Initial:
+    case DiskWriteThread::State::Running:
+      // It should not be possible to get here at runtime
+      writeFailed("Internal state error");
+      return;
+
+    case DiskWriteThread::State::GetFileSizeFailed:
+      writeFailed("Error reading the disk image's file size");
+      return;
+
+    case DiskWriteThread::State::InstallFailed:
+      writeFailed("Error writing to the USB device");
+      return;
+
+    case DiskWriteThread::State::Success:
+      // Hooray!
+      break;
+  }
+
   setTitle("CloudReady USB created!");
   setSubTitle("You may now either exit or create another USB.");
   qDebug() << "install call returned";
@@ -329,7 +351,7 @@ int WriteOperationPage::nextId() const {
 }
 
 void WriteOperationPage::setVisible(bool visible) {
-  QWizardPage::setVisible(visible);
+  WizardPage::setVisible(visible);
   GondarWizard* wiz = dynamic_cast<GondarWizard*>(wizard());
   if (visible) {
     setButtonText(QWizard::CustomButton1, "Make Another USB");
@@ -340,6 +362,12 @@ void WriteOperationPage::setVisible(bool visible) {
     disconnect(wiz, SIGNAL(customButtonClicked(int)), wiz,
                SLOT(handleMakeAnother()));
   }
+}
+
+void WriteOperationPage::writeFailed(const QString& errorMessage) {
+  wizard()->postError(errorMessage);
+  writeFinished = true;
+  emit completeChanged();
 }
 
 ErrorPage::ErrorPage(QWidget* parent) : WizardPage(parent) {
@@ -356,17 +384,15 @@ void ErrorPage::setErrorString(const QString& errorStringIn) {
 }
 
 bool ErrorPage::errorEmpty() const {
-  return errorString.isEmpty();
+  return label.text().isEmpty();
 }
 
-// though error page follows in index, this is the end of the wizard for
-// healthy flows
 int ErrorPage::nextId() const {
   return -1;
 }
 
 void ErrorPage::setVisible(bool visible) {
-  QWizardPage::setVisible(visible);
+  WizardPage::setVisible(visible);
   if (visible) {
     setButtonText(QWizard::CustomButton1, "Exit");
     wizard()->setOption(QWizard::HaveCustomButton1, true);

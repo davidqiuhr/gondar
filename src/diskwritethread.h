@@ -2,6 +2,7 @@
 #ifndef DISKWRITE_THREAD_H
 #define DISKWRITE_THREAD_H
 
+#include <QMutex>
 #include <QString>
 #include <QThread>
 
@@ -15,10 +16,24 @@ class DiskWriteThread : public QThread {
                   QObject* parent = 0);
   ~DiskWriteThread();
 
+  enum class State {
+    Initial,
+    Running,
+    GetFileSizeFailed,
+    InstallFailed,
+    Success,
+  };
+
+  State state() const;
+
  protected:
   void run() override;
 
  private:
+  void setState(State state);
+
+  mutable QMutex state_mutex_;
+  State state_ = State::Initial;
   DeviceGuy selected_drive;
   QString image_path;
 };

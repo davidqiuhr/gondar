@@ -15,8 +15,8 @@ To make a build in one step, run:
 `package.py` will handle building everything for you using mxe in a
 docker container.  Check out `docker/gondar-win32.Dockerfile` to see
 how that happens.
-    
-To configure a debub build, modify `gondar.pro` with 
+
+To configure a debug build, modify `gondar.pro` with
 
 ```
 qmake CONFIG+=debug
@@ -35,14 +35,14 @@ qmake CONFIG+=debug
 1. Install dependencies (distro specific):
 
     Fedora:
-    
+
         dnf install cmake qt5-qtbase-devel
 
     Ubuntu:
 
         aptitude install cmake qt5-default
 
-2. make -f Makefile.linux
+2. make
 
 ## Code style
 
@@ -65,7 +65,7 @@ Download and decompress the Windows image:
 Create the backing image for the emulated USB device:
 
     qemu-img create -f raw fakeusb.raw 16G
-    
+
 *TODO(nicholasbishop): could probably also set up a device passthrough
 for testing on actual USB devices...*
 

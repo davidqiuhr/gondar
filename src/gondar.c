@@ -2402,7 +2402,7 @@ DeviceGuyList* GetDeviceList() {
   return device_list;
 }
 
-void Install(DeviceGuy* target_device,
+BOOL Install(DeviceGuy* target_device,
              const char* image_path,
              int64_t image_size) {
   uint64_t device_num = target_device->device_num;
@@ -2415,6 +2415,7 @@ void Install(DeviceGuy* target_device,
   HANDLE source_img =
       CreateFileU(image_path, GENERIC_READ, FILE_SHARE_READ, NULL,
                   OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN, NULL);
+  BOOL ret = FALSE;
   // TODO(kendall): make sure the handlers don't equal INVALID_HANDLE_VALUE
   safe_free(physical_path);
   if (phys_handle != INVALID_HANDLE_VALUE &&
@@ -2431,11 +2432,14 @@ void Install(DeviceGuy* target_device,
     printf("kendall: physical handle invalid!\n");
   }
 
-  WriteDrive(phys_handle, source_img, sector_size, drive_size, image_size);
-  printf("kendall: drive write complete\n");
+  ret =
+      WriteDrive(phys_handle, source_img, sector_size, drive_size, image_size);
+
   // close the handles we created so that Install() may be called again
   // within this same run
   safe_closehandle(phys_handle);
   safe_closehandle(hLogicalVolume);
   safe_closehandle(source_img);
+
+  return ret;
 }
