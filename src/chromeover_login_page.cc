@@ -28,38 +28,43 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
   setLayout(&layout);
   // not sure about this design choice yet
   outstandingSites = 0;
+}
+
+void ChromeoverLoginPage::initializePage() {
+  // clear out the siteList if it's not empty
+  if (!siteList.isEmpty()) {
+    //TODO: test this logic
+    for (int i = 0; i < siteList.size(); i++) {
+      delete siteList.at(i);
+    }
+  }
   finished = false;
-  // don't allow multiple launches of this logic
+  // don't allow multiple launches of the site information fetching process
+  // at once
   started = false;
 }
 
 int ChromeoverLoginPage::nextId() const {
-  //TODO: if we have more than two sites, go to Page_siteSelect
-  // otherwise, go to Page_imageSelect
-  //TODO: think about the bypass case; where will the imaages get updated?
-  // is it too weird to just do it in this page's logic like i had it initially?
   if (siteList.size() == 0) {
     return GondarWizard::Page_error;
   } else if (siteList.size() > 1) {
+    // if there are multiple sites, we'll set the urls on the site select page
     return GondarWizard::Page_siteSelect;
   } else {
+    // otherwise, we can skip that step and update the urls here
     wizard()->imageSelectPage.set64Url(siteList[0]->url64);
     wizard()->imageSelectPage.set32Url(siteList[0]->url32);
-    // update the urls here
     return GondarWizard::Page_imageSelect;
   }
 }
 
 bool ChromeoverLoginPage::validatePage() {
-  // TODO: let's grab the field contents here
-  // these work
   QString username = usernameLineEdit.text();
   QString password = passwordLineEdit.text();
   if (finished) {
     return true;
   }
   if (!started) {
-    // step 1: log in and get api token
     startGetToken(username, password);
   }
   started = true;
@@ -134,9 +139,9 @@ void ChromeoverLoginPage::sitesRequestFinished(QNetworkReply* reply) {
     QJsonObject cur = sitesArray.at(i).toObject();
     int siteId = cur["site_id"].toInt();
     QString siteIdStr = QString::number(siteId);
-    QString site_name = cur["name"].toString();
-    GondarSite * cur_site = new GondarSite(siteId, site_name);
-    siteList << cur_site;
+    QString siteName = cur["name"].toString();
+    GondarSite * curSite = new GondarSite(siteId, siteName);
+    siteList << curSite;
     // we want to ask for the downloads for this site
     QUrl downloadsUrl("https://api.grv.neverware.com/poof/sites/" + siteIdStr +
                       "/downloads");
@@ -161,7 +166,6 @@ void ChromeoverLoginPage::imageUrlRequestFinished(QNetworkReply* reply) {
 
   // the site number will be third symbol deep splitting on / of path
   QString siteName = reply->request().url().path().split("/").at(3);
-  //TODO: find the site entry we made in sitesRequestFinished 
   int siteNum = siteName.toInt();
   GondarSite * thisSite = NULL;
   for (int i = 0; i < siteList.size(); i++) {
@@ -170,7 +174,6 @@ void ChromeoverLoginPage::imageUrlRequestFinished(QNetworkReply* reply) {
     }
   }
   if (thisSite == NULL) {
-    // not really sure when this would happen
     qDebug() << "ERROR: site not found!";
   }
 
@@ -181,23 +184,17 @@ void ChromeoverLoginPage::imageUrlRequestFinished(QNetworkReply* reply) {
   for (int i = 0; i < downloadsObj.size(); i++) {
     QJsonValue kewlvalue = downloadsObj.keys().at(i);
   }
-  // for starters, let's just use cloudready
+  // for starters, let's just use use the cloudready product
   QJsonValue downloadsValue = downloadsObj["CloudReady"];
   QJsonArray downloadsArray = downloadsValue.toArray();
-  // for starters, let's just use "32-bit" and "64-bit"
-
+  // for starters, let's just use "32-bit" and "64-bit" builds
   for (int i = 0; i < downloadsArray.size(); i++) {
     QJsonObject download = downloadsArray.at(i).toObject();
     if (download["title"] == "64-Bit") {
       QUrl url64(download["url"].toString());
-      //FIXME: if there are multiple sites, whatever site responds last
-      // will get to use its values.  that is kind of a weird behavior
-      // even for an initial pass.
-      //wizard()->imageSelectPage.set64Url(url64);
       thisSite->set64Url(url64);
     } else if (download["title"] == "32-Bit") {
       QUrl url32(download["url"].toString());
-      //wizard()->imageSelectPage.set32Url(url32);
       thisSite->set32Url(url32);
     }
   }
@@ -208,6 +205,9 @@ void ChromeoverLoginPage::imageUrlRequestFinished(QNetworkReply* reply) {
     qDebug() << "received information for all outstanding site requests";
     disconnect(&networkManager, SIGNAL(finished(QNetworkReply*)), this,
                SLOT(imageUrlRequestFinished(QNetworkReply*)));
+    // we don't want users to be able to pass through the screen by pressing
+    // next while processing.  this will make validatePage pass and immediately
+    // move the user on to the next screen
     finished = true;
     wizard()->next();
   }
