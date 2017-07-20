@@ -125,6 +125,7 @@ void ChromeoverLoginPage::sitesRequestFinished(QNetworkReply* reply) {
     int siteId = cur["site_id"].toInt();
     QString siteIdStr = QString::number(siteId);
     QString siteName = cur["name"].toString();
+    // FIXME: leak
     GondarSite * curSite = new GondarSite(siteId, siteName);
     siteList << curSite;
     // we want to ask for the downloads for this site
