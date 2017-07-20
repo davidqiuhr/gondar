@@ -9,8 +9,12 @@ class GondarSite : public QRadioButton {
  Q_OBJECT
  public:
   GondarSite(int siteIdIn, QString siteNameIn);
+  int getSiteId();
   void set32Url(QUrl url);
   void set64Url(QUrl url);
+  QUrl get32Url();
+  QUrl get64Url();
+ private:
   int siteId;
   QString siteName;
   QUrl url32;

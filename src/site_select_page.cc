@@ -29,10 +29,10 @@ bool SiteSelectPage::validatePage() {
   } else {
     // if we have a site selected, update our download links for that
     // go find the sitesList
-    qDebug() << "DEBUG: url64 selected=" << selected->url64;
-    qDebug() << "DEBUG: url32 selected=" << selected->url64;
-    wizard()->imageSelectPage.set64Url(selected->url64);
-    wizard()->imageSelectPage.set32Url(selected->url32);
+    qDebug() << "DEBUG: url64 selected=" << selected->get64Url();
+    qDebug() << "DEBUG: url32 selected=" << selected->get32Url();
+    wizard()->imageSelectPage.set64Url(selected->get64Url());
+    wizard()->imageSelectPage.set32Url(selected->get32Url());
     return true;
   }
 }

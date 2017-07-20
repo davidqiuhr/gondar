@@ -37,8 +37,8 @@ int ChromeoverLoginPage::nextId() const {
     return GondarWizard::Page_siteSelect;
   } else {
     // otherwise, we can skip that step and update the urls here
-    wizard()->imageSelectPage.set64Url(siteList[0]->url64);
-    wizard()->imageSelectPage.set32Url(siteList[0]->url32);
+    wizard()->imageSelectPage.set64Url(siteList[0]->get64Url());
+    wizard()->imageSelectPage.set32Url(siteList[0]->get32Url());
     return GondarWizard::Page_imageSelect;
   }
 }
@@ -151,7 +151,7 @@ void ChromeoverLoginPage::imageUrlRequestFinished(QNetworkReply* reply) {
   int siteNum = siteName.toInt();
   GondarSite * thisSite = NULL;
   for (int i = 0; i < siteList.size(); i++) {
-    if (siteList[i]->siteId == siteNum) {
+    if (siteList[i]->getSiteId() == siteNum) {
       thisSite = siteList[i];
     }
   }
