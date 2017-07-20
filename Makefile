@@ -1,18 +1,24 @@
 BUILD_DIR ?= build
+CHROMEOVER ?= false
 CMAKE ?= cmake
+RELEASE ?= false
 
-# Some distros use different names for qmake and clang-format
-
+# Some distros use different names for clang-format
 ifneq (, $(shell which clang-format))
     CLANG_FORMAT ?= clang-format
 else
     CLANG_FORMAT ?= clang-format-4.0
 endif
 
-ifneq (, $(shell which qmake-qt5))
-    QMAKE ?= qmake-qt5
+# Release mode vs normal debug mode
+ifeq (${RELEASE}, true)
+	CMAKE_BUILD_TYPE ?= RelWithDebInfo
+	PACKAGE_FLAGS ?= --release
+	WIN32_CONSOLE ?= OFF
 else
-    QMAKE ?= qmake
+	CMAKE_BUILD_TYPE ?= Debug
+	WIN32_CONSOLE ?= ON
+	PACKAGE_FLAGS ?=
 endif
 
 
@@ -20,18 +26,13 @@ endif
 all: build-gondar test
 
 
-# Build libminizip.a
-build-minizip: print-config update-submodules
-	mkdir -p "${BUILD_DIR}/minizip" && \
-		cd ${BUILD_DIR}/minizip && \
-		${CMAKE} -DUSE_AES=OFF ../../minizip && \
-		${CMAKE} --build .
-
-
 # Build gondar executable
-build-gondar: build-minizip
+build-gondar: print-config update-submodules
+	mkdir -p "${BUILD_DIR}" && \
 	cd ${BUILD_DIR} && \
-		${QMAKE} .. && \
+		${CMAKE} .. \
+			-DCHROMEOVER=${CHROMEOVER} \
+			-DWIN32_CONSOLE=${WIN32_CONSOLE} && \
 		make -j
 
 
@@ -55,25 +56,26 @@ jenkins: jenkins-linux jenkins-win32
 jenkins-linux:
 	sudo docker build -f docker/gondar-linux.Dockerfile .
 
+
 jenkins-win32:
-ifdef RELEASE
-	python package.py --release
-else
-	python package.py
-endif
+	python package.py ${PACKAGE_FLAGS}
 
 
 print-config:
 	@echo "Build config {"
 	@echo "  BUILD_DIR: ${BUILD_DIR}"
+	@echo "  CHROMEOVER: ${CHROMEOVER}"
 	@echo "  CMAKE: ${CMAKE}"
-	@echo "  QMAKE: ${QMAKE}"
+	@echo "  CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}"
+	@echo "  PACKAGE_FLAGS: '${PACKAGE_FLAGS}' (only affects docker win32 builds)"
+	@echo "  RELEASE: ${RELEASE}"
+	@echo "  WIN32_CONSOLE: ${WIN32_CONSOLE} (only affects win32 builds)"
 	@echo "}"
 
 
 # Run tests in headless mode
 test: build-gondar
-	cd ${BUILD_DIR} && TESTARGS="-platform offscreen" make check
+	${BUILD_DIR}/tests -platform offscreen
 
 
 update-submodules:
@@ -89,7 +91,6 @@ endif
 # handle the real dependency tracking internally
 .PHONY: all \
 		build-gondar \
-		build-minizip \
 		clean \
 		format \
 		jenkins \

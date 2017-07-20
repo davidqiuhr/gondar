@@ -8,8 +8,9 @@ RUN dnf install -y \
     which \
 	zlib-devel
 
-ADD Makefile *.pro *.qrc /opt/gondar/
+ADD CMakeLists.txt Makefile *.pro *.qrc /opt/gondar/
 ADD images /opt/gondar/images
+ADD infra /opt/gondar/infra
 ADD minizip /opt/gondar/minizip
 ADD plog /opt/gondar/plog
 ADD src /opt/gondar/src

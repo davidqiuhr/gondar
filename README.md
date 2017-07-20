@@ -7,6 +7,17 @@ CloudReady releases and burn it onto a USB stick for immediate use.
 We're primarily targeting Windows 10 for compatibility.
 
 ## Building
+
+### Via Makefile
+
+Run `make`. This will build Gondar for Linux by default, as well as
+run the tests. The actual build uses CMake, so you can also do the
+usual `mkdir build && cd build && cmake .. && make` dance.
+
+There are a number of environment variables you can pass to the
+top-level Makefile to control how it gets built. These are printed out
+at the beginning of the build (look for "Build config").
+
 ### With package.py
 To make a build in one step, run:
 ```
@@ -16,33 +27,23 @@ To make a build in one step, run:
 docker container.  Check out `docker/gondar-win32.Dockerfile` to see
 how that happens.
 
-To configure a debug build, modify `gondar.pro` with
-
-```
-qmake CONFIG+=debug
-```
-
 ### With MXE directly
 
 * Get MXE `git clone https://github.com/mxe/mxe`
 
 * Build required packages for mxe `make qtbase` in mxe dir
 
-* run the command included in winqmake
+* `CMAKE=/path/to/mxe/usr/bin/i686-w64-mingw32.static-cmake make`
 
-### Build for Linux
+### Linux dependencies
 
-1. Install dependencies (distro specific):
+Fedora:
 
-    Fedora:
+    dnf install cmake qt5-qtbase-devel
 
-        dnf install cmake qt5-qtbase-devel
+Ubuntu:
 
-    Ubuntu:
-
-        aptitude install cmake qt5-default
-
-2. make
+    aptitude install cmake qt5-default
 
 ## Code style
 
