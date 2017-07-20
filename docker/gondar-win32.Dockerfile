@@ -2,6 +2,7 @@ FROM neverware/gondar-build-mxe:v2
 
 ENV PATH=$PATH:/opt/mxe/usr/bin
 ENV CMAKE=i686-w64-mingw32.static-cmake
+ENV TREAT_WARNINGS_AS_ERRORS=true
 
 ADD CMakeLists.txt Makefile *.pro *.qrc *.rc /opt/gondar/
 ADD images /opt/gondar/images
