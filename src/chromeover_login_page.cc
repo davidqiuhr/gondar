@@ -163,9 +163,6 @@ void ChromeoverLoginPage::imageUrlRequestFinished(QNetworkReply* reply) {
   QJsonDocument jsonDoc = QJsonDocument::fromJson(replyStr.toUtf8());
   QJsonObject jsonObj = jsonDoc.object();
   QJsonObject downloadsObj = jsonObj["links"].toObject();
-  for (int i = 0; i < downloadsObj.size(); i++) {
-    QJsonValue kewlvalue = downloadsObj.keys().at(i);
-  }
   // for starters, let's just use use the cloudready product
   QJsonValue downloadsValue = downloadsObj["CloudReady"];
   QJsonArray downloadsArray = downloadsValue.toArray();
