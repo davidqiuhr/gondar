@@ -111,15 +111,12 @@ void ChromeoverLoginPage::sitesRequestFinished(QNetworkReply* reply) {
 
   QString replyStr = (QString)reply->readAll();
   QJsonDocument jsonDoc = QJsonDocument::fromJson(replyStr.toUtf8());
-  QJsonObject jsonObj = jsonDoc.object();
-  QJsonValue sitesObj = jsonObj["sites"];
-  QJsonArray sitesArray = sitesObj.toArray();
+  QJsonArray sitesArray= jsonDoc.object()["sites"].toArray();
 
   // first connect our listener guy
   connect(&networkManager, SIGNAL(finished(QNetworkReply*)), this,
           SLOT(imageUrlRequestFinished(QNetworkReply*)));
   // for site in sites, go get the image endpoints for those sites
-
   for (int i = 0; i < sitesArray.size(); i++) {
     QJsonObject cur = sitesArray.at(i).toObject();
     int siteId = cur["site_id"].toInt();
@@ -131,7 +128,6 @@ void ChromeoverLoginPage::sitesRequestFinished(QNetworkReply* reply) {
     // we want to ask for the downloads for this site
     QUrl downloadsUrl("https://api.grv.neverware.com/poof/sites/" + siteIdStr +
                       "/downloads");
-    // this time we will want to add params like i had earlier
     QUrlQuery query;
     query.addQueryItem("token", apiToken);
     downloadsUrl.setQuery(query);
