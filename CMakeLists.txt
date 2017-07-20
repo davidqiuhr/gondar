@@ -37,7 +37,7 @@ target_compile_options(minizip_extra PRIVATE -Wno-unused-parameter -Wno-format)
 # Static lib containing the bulk of gondar, shared between the
 # application and test targets
 add_library(app STATIC
-  gondarwizard.qrc
+  resources/gondarwizard.qrc
   src/admin_check_page.cc
   src/chromeover_login_page.cc
   src/deviceguy.cc
@@ -79,7 +79,7 @@ if(WIN32)
 
   fix_qt_static_link(app)
   add_win32_usb_support(app)
-  target_sources(cloudready-usb-creator PRIVATE gondar.rc)
+  target_sources(cloudready-usb-creator PRIVATE resources/gondar.rc)
 else()
   target_sources(app PRIVATE src/stubs.cc)
 endif()
