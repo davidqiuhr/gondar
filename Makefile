@@ -2,6 +2,7 @@ BUILD_DIR ?= build
 CHROMEOVER ?= false
 CMAKE ?= cmake
 RELEASE ?= false
+TREAT_WARNINGS_AS_ERRORS ?= false
 
 # Some distros use different names for clang-format
 ifneq (, $(shell which clang-format))
@@ -69,6 +70,7 @@ print-config:
 	@echo "  CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}"
 	@echo "  PACKAGE_FLAGS: '${PACKAGE_FLAGS}' (only affects docker win32 builds)"
 	@echo "  RELEASE: ${RELEASE}"
+	@echo "  TREAT_WARNINGS_AS_ERRORS: ${TREAT_WARNINGS_AS_ERRORS}"
 	@echo "  WIN32_CONSOLE: ${WIN32_CONSOLE} (only affects win32 builds)"
 	@echo "}"
 

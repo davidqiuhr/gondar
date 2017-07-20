@@ -8,6 +8,8 @@ RUN dnf install -y \
     which \
 	zlib-devel
 
+ENV TREAT_WARNINGS_AS_ERRORS=true
+
 ADD CMakeLists.txt Makefile *.pro *.qrc /opt/gondar/
 ADD images /opt/gondar/images
 ADD infra /opt/gondar/infra
