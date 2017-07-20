@@ -72,7 +72,7 @@ def main():
     build_image(image_name, args.release, args.chromeover)
     volume = (output_path, '/opt/host')
     run_container(image_name,
-                  'cp', '-r', '/opt/gondar/src/release/', '/opt/host',
+                  'cp', '-r', '/opt/gondar/build/', '/opt/host',
                   volumes=[volume])
     # Change ownership of the output from root to the user running
     # this script
