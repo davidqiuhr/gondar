@@ -18,7 +18,6 @@ class ChromeoverLoginPage : public gondar::WizardPage {
   QList<GondarSite*> siteList;
 
  protected:
-  void initializePage() override;
   bool validatePage() override;
 
  private:

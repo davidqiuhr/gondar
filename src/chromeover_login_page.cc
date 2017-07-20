@@ -30,20 +30,6 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
   outstandingSites = 0;
 }
 
-void ChromeoverLoginPage::initializePage() {
-  // clear out the siteList if it's not empty
-  if (!siteList.isEmpty()) {
-    //TODO: test this logic
-    for (int i = 0; i < siteList.size(); i++) {
-      delete siteList.at(i);
-    }
-  }
-  finished = false;
-  // don't allow multiple launches of the site information fetching process
-  // at once
-  started = false;
-}
-
 int ChromeoverLoginPage::nextId() const {
   if (siteList.size() == 0) {
     return GondarWizard::Page_error;
@@ -209,6 +195,8 @@ void ChromeoverLoginPage::imageUrlRequestFinished(QNetworkReply* reply) {
     // next while processing.  this will make validatePage pass and immediately
     // move the user on to the next screen
     finished = true;
+    // TODO: let's make this a commit page so we don't have to worry about
+    // the case of a user revisiting this segment for now
     wizard()->next();
   }
 }
