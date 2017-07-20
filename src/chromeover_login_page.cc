@@ -26,7 +26,6 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
   layout.addWidget(&meanWordsLabel, 2, 0);
   meanWordsLabel.setVisible(false);
   setLayout(&layout);
-  // not sure about this design choice yet
   outstandingSites = 0;
 }
 
