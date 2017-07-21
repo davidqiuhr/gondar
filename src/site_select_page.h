@@ -14,9 +14,11 @@ class SiteSelectPage : public gondar::WizardPage {
 
  public:
   SiteSelectPage(QWidget* parent = 0);
+
  protected:
   void initializePage() override;
   bool validatePage() override;
+
  private:
   QButtonGroup sitesButtons;
   QVBoxLayout layout;

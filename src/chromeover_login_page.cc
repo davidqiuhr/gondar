@@ -111,7 +111,7 @@ void ChromeoverLoginPage::sitesRequestFinished(QNetworkReply* reply) {
 
   QString replyStr = (QString)reply->readAll();
   QJsonDocument jsonDoc = QJsonDocument::fromJson(replyStr.toUtf8());
-  QJsonArray sitesArray= jsonDoc.object()["sites"].toArray();
+  QJsonArray sitesArray = jsonDoc.object()["sites"].toArray();
 
   // first connect our listener guy
   connect(&networkManager, SIGNAL(finished(QNetworkReply*)), this,
@@ -123,7 +123,7 @@ void ChromeoverLoginPage::sitesRequestFinished(QNetworkReply* reply) {
     QString siteIdStr = QString::number(siteId);
     QString siteName = cur["name"].toString();
     // FIXME: leak
-    GondarSite * curSite = new GondarSite(siteId, siteName);
+    GondarSite* curSite = new GondarSite(siteId, siteName);
     siteList << curSite;
     // we want to ask for the downloads for this site
     QUrl downloadsUrl("https://api.grv.neverware.com/poof/sites/" + siteIdStr +
@@ -149,7 +149,7 @@ void ChromeoverLoginPage::imageUrlRequestFinished(QNetworkReply* reply) {
   // the site number will be third symbol deep splitting on / of path
   QString siteName = reply->request().url().path().split("/").at(3);
   int siteNum = siteName.toInt();
-  GondarSite * thisSite = NULL;
+  GondarSite* thisSite = NULL;
   for (int i = 0; i < siteList.size(); i++) {
     if (siteList[i]->getSiteId() == siteNum) {
       thisSite = siteList[i];

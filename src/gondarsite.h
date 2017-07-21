@@ -6,7 +6,7 @@
 #include <QUrl>
 
 class GondarSite : public QRadioButton {
- Q_OBJECT
+  Q_OBJECT
  public:
   GondarSite(int siteIdIn, QString siteNameIn);
   int getSiteId();
@@ -14,6 +14,7 @@ class GondarSite : public QRadioButton {
   void set64Url(QUrl url);
   QUrl get32Url();
   QUrl get64Url();
+
  private:
   int siteId;
   QString siteName;

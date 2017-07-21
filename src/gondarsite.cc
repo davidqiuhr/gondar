@@ -1,6 +1,6 @@
 
-#include <QDebug>
 #include "gondarsite.h"
+#include <QDebug>
 
 GondarSite::GondarSite(int siteIdIn, QString siteNameIn) {
   siteId = siteIdIn;

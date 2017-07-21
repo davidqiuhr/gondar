@@ -12,9 +12,9 @@ SiteSelectPage::SiteSelectPage(QWidget* parent) : WizardPage(parent) {
 }
 
 void SiteSelectPage::initializePage() {
-  QList<GondarSite*> * sitesList = & wizard()->chromeoverLoginPage.siteList;
+  QList<GondarSite*>* sitesList = &wizard()->chromeoverLoginPage.siteList;
   for (int i = 0; i < sitesList->size(); i++) {
-    GondarSite * curButton = sitesList->at(i);
+    GondarSite* curButton = sitesList->at(i);
     sitesButtons.addButton(curButton);
     layout.addWidget(curButton);
   }
@@ -23,7 +23,8 @@ void SiteSelectPage::initializePage() {
 bool SiteSelectPage::validatePage() {
   // if we have a site selected, update our download links and continue
   // otherwise, return false
-  GondarSite* selected = dynamic_cast<GondarSite*>(sitesButtons.checkedButton());
+  GondarSite* selected =
+      dynamic_cast<GondarSite*>(sitesButtons.checkedButton());
   if (selected == NULL) {
     return false;
   } else {
