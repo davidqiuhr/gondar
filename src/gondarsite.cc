@@ -8,7 +8,7 @@ GondarSite::GondarSite(int siteIdIn, QString siteNameIn) {
   setText(siteName);
 }
 
-int GondarSite::getSiteId() {
+int GondarSite::getSiteId() const {
   return siteId;
 }
 
@@ -20,10 +20,10 @@ void GondarSite::set64Url(QUrl url) {
   url64 = url;
 }
 
-QUrl GondarSite::get32Url() {
+QUrl GondarSite::get32Url() const {
   return url32;
 }
 
-QUrl GondarSite::get64Url() {
+QUrl GondarSite::get64Url() const {
   return url64;
 }
