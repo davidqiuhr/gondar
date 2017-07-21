@@ -71,7 +71,7 @@ void ChromeoverLoginPage::handleMeepoFinished() {
     for (const auto& site : meepo_.sites()) {
       siteList.append(new GondarSite(site));
     }
-    
+
     // we don't want users to be able to pass through the screen by pressing
     // next while processing.  this will make validatePage pass and immediately
     // move the user on to the next screen
