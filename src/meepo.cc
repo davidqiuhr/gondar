@@ -125,6 +125,12 @@ Meepo::Meepo() {
 
 void Meepo::start(const QAuthenticator& auth) {
   LOG_INFO << "starting meepo flow";
+
+  api_token_.clear();
+  sites_.clear();
+  error_.clear();
+  sites_remaining_ = 0;
+
   requestAuth(auth);
 }
 
