@@ -22,7 +22,7 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
   meanWordsLabel.setStyleSheet("QLabel { color : red; }");
   layout.addWidget(&passwordLineEditLabel, 1, 0);
   layout.addWidget(&passwordLineEdit, 1, 1);
-  layout.addWidget(&meanWordsLabel, 2, 0);
+  layout.addWidget(&meanWordsLabel, 2, 0, 1, 2);
   meanWordsLabel.setVisible(false);
   setLayout(&layout);
   outstandingSites = 0;
