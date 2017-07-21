@@ -7,7 +7,6 @@
 ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
   setTitle("Login");
   setSubTitle("Enter credentials for my.neverware.com.");
-  setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
   // configure username fields
   usernameLineEditLabel.setBuddy(&usernameLineEdit);
   usernameLineEditLabel.setText("Username:");
