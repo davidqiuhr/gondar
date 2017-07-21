@@ -43,8 +43,8 @@ int ChromeoverLoginPage::nextId() const {
     return GondarWizard::Page_siteSelect;
   } else {
     // otherwise, we can skip that step and update the urls here
-    wizard()->imageSelectPage.set64Url(siteList[0]->get64Url());
-    wizard()->imageSelectPage.set32Url(siteList[0]->get32Url());
+    wizard()->imageSelectPage.set64Url(siteList[0].get64Url());
+    wizard()->imageSelectPage.set32Url(siteList[0].get32Url());
     return GondarWizard::Page_imageSelect;
   }
 }
@@ -65,12 +65,7 @@ bool ChromeoverLoginPage::validatePage() {
 
 void ChromeoverLoginPage::handleMeepoFinished() {
   if (meepo_.error().isEmpty()) {
-    // TODO(nicholasbishop): temporary hack to make my PR-into-PR
-    // touch fewer files
-    siteList.clear();
-    for (const auto& site : meepo_.sites()) {
-      siteList.append(new GondarSite(site));
-    }
+    siteList = meepo_.sites();
 
     // we don't want users to be able to pass through the screen by pressing
     // next while processing.  this will make validatePage pass and immediately
