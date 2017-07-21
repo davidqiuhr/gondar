@@ -47,6 +47,7 @@ add_library(app STATIC
   src/gondarwizard.cc
   src/image_select_page.cc
   src/log.cc
+  src/meepo.cc
   src/neverware_unzipper.cc
   src/site_select_page.cc
   src/unzipthread.cc

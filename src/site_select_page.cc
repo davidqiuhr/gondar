@@ -11,9 +11,7 @@ class SiteButton : public QRadioButton {
     setText(site.getSiteName());
   }
 
-  const GondarSite& site() const {
-    return site_;
-  }
+  const GondarSite& site() const { return site_; }
 
  private:
   const GondarSite site_;
@@ -39,8 +37,7 @@ void SiteSelectPage::initializePage() {
 bool SiteSelectPage::validatePage() {
   // if we have a site selected, update our download links and continue
   // otherwise, return false
-  auto* selected =
-      dynamic_cast<SiteButton*>(sitesButtons.checkedButton());
+  auto* selected = dynamic_cast<SiteButton*>(sitesButtons.checkedButton());
   if (selected == NULL) {
     return false;
   } else {
