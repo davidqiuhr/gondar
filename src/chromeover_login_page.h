@@ -1,10 +1,12 @@
 #ifndef CHROMEOVER_LOGIN_PAGE_H
 #define CHROMEOVER_LOGIN_PAGE_H
 
+#include <vector>
+
 #include <QGridLayout>
 #include <QLabel>
 #include <QLineEdit>
-#include <QList>
+
 #include "gondarsite.h"
 #include "meepo.h"
 #include "wizard_page.h"
@@ -15,7 +17,7 @@ class ChromeoverLoginPage : public gondar::WizardPage {
  public:
   ChromeoverLoginPage(QWidget* parent = 0);
   int nextId() const override;
-  QList<GondarSite*> siteList;
+  std::vector<GondarSite> siteList;
 
  protected:
   bool validatePage() override;
