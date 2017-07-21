@@ -27,6 +27,10 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
   meanWordsLabel.setVisible(false);
   setLayout(&layout);
   outstandingSites = 0;
+  // don't allow progressing to next page yet
+  finished = false;
+  // don't allow another launch of server interaction while another is running
+  started = false;
 }
 
 int ChromeoverLoginPage::nextId() const {
