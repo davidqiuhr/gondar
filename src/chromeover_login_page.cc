@@ -1,9 +1,8 @@
 #include "chromeover_login_page.h"
 
-#include <QDebug>
-
 #include "gondarsite.h"
 #include "gondarwizard.h"
+#include "log.h"
 
 ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
   setTitle("Login");
@@ -82,7 +81,7 @@ void ChromeoverLoginPage::tokenRequestFinished(QNetworkReply* reply) {
              SLOT(tokenRequestFinished(QNetworkReply*)));
   // TODO: investigate to what extent this covers all the error response codes
   if (reply->error()) {
-    qDebug() << "Invalid login credentials supplied";
+    LOG_INFO << "Invalid login credentials supplied";
     started = false;
     meanWordsLabel.setVisible(true);
     return;
@@ -160,7 +159,7 @@ void ChromeoverLoginPage::imageUrlRequestFinished(QNetworkReply* reply) {
     }
   }
   if (thisSite == NULL) {
-    qDebug() << "ERROR: site not found!";
+    LOG_ERROR << "ERROR: site not found!";
   }
 
   QString replyStr = (QString)reply->readAll();
@@ -185,7 +184,7 @@ void ChromeoverLoginPage::imageUrlRequestFinished(QNetworkReply* reply) {
   // see if we're done
   outstandingSites--;
   if (outstandingSites == 0) {
-    qDebug() << "received information for all outstanding site requests";
+    LOG_INFO << "received information for all outstanding site requests";
     disconnect(&networkManager, SIGNAL(finished(QNetworkReply*)), this,
                SLOT(imageUrlRequestFinished(QNetworkReply*)));
     // we don't want users to be able to pass through the screen by pressing

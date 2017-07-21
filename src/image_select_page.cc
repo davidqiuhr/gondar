@@ -1,6 +1,7 @@
 #include "image_select_page.h"
 
 #include "gondarwizard.h"
+#include "log.h"
 
 ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
   setTitle("Which version of CloudReady do you need?");
@@ -25,8 +26,8 @@ ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
 }
 
 QUrl ImageSelectPage::getUrl() const {
-  qDebug() << "in getUrl and thirtyTwoUrl=" << thirtyTwoUrl;
-  qDebug() << "in getUrl and sixtyFourUrl=" << sixtyFourUrl;
+  LOG_INFO << "in getUrl and thirtyTwoUrl=" << thirtyTwoUrl.toString();
+  LOG_INFO << "in getUrl and sixtyFourUrl=" << sixtyFourUrl.toString();
   QAbstractButton* selected = bitnessButtons.checkedButton();
   if (selected == &thirtyTwo) {
     return thirtyTwoUrl;
