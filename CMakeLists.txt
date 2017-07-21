@@ -43,10 +43,13 @@ add_library(app STATIC
   src/deviceguy.cc
   src/diskwritethread.cc
   src/downloader.cc
+  src/gondarsite.cc
   src/gondarwizard.cc
   src/image_select_page.cc
   src/log.cc
+  src/meepo.cc
   src/neverware_unzipper.cc
+  src/site_select_page.cc
   src/unzipthread.cc
   src/wizard_page.cc)
 

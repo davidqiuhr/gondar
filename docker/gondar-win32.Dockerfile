@@ -13,4 +13,5 @@ ADD src /opt/gondar/src
 ADD test /opt/gondar/test
 
 ARG RELEASE=false
+ARG CHROMEOVER=false
 RUN make -C /opt/gondar build-gondar
