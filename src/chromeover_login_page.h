@@ -33,8 +33,6 @@ class ChromeoverLoginPage : public gondar::WizardPage {
   QLineEdit passwordLineEdit;
   QLabel passwordLineEditLabel;
   QLabel meanWordsLabel;
-  int outstandingSites;
-  QString apiToken;
   bool finished;
   bool started;
 };

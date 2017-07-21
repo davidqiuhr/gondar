@@ -25,7 +25,6 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
   layout.addWidget(&meanWordsLabel, 2, 0, 1, 2);
   meanWordsLabel.setVisible(false);
   setLayout(&layout);
-  outstandingSites = 0;
   // don't allow progressing to next page yet
   finished = false;
   // don't allow another launch of server interaction while another is running
