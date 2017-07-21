@@ -1,15 +1,14 @@
 #ifndef GONDARSITE_H
 #define GONDARSITE_H
 
-#include <QRadioButton>
 #include <QString>
 #include <QUrl>
 
-class GondarSite : public QRadioButton {
-  Q_OBJECT
+class GondarSite {
  public:
   GondarSite(int siteIdIn, QString siteNameIn);
   int getSiteId() const;
+  const QString& getSiteName() const;
   void set32Url(QUrl url);
   void set64Url(QUrl url);
   QUrl get32Url() const;

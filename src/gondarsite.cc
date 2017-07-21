@@ -5,11 +5,14 @@
 GondarSite::GondarSite(int siteIdIn, QString siteNameIn) {
   siteId = siteIdIn;
   siteName = siteNameIn;
-  setText(siteName);
 }
 
 int GondarSite::getSiteId() const {
   return siteId;
+}
+
+const QString& GondarSite::getSiteName() const {
+  return siteName;
 }
 
 void GondarSite::set32Url(QUrl url) {
