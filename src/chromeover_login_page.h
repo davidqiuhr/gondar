@@ -5,8 +5,8 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QList>
-#include <QNetworkReply>
 #include "gondarsite.h"
+#include "meepo.h"
 #include "wizard_page.h"
 
 class ChromeoverLoginPage : public gondar::WizardPage {
@@ -21,9 +21,10 @@ class ChromeoverLoginPage : public gondar::WizardPage {
   bool validatePage() override;
 
  private:
-  void startGetToken(QString username, QString password);
-  QString getToken(QNetworkReply* reply);
-  QNetworkAccessManager networkManager;
+  void handleMeepoFinished();
+
+  gondar::Meepo meepo_;
+
   QGridLayout layout;
   QLineEdit usernameLineEdit;
   QLabel usernameLineEditLabel;
@@ -34,10 +35,6 @@ class ChromeoverLoginPage : public gondar::WizardPage {
   QString apiToken;
   bool finished;
   bool started;
- public slots:
-  void tokenRequestFinished(QNetworkReply* reply);
-  void sitesRequestFinished(QNetworkReply* reply);
-  void imageUrlRequestFinished(QNetworkReply* reply);
 };
 
 #endif
