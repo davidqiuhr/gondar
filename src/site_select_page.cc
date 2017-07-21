@@ -23,7 +23,7 @@ SiteSelectPage::SiteSelectPage(QWidget* parent) : WizardPage(parent) {
   setTitle("Site Select");
   setSubTitle(
       "Your account is associated with more than one site. "
-      "Select the site for which you would like to burn an image.");
+      "Select the site you'd like to use.");
   setLayout(&layout);
 }
 
