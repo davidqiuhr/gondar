@@ -8,7 +8,6 @@ ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
   setSubTitle(
       "64-bit should be suitable for most computers made after 2007.  Choose "
       "32-bit for older computers or devices with Intel Atom CPUs.");
-  setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
   thirtyTwo.setText("32-bit");
   sixtyFour.setText("64-bit (recommended)");
   sixtyFour.setChecked(true);

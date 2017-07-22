@@ -40,6 +40,7 @@ GondarWizard::GondarWizard(QWidget* parent) : QWizard(parent) {
   setPage(Page_error, &errorPage);
   setWizardStyle(QWizard::ModernStyle);
   setWindowTitle(tr("Cloudready USB Creation Utility"));
+  setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
 
   setOption(QWizard::HaveCustomButton1, false);
   setOption(QWizard::NoCancelButton, true);
@@ -79,7 +80,6 @@ DownloadProgressPage::DownloadProgressPage(QWidget* parent)
     : WizardPage(parent) {
   setTitle("CloudReady Download");
   setSubTitle("Your installer is currently downloading.");
-  setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
   download_finished = false;
   layout.addWidget(&progress);
   setLayout(&layout);
@@ -152,7 +152,6 @@ UsbInsertPage::UsbInsertPage(QWidget* parent) : WizardPage(parent) {
   setSubTitle(
       "In the next step, the selected device will be permanantly erased and "
       "turned into a CloudReady installer.");
-  setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
 
   label.setText(
       "Sandisk devices are not recommended.  "
@@ -211,7 +210,6 @@ DeviceSelectPage::DeviceSelectPage(QWidget* parent) : WizardPage(parent) {
   // the usb device list.  or it could ask you to insert your device
   setTitle("USB device selection");
   setSubTitle("Choose your target device from the list of devices below.");
-  setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
   layout = new QVBoxLayout;
   drivesLabel.setText("Select Drive:");
   radioGroup = NULL;
@@ -275,7 +273,6 @@ int DeviceSelectPage::nextId() const {
 WriteOperationPage::WriteOperationPage(QWidget* parent) : WizardPage(parent) {
   setTitle("Creating your CloudReady USB installer");
   setSubTitle("This process may take up to 20 minutes.");
-  setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
   layout.addWidget(&progress);
   setLayout(&layout);
 }
@@ -374,7 +371,6 @@ void WriteOperationPage::writeFailed(const QString& errorMessage) {
 ErrorPage::ErrorPage(QWidget* parent) : WizardPage(parent) {
   setTitle("An error has occurred");
   setSubTitle(" ");
-  setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
   layout.addWidget(&label);
   label.setText("");
   setLayout(&layout);
