@@ -1,10 +1,22 @@
 
 #include <QApplication>
+#include <QFile>
 #include <QLibraryInfo>
 #include <QtPlugin>
 
 #include "gondarwizard.h"
 #include "log.h"
+
+namespace {
+
+void loadStyleSheet(QApplication* app) {
+  QFile file(":/style.css");
+  file.open(QFile::ReadOnly);
+  const QString content = file.readAll();
+  app->setStyleSheet(content);
+}
+
+}  // namespace
 
 int main(int argc, char* argv[]) {
 #if defined(Q_OS_WIN)
@@ -15,6 +27,8 @@ int main(int argc, char* argv[]) {
   gondar::InitializeLogging();
 
   QApplication app(argc, argv);
+  loadStyleSheet(&app);
+
   GondarWizard wizard;
   wizard.show();
 

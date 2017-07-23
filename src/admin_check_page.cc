@@ -19,6 +19,8 @@ void AdminCheckPage::initializePage() {
   } else {
     showIsAdmin();
   }
+
+  WizardPage::initializePage();
 }
 
 bool AdminCheckPage::isComplete() const {

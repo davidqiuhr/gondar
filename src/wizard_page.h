@@ -3,7 +3,10 @@
 #ifndef SRC_WIZARD_PAGE_H_
 #define SRC_WIZARD_PAGE_H_
 
+#include <QVBoxLayout>
 #include <QWizard>
+
+#include "wizard_header.h"
 
 class GondarWizard;
 
@@ -22,7 +25,17 @@ class WizardPage : public QWizardPage {
  public:
   explicit WizardPage(QWidget* parent = nullptr);
 
+ protected:
   GondarWizard* wizard() const;
+
+  void setLayout(QLayout* layout);
+
+  void initializePage() override;
+
+ private:
+  QVBoxLayout layout_;
+  WizardHeader header_;
+  QWidget center_;
 };
 }
 

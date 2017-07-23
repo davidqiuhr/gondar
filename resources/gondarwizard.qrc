@@ -2,4 +2,7 @@
 <qresource prefix="images">
     <file>crlogo.png</file>
 </qresource>
+<qresource>
+    <file>style.css</file>
+</qresource>
 </RCC>

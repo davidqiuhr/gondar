@@ -1,0 +1,11 @@
+gondar--WizardHeader {
+    background-color: white;
+    // TODO
+    min-width: 640px;
+    min-height: 5.5em;
+    max-height: 5.5em;
+}
+
+gondar--WizardHeader #title {
+    font-weight: bold;
+}
