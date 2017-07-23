@@ -33,6 +33,7 @@ build-gondar: print-config update-submodules
 	cd ${BUILD_DIR} && \
 		${CMAKE} .. \
 			-DCHROMEOVER=${CHROMEOVER} \
+			-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
 			-DTREAT_WARNINGS_AS_ERRORS=${TREAT_WARNINGS_AS_ERRORS} \
 			-DWIN32_CONSOLE=${WIN32_CONSOLE} && \
 		make -j
