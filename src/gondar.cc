@@ -1503,7 +1503,8 @@ static void GetDevices(DeviceGuyList* device_list) {
   HANDLE hDrive;
   int s, score, drive_number;
   char drive_letters[27], *device_id, *devid_list = NULL;
-  char *p, *label, buffer[MAX_PATH], str[MAX_PATH], *method_str;
+  char *p, *label, buffer[MAX_PATH], str[MAX_PATH];
+  const char* method_str;
   usb_device_props props;
 
   StrArrayCreate(&dev_if_path, 128);
