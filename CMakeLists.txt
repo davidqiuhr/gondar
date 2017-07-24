@@ -17,14 +17,28 @@ set(USE_AES OFF CACHE BOOL "Unused docstring")
 # doesn't show.
 set(WIN32_CONSOLE ON CACHE BOOL "On Windows, show the console")
 
-# Build minizip before setting any project-level compile flags
-add_subdirectory(minizip)
-
 # TODO(nicholasbishop): enable more warnings
-add_compile_options(-Wall -Wextra)
+set(EXTRA_WARNINGS ${EXTRA_WARNINGS}
+  # Warnings limited to C++
+  $<$<COMPILE_LANGUAGE:CXX>:-Wsuggest-override>
+
+  # Warnings for both C and C++
+  -Wall
+  -Wextra
+  -Wmissing-declarations
+  -Wunused-macros
+  -Wwrite-strings)
 if(${TREAT_WARNINGS_AS_ERRORS})
-  add_compile_options(-Werror)
+  set(EXTRA_WARNINGS ${EXTRA_WARNINGS} -Werror)
 endif()
+
+# This mingw define adds more modern string formatting than what
+# msvcrt provides (C99/C11 vs C89). This makes extended format
+# specifiers like "%lld" work.
+add_definitions(-D__USE_MINGW_ANSI_STDIO=1)
+
+# Build minizip
+add_subdirectory(minizip)
 
 # Required Qt components
 find_package(Qt5 COMPONENTS Network Test Widgets REQUIRED)
@@ -32,7 +46,11 @@ find_package(Qt5 COMPONENTS Network Test Widgets REQUIRED)
 # Static lib with convenience functions that make unzipping easier
 add_library(minizip_extra STATIC minizip/minishared.c minizip/miniunz.c)
 target_compile_definitions(minizip_extra PRIVATE _LARGEFILE64_SOURCE NOMAIN)
-target_compile_options(minizip_extra PRIVATE -Wno-unused-parameter -Wno-format)
+target_compile_options(minizip_extra PRIVATE
+  ${EXTRA_WARNINGS}
+  -Wno-format
+  -Wno-missing-declarations
+  -Wno-unused-macros)
 
 # Static lib containing the bulk of gondar, shared between the
 # application and test targets
@@ -58,9 +76,7 @@ if(${CHROMEOVER})
 endif()
 
 set_target_properties(app PROPERTIES AUTOMOC ON AUTORCC ON)
-target_compile_options(app PUBLIC
-  -Wmissing-declarations
-  -Wsuggest-override)
+target_compile_options(app PRIVATE ${EXTRA_WARNINGS})
 target_include_directories(app SYSTEM PUBLIC minizip plog/include)
 target_link_libraries(app PUBLIC
   Qt5::Network Qt5::Widgets minizip minizip_extra)
