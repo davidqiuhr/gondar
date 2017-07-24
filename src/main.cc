@@ -5,6 +5,7 @@
 
 #include "gondarwizard.h"
 #include "log.h"
+#include "metric.h"
 
 int main(int argc, char* argv[]) {
 #if defined(Q_OS_WIN)
@@ -13,6 +14,7 @@ int main(int argc, char* argv[]) {
   Q_INIT_RESOURCE(gondarwizard);
 
   gondar::InitializeLogging();
+  gondar::SendMetric("use");
 
   QApplication app(argc, argv);
   GondarWizard wizard;

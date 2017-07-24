@@ -11,6 +11,7 @@
 
 #include "gondarsite.h"
 #include "log.h"
+#include "barathrum.h"
 
 namespace {
 
@@ -119,7 +120,9 @@ namespace gondar {
 
 Meepo::Meepo() {
   // All replies are handled by dispatchReply
-  connect(&network_manager_, &QNetworkAccessManager::finished, this,
+  connect(Barathrum::getInstance().getManager(),
+          &QNetworkAccessManager::finished,
+          this,
           &Meepo::dispatchReply);
 }
 
@@ -145,7 +148,7 @@ Meepo::Sites Meepo::sites() const {
 void Meepo::requestAuth(const QAuthenticator& auth) {
   const auto request = createAuthRequest(auth);
   LOG_INFO << "POST " << redactedUrl(request.url());
-  network_manager_.post(request, QByteArray());
+  Barathrum::getInstance().getManager()->post(request, QByteArray());
 }
 
 void Meepo::handleAuthReply(QNetworkReply* reply) {
@@ -163,7 +166,7 @@ void Meepo::handleAuthReply(QNetworkReply* reply) {
 void Meepo::requestSites() {
   const auto request = createSitesRequest(api_token_);
   LOG_INFO << "GET " << redactedUrl(request.url());
-  network_manager_.get(request);
+  Barathrum::getInstance().getManager()->get(request);
 }
 
 void Meepo::handleSitesReply(QNetworkReply* reply) {
@@ -180,7 +183,7 @@ void Meepo::handleSitesReply(QNetworkReply* reply) {
 void Meepo::requestDownloads(const GondarSite& site) {
   const auto request = createDownloadsRequest(api_token_, site.getSiteId());
   LOG_INFO << "GET " << redactedUrl(request.url());
-  network_manager_.get(request);
+  Barathrum::getInstance().getManager()->get(request);
 }
 
 void Meepo::handleDownloadsReply(QNetworkReply* reply) {

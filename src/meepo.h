@@ -46,8 +46,6 @@ class Meepo : public QObject {
 
   GondarSite* siteFromSiteId(const int site_id);
 
-  QNetworkAccessManager network_manager_;
-
   QString api_token_;
   Sites sites_;
   QString error_;
