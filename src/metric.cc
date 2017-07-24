@@ -17,9 +17,7 @@ namespace gondar {
 
 void SendMetric(std::string metric) {
     QNetworkAccessManager * manager = getNetworkManager();
-    QUrl url = QUrl(
-                 "https://4mjpbmflkd.execute-api.us-east-1.amazonaws.com/prod"
-               );
+    QUrl url("https://4mjpbmflkd.execute-api.us-east-1.amazonaws.com/prod");
     QJsonObject json;
     // TODO: use a persistent UUID across a session, and potentially even
     // across multiple runs
