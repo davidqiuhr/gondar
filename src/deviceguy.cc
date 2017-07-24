@@ -1,3 +1,4 @@
+#include <algorithm>
 
 #include <inttypes.h>
 #include <stdio.h>
@@ -5,6 +6,7 @@
 #include <string.h>
 
 #include "deviceguy.h"
+#include "gondar.h"
 
 #include "shared.h"
 
@@ -90,3 +92,53 @@ void DeviceGuyList_free(DeviceGuyList* self) {
   }
   delete self;
 }
+
+namespace gondar {
+
+bool Device::Id::operator==(const Id& other) const {
+  return value() == other.value();
+}
+
+bool Device::Id::operator<(const Id& other) const {
+  return value() < other.value();
+}
+
+std::vector<Device> Device::sortedDevices() {
+  std::vector<Device> result;
+
+  auto* devices = GetDeviceList();
+  for (DeviceGuy* item = devices->head; item; item = item->next) {
+    result.emplace_back(Device(item->name, Device::Id(item->device_num)));
+  }
+  DeviceGuyList_free(devices);
+
+  std::sort(result.begin(), result.end());
+
+  for (const auto& d : result) {
+    LOG_ERROR << d;
+  }
+
+  return result;
+}
+
+bool Device::operator==(const Device& other) const {
+  return name() == other.name() && id() == other.id();
+}
+
+bool Device::operator<(const Device& other) const {
+  const auto n = name().compare(other.name());
+  if (n == 0) {
+    return id() < other.id();
+  } else {
+    return n;
+  }
+}
+
+}  // namespace gondar
+
+//namespace plog {
+Record& operator<<(Record& record, const gondar::Device& device) {
+  return record << "Device(\"" << device.name() << "\", " << device.id().value()
+                << ")";
+}
+//}  // namespace plog

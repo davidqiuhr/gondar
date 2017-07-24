@@ -10,6 +10,7 @@
 
 #include "admin_check_page.h"
 #include "chromeover_login_page.h"
+#include "device_picker.h"
 #include "deviceguy.h"
 #include "diskwritethread.h"
 #include "downloader.h"
@@ -22,16 +23,6 @@ class QCheckBox;
 class QGroupBox;
 class QLabel;
 class QRadioButton;
-
-class GondarButton : public QRadioButton {
-  Q_OBJECT
-
- public:
-  GondarButton(const QString& text,
-               unsigned int device_num,
-               QWidget* parent = 0);
-  unsigned int index = 0;
-};
 
 class DownloadProgressPage : public gondar::WizardPage {
   Q_OBJECT
@@ -94,10 +85,9 @@ class DeviceSelectPage : public gondar::WizardPage {
   bool validatePage() override;
 
  private:
-  QLabel drivesLabel;
-  QGroupBox* drivesBox;
-  QButtonGroup* radioGroup;
-  QVBoxLayout* layout;
+  QVBoxLayout layout_;
+  QLabel label_{tr("Select Drive:")};
+  gondar::DevicePicker device_picker_;
 };
 
 class WriteOperationPage : public gondar::WizardPage {
