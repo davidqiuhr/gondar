@@ -57,7 +57,7 @@ target_compile_options(minizip_extra PRIVATE
 add_library(app STATIC
   resources/gondarwizard.qrc
   src/admin_check_page.cc
-  src/barathrum.cc
+  src/networksingleton.cc
   src/chromeover_login_page.cc
   src/device.cc
   src/diskwritethread.cc
