@@ -22,7 +22,7 @@ endfunction()
 # partially third-party C file. The result is linked to |target| along
 # with any system libs that gondar.c needs.
 function(add_win32_usb_support target)
-  add_library(win32_usb STATIC src/gondar.c)
+  add_library(win32_usb STATIC src/gondar.cc)
   target_compile_options(win32_usb PRIVATE
     # TODO(nicholasbishop): consider fixing these warnings instead of
     # hiding them
