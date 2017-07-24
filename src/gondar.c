@@ -181,7 +181,7 @@ typedef CHAR* DEVINSTID_A;
 #define CheckDriveIndex(DriveIndex)                                            \
   do {                                                                         \
     if ((DriveIndex < DRIVE_INDEX_MIN) || (DriveIndex > DRIVE_INDEX_MAX)) {    \
-      printf("ERROR: Bad index value %d. Please check the code!", DriveIndex); \
+      printf("ERROR: Bad index value %lu. Please check the code!", DriveIndex); \
       goto out;                                                                \
     }                                                                          \
     DriveIndex -= DRIVE_INDEX_MIN;                                             \
@@ -591,7 +591,7 @@ static BOOL _GetDriveLettersAndType(DWORD DriveIndex,
     goto out;
   }
   if (size > sizeof(drives)) {
-    printf("GetLogicalDriveStrings: Buffer too small (required %d vs. %d)\n",
+    printf("GetLogicalDriveStrings: Buffer too small (required %lu vs. %d)\n",
            size, sizeof(drives));
     goto out;
   }
@@ -901,7 +901,7 @@ static BOOL GetUSBProperties(char* parent_path,
 
   cr = CM_Locate_DevNodeA(&device_inst, device_id, 0);
   if (cr != CR_SUCCESS) {
-    printf("Could not get device instance handle for '%s': CR error %d",
+    printf("Could not get device instance handle for '%s': CR error %lu",
            device_id, cr);
     goto out;
   }
@@ -911,7 +911,7 @@ static BOOL GetUSBProperties(char* parent_path,
   cr = pfCM_Get_DevNode_Registry_PropertyA(device_inst, CM_DRP_ADDRESS, NULL,
                                            (PVOID)&props->port, &size, 0);
   if (cr != CR_SUCCESS) {
-    printf("Could not get port for '%s': CR error %d", device_id, cr);
+    printf("Could not get port for '%s': CR error %lu", device_id, cr);
     goto out;
   }
 
@@ -1506,7 +1506,7 @@ static void GetDevices(DeviceGuyList* device_list) {
     if (htab_create(DEVID_HTAB_SIZE, &htab_devid)) {
       dev_info_data.cbSize = sizeof(dev_info_data);
       for (i = 0; SetupDiEnumDeviceInfo(dev_info, i, &dev_info_data); i++) {
-        printf("Processing Hub %d:", i + 1);
+        printf("Processing Hub %lu:", i + 1);
         devint_detail_data = NULL;
         devint_data.cbSize = sizeof(devint_data);
         // Only care about the first interface (MemberIndex 0)
@@ -1536,7 +1536,7 @@ static void GetDevices(DeviceGuyList* device_list) {
                 if ((k = htab_hash(device_id, &htab_devid)) != 0) {
                   htab_devid.table[k].data = (void*)(uintptr_t)s;
                 }
-                printf("  Found ID[%03d]: %s", k, device_id);
+                printf("  Found ID[%03lu]: %s", k, device_id);
                 while (CM_Get_Sibling(&device_inst, device_inst, 0) ==
                        CR_SUCCESS) {
                   device_id[0] = 0;
@@ -1546,7 +1546,7 @@ static void GetDevices(DeviceGuyList* device_list) {
                     if ((k = htab_hash(device_id, &htab_devid)) != 0) {
                       htab_devid.table[k].data = (void*)(uintptr_t)s;
                     }
-                    printf("  Found ID[%03d]: %s", k, device_id);
+                    printf("  Found ID[%03lu]: %s", k, device_id);
                   }
                 }
               }
@@ -1737,7 +1737,7 @@ static void GetDevices(DeviceGuyList* device_list) {
         // need to populate the properties
         ToUpper(device_id);
         j = htab_hash(device_id, &htab_devid);
-        printf("  Matched with ID[%03d]: %s", j, device_id);
+        printf("  Matched with ID[%03lu]: %s", j, device_id);
 
         // Try to parse the current device_id string for VID:PID
         // We'll use that if we can't get anything better
@@ -1771,7 +1771,7 @@ static void GetDevices(DeviceGuyList* device_list) {
           method_str = "[GP]";
           ToUpper(device_id);
           j = htab_hash(device_id, &htab_devid);
-          printf("  Matched with (GP) ID[%03d]: %s", j, device_id);
+          printf("  Matched with (GP) ID[%03lu]: %s", j, device_id);
         }
         if ((uintptr_t)htab_devid.table[j].data > 0) {
           printf("  Matched with Hub[%d]: '%s'",
@@ -1963,7 +1963,7 @@ static void GetDevices(DeviceGuyList* device_list) {
       }
       // here we are.  the device has not been eliminated!  that is great!
       // if we don't already have a ret, make this our ret
-      printf("kendall: %d qualified\n", drive_index);
+      printf("kendall: %lu qualified\n", drive_index);
       DeviceGuyList_append(device_list, drive_index, buffer);
     }
   }
@@ -2270,7 +2270,7 @@ static BOOL WriteDrive(HANDLE hPhysicalDrive,
   printf("kendall: we are writing the image now!\n");
   // Our buffer size must be a multiple of the sector size and *ALIGNED* to the
   // sector size
-  printf("kendall: sector size: %d\n", sector_size);
+  printf("kendall: sector size: %llu\n", sector_size);
   if (sector_size < 512) {
     sector_size = 512;
   }
@@ -2323,9 +2323,9 @@ static BOOL WriteDrive(HANDLE hPhysicalDrive,
       if ((s) && (wSize == rSize))
         break;
       if (s)
-        printf("write error: Wrote %d bytes, expected %d bytes", wSize, rSize);
+        printf("write error: Wrote %lu bytes, expected %lu bytes", wSize, rSize);
       else
-        printf("write error at sector %d:\n", wb / sector_size);
+        printf("write error at sector %llu:\n", wb / sector_size);
       if (i < WRITE_RETRIES - 1) {
         li.QuadPart = wb;
         printf("  RETRYING...\n");
