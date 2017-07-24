@@ -213,6 +213,7 @@ static __inline HMODULE GetLibraryHandle(const char* szLibraryName) {
     }                                                               \
   } while (0)
 
+extern "C" {
 /* Cfgmgr32.dll interface */
 DECLSPEC_IMPORT CONFIGRET WINAPI CM_Get_Device_IDA(DEVINST dnDevInst,
                                                    PCSTR Buffer,
@@ -242,6 +243,7 @@ PF_TYPE_DECL(WINAPI,
              CONFIGRET,
              CM_Get_DevNode_Registry_PropertyA,
              (DEVINST, ULONG, PULONG, PVOID, PULONG, ULONG));
+}
 
 // from registry.c
 /* Read a generic registry key value. If a short key_name is used, assume that
