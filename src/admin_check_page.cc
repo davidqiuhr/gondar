@@ -11,6 +11,13 @@ AdminCheckPage::AdminCheckPage(QWidget* parent) : WizardPage(parent) {
 
   layout.addWidget(&label);
   setLayout(&layout);
+    // TODO: move isChromevoer() out of AdminCheckPage and call these metrics
+    // from a more intuitive context
+  if (isChromeover()) {
+    gondar::SendMetric("chromeoverUse");
+  } else {
+    gondar::SendMetric("beeroverUse");
+  }
 }
 
 void AdminCheckPage::initializePage() {
@@ -59,12 +66,8 @@ bool AdminCheckPage::isChromeover() {
 
 int AdminCheckPage::nextId() const {
   if (isChromeover()) {
-    // TODO: move isChromevoer() out of AdminCheckPage and call these metrics
-    // immediately on program start
-    gondar::SendMetric("chromeoverUse");
     return GondarWizard::Page_chromeoverLogin;
   } else {
-    gondar::SendMetric("beeroverUse");
     return GondarWizard::Page_imageSelect;
   }
 }

@@ -56,12 +56,12 @@ void DownloadManager::startNextDownload() {
     fprintf(stderr, "Problem opening save file '%s' for download '%s': %s\n",
             qPrintable(filename), url.toEncoded().constData(),
             qPrintable(output.errorString()));
-    gondar::SendMetric("downloadAttempt");
     startNextDownload();
     return;  // skip this download
   }
 
   QNetworkRequest request(url);
+  gondar::SendMetric("downloadAttempt");
   currentDownload = manager.get(request);
   connect(currentDownload, SIGNAL(finished()), SLOT(downloadFinished()));
   connect(currentDownload, SIGNAL(readyRead()), SLOT(downloadReadyRead()));
