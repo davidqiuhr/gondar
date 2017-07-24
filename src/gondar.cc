@@ -1408,7 +1408,6 @@ static uint32_t htab_hash(char* str, htab_table* htab) {
   return idx;
 }
 
-int nWindowsVersion;
 BOOL list_non_usb_removable_drives = FALSE;
 #define MIN_DRIVE_SIZE 8
 
