@@ -45,10 +45,8 @@ static int dword_to_int(const DWORD value) {
   size_t_to_signed(ARRAYSIZE(array_))
 
 /* Convenient to have around */
-#define KB 1024LL
 #define MB 1048576LL
 #define GB 1073741824LL
-#define TB 1099511627776LL
 
 #define USB_GET_NODE_CONNECTION_INFORMATION_EX 274
 #define USB_GET_NODE_CONNECTION_INFORMATION_EX_V2 279
@@ -65,15 +63,6 @@ static int dword_to_int(const DWORD value) {
 #define DRIVE_ACCESS_RETRIES 150  // How many times we should retry
 #define DRIVE_ACCESS_TIMEOUT \
   15000  // How long we should retry drive access (in ms)
-
-#define DRIVE_INDEX_MIN 0x00000080
-#define DRIVE_INDEX_MAX 0x000000C0
-#define MAX_LOG_SIZE 0x7FFFFFFE
-
-#define safe_vsnprintf(buf, size, format, arg) \
-  _vsnprintf_s(buf, size, _TRUNCATE, format, arg)
-
-#define isspaceU(c) isspace((unsigned char)(c))
 
 #define safe_closehandle(h)                           \
   do {                                                \
@@ -109,12 +98,14 @@ static int dword_to_int(const DWORD value) {
 #define DRIVE_INDEX_MAX 0x000000C0
 #define MAX_DRIVES (DRIVE_INDEX_MAX - DRIVE_INDEX_MIN)
 
-#define USB_SPEED_UNKNOWN 0
-#define USB_SPEED_LOW 1
-#define USB_SPEED_FULL 2
-#define USB_SPEED_HIGH 3
-#define USB_SPEED_SUPER_OR_LATER 4
-#define USB_SPEED_MAX 5
+enum {
+  USB_SPEED_UNKNOWN = 0,
+  USB_SPEED_LOW = 1,
+  USB_SPEED_FULL = 2,
+  USB_SPEED_HIGH = 3,
+  USB_SPEED_SUPER_OR_LATER = 4,
+  USB_SPEED_MAX = 5,
+};
 
 #define HTAB_EMPTY \
   { NULL, 0, 0 }
@@ -172,9 +163,7 @@ typedef RETURN_TYPE CONFIGRET;
 typedef CHAR* DEVINSTID_A;
 
 #define CR_SUCCESS 0x00000000
-#define CR_NO_SUCH_DEVNODE 0x0000000D
 #define CM_GETIDLIST_FILTER_SERVICE 0x00000002
-#define CM_REMOVAL_POLICY_EXPECT_NO_REMOVAL 0x00000001
 #define CM_REMOVAL_POLICY_EXPECT_ORDERLY_REMOVAL 0x00000002
 #define CM_REMOVAL_POLICY_EXPECT_SURPRISE_REMOVAL 0x00000003
 // /!\ The following flag is only available on Windows 7 or later!
@@ -224,15 +213,6 @@ static __inline HMODULE GetLibraryHandle(const char* szLibraryName) {
 #define PF_INIT(proc, name) \
   if (pf##proc == NULL)     \
   pf##proc = (proc##_t)GetProcAddress(GetLibraryHandle(#name), #proc)
-#define PF_INIT_OR_OUT(proc, name)                                  \
-  do {                                                              \
-    PF_INIT(proc, name);                                            \
-    if (pf##proc == NULL) {                                         \
-      printf("Unable to locate %s() in %s.dll: %s\n", #proc, #name, \
-             "kewlerror");                                          \
-      goto out;                                                     \
-    }                                                               \
-  } while (0)
 
 /* Cfgmgr32.dll interface */
 DECLSPEC_IMPORT CONFIGRET WINAPI CM_Get_Device_IDA(DEVINST dnDevInst,
@@ -1433,11 +1413,8 @@ BOOL list_non_usb_removable_drives = FALSE;
 #define MIN_DRIVE_SIZE 8
 
 BOOL enable_HDDs = FALSE;
-#define MSG_047 3047
 // look i don't know
 BOOL right_to_left_mode = FALSE;
-
-#define RIGHT_TO_LEFT_MARK "<200f>"
 
 char app_dir[512];
 char system_dir[512];

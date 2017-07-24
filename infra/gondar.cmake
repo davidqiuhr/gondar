@@ -24,6 +24,7 @@ endfunction()
 function(add_win32_usb_support target)
   add_library(win32_usb STATIC src/gondar.c)
   target_compile_options(win32_usb PRIVATE
+    -Wunused-macros
     -Wwrite-strings
     # TODO(nicholasbishop): re-enable this warning
     -Wno-format)
