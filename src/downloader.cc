@@ -10,6 +10,8 @@
 #include <QStringList>
 #include <QTimer>
 
+#include "metric.h"
+
 DownloadManager::DownloadManager(QObject* parent)
     : QObject(parent), downloadedCount(0), totalCount(0) {}
 
@@ -54,7 +56,7 @@ void DownloadManager::startNextDownload() {
     fprintf(stderr, "Problem opening save file '%s' for download '%s': %s\n",
             qPrintable(filename), url.toEncoded().constData(),
             qPrintable(output.errorString()));
-
+    gondar::SendMetric("downloadAttempt");
     startNextDownload();
     return;  // skip this download
   }
@@ -71,6 +73,7 @@ void DownloadManager::startNextDownload() {
 }
 
 void DownloadManager::downloadFinished() {
+  gondar::SendMetric("downloadSuccess");
   // progressBar.clear();
   output.close();
 
