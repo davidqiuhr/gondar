@@ -23,6 +23,27 @@ but inherits that project's license should it be distributed.
 #include "device.h"
 #include "shared.h"
 
+static ssize_t size_t_to_signed(const size_t value) {
+  if (value <= SSIZE_MAX) {
+    return (ssize_t)value;
+  } else {
+    fprintf(stderr, "warning: overflow in size_t_to_signed\n");
+    return (ssize_t)SSIZE_MAX;
+  }
+}
+
+static int dword_to_int(const DWORD value) {
+  if (value <= INT_MAX) {
+    return (int)value;
+  } else {
+    fprintf(stderr, "warning: overflow in dword_to_int\n");
+    return (int)INT_MAX;
+  }
+}
+
+#define ARRAYSIZE_SIGNED(array_) \
+  size_t_to_signed(ARRAYSIZE(array_))
+
 /* Convenient to have around */
 #define KB 1024LL
 #define MB 1048576LL
@@ -623,7 +644,7 @@ static BOOL _GetDriveLettersAndType(DWORD DriveIndex,
 
     drive_number = GetDriveNumber(hDrive);
     safe_closehandle(hDrive);
-    if (drive_number == DriveIndex) {
+    if (drive_number == dword_to_int(DriveIndex)) {
       r = TRUE;
       if (drive_letters != NULL)
         drive_letters[i++] = *drive;
@@ -1585,7 +1606,7 @@ static void GetDevices(DeviceGuyList* device_list) {
   ulFlags = CM_GETIDLIST_FILTER_SERVICE;
   if (nWindowsVersion >= WINDOWS_7)
     ulFlags |= CM_GETIDLIST_FILTER_PRESENT;
-  for (s = 0; s < ARRAYSIZE(usbstor_name); s++) {
+  for (s = 0; s < ARRAYSIZE_SIGNED(usbstor_name); s++) {
     // Get a list of device IDs for all USB storage devices
     // This will be used to find if a device is UASP
     // Also compute the uasp_start index
@@ -1598,7 +1619,7 @@ static void GetDevices(DeviceGuyList* device_list) {
       full_list_size += list_size[s] - 1;  // remove extra NUL terminator
   }
   // Compute the card_start index
-  for (s = 0; s < ARRAYSIZE(genstor_name); s++) {
+  for (s = 0; s < ARRAYSIZE_SIGNED(genstor_name); s++) {
     if (strcmp(genstor_name[s], "SD") == 0)
       card_start = s;
   }
@@ -1620,7 +1641,7 @@ static void GetDevices(DeviceGuyList* device_list) {
       printf("Could not allocate Device ID list\n");
       goto out;
     }
-    for (s = 0, i = 0; s < ARRAYSIZE(usbstor_name); s++) {
+    for (s = 0, i = 0; s < ARRAYSIZE_SIGNED(usbstor_name); s++) {
       list_start[s] = i;
       if (list_size[s] > 1) {
         if (CM_Get_Device_ID_ListA(usbstor_name[s], &devid_list[i],
@@ -2066,12 +2087,12 @@ static char* GetLogicalName(DWORD DriveIndex, BOOL bKeepTrailingBackslash) {
       continue;
     }
 
-    for (j = 0; (j < ARRAYSIZE(ignore_device)) &&
+    for (j = 0; (j < ARRAYSIZE_SIGNED(ignore_device)) &&
                 (_strnicmp(path, ignore_device[j],
                            safe_strlen(ignore_device[j])) != 0);
          j++)
       ;
-    if (j < ARRAYSIZE(ignore_device)) {
+    if (j < ARRAYSIZE_SIGNED(ignore_device)) {
       printf("Skipping GUID volume for '%s'\n", path);
       continue;
     }
