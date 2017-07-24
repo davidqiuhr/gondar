@@ -181,7 +181,7 @@ typedef CHAR* DEVINSTID_A;
 HMODULE OpenedLibrariesHandle[MAX_LIBRARY_HANDLES];
 uint16_t OpenedLibrariesHandleSize;
 
-static __inline HMODULE GetLibraryHandle(char* szLibraryName) {
+static __inline HMODULE GetLibraryHandle(const char* szLibraryName) {
   HMODULE h = NULL;
   if ((h = GetModuleHandleA(szLibraryName)) == NULL) {
     if (OpenedLibrariesHandleSize >= MAX_LIBRARY_HANDLES) {
@@ -1094,7 +1094,7 @@ static BOOL GetDriveLetters(DWORD DriveIndex, char* drive_letters) {
  * Return the drive letter and volume label
  * If the drive doesn't have a volume assigned, space is returned for the letter
  */
-static BOOL GetDriveLabel(DWORD DriveIndex, char* letters, char** label) {
+static BOOL GetDriveLabel(DWORD DriveIndex, char* letters, const char** label) {
   HANDLE hPhysical;
   DWORD size;
   static char VolumeLabel[MAX_PATH + 1];
@@ -1501,7 +1501,9 @@ static void GetDevices(DeviceGuyList* device_list) {
   HANDLE hDrive;
   int s, score, drive_number;
   char drive_letters[27], *device_id, *devid_list = NULL;
-  char *p, *label, buffer[MAX_PATH], str[MAX_PATH], *method_str;
+  char *p, buffer[MAX_PATH], str[MAX_PATH];
+  const char *label;
+  const char *method_str;
   usb_device_props props;
 
   StrArrayCreate(&dev_if_path, 128);
