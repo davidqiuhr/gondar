@@ -8,7 +8,8 @@ files
 #ifndef SHARED_H
 #define SHARED_H
 
-#include <inttypes.h>
+#include <algorithm>
+#include <cstdint>
 
 #define TRUE 1
 #define FALSE 0
@@ -35,7 +36,7 @@ files
   } while (0)
 #define safe_strstr(str1, str2) \
   strstr(((str1 == NULL) ? "<NULL>" : str1), ((str2 == NULL) ? "<NULL>" : str2))
-#define safe_min(a, b) min((size_t)(a), (size_t)(b))
+#define safe_min(a, b) std::min((size_t)(a), (size_t)(b))
 #define safe_strcat(dst, dst_max, src) \
   safe_strncat(dst, dst_max, src, safe_strlen(src) + 1)
 #define safe_strncat(dst, dst_max, src, count) \
