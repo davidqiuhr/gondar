@@ -2250,23 +2250,6 @@ static BOOL RefreshDriveLayout(HANDLE hDrive) {
   return r;
 }
 
-/*
- * Working with drive indexes quite risky (left unchecked,inadvertently passing
- * 0 as
- * index would return a handle to C:, which we might then proceed to unknowingly
- * clear the MBR of!), so we mitigate the risk by forcing our indexes to belong
- * to
- * the specific range [DRIVE_INDEX_MIN; DRIVE_INDEX_MAX].
- */
-#define CheckDriveIndex(DriveIndex)                                            \
-  do {                                                                         \
-    if ((DriveIndex < DRIVE_INDEX_MIN) || (DriveIndex > DRIVE_INDEX_MAX)) {    \
-      printf("ERROR: Bad index value %d. Please check the code!", DriveIndex); \
-      goto out;                                                                \
-    }                                                                          \
-    DriveIndex -= DRIVE_INDEX_MIN;                                             \
-  } while (0)
-
 // not really from drive.c, but more or less.
 /*
  * Return the drive size
