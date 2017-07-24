@@ -17,6 +17,8 @@ set(USE_AES OFF CACHE BOOL "Unused docstring")
 # doesn't show.
 set(WIN32_CONSOLE ON CACHE BOOL "On Windows, show the console")
 
+set(CMAKE_CXX_STANDARD 11)
+
 # Build minizip before setting any project-level compile flags
 add_subdirectory(minizip)
 
