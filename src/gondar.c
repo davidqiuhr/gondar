@@ -20,7 +20,7 @@ but inherits that project's license should it be distributed.
 #include "hdd_vs_ufd.h"
 
 // kendall specialz
-#include "deviceguy.h"
+#include "device.h"
 #include "shared.h"
 
 /* Convenient to have around */

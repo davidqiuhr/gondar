@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "deviceguy.h"
+#include "device.h"
 
 #include "shared.h"
 

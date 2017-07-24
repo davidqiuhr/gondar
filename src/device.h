@@ -1,8 +1,8 @@
 /*
 A linkedlist of device info passed between the C and C++ layer
 */
-#ifndef DEVICEGUY_H
-#define DEVICEGUY_H
+#ifndef DEVICE_H
+#define DEVICE_H
 
 #include <inttypes.h>
 
@@ -40,4 +40,4 @@ void DeviceGuyList_free(DeviceGuyList* self);
 }
 #endif
 
-#endif /* DEVICEGUY_H */
+#endif /* DEVICE_H */

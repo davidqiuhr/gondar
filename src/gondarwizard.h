@@ -10,7 +10,7 @@
 
 #include "admin_check_page.h"
 #include "chromeover_login_page.h"
-#include "deviceguy.h"
+#include "device.h"
 #include "diskwritethread.h"
 #include "downloader.h"
 #include "image_select_page.h"

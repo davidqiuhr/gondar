@@ -9,7 +9,7 @@
 #include "downloader.h"
 #include "unzipthread.h"
 
-#include "deviceguy.h"
+#include "device.h"
 #include "gondar.h"
 #include "log.h"
 #include "neverware_unzipper.h"
