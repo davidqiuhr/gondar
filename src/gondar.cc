@@ -1096,7 +1096,7 @@ static BOOL GetDriveLetters(DWORD DriveIndex, char* drive_letters) {
  * Return the drive letter and volume label
  * If the drive doesn't have a volume assigned, space is returned for the letter
  */
-static BOOL GetDriveLabel(DWORD DriveIndex, char* letters, char** label) {
+static BOOL GetDriveLabel(DWORD DriveIndex, char* letters, const char** label) {
   HANDLE hPhysical;
   DWORD size;
   static char VolumeLabel[MAX_PATH + 1];
@@ -1503,7 +1503,8 @@ static void GetDevices(DeviceGuyList* device_list) {
   HANDLE hDrive;
   int s, score, drive_number;
   char drive_letters[27], *device_id, *devid_list = NULL;
-  char *p, *label, buffer[MAX_PATH], str[MAX_PATH];
+  char *p, buffer[MAX_PATH], str[MAX_PATH];
+  const char* label;
   const char* method_str;
   usb_device_props props;
 
