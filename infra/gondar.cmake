@@ -26,7 +26,6 @@ function(add_win32_usb_support target)
   target_compile_options(win32_usb PRIVATE
     # TODO(nicholasbishop): consider fixing these warnings instead of
     # hiding them
-    -Wno-missing-prototype
     -Wno-format
     -Wno-sign-compare)
   target_link_libraries(app PRIVATE win32_usb setupapi)
