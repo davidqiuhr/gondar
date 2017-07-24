@@ -24,13 +24,6 @@ endfunction()
 function(add_win32_usb_support target)
   add_library(win32_usb STATIC src/gondar.cc)
   set_target_properties(win32_usb PROPERTIES CXX_STANDARD 11)
-  target_compile_options(win32_usb PRIVATE
-    -Wunused-macros
-    -Wwrite-strings)
+  target_compile_options(win32_usb PRIVATE ${EXTRA_WARNINGS})
   target_link_libraries(app PRIVATE win32_usb setupapi)
-
-  # This mingw define adds more modern string formatting than what
-  # msvcrt provides (C99/C11 vs C89). This makes extended format
-  # specifiers like "%lld" work.
-  target_compile_definitions(win32_usb PRIVATE __USE_MINGW_ANSI_STDIO=1)
 endfunction()
