@@ -3,7 +3,7 @@
 
 #include <QFile>
 
-#include "deviceguy.h"
+#include "device.h"
 #include "gondar.h"
 #include "log.h"
 
