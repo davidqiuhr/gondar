@@ -16,7 +16,7 @@
 namespace gondar {
 
 void SendMetric(std::string metric) {
-    QNetworkAccessManager * manager = Barathrum::getInstance().getManager();
+    QNetworkAccessManager * manager = getNetworkManager();
     QUrl url = QUrl(
                  "https://4mjpbmflkd.execute-api.us-east-1.amazonaws.com/prod"
                );

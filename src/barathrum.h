@@ -4,19 +4,6 @@
 
 #include <QNetworkAccessManager>
 
-class Barathrum {
- public:
-  static Barathrum& getInstance() {
-    static Barathrum instance;
-    return instance;
-  }
-  QNetworkAccessManager* getManager() { return &manager;}
- private:
-  QNetworkAccessManager manager;
-  Barathrum() {};
- public:
-  Barathrum(Barathrum const&) = delete;
-  void operator=(Barathrum const&) = delete;
-};
+QNetworkAccessManager* getNetworkManager();
 
 #endif /* BARATHRUM_H */
