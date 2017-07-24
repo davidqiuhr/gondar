@@ -42,7 +42,7 @@ add_library(app STATIC
   resources/gondarwizard.qrc
   src/admin_check_page.cc
   src/chromeover_login_page.cc
-  src/deviceguy.cc
+  src/device.cc
   src/diskwritethread.cc
   src/downloader.cc
   src/gondarsite.cc

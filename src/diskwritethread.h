@@ -6,7 +6,7 @@
 #include <QString>
 #include <QThread>
 
-#include "deviceguy.h"
+#include "device.h"
 
 class DiskWriteThread : public QThread {
   Q_OBJECT

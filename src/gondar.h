@@ -1,7 +1,7 @@
 #ifndef GONDAR_H
 #define GONDAR_H
 
-#include "deviceguy.h"
+#include "device.h"
 #include "shared.h"
 
 #ifdef __cplusplus
