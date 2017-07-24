@@ -44,7 +44,7 @@ clean:
 
 
 format:
-	${CLANG_FORMAT} -i src/*.{h,c,cc} test/*.{h,cc}
+	${CLANG_FORMAT} -i src/*.{h,cc} test/*.{h,cc}
 
 
 help:

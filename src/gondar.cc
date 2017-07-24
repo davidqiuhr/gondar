@@ -41,8 +41,7 @@ static int dword_to_int(const DWORD value) {
   }
 }
 
-#define ARRAYSIZE_SIGNED(array_) \
-  size_t_to_signed(ARRAYSIZE(array_))
+#define ARRAYSIZE_SIGNED(array_) size_t_to_signed(ARRAYSIZE(array_))
 
 /* Convenient to have around */
 #define MB 1048576LL
@@ -178,13 +177,14 @@ typedef CHAR* DEVINSTID_A;
  * to
  * the specific range [DRIVE_INDEX_MIN; DRIVE_INDEX_MAX].
  */
-#define CheckDriveIndex(DriveIndex)                                            \
-  do {                                                                         \
-    if ((DriveIndex < DRIVE_INDEX_MIN) || (DriveIndex > DRIVE_INDEX_MAX)) {    \
-      printf("ERROR: Bad index value %lu. Please check the code!", DriveIndex); \
-      goto out;                                                                \
-    }                                                                          \
-    DriveIndex -= DRIVE_INDEX_MIN;                                             \
+#define CheckDriveIndex(DriveIndex)                                         \
+  do {                                                                      \
+    if ((DriveIndex < DRIVE_INDEX_MIN) || (DriveIndex > DRIVE_INDEX_MAX)) { \
+      printf("ERROR: Bad index value %lu. Please check the code!",          \
+             DriveIndex);                                                   \
+      goto out;                                                             \
+    }                                                                       \
+    DriveIndex -= DRIVE_INDEX_MIN;                                          \
   } while (0)
 
 #define MAX_LIBRARY_HANDLES 32
@@ -214,6 +214,7 @@ static __inline HMODULE GetLibraryHandle(const char* szLibraryName) {
   if (pf##proc == NULL)     \
   pf##proc = (proc##_t)GetProcAddress(GetLibraryHandle(#name), #proc)
 
+extern "C" {
 /* Cfgmgr32.dll interface */
 DECLSPEC_IMPORT CONFIGRET WINAPI CM_Get_Device_IDA(DEVINST dnDevInst,
                                                    PCSTR Buffer,
@@ -243,6 +244,7 @@ PF_TYPE_DECL(WINAPI,
              CONFIGRET,
              CM_Get_DevNode_Registry_PropertyA,
              (DEVINST, ULONG, PULONG, PVOID, PULONG, ULONG));
+}
 
 // from registry.c
 /* Read a generic registry key value. If a short key_name is used, assume that
@@ -1483,8 +1485,8 @@ static void GetDevices(DeviceGuyList* device_list) {
   int s, score, drive_number;
   char drive_letters[27], *device_id, *devid_list = NULL;
   char *p, buffer[MAX_PATH], str[MAX_PATH];
-  const char *label;
-  const char *method_str;
+  const char* label;
+  const char* method_str;
   usb_device_props props;
 
   StrArrayCreate(&dev_if_path, 128);
@@ -2323,7 +2325,8 @@ static BOOL WriteDrive(HANDLE hPhysicalDrive,
       if ((s) && (wSize == rSize))
         break;
       if (s)
-        printf("write error: Wrote %lu bytes, expected %lu bytes", wSize, rSize);
+        printf("write error: Wrote %lu bytes, expected %lu bytes", wSize,
+               rSize);
       else
         printf("write error at sector %llu:\n", wb / sector_size);
       if (i < WRITE_RETRIES - 1) {
