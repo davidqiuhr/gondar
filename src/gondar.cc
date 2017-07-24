@@ -2049,7 +2049,7 @@ static char* GetLogicalName(DWORD DriveIndex, BOOL bKeepTrailingBackslash) {
     len = safe_strlen(volume_name);
     if ((len <= 1) || (safe_strnicmp(volume_name, volume_start, 4) != 0) ||
         (volume_name[len - 1] != '\\')) {
-      sprintf("'%s' is not a GUID volume name\n", volume_name);
+      printf("'%s' is not a GUID volume name\n", volume_name);
       continue;
     }
 
@@ -2060,7 +2060,7 @@ static char* GetLogicalName(DWORD DriveIndex, BOOL bKeepTrailingBackslash) {
     volume_name[len - 1] = 0;
 
     if (QueryDosDeviceA(&volume_name[4], path, sizeof(path)) == 0) {
-      sprintf("Failed to get device path for GUID volume '%s':\n", volume_name);
+      printf("Failed to get device path for GUID volume '%s':\n", volume_name);
       continue;
     }
 
@@ -2070,7 +2070,7 @@ static char* GetLogicalName(DWORD DriveIndex, BOOL bKeepTrailingBackslash) {
          j++)
       ;
     if (j < ARRAYSIZE(ignore_device)) {
-      sprintf("Skipping GUID volume for '%s'\n", path);
+      printf("Skipping GUID volume for '%s'\n", path);
       continue;
     }
 
@@ -2078,7 +2078,7 @@ static char* GetLogicalName(DWORD DriveIndex, BOOL bKeepTrailingBackslash) {
                          FILE_SHARE_READ | FILE_SHARE_WRITE, NULL,
                          OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     if (hDrive == INVALID_HANDLE_VALUE) {
-      sprintf("Could not open GUID volume '%s': \n", volume_name);
+      printf("Could not open GUID volume '%s': \n", volume_name);
       continue;
     }
 
