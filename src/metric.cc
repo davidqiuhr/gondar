@@ -21,6 +21,8 @@ void SendMetric(std::string metric) {
                  "https://4mjpbmflkd.execute-api.us-east-1.amazonaws.com/prod"
                );
     QJsonObject json;
+    // TODO: use a persistent UUID across a session, and potentially even
+    // across multiple runs
     QString id = QUuid::createUuid().toString();
     json.insert("identifier", id);
     json.insert("metric", metric.c_str());
