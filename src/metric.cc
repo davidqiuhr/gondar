@@ -11,7 +11,7 @@
 #include <QJsonDocument>
 #include <QUuid>
 
-#include "barathrum.h"
+#include "networksingleton.h"
 
 namespace gondar {
 
@@ -31,7 +31,7 @@ void SendMetric(std::string metric) {
                       "application/x-www-form-urlencoded");
     QJsonDocument doc(json);
     QString strJson(doc.toJson(QJsonDocument::Compact));
-    manager->post(request, QByteArray(strJson.toLocal8Bit()));
+    manager->post(request, QByteArray(strJson.toUtf8()));
 }
 
 }

@@ -11,7 +11,7 @@
 
 #include "gondarsite.h"
 #include "log.h"
-#include "barathrum.h"
+#include "networksingleton.h"
 
 namespace {
 
