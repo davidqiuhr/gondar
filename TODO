@@ -1,0 +1,5 @@
+Makefile: pass build type through to cmake :(
+
+PR for style sheet
+
+Move pages to separate files!
