@@ -11,7 +11,6 @@ class Barathrum {
     return instance;
   }
   QNetworkAccessManager* getManager() { return &manager;}
-  // just public for starters
  private:
   QNetworkAccessManager manager;
   Barathrum() {};
