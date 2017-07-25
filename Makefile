@@ -3,6 +3,7 @@ CHROMEOVER ?= false
 CMAKE ?= cmake
 RELEASE ?= false
 TREAT_WARNINGS_AS_ERRORS ?= false
+METRICS_API_KEY ?= notset
 
 # Some distros use different names for clang-format
 ifneq (, $(shell which clang-format))
@@ -35,7 +36,8 @@ build-gondar: print-config update-submodules
 			-DCHROMEOVER=${CHROMEOVER} \
 			-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
 			-DTREAT_WARNINGS_AS_ERRORS=${TREAT_WARNINGS_AS_ERRORS} \
-			-DWIN32_CONSOLE=${WIN32_CONSOLE} && \
+			-DWIN32_CONSOLE=${WIN32_CONSOLE} \
+			-DMETRICS_API_KEY:STRING=${METRICS_API_KEY} && \
 		make -j
 
 

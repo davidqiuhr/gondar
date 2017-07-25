@@ -11,6 +11,7 @@
 #include <QUuid>
 
 #include "config.h"
+#include "log.h"
 
 namespace gondar {
 
@@ -35,6 +36,11 @@ std::string getMetricString(Metric metric) {
 }
 
 void SendMetric(Metric metric) {
+    if (METRICS_API_KEY == "notset") {
+        // all production builds should sent metrics
+        LOG_WARNING << "not sending metrics!";
+        return;
+    }
     // TODO: add a metrics enabled bool in cmake layer and return here
     // if metrics are disabled
     std::string metricStr = getMetricString(metric);

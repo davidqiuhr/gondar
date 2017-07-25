@@ -31,8 +31,9 @@ set(EXTRA_WARNINGS ${EXTRA_WARNINGS}
 
 # we set the API key here and move the files required by metric.cc along
 # with it into ./build/src
-set(METRICS_API_KEY fwoKBOcFsO8yHbATzjvRF5PFn6ThzxQea9oNqVn9)
-configure_file(src/config.h.in src/config.h @ONLY)
+set(METRICS_API_KEY "notset" CACHE STRING "metrics API key")
+configure_file(src/metric.cc src/metric.cc @ONLY)
+configure_file(src/metric.h src/metric.h @ONLY)
 
 if(${TREAT_WARNINGS_AS_ERRORS})
   set(EXTRA_WARNINGS ${EXTRA_WARNINGS} -Werror)
