@@ -30,7 +30,7 @@ void SendMetric(Metric metric) {
     // if metrics are disabled
     std::string metricStr = getMetricString(metric);
     QNetworkAccessManager * manager = getNetworkManager();
-    QUrl url("https://gondar-metrics.neverware.com/prod");
+    QUrl url("https://4mjpbmflkd.execute-api.us-east-1.amazonaws.com/prod");
     QJsonObject json;
     // TODO: use a persistent UUID across a session, and potentially even
     // across multiple runs
