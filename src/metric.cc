@@ -1,4 +1,6 @@
 
+#cmakedefine METRICS_API_KEY "@METRICS_API_KEY@"
+
 #include "metric.h"
 
 #include <QNetworkAccessManager>
@@ -24,6 +26,8 @@ std::string getMetricString(Metric metric) {
 }
 
 void SendMetric(Metric metric) {
+    // TODO: add a metrics enabled bool in cmake layer and return here
+    // if metrics are disabled
     std::string metricStr = getMetricString(metric);
     QNetworkAccessManager * manager = getNetworkManager();
     QUrl url("https://gondar-metrics.neverware.com");
@@ -35,7 +39,7 @@ void SendMetric(Metric metric) {
     json.insert("metric", QString::fromStdString(metricStr));
     QNetworkRequest request(url);
     request.setRawHeader(QByteArray("x-api-key"),
-                         "fwoKBOcFsO8yHbATzjvRF5PFn6ThzxQea9oNqVn9");
+                         METRICS_API_KEY);
     request.setHeader(QNetworkRequest::ContentTypeHeader,
                       "application/x-www-form-urlencoded");
     QJsonDocument doc(json);
