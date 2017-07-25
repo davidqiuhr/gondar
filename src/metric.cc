@@ -13,9 +13,12 @@
 #include <QJsonDocument>
 #include <QUuid>
 
-#include "networksingleton.h"
-
 namespace gondar {
+
+QNetworkAccessManager* getNetworkManager() {
+  static QNetworkAccessManager manager;
+  return & manager;
+}
 
 std::string getMetricString(Metric metric) {
   switch (metric) {

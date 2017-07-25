@@ -34,7 +34,6 @@ set(EXTRA_WARNINGS ${EXTRA_WARNINGS}
 set(METRICS_API_KEY fwoKBOcFsO8yHbATzjvRF5PFn6ThzxQea9oNqVn9)
 configure_file(src/metric.cc src/metric.cc @ONLY)
 configure_file(src/metric.h src/metric.h @ONLY)
-configure_file(src/networksingleton.h src/networksingleton.h @ONLY)
 
 if(${TREAT_WARNINGS_AS_ERRORS})
   set(EXTRA_WARNINGS ${EXTRA_WARNINGS} -Werror)
@@ -65,7 +64,6 @@ target_compile_options(minizip_extra PRIVATE
 add_library(app STATIC
   resources/gondarwizard.qrc
   src/admin_check_page.cc
-  src/networksingleton.cc
   src/chromeover_login_page.cc
   src/device.cc
   src/diskwritethread.cc
