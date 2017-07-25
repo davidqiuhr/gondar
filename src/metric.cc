@@ -36,7 +36,8 @@ std::string getMetricString(Metric metric) {
 }
 
 void SendMetric(Metric metric) {
-    if (METRICS_API_KEY == "notset") {
+    // use QString's equality check
+    if (QString("notset") == METRICS_API_KEY) {
         // all production builds should sent metrics
         LOG_WARNING << "not sending metrics!";
         return;
