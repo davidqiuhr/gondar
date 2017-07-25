@@ -14,6 +14,8 @@
 
 namespace gondar {
 
+namespace {
+
 QNetworkAccessManager* getNetworkManager();
 std::string getMetricString(Metric metric);
 
@@ -28,6 +30,8 @@ std::string getMetricString(Metric metric) {
     // not sure we want to crash the program on a bad metric lookup
     default:   return "unknown";
   }
+}
+
 }
 
 void SendMetric(Metric metric) {
