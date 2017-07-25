@@ -22,7 +22,7 @@ QNetworkAccessManager* getNetworkManager() {
 
 std::string getMetricString(Metric metric) {
   switch (metric) {
-    case Use:  return "use";
+    case Metric::Use:  return "use";
     // not sure we want to crash the program on a bad metric lookup
     default:   return "unknown";
   }

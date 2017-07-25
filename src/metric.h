@@ -8,7 +8,7 @@
 
 namespace gondar {
 
-enum Metric {Use};
+enum class Metric {Use};
 
 QNetworkAccessManager* getNetworkManager();
 std::string getMetricString(Metric metric);
