@@ -1,9 +1,9 @@
 
-#ifndef BARATHRUM_H
-#define BARATHRUM_H
+#ifndef NETWORK_SINGLETON_H
+#define NETWORK_SINGLETON_H
 
 #include <QNetworkAccessManager>
 
 QNetworkAccessManager* getNetworkManager();
 
-#endif /* BARATHRUM_H */
+#endif
