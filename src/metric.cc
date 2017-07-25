@@ -15,7 +15,16 @@
 
 namespace gondar {
 
-void SendMetric(std::string metric) {
+std::string getMetricString(Metric metric) {
+  switch (metric) {
+    case Use:  return "use";
+    // not sure we want to crash the program on a bad metric lookup
+    default:   return "unknown";
+  }
+}
+
+void SendMetric(Metric metric) {
+    std::string metricStr = getMetricString(metric);
     QNetworkAccessManager * manager = getNetworkManager();
     QUrl url("https://4mjpbmflkd.execute-api.us-east-1.amazonaws.com/prod");
     QJsonObject json;
@@ -23,7 +32,7 @@ void SendMetric(std::string metric) {
     // across multiple runs
     QString id = QUuid::createUuid().toString();
     json.insert("identifier", id);
-    json.insert("metric", metric.c_str());
+    json.insert("metric", metricStr.c_str());
     QNetworkRequest request(url);
     request.setRawHeader(QByteArray("x-api-key"),
                          "fwoKBOcFsO8yHbATzjvRF5PFn6ThzxQea9oNqVn9");

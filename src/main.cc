@@ -14,7 +14,7 @@ int main(int argc, char* argv[]) {
   Q_INIT_RESOURCE(gondarwizard);
 
   gondar::InitializeLogging();
-  gondar::SendMetric("use");
+  gondar::SendMetric(gondar::Metric::Use);
 
   QApplication app(argc, argv);
   GondarWizard wizard;
