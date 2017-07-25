@@ -32,8 +32,7 @@ set(EXTRA_WARNINGS ${EXTRA_WARNINGS}
 # we set the API key here and move the files required by metric.cc along
 # with it into ./build/src
 set(METRICS_API_KEY fwoKBOcFsO8yHbATzjvRF5PFn6ThzxQea9oNqVn9)
-configure_file(src/metric.cc src/metric.cc @ONLY)
-configure_file(src/metric.h src/metric.h @ONLY)
+configure_file(src/config.h.in src/config.h @ONLY)
 
 if(${TREAT_WARNINGS_AS_ERRORS})
   set(EXTRA_WARNINGS ${EXTRA_WARNINGS} -Werror)
@@ -73,7 +72,7 @@ add_library(app STATIC
   src/image_select_page.cc
   src/log.cc
   src/meepo.cc
-  build/src/metric.cc
+  src/metric.cc
   src/neverware_unzipper.cc
   src/site_select_page.cc
   src/unzipthread.cc
@@ -86,6 +85,7 @@ endif()
 set_target_properties(app PROPERTIES AUTOMOC ON AUTORCC ON)
 target_compile_options(app PRIVATE ${EXTRA_WARNINGS})
 target_include_directories(app SYSTEM PUBLIC minizip plog/include)
+target_include_directories(app PRIVATE ${CMAKE_BINARY_DIR}/src)
 target_link_libraries(app PUBLIC
   Qt5::Network Qt5::Widgets minizip minizip_extra)
 
