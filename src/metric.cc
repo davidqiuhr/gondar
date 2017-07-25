@@ -1,6 +1,3 @@
-
-#cmakedefine METRICS_API_KEY "@METRICS_API_KEY@"
-
 #include "metric.h"
 
 #include <QNetworkAccessManager>
@@ -12,6 +9,8 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QUuid>
+
+#include "config.h"
 
 namespace gondar {
 

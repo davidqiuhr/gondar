@@ -1,0 +1,8 @@
+// Copyright 2017 Neverware
+
+#ifndef SRC_CONFIG_H_
+#define SRC_CONFIG_H_
+
+#cmakedefine METRICS_API_KEY "@METRICS_API_KEY@"
+
+#endif  // SRC_CONFIG_H_IN_
