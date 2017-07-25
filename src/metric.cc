@@ -31,8 +31,8 @@ void SendMetric(Metric metric) {
     // TODO: use a persistent UUID across a session, and potentially even
     // across multiple runs
     QString id = QUuid::createUuid().toString();
-    json.insert("identifier", id);
-    json.insert("metric", metricStr.c_str());
+    json["identifier"] = id;
+    json.insert("metric", QString::fromStdString(metricStr));
     QNetworkRequest request(url);
     request.setRawHeader(QByteArray("x-api-key"),
                          "fwoKBOcFsO8yHbATzjvRF5PFn6ThzxQea9oNqVn9");
