@@ -2,11 +2,11 @@
 #ifndef GONDAR_METRIC_H
 #define GONDAR_METRIC_H
 
-#include <string>
-
 namespace gondar {
 
-void SendMetric(std::string metric);
+enum class Metric {Use};
+
+void SendMetric(Metric metric);
 
 }  // namespace gondar
 

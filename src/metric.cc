@@ -1,4 +1,3 @@
-
 #include "metric.h"
 
 #include <QNetworkAccessManager>
@@ -11,27 +10,57 @@
 #include <QJsonDocument>
 #include <QUuid>
 
-#include "barathrum.h"
+#include "config.h"
+#include "log.h"
 
 namespace gondar {
 
-void SendMetric(std::string metric) {
-    QNetworkAccessManager * manager = Barathrum::getInstance().getManager();
-    QUrl url = QUrl(
-                 "https://4mjpbmflkd.execute-api.us-east-1.amazonaws.com/prod"
-               );
+namespace {
+
+QNetworkAccessManager* getNetworkManager();
+std::string getMetricString(Metric metric);
+
+QNetworkAccessManager* getNetworkManager() {
+  static QNetworkAccessManager manager;
+  return & manager;
+}
+
+std::string getMetricString(Metric metric) {
+  switch (metric) {
+    case Metric::Use:  return "use";
+    // not sure we want to crash the program on a bad metric lookup
+    default:   return "unknown";
+  }
+}
+
+}
+
+void SendMetric(Metric metric) {
+    // use QString's equality check
+    if (QString("notset") == METRICS_API_KEY) {
+        // all production builds should sent metrics
+        LOG_WARNING << "not sending metrics!";
+        return;
+    }
+    // TODO: add a metrics enabled bool in cmake layer and return here
+    // if metrics are disabled
+    std::string metricStr = getMetricString(metric);
+    QNetworkAccessManager * manager = getNetworkManager();
+    QUrl url("https://gondar-metrics.neverware.com/prod");
     QJsonObject json;
+    // TODO: use a persistent UUID across a session, and potentially even
+    // across multiple runs
     QString id = QUuid::createUuid().toString();
-    json.insert("identifier", id);
-    json.insert("metric", metric.c_str());
+    json["identifier"] = id;
+    json.insert("metric", QString::fromStdString(metricStr));
     QNetworkRequest request(url);
     request.setRawHeader(QByteArray("x-api-key"),
-                         "fwoKBOcFsO8yHbATzjvRF5PFn6ThzxQea9oNqVn9");
+                         METRICS_API_KEY);
     request.setHeader(QNetworkRequest::ContentTypeHeader,
                       "application/x-www-form-urlencoded");
     QJsonDocument doc(json);
     QString strJson(doc.toJson(QJsonDocument::Compact));
-    manager->post(request, QByteArray(strJson.toLocal8Bit()));
+    manager->post(request, QByteArray(strJson.toUtf8()));
 }
 
 }
