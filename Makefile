@@ -72,6 +72,7 @@ print-config:
 	@echo "  CHROMEOVER: ${CHROMEOVER}"
 	@echo "  CMAKE: ${CMAKE}"
 	@echo "  CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}"
+	@echo "  METRICS_API_KEY: ${METRICS_API_KEY}"
 	@echo "  PACKAGE_FLAGS: '${PACKAGE_FLAGS}' (only affects docker win32 builds)"
 	@echo "  RELEASE: ${RELEASE}"
 	@echo "  TREAT_WARNINGS_AS_ERRORS: ${TREAT_WARNINGS_AS_ERRORS}"
