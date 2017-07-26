@@ -17,9 +17,6 @@ namespace gondar {
 
 namespace {
 
-QNetworkAccessManager* getNetworkManager();
-std::string getMetricString(Metric metric);
-
 QNetworkAccessManager* getNetworkManager() {
   static QNetworkAccessManager manager;
   return & manager;
