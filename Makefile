@@ -3,7 +3,6 @@ CHROMEOVER ?= false
 CMAKE ?= cmake
 RELEASE ?= false
 TREAT_WARNINGS_AS_ERRORS ?= false
-METRICS_API_KEY ?= notset
 
 # Some distros use different names for clang-format
 ifneq (, $(shell which clang-format))

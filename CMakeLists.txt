@@ -29,7 +29,7 @@ set(EXTRA_WARNINGS ${EXTRA_WARNINGS}
   -Wunused-macros
   -Wwrite-strings)
 
-set(METRICS_API_KEY "notset" CACHE STRING "metrics API key")
+set(METRICS_API_KEY CACHE STRING "metrics API key")
 configure_file(src/config.h.in src/config.h @ONLY)
 
 if(${TREAT_WARNINGS_AS_ERRORS})
