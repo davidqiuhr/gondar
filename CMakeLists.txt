@@ -60,6 +60,7 @@ target_compile_options(minizip_extra PRIVATE
 # application and test targets
 add_library(app STATIC
   resources/gondarwizard.qrc
+  src/about_dialog.cc
   src/admin_check_page.cc
   src/chromeover_login_page.cc
   src/device.cc
