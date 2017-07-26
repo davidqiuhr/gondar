@@ -61,7 +61,7 @@ void DownloadManager::startNextDownload() {
   }
 
   QNetworkRequest request(url);
-  gondar::SendMetric("downloadAttempt");
+  gondar::SendMetric(gondar::Metric::DownloadAttempt);
   currentDownload = manager.get(request);
   connect(currentDownload, SIGNAL(finished()), SLOT(downloadFinished()));
   connect(currentDownload, SIGNAL(readyRead()), SLOT(downloadReadyRead()));
@@ -73,7 +73,7 @@ void DownloadManager::startNextDownload() {
 }
 
 void DownloadManager::downloadFinished() {
-  gondar::SendMetric("downloadSuccess");
+  gondar::SendMetric(gondar::Metric::DownloadSuccess);
   // progressBar.clear();
   output.close();
 

@@ -33,7 +33,7 @@ DiskWriteThread::State DiskWriteThread::state() const {
 
 void DiskWriteThread::run() {
   LOG_INFO << "writing " << image_path << " to disk";
-  gondar::SendMetric("usbAttempt");
+  gondar::SendMetric(gondar::Metric::UsbAttempt);
   setState(State::Running);
 
   const int64_t image_size = getFileSize(image_path);
@@ -48,7 +48,7 @@ void DiskWriteThread::run() {
     setState(State::InstallFailed);
     return;
   }
-  gondar::SendMetric("usbSuccess");
+  gondar::SendMetric(gondar::Metric::UsbSuccess);
 }
 
 void DiskWriteThread::setState(const State state) {

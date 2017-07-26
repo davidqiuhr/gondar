@@ -27,6 +27,12 @@ QNetworkAccessManager* getNetworkManager() {
 
 std::string getMetricString(Metric metric) {
   switch (metric) {
+    case Metric::BeeroverUse: return "beerover-use";
+    case Metric::ChromeoverUse: return "chromeover-use";
+    case Metric::DownloadAttempt: return "download-attempt";
+    case Metric::DownloadSuccess: return "download-success";
+    case Metric::UsbAttempt: return "usb-attempt";
+    case Metric::UsbSuccess: return "usb-success";
     case Metric::Use:  return "use";
     // not sure we want to crash the program on a bad metric lookup
     default:   return "unknown";

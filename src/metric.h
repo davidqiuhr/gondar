@@ -4,7 +4,8 @@
 
 namespace gondar {
 
-enum class Metric {Use};
+enum class Metric { Use, UsbAttempt, UsbSuccess, DownloadAttempt,
+                    DownloadSuccess, ChromeoverUse, BeeroverUse };
 
 void SendMetric(Metric metric);
 
