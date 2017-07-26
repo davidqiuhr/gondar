@@ -30,11 +30,19 @@ std::string getMetricString(Metric metric) {
   }
 }
 
+QByteArray getMetricsApiKey() {
+#ifdef METRICS_API_KEY
+  return QByteArray(METRICS_API_KEY);
+#else
+  return QByteArray();
+#endif
+}
+
 }
 
 void SendMetric(Metric metric) {
-    // use QString's equality check
-    if (QString("notset") == METRICS_API_KEY) {
+    const auto api_key = getMetricsApiKey();
+    if (api_key.isEmpty()) {
         // all production builds should sent metrics
         LOG_WARNING << "not sending metrics!";
         return;
@@ -51,8 +59,7 @@ void SendMetric(Metric metric) {
     json["identifier"] = id;
     json.insert("metric", QString::fromStdString(metricStr));
     QNetworkRequest request(url);
-    request.setRawHeader(QByteArray("x-api-key"),
-                         METRICS_API_KEY);
+    request.setRawHeader(QByteArray("x-api-key"), api_key);
     request.setHeader(QNetworkRequest::ContentTypeHeader,
                       "application/x-www-form-urlencoded");
     QJsonDocument doc(json);
