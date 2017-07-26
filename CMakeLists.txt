@@ -29,9 +29,7 @@ set(EXTRA_WARNINGS ${EXTRA_WARNINGS}
   -Wunused-macros
   -Wwrite-strings)
 
-# we set the API key here and move the files required by metric.cc along
-# with it into ./build/src
-set(METRICS_API_KEY "notset" CACHE STRING "metrics API key")
+set(METRICS_API_KEY CACHE STRING "metrics API key")
 configure_file(src/config.h.in src/config.h @ONLY)
 
 if(${TREAT_WARNINGS_AS_ERRORS})
@@ -76,6 +74,7 @@ add_library(app STATIC
   src/neverware_unzipper.cc
   src/site_select_page.cc
   src/unzipthread.cc
+  src/util.cc
   src/wizard_page.cc)
 
 if(${CHROMEOVER})
