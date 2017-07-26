@@ -1,6 +1,7 @@
 #include "admin_check_page.h"
 #include "gondar.h"
 #include "gondarwizard.h"
+#include "util.h"
 
 // note that even though this is called the admin check page, it will in most
 // cases be a welcome page, unless the user is missing admin rights
@@ -47,17 +48,8 @@ void AdminCheckPage::showIsNotAdmin() {
       "program with sufficient rights.");
 }
 
-// helper function to determine if this build is a chromeover build
-bool AdminCheckPage::isChromeover() {
-#ifdef CHROMEOVER
-  return true;
-#else
-  return false;
-#endif
-}
-
 int AdminCheckPage::nextId() const {
-  if (isChromeover()) {
+  if (gondar::isChromeover()) {
     return GondarWizard::Page_chromeoverLogin;
   } else {
     return GondarWizard::Page_imageSelect;

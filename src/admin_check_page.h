@@ -20,7 +20,6 @@ class AdminCheckPage : public gondar::WizardPage {
   void showIsNotAdmin();
 
  private:
-  static bool isChromeover();
   QLabel label;
   bool is_admin;
   QVBoxLayout layout;

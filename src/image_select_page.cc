@@ -2,6 +2,7 @@
 
 #include "gondarwizard.h"
 #include "log.h"
+#include "util.h"
 
 ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
   setTitle("Which version of CloudReady do you need?");
@@ -16,26 +17,18 @@ ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
   layout.addWidget(&thirtyTwo);
   layout.addWidget(&sixtyFour);
   setLayout(&layout);
-  thirtyTwoUrl.setUrl(
-      "https://ddnynf025unax.cloudfront.net/cloudready-free-56.3.80-32-bit/"
-      "cloudready-free-56.3.80-32-bit.bin.zip");
-  sixtyFourUrl.setUrl(
-      "https://ddnynf025unax.cloudfront.net/cloudready-free-56.3.82-64-bit/"
-      "cloudready-free-56.3.82-64-bit.bin.zip");
 }
 
-QUrl ImageSelectPage::getUrl() const {
-  LOG_INFO << "in getUrl and thirtyTwoUrl=" << thirtyTwoUrl.toString();
-  LOG_INFO << "in getUrl and sixtyFourUrl=" << sixtyFourUrl.toString();
-  QAbstractButton* selected = bitnessButtons.checkedButton();
-  if (selected == &thirtyTwo) {
-    return thirtyTwoUrl;
-  } else if (selected == &sixtyFour) {
-    return sixtyFourUrl;
-  } else {
-    // TODO: decide what this behavior should be
-    return sixtyFourUrl;
+void ImageSelectPage::initializePage() {
+  urlPal.fetch();
+}
+
+bool ImageSelectPage::validatePage() {
+  // we only need to prevent proceeding to next page in the beerover case
+  if (gondar::isChromeover()) {
+    return true;
   }
+  return urlPal.isReady();
 }
 
 int ImageSelectPage::nextId() const {
@@ -43,9 +36,21 @@ int ImageSelectPage::nextId() const {
 }
 
 void ImageSelectPage::set32Url(QUrl url_in) {
-  thirtyTwoUrl = url_in;
+  urlPal.set32Url(url_in);
 }
 
 void ImageSelectPage::set64Url(QUrl url_in) {
-  sixtyFourUrl = url_in;
+  urlPal.set64Url(url_in);
+}
+
+QUrl ImageSelectPage::getUrl() {
+  QAbstractButton* selected = bitnessButtons.checkedButton();
+  if (selected == &thirtyTwo) {
+    return urlPal.get32Url();
+  } else if (selected == &sixtyFour) {
+    return urlPal.get64Url();
+  } else {
+    // TODO: decide what this behavior should be
+    return urlPal.get64Url();
+  }
 }

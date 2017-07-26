@@ -5,6 +5,9 @@
 #include <QRadioButton>
 #include <QUrl>
 #include <QVBoxLayout>
+#include <QNetworkAccessManager>
+
+#include "url_pal.h"
 
 #include "wizard_page.h"
 
@@ -17,14 +20,18 @@ class ImageSelectPage : public gondar::WizardPage {
   int nextId() const override;
   void set32Url(QUrl url_in);
   void set64Url(QUrl url_in);
+  QUrl getUrl();
+
+ protected:
+  void initializePage() override;
+  bool validatePage() override;
 
  private:
   QButtonGroup bitnessButtons;
   QRadioButton thirtyTwo;
   QRadioButton sixtyFour;
   QVBoxLayout layout;
-  QUrl thirtyTwoUrl;
-  QUrl sixtyFourUrl;
+  UrlPal urlPal;
 };
 
 #endif

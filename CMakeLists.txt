@@ -62,6 +62,7 @@ add_library(app STATIC
   resources/gondarwizard.qrc
   src/about_dialog.cc
   src/admin_check_page.cc
+  src/url_pal.cc
   src/chromeover_login_page.cc
   src/device.cc
   src/diskwritethread.cc
