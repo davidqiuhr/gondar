@@ -39,8 +39,6 @@ void SendMetric(Metric metric) {
         LOG_WARNING << "not sending metrics!";
         return;
     }
-    // TODO: add a metrics enabled bool in cmake layer and return here
-    // if metrics are disabled
     std::string metricStr = getMetricString(metric);
     QNetworkAccessManager * manager = getNetworkManager();
     QUrl url("https://gondar-metrics.neverware.com/prod");
