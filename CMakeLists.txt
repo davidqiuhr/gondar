@@ -29,8 +29,6 @@ set(EXTRA_WARNINGS ${EXTRA_WARNINGS}
   -Wunused-macros
   -Wwrite-strings)
 
-# we set the API key here and move the files required by metric.cc along
-# with it into ./build/src
 set(METRICS_API_KEY "notset" CACHE STRING "metrics API key")
 configure_file(src/config.h.in src/config.h @ONLY)
 
