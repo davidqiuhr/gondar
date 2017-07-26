@@ -74,6 +74,7 @@ add_library(app STATIC
   src/neverware_unzipper.cc
   src/site_select_page.cc
   src/unzipthread.cc
+  src/util.cc
   src/wizard_page.cc)
 
 if(${CHROMEOVER})
