@@ -23,7 +23,8 @@ GondarButton::GondarButton(const QString& text,
     : QRadioButton(text, parent) {
   index = device_num;
 }
-GondarWizard::GondarWizard(QWidget* parent) : QWizard(parent) {
+GondarWizard::GondarWizard(QWidget* parent)
+    : QWizard(parent), about_shortcut_(QKeySequence::HelpContents, this) {
   // these pages are automatically cleaned up
   // new instances are made whenever navigation moves on to another page
   // according to qt docs
@@ -45,6 +46,9 @@ GondarWizard::GondarWizard(QWidget* parent) : QWizard(parent) {
   setOption(QWizard::HaveCustomButton1, false);
   setOption(QWizard::NoCancelButton, true);
   setOption(QWizard::NoBackButtonOnLastPage, true);
+
+  connect(&about_shortcut_, &QShortcut::activated, &about_dialog_,
+          &gondar::AboutDialog::show);
 }
 
 // handle event when 'make another usb' button pressed
