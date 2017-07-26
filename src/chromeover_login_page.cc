@@ -17,8 +17,7 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
   passwordLineEditLabel.setBuddy(&passwordLineEdit);
   passwordLineEditLabel.setText("Password:");
   meanWordsLabel.setText("That's not right!  Try again.");
-  // give it the smithforrestr treatment
-  meanWordsLabel.setStyleSheet("QLabel { color : red; }");
+  meanWordsLabel.setObjectName("loginError");
   layout.addWidget(&passwordLineEditLabel, 1, 0);
   layout.addWidget(&passwordLineEdit, 1, 1);
   layout.addWidget(&meanWordsLabel, 2, 0, 1, 2);
