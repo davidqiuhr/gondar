@@ -1,13 +1,13 @@
 #include "metric.h"
 
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QNetworkAccessManager>
-#include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QNetworkRequest>
 #include <QSslError>
 #include <QUrl>
 #include <QUrlQuery>
-#include <QJsonObject>
-#include <QJsonDocument>
 #include <QUuid>
 
 #include "config.h"
@@ -19,14 +19,16 @@ namespace {
 
 QNetworkAccessManager* getNetworkManager() {
   static QNetworkAccessManager manager;
-  return & manager;
+  return &manager;
 }
 
 std::string getMetricString(Metric metric) {
   switch (metric) {
-    case Metric::Use:  return "use";
+    case Metric::Use:
+      return "use";
     // not sure we want to crash the program on a bad metric lookup
-    default:   return "unknown";
+    default:
+      return "unknown";
   }
 }
 
@@ -37,32 +39,30 @@ QByteArray getMetricsApiKey() {
   return QByteArray();
 #endif
 }
-
 }
 
 void SendMetric(Metric metric) {
-    const auto api_key = getMetricsApiKey();
-    if (api_key.isEmpty()) {
-        // all production builds should sent metrics
-        LOG_WARNING << "not sending metrics!";
-        return;
-    }
-    std::string metricStr = getMetricString(metric);
-    QNetworkAccessManager * manager = getNetworkManager();
-    QUrl url("https://gondar-metrics.neverware.com/prod");
-    QJsonObject json;
-    // TODO: use a persistent UUID across a session, and potentially even
-    // across multiple runs
-    QString id = QUuid::createUuid().toString();
-    json["identifier"] = id;
-    json.insert("metric", QString::fromStdString(metricStr));
-    QNetworkRequest request(url);
-    request.setRawHeader(QByteArray("x-api-key"), api_key);
-    request.setHeader(QNetworkRequest::ContentTypeHeader,
-                      "application/x-www-form-urlencoded");
-    QJsonDocument doc(json);
-    QString strJson(doc.toJson(QJsonDocument::Compact));
-    manager->post(request, QByteArray(strJson.toUtf8()));
+  const auto api_key = getMetricsApiKey();
+  if (api_key.isEmpty()) {
+    // all production builds should sent metrics
+    LOG_WARNING << "not sending metrics!";
+    return;
+  }
+  std::string metricStr = getMetricString(metric);
+  QNetworkAccessManager* manager = getNetworkManager();
+  QUrl url("https://gondar-metrics.neverware.com/prod");
+  QJsonObject json;
+  // TODO: use a persistent UUID across a session, and potentially even
+  // across multiple runs
+  QString id = QUuid::createUuid().toString();
+  json["identifier"] = id;
+  json.insert("metric", QString::fromStdString(metricStr));
+  QNetworkRequest request(url);
+  request.setRawHeader(QByteArray("x-api-key"), api_key);
+  request.setHeader(QNetworkRequest::ContentTypeHeader,
+                    "application/x-www-form-urlencoded");
+  QJsonDocument doc(json);
+  QString strJson(doc.toJson(QJsonDocument::Compact));
+  manager->post(request, QByteArray(strJson.toUtf8()));
 }
-
 }

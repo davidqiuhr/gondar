@@ -4,7 +4,7 @@
 
 namespace gondar {
 
-enum class Metric {Use};
+enum class Metric { Use };
 
 void SendMetric(Metric metric);
 
