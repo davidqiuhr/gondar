@@ -12,10 +12,9 @@
 #include "chromeover_login_page.h"
 #include "device.h"
 #include "diskwritethread.h"
-#include "downloader.h"
+#include "download_progress_page.h"
 #include "image_select_page.h"
 #include "site_select_page.h"
-#include "unzipthread.h"
 #include "wizard_page.h"
 
 class QCheckBox;
@@ -31,33 +30,6 @@ class GondarButton : public QRadioButton {
                unsigned int device_num,
                QWidget* parent = 0);
   unsigned int index = 0;
-};
-
-class DownloadProgressPage : public gondar::WizardPage {
-  Q_OBJECT
-
- public:
-  DownloadProgressPage(QWidget* parent = 0);
-  bool isComplete() const override;
-  const QString& getImageFileName();
-
- protected:
-  void initializePage() override;
-  void notifyUnzip();
-
- public slots:
-  void markComplete();
-  void downloadProgress(qint64 sofar, qint64 total);
-  void onDownloadStarted();
-  void onUnzipFinished();
-
- private:
-  bool range_set;
-  DownloadManager manager;
-  QProgressBar progress;
-  bool download_finished;
-  QVBoxLayout layout;
-  UnzipThread* unzipThread;
 };
 
 class UsbInsertPage : public gondar::WizardPage {
