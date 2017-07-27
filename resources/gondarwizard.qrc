@@ -4,7 +4,8 @@
 </qresource>
 
 <qresource>
+    <file>about.html</file>
+    <file>gpl-3.0-standalone.html</file>
     <file>style.css</file>
 </qresource>
-
 </RCC>
