@@ -15,6 +15,7 @@
 #include "device.h"
 #include "diskwritethread.h"
 #include "download_progress_page.h"
+#include "error_page.h"
 #include "image_select_page.h"
 #include "site_select_page.h"
 #include "wizard_page.h"
@@ -98,23 +99,6 @@ class WriteOperationPage : public gondar::WizardPage {
   bool writeFinished;
   DiskWriteThread* diskWriteThread;
   QString image_path;
-};
-
-class ErrorPage : public gondar::WizardPage {
-  Q_OBJECT
-
- public:
-  ErrorPage(QWidget* parent = 0);
-  void setErrorString(const QString& errorString);
-  bool errorEmpty() const;
-
- protected:
-  int nextId() const override;
-  void setVisible(bool visible) override;
-
- private:
-  QVBoxLayout layout;
-  QLabel label;
 };
 
 class GondarWizard : public QWizard {

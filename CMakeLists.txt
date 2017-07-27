@@ -65,8 +65,9 @@ add_library(app STATIC
   src/chromeover_login_page.cc
   src/device.cc
   src/diskwritethread.cc
-  src/downloader.cc
   src/download_progress_page.cc
+  src/downloader.cc
+  src/error_page.cc
   src/gondarsite.cc
   src/gondarwizard.cc
   src/image_select_page.cc
