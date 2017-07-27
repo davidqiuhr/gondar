@@ -4,10 +4,12 @@
 
 #include <QProgressBar>
 #include <QRadioButton>
+#include <QShortcut>
 #include <QString>
 #include <QWizard>
 #include <QtWidgets>
 
+#include "about_dialog.h"
 #include "admin_check_page.h"
 #include "chromeover_login_page.h"
 #include "device.h"
@@ -155,6 +157,9 @@ class GondarWizard : public QWizard {
 
  private:
   void catchError(const QString& error);
+
+  QShortcut about_shortcut_;
+  gondar::AboutDialog about_dialog_;
 };
 
 #endif /* GONDARWIZARD */
