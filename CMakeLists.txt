@@ -65,6 +65,7 @@ add_library(app STATIC
   src/device.cc
   src/diskwritethread.cc
   src/downloader.cc
+  src/error_page.cc
   src/gondarsite.cc
   src/gondarwizard.cc
   src/image_select_page.cc
