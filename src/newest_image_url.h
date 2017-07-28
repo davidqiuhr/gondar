@@ -16,6 +16,8 @@ class NewestImageUrl : public QObject {
   void set64Url(QUrl url_in);
   QUrl get32Url();
   QUrl get64Url();
+ signals:
+  void errorOccurred();
  protected:
   void handleReply(QNetworkReply* reply);
  private:

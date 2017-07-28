@@ -17,6 +17,9 @@ ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
   layout.addWidget(&thirtyTwo);
   layout.addWidget(&sixtyFour);
   setLayout(&layout);
+  connect(&newestImageUrl, &NewestImageUrl::errorOccurred, this,
+          &ImageSelectPage::handleNewestImageUrlError);
+  hasError = false;
 }
 
 void ImageSelectPage::initializePage() {
@@ -29,6 +32,10 @@ void ImageSelectPage::initializePage() {
 bool ImageSelectPage::validatePage() {
   // we only need to prevent proceeding to next page in the beerover case
   if (gondar::isChromeover()) {
+    return true;
+  // if there is an error, we need to allow the user to proceed to the error
+  // screen
+  } else if (hasError) {
     return true;
   } else {
     return newestImageUrl.isReady();
@@ -57,4 +64,9 @@ QUrl ImageSelectPage::getUrl() {
     // TODO: decide what this behavior should be
     return newestImageUrl.get64Url();
   }
+}
+
+void ImageSelectPage::handleNewestImageUrlError() {
+  hasError = true;
+  wizard()->postError("An error has occurred fetching the latest image");
 }

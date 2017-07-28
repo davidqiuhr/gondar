@@ -21,6 +21,7 @@ class ImageSelectPage : public gondar::WizardPage {
   void set32Url(QUrl url_in);
   void set64Url(QUrl url_in);
   QUrl getUrl();
+  void handleNewestImageUrlError();
 
  protected:
   void initializePage() override;
@@ -32,6 +33,7 @@ class ImageSelectPage : public gondar::WizardPage {
   QRadioButton sixtyFour;
   QVBoxLayout layout;
   NewestImageUrl newestImageUrl;
+  bool hasError;
 };
 
 #endif
