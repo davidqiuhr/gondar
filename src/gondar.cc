@@ -1424,8 +1424,6 @@ char system_dir[512];
 
 DWORD FormatStatus;
 
-char drive_letters[27];
-
 // this is a big one.  in its modified form, it just returns to me the device
 // number i want
 /*
