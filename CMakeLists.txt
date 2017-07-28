@@ -17,15 +17,35 @@ set(USE_AES OFF CACHE BOOL "Unused docstring")
 # doesn't show.
 set(WIN32_CONSOLE ON CACHE BOOL "On Windows, show the console")
 
-# TODO(nicholasbishop): enable more warnings
+# Extra warnings sourced from:
+# https://stackoverflow.com/questions/5088460
+#
+# TODO(nicholasbishop): add -pedantic, -Wsign-conversion,
+# -Wold-style-cast, -Wcast-qual
 set(EXTRA_WARNINGS ${EXTRA_WARNINGS}
   # Warnings limited to C++
-  $<$<COMPILE_LANGUAGE:CXX>:-Wsuggest-override>
+  $<$<COMPILE_LANGUAGE:CXX>:
+    -Wctor-dtor-privacy
+    -Wnoexcept
+    -Woverloaded-virtual
+    -Wsign-promo
+    -Wstrict-null-sentinel
+    -Wsuggest-override>
 
-  # Warnings for both C and C++
   -Wall
   -Wextra
+
+  # Warnings for both C and C++
+  -Wcast-align
+  -Wdisabled-optimization
+  -Wformat=2
+  -Winit-self
+  -Wlogical-op
   -Wmissing-declarations
+  -Wredundant-decls
+  -Wshadow
+  -Wstrict-overflow=5
+  -Wundef
   -Wunused-macros
   -Wwrite-strings)
 
