@@ -30,8 +30,9 @@ bool ImageSelectPage::validatePage() {
   // we only need to prevent proceeding to next page in the beerover case
   if (gondar::isChromeover()) {
     return true;
+  } else {
+    return urlPal.isReady();
   }
-  return urlPal.isReady();
 }
 
 int ImageSelectPage::nextId() const {
