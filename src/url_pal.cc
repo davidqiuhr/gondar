@@ -2,6 +2,7 @@
 #include "url_pal.h"
 
 #include <QNetworkReply>
+#include <QString>
 #include <QUrl>
 #include "log.h"
 #include "util.h"
@@ -12,11 +13,13 @@ UrlPal::UrlPal() {
 }
 
 void UrlPal::fetch() {
+  QString baseUrl(
+      "https://s3.amazonaws.com/neverware-cloudready-free-releases/");
   if (!gondar::isChromeover()) {
     // for the free version, we have to find out what the url is
     connect(&networkManager, &QNetworkAccessManager::finished, this, &UrlPal::handleReply);
-    networkManager.get(QNetworkRequest(QUrl("https://s3.amazonaws.com/neverware-cloudready-free-releases/latest-stable-64bit")));
-    networkManager.get(QNetworkRequest(QUrl("https://s3.amazonaws.com/neverware-cloudready-free-releases/latest-stable-32bit")));
+    networkManager.get(QNetworkRequest(QUrl(baseUrl + "latest-stable-64bit")));
+    networkManager.get(QNetworkRequest(QUrl(baseUrl + "latest-stable-32bit")));
   }
 }
 
