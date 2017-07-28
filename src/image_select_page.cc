@@ -20,7 +20,10 @@ ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
 }
 
 void ImageSelectPage::initializePage() {
-  urlPal.fetch();
+  if (!gondar::isChromeover()) {
+    // for beerover, we'll have to check what the latest release is
+    urlPal.fetch();
+  }
 }
 
 bool ImageSelectPage::validatePage() {
