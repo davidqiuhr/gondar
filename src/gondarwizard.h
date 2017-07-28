@@ -123,6 +123,7 @@ class GondarWizard : public QWizard {
 
   int nextId() const override;
   void postError(const QString& error);
+  double getRunTime();
   // There's an elaborate state-sharing solution via the 'field' mechanism
   // supported by QWizard.  I found the logic for that to be easy for sharing
   // some data types and convoluted for others.  In this case, a later page
@@ -150,6 +151,7 @@ class GondarWizard : public QWizard {
     Page_writeOperation,
     Page_error
   };
+
  private slots:
   void handleMakeAnother();
 
@@ -157,6 +159,7 @@ class GondarWizard : public QWizard {
   void catchError(const QString& error);
 
   QShortcut about_shortcut_;
+  QTime runTime;
   gondar::AboutDialog about_dialog_;
 };
 

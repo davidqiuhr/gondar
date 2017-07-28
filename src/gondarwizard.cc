@@ -26,6 +26,7 @@
 #include "device.h"
 #include "gondar.h"
 #include "log.h"
+#include "metric.h"
 #include "neverware_unzipper.h"
 
 DeviceGuyList* drivelist = NULL;
@@ -63,6 +64,7 @@ GondarWizard::GondarWizard(QWidget* parent)
 
   connect(&about_shortcut_, &QShortcut::activated, &about_dialog_,
           &gondar::AboutDialog::show);
+  runTime.start();
 }
 
 // handle event when 'make another usb' button pressed
@@ -92,6 +94,10 @@ void GondarWizard::catchError(const QString& error) {
   LOG_ERROR << "displaying error: " << error;
   errorPage.setErrorString(error);
   next();
+}
+
+double GondarWizard::getRunTime() {
+  return runTime.elapsed();
 }
 
 UsbInsertPage::UsbInsertPage(QWidget* parent) : WizardPage(parent) {
@@ -286,6 +292,8 @@ void WriteOperationPage::onDoneWriting() {
   progress.setRange(0, 100);
   progress.setValue(100);
   wizard()->setOption(QWizard::HaveCustomButton1, true);
+  // when a USB was successfully created, report time the run took
+  gondar::SendMetric(gondar::Metric::SuccessTime, QString::number(wizard()->getRunTime()).toStdString());
   emit completeChanged();
 }
 

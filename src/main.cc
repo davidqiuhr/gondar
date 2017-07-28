@@ -15,6 +15,7 @@
 
 #include <QApplication>
 #include <QLibraryInfo>
+#include <QTime>
 #include <QtPlugin>
 
 #include "gondarwizard.h"
@@ -30,7 +31,6 @@ int main(int argc, char* argv[]) {
 
   gondar::InitializeLogging();
   gondar::SendMetric(gondar::Metric::Use);
-
   QApplication app(argc, argv);
   app.setStyleSheet(gondar::readUtf8File(":/style.css"));
 
