@@ -7,7 +7,7 @@
 #include <QVBoxLayout>
 #include <QNetworkAccessManager>
 
-#include "url_pal.h"
+#include "newest_image_url.h"
 
 #include "wizard_page.h"
 
@@ -31,7 +31,7 @@ class ImageSelectPage : public gondar::WizardPage {
   QRadioButton thirtyTwo;
   QRadioButton sixtyFour;
   QVBoxLayout layout;
-  UrlPal urlPal;
+  NewestImageUrl newestImageUrl;
 };
 
 #endif

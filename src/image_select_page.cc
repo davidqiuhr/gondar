@@ -22,7 +22,7 @@ ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
 void ImageSelectPage::initializePage() {
   if (!gondar::isChromeover()) {
     // for beerover, we'll have to check what the latest release is
-    urlPal.fetch();
+    newestImageUrl.fetch();
   }
 }
 
@@ -31,7 +31,7 @@ bool ImageSelectPage::validatePage() {
   if (gondar::isChromeover()) {
     return true;
   } else {
-    return urlPal.isReady();
+    return newestImageUrl.isReady();
   }
 }
 
@@ -40,21 +40,21 @@ int ImageSelectPage::nextId() const {
 }
 
 void ImageSelectPage::set32Url(QUrl url_in) {
-  urlPal.set32Url(url_in);
+  newestImageUrl.set32Url(url_in);
 }
 
 void ImageSelectPage::set64Url(QUrl url_in) {
-  urlPal.set64Url(url_in);
+  newestImageUrl.set64Url(url_in);
 }
 
 QUrl ImageSelectPage::getUrl() {
   QAbstractButton* selected = bitnessButtons.checkedButton();
   if (selected == &thirtyTwo) {
-    return urlPal.get32Url();
+    return newestImageUrl.get32Url();
   } else if (selected == &sixtyFour) {
-    return urlPal.get64Url();
+    return newestImageUrl.get64Url();
   } else {
     // TODO: decide what this behavior should be
-    return urlPal.get64Url();
+    return newestImageUrl.get64Url();
   }
 }
