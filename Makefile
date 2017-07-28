@@ -4,13 +4,6 @@ CMAKE ?= cmake
 RELEASE ?= false
 TREAT_WARNINGS_AS_ERRORS ?= false
 
-# Some distros use different names for clang-format
-ifneq (, $(shell which clang-format))
-    CLANG_FORMAT ?= clang-format
-else
-    CLANG_FORMAT ?= clang-format-4.0
-endif
-
 # Release mode vs normal debug mode
 ifeq (${RELEASE}, true)
 	CMAKE_BUILD_TYPE ?= RelWithDebInfo
@@ -45,7 +38,7 @@ clean:
 
 
 format:
-	${CLANG_FORMAT} -i src/*.{h,cc} test/*.{h,cc}
+	CLANG_FORMAT=${CLANG_FORMAT} infra/format.py
 
 
 help:
