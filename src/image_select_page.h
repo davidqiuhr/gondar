@@ -2,9 +2,12 @@
 #define IMAGE_SELECT_PAGE_H
 
 #include <QButtonGroup>
+#include <QNetworkAccessManager>
 #include <QRadioButton>
 #include <QUrl>
 #include <QVBoxLayout>
+
+#include "newest_image_url.h"
 
 #include "wizard_page.h"
 
@@ -17,14 +20,20 @@ class ImageSelectPage : public gondar::WizardPage {
   int nextId() const override;
   void set32Url(QUrl url_in);
   void set64Url(QUrl url_in);
+  QUrl getUrl();
+  void handleNewestImageUrlError();
+
+ protected:
+  void initializePage() override;
+  bool validatePage() override;
 
  private:
   QButtonGroup bitnessButtons;
   QRadioButton thirtyTwo;
   QRadioButton sixtyFour;
   QVBoxLayout layout;
-  QUrl thirtyTwoUrl;
-  QUrl sixtyFourUrl;
+  NewestImageUrl newestImageUrl;
+  bool hasError;
 };
 
 #endif

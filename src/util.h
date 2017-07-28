@@ -10,6 +10,7 @@ namespace gondar {
 // Read the contents of |filepath| and decode as UTF-8. Throws an
 // exception on failure.
 QString readUtf8File(const QString& filepath);
+bool isChromeover();
 
 }  // namespace gondar
 

@@ -2,6 +2,7 @@
 
 #include "gondarwizard.h"
 #include "log.h"
+#include "util.h"
 
 ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
   setTitle("Which version of CloudReady do you need?");
@@ -16,25 +17,28 @@ ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
   layout.addWidget(&thirtyTwo);
   layout.addWidget(&sixtyFour);
   setLayout(&layout);
-  thirtyTwoUrl.setUrl(
-      "https://ddnynf025unax.cloudfront.net/cloudready-free-56.3.80-32-bit/"
-      "cloudready-free-56.3.80-32-bit.bin.zip");
-  sixtyFourUrl.setUrl(
-      "https://ddnynf025unax.cloudfront.net/cloudready-free-56.3.82-64-bit/"
-      "cloudready-free-56.3.82-64-bit.bin.zip");
+  connect(&newestImageUrl, &NewestImageUrl::errorOccurred, this,
+          &ImageSelectPage::handleNewestImageUrlError);
+  hasError = false;
 }
 
-QUrl ImageSelectPage::getUrl() const {
-  LOG_INFO << "in getUrl and thirtyTwoUrl=" << thirtyTwoUrl.toString();
-  LOG_INFO << "in getUrl and sixtyFourUrl=" << sixtyFourUrl.toString();
-  QAbstractButton* selected = bitnessButtons.checkedButton();
-  if (selected == &thirtyTwo) {
-    return thirtyTwoUrl;
-  } else if (selected == &sixtyFour) {
-    return sixtyFourUrl;
+void ImageSelectPage::initializePage() {
+  if (!gondar::isChromeover()) {
+    // for beerover, we'll have to check what the latest release is
+    newestImageUrl.fetch();
+  }
+}
+
+bool ImageSelectPage::validatePage() {
+  // we only need to prevent proceeding to next page in the beerover case
+  if (gondar::isChromeover()) {
+    return true;
+    // if there is an error, we need to allow the user to proceed to the error
+    // screen
+  } else if (hasError) {
+    return true;
   } else {
-    // TODO: decide what this behavior should be
-    return sixtyFourUrl;
+    return newestImageUrl.isReady();
   }
 }
 
@@ -43,9 +47,26 @@ int ImageSelectPage::nextId() const {
 }
 
 void ImageSelectPage::set32Url(QUrl url_in) {
-  thirtyTwoUrl = url_in;
+  newestImageUrl.set32Url(url_in);
 }
 
 void ImageSelectPage::set64Url(QUrl url_in) {
-  sixtyFourUrl = url_in;
+  newestImageUrl.set64Url(url_in);
+}
+
+QUrl ImageSelectPage::getUrl() {
+  QAbstractButton* selected = bitnessButtons.checkedButton();
+  if (selected == &thirtyTwo) {
+    return newestImageUrl.get32Url();
+  } else if (selected == &sixtyFour) {
+    return newestImageUrl.get64Url();
+  } else {
+    // TODO: decide what this behavior should be
+    return newestImageUrl.get64Url();
+  }
+}
+
+void ImageSelectPage::handleNewestImageUrlError() {
+  hasError = true;
+  wizard()->postError("An error has occurred fetching the latest image");
 }
