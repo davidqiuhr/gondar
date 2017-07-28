@@ -6,6 +6,11 @@
 #include <QUrl>
 #include "log.h"
 
+static QUrl getLatestUrl(QNetworkReply* reply) {
+  const char base[] = "https://ddnynf025unax.cloudfront.net/";
+  const auto path = QString::fromUtf8(reply->readAll());
+  return QUrl(base + path.trimmed());
+}
 NewestImageUrl::NewestImageUrl() {
   url32Ready = false;
   url64Ready = false;
@@ -28,8 +33,7 @@ void NewestImageUrl::handleReply(QNetworkReply* reply) {
     return;
   }
   // we find out which request this is a response for
-  // TODO: can readAll() be trusted to read our path strings properly?
-  QUrl url = QUrl(QString("https://ddnynf025unax.cloudfront.net/") + reply->readAll());
+  QUrl url = getLatestUrl(reply);
   if (reply->url().toString().contains("32bit")) {
     thirtyTwoUrl = url;
     url32Ready = true;
