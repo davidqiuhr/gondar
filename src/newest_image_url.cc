@@ -24,6 +24,8 @@ void NewestImageUrl::handleReply(QNetworkReply* reply) {
   const auto error = reply->error();
   if (error != QNetworkReply::NoError) {
     LOG_ERROR << "Error retrieving CloudReady Home Edition URL";
+    emit error();
+    return;
   }
   // we find out which request this is a response for
   // TODO: can readAll() be trusted to read our path strings properly?
