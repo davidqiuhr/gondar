@@ -41,8 +41,7 @@ void NewestImageUrl::handleReply(QNetworkReply* reply) {
     sixtyFourUrl = url;
     url64Ready = true;
   }
-  qDebug() << reply->url();
-  qDebug() << reply->readAll();
+  LOG_INFO << "using latest url: " << url.toString();
   reply->deleteLater();
 }
 
