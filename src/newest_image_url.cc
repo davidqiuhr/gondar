@@ -29,7 +29,7 @@ void NewestImageUrl::handleReply(QNetworkReply* reply) {
   const auto error = reply->error();
   if (error != QNetworkReply::NoError) {
     LOG_ERROR << "Error retrieving CloudReady Home Edition URL";
-    emit reply->error();
+    // TODO: propagate error up to wizard
     return;
   }
   // we find out which request this is a response for
