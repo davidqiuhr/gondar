@@ -33,8 +33,8 @@ bool ImageSelectPage::validatePage() {
   // we only need to prevent proceeding to next page in the beerover case
   if (gondar::isChromeover()) {
     return true;
-  // if there is an error, we need to allow the user to proceed to the error
-  // screen
+    // if there is an error, we need to allow the user to proceed to the error
+    // screen
   } else if (hasError) {
     return true;
   } else {

@@ -2,8 +2,8 @@
 #ifndef NEWEST_IMAGE_URL_H
 #define NEWEST_IMAGE_URL_H
 
-#include <QUrl>
 #include <QNetworkReply>
+#include <QUrl>
 
 class NewestImageUrl : public QObject {
   Q_OBJECT
@@ -18,8 +18,10 @@ class NewestImageUrl : public QObject {
   QUrl get64Url();
  signals:
   void errorOccurred();
+
  protected:
   void handleReply(QNetworkReply* reply);
+
  private:
   QNetworkAccessManager networkManager;
   bool url32Ready;

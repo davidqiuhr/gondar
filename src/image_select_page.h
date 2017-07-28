@@ -2,10 +2,10 @@
 #define IMAGE_SELECT_PAGE_H
 
 #include <QButtonGroup>
+#include <QNetworkAccessManager>
 #include <QRadioButton>
 #include <QUrl>
 #include <QVBoxLayout>
-#include <QNetworkAccessManager>
 
 #include "newest_image_url.h"
 

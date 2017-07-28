@@ -19,8 +19,9 @@ NewestImageUrl::NewestImageUrl() {
 void NewestImageUrl::fetch() {
   QString baseUrl(
       "https://s3.amazonaws.com/neverware-cloudready-free-releases/");
-    // for the free version, we have to find out what the url is
-  connect(&networkManager, &QNetworkAccessManager::finished, this, &NewestImageUrl::handleReply);
+  // for the free version, we have to find out what the url is
+  connect(&networkManager, &QNetworkAccessManager::finished, this,
+          &NewestImageUrl::handleReply);
   networkManager.get(QNetworkRequest(QUrl(baseUrl + "latest-stable-64bit")));
   networkManager.get(QNetworkRequest(QUrl(baseUrl + "latest-stable-32bit")));
 }
