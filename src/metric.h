@@ -16,6 +16,8 @@
 #ifndef GONDAR_METRIC_H
 #define GONDAR_METRIC_H
 
+#include <string>
+
 namespace gondar {
 
 enum class Metric {
@@ -25,10 +27,11 @@ enum class Metric {
   DownloadAttempt,
   DownloadSuccess,
   ChromeoverUse,
-  BeeroverUse
+  BeeroverUse,
+  RunTime
 };
 
-void SendMetric(Metric metric);
+void SendMetric(Metric metric, std::string value = "");
 
 }  // namespace gondar
 
