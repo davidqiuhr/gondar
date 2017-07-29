@@ -15,7 +15,6 @@
 
 #include "downloader.h"
 
-#include <stdio.h>
 #include <QDir>
 #include <QFileInfo>
 #include <QNetworkReply>
@@ -25,6 +24,7 @@
 #include <QStringList>
 #include <QTimer>
 
+#include "log.h"
 #include "metric.h"
 
 DownloadManager::DownloadManager(QObject* parent)
@@ -52,8 +52,8 @@ QString DownloadManager::saveFileName(const QUrl& url) {
 
 void DownloadManager::startNextDownload() {
   if (downloadQueue.isEmpty()) {
-    printf("%d/%d files downloaded successfully\n", downloadedCount,
-           totalCount);
+    LOG_INFO << downloadedCount << "/" << totalCount
+             << " files downloaded successfully";
     emit finished();
     return;
   }
@@ -68,9 +68,8 @@ void DownloadManager::startNextDownload() {
   qInfo() << "Download destination:" << output.fileName();
 
   if (!output.open(QIODevice::WriteOnly)) {
-    fprintf(stderr, "Problem opening save file '%s' for download '%s': %s\n",
-            qPrintable(filename), url.toEncoded().constData(),
-            qPrintable(output.errorString()));
+    LOG_ERROR << "failed to open " << filename << ": " << output.errorString();
+    LOG_ERROR << "skipping download of " << url.toString();
     startNextDownload();
     return;  // skip this download
   }
@@ -83,7 +82,7 @@ void DownloadManager::startNextDownload() {
   emit started();
 
   // prepare the output
-  printf("Downloading %s...\n", url.toEncoded().constData());
+  LOG_INFO << "downloading " << url.toString();
   downloadTime.start();
 }
 
@@ -94,9 +93,9 @@ void DownloadManager::downloadFinished() {
 
   if (currentDownload->error()) {
     // download failed
-    fprintf(stderr, "Failed: %s\n", qPrintable(currentDownload->errorString()));
+    LOG_ERROR << "download failed: " << currentDownload->errorString();
   } else {
-    printf("Succeeded.\n");
+    LOG_INFO << "download succeeded";
     ++downloadedCount;
   }
 

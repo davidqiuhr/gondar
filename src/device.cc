@@ -14,12 +14,12 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <inttypes.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "device.h"
 
+#include "log.h"
 #include "shared.h"
 
 DeviceGuy* DeviceGuy_init(uint32_t device_num, const char* name) {
@@ -29,8 +29,6 @@ DeviceGuy* DeviceGuy_init(uint32_t device_num, const char* name) {
   // the name that came in is just a temporary buffer; we'll need to strcpy
   strncpy(self->name, name, MAX_NAME_LENGTH);
   self->name[MAX_NAME_LENGTH - 1] = '\0';
-  printf("kendall: new deviceguy; device_num=%d, name=%s, next=%p, prev=%p\n",
-         self->device_num, self->name, self->next, self->prev);
   return self;
 }
 
@@ -51,8 +49,6 @@ DeviceGuyList* DeviceGuyList_init() {
 void DeviceGuyList_append(DeviceGuyList* self,
                           uint32_t device_num,
                           const char* name) {
-  printf("kendall: in append with self=%p, device_num=%d, name=%s\n", self,
-         device_num, name);
   DeviceGuy* newguy = DeviceGuy_init(device_num, name);
   if (self->head == NULL) {
     self->head = newguy;
@@ -67,7 +63,8 @@ void DeviceGuyList_append(DeviceGuyList* self,
 void DeviceGuyList_print(DeviceGuyList* self) {
   DeviceGuy* itr = self->head;
   while (itr != NULL) {
-    printf("device_num=%d,name=%s\n", itr->device_num, itr->name);
+    LOG_INFO << "device_num=" << itr->device_num
+             << ", name=" << itr->name;
     itr = itr->next;
   }
 }
@@ -80,7 +77,7 @@ DeviceGuy* DeviceGuyList_getByIndex(DeviceGuyList* self, uint32_t index) {
     }
     itr = itr->next;
   }
-  printf("ERROR: Device index not found!\nHave a nice day!\n");
+  LOG_ERROR << "device at " << index << " not found";
   return NULL;
 }
 
