@@ -15,7 +15,6 @@
 
 #include <QApplication>
 #include <QLibraryInfo>
-#include <QTime>
 #include <QtPlugin>
 
 #include "gondarwizard.h"
