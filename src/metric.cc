@@ -68,7 +68,7 @@ QByteArray getMetricsApiKey() {
 }
 }
 
-void SendMetric(Metric metric, std::string value) {
+void SendMetric(Metric metric, const std::string value) {
   const auto api_key = getMetricsApiKey();
   if (api_key.isEmpty()) {
     // all production builds should sent metrics
@@ -84,7 +84,7 @@ void SendMetric(Metric metric, std::string value) {
   QString id = QUuid::createUuid().toString();
   json["identifier"] = id;
   json.insert("metric", QString::fromStdString(metricStr));
-  if (value != "") {
+  if (!value.empty()) {
     // then we append the value to the metric
     json.insert("value", QString::fromStdString(value));
   }
