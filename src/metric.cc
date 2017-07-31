@@ -15,9 +15,12 @@
 
 #include "metric.h"
 
+#include <QCryptographicHash>
+#include <QDataStream>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QNetworkAccessManager>
+#include <QNetworkInterface>
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QSslError>
@@ -68,6 +71,18 @@ QByteArray getMetricsApiKey() {
 }
 }
 
+static QString getMacAddress() {
+  // return the first non-loopback interface's mac address
+  // https://stackoverflow.com/questions/7609953/obtaining-mac-address-on-windows-in-qt
+  foreach(QNetworkInterface netInterface, QNetworkInterface::allInterfaces()) {
+    if (!(netInterface.flags() & QNetworkInterface::IsLoopBack)) {
+      return netInterface.hardwareAddress();
+    }
+  }
+  LOG_WARNING << "Could not find valid identifier for metrics";
+  return QString();
+}
+
 void SendMetric(Metric metric, const std::string& value) {
   const auto api_key = getMetricsApiKey();
   if (api_key.isEmpty()) {
@@ -79,9 +94,19 @@ void SendMetric(Metric metric, const std::string& value) {
   QNetworkAccessManager* manager = getNetworkManager();
   QUrl url("https://gondar-metrics.neverware.com/prod");
   QJsonObject json;
-  // TODO: use a persistent UUID across a session, and potentially even
-  // across multiple runs
-  QString id = QUuid::createUuid().toString();
+  QString mac = getMacAddress();
+  QString id;
+  if (mac.isEmpty()) {
+    id = QString("unknown");
+  } else {
+    QCryptographicHash hash(QCryptographicHash::Sha3_512);
+    hash.addData(mac.toUtf8());
+    QByteArray result = hash.result();
+    QDataStream ds(result);
+    quint64 buffer;
+    ds >> buffer;
+    id = QString::number(buffer);
+  }
   json["identifier"] = id;
   json.insert("metric", QString::fromStdString(metricStr));
   if (!value.empty()) {
