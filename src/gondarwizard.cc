@@ -293,7 +293,8 @@ void WriteOperationPage::onDoneWriting() {
   progress.setValue(100);
   wizard()->setOption(QWizard::HaveCustomButton1, true);
   // when a USB was successfully created, report time the run took
-  gondar::SendMetric(gondar::Metric::SuccessTime, QString::number(wizard()->getRunTime()).toStdString());
+  gondar::SendMetric(gondar::Metric::SuccessTime,
+                     QString::number(wizard()->getRunTime()).toStdString());
   emit completeChanged();
 }
 
