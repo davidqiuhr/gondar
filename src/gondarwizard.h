@@ -159,7 +159,7 @@ class GondarWizard : public QWizard {
   void catchError(const QString& error);
 
   QShortcut about_shortcut_;
-  QTime runTime;
+  QDateTime runTime;
   gondar::AboutDialog about_dialog_;
 };
 

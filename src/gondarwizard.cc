@@ -64,7 +64,7 @@ GondarWizard::GondarWizard(QWidget* parent)
 
   connect(&about_shortcut_, &QShortcut::activated, &about_dialog_,
           &gondar::AboutDialog::show);
-  runTime.start();
+  runTime = QDateTime::currentDateTime();
 }
 
 // handle event when 'make another usb' button pressed
@@ -97,7 +97,9 @@ void GondarWizard::catchError(const QString& error) {
 }
 
 double GondarWizard::getRunTime() {
-  return runTime.elapsed();
+  double delta = QDateTime::currentDateTime().toMSecsSinceEpoch() -
+                 runTime.toMSecsSinceEpoch();
+  return delta;
 }
 
 UsbInsertPage::UsbInsertPage(QWidget* parent) : WizardPage(parent) {
