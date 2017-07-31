@@ -17,6 +17,7 @@
 
 #include <QCryptographicHash>
 #include <QDataStream>
+#include <QDir>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QNetworkAccessManager>
@@ -24,6 +25,7 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QSslError>
+#include <QStandardPaths>
 #include <QUrl>
 #include <QUrlQuery>
 #include <QUuid>
@@ -71,16 +73,26 @@ QByteArray getMetricsApiKey() {
 }
 }
 
-static QString getMacAddress() {
-  // return the first non-loopback interface's mac address
-  // https://stackoverflow.com/questions/7609953/obtaining-mac-address-on-windows-in-qt
-  foreach(QNetworkInterface netInterface, QNetworkInterface::allInterfaces()) {
-    if (!(netInterface.flags() & QNetworkInterface::IsLoopBack)) {
-      return netInterface.hardwareAddress();
-    }
+static QString getUuid() {
+  const QDir dir = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
+  QString filepath = dir.filePath("cloudready_installer_uuid");
+  QFile uuidFile(filepath);
+  QString id;
+  if (!uuidFile.exists()) {
+    // then we make our uuid
+    id = QUuid::createUuid().toString();
+    uuidFile.open(QIODevice::WriteOnly);
+    QTextStream outstream(&uuidFile);
+    outstream << id;
+    uuidFile.close();
+  } else {
+    // otherwise read the existing uuid from file
+    uuidFile.open(QIODevice::ReadOnly);
+    id = uuidFile.readAll();
+    uuidFile.close();
+    id = id.trimmed();
   }
-  LOG_WARNING << "Could not find valid identifier for metrics";
-  return QString();
+  return id;
 }
 
 void SendMetric(Metric metric, const std::string& value) {
@@ -94,19 +106,7 @@ void SendMetric(Metric metric, const std::string& value) {
   QNetworkAccessManager* manager = getNetworkManager();
   QUrl url("https://gondar-metrics.neverware.com/prod");
   QJsonObject json;
-  QString mac = getMacAddress();
-  QString id;
-  if (mac.isEmpty()) {
-    id = QString("unknown");
-  } else {
-    QCryptographicHash hash(QCryptographicHash::Sha3_512);
-    hash.addData(mac.toUtf8());
-    QByteArray result = hash.result();
-    QDataStream ds(result);
-    quint64 buffer;
-    ds >> buffer;
-    id = QString::number(buffer);
-  }
+  QString id = getUuid();
   json["identifier"] = id;
   json.insert("metric", QString::fromStdString(metricStr));
   if (!value.empty()) {
