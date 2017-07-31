@@ -16,6 +16,8 @@
 #ifndef GONDAR_METRIC_H
 #define GONDAR_METRIC_H
 
+#include <string>
+
 namespace gondar {
 
 enum class Metric {
@@ -28,7 +30,7 @@ enum class Metric {
   BeeroverUse
 };
 
-void SendMetric(Metric metric);
+void SendMetric(Metric metric, const std::string& value = "");
 
 }  // namespace gondar
 
