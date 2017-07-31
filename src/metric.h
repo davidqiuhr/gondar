@@ -28,7 +28,7 @@ enum class Metric {
   DownloadSuccess,
   ChromeoverUse,
   BeeroverUse,
-  SuccessTime
+  SuccessDuration
 };
 
 void SendMetric(Metric metric, const std::string& value = "");

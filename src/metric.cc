@@ -53,7 +53,7 @@ std::string getMetricString(Metric metric) {
       return "usb-success";
     case Metric::Use:
       return "use";
-    case Metric::SuccessTime:
+    case Metric::SuccessDuration:
       return "success-time";
     // not sure we want to crash the program on a bad metric lookup
     default:
