@@ -30,7 +30,7 @@ enum class Metric {
   BeeroverUse
 };
 
-void SendMetric(Metric metric, std::string value = "");
+void SendMetric(Metric metric, const std::string& value = "");
 
 }  // namespace gondar
 
