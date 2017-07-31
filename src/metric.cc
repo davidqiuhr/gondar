@@ -68,7 +68,7 @@ QByteArray getMetricsApiKey() {
 }
 }
 
-void SendMetric(Metric metric, const std::string value) {
+void SendMetric(Metric metric, const std::string& value) {
   const auto api_key = getMetricsApiKey();
   if (api_key.isEmpty()) {
     // all production builds should sent metrics
