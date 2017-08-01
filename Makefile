@@ -16,6 +16,7 @@
 BUILD_DIR ?= build
 CHROMEOVER ?= false
 CMAKE ?= cmake
+METRICS_API_KEY ?= ""
 RELEASE ?= false
 TREAT_WARNINGS_AS_ERRORS ?= false
 
