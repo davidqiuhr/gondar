@@ -19,7 +19,7 @@ def run_cmd(*args):
     subprocess.check_call(args)
 
 
-def build_image(image_name, release, chromeover):
+def build_image(image_name, release, chromeover, apikey):
     """Build the Dockerfile from the current directory."""
     cmd = ('sudo', 'docker', 'build',
             '--file', 'docker/gondar-win32.Dockerfile',
@@ -28,6 +28,8 @@ def build_image(image_name, release, chromeover):
       cmd += ('--build-arg', 'RELEASE=true',)
     if (chromeover):
       cmd += ('--build-arg', 'CHROMEOVER=true',)
+    if apikey:
+      cmd += ('--build-arg', 'METRICS_API_KEY={}'.format(apikey))
     run_cmd(*cmd)
 
 
@@ -60,6 +62,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--release', action='store_true')
     parser.add_argument('--chromeover', action='store_true')
+    parser.add_argument('--apikey', default=None)
     return parser.parse_args()
 
 
@@ -69,7 +72,7 @@ def main():
     image_name = 'gondar-build'
     output_path = get_output_path('package')
 
-    build_image(image_name, args.release, args.chromeover)
+    build_image(image_name, args.release, args.chromeover, args.apikey)
     volume = (output_path, '/opt/host')
     run_container(image_name,
                   'cp', '-r', '/opt/gondar/build/', '/opt/host',

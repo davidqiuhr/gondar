@@ -18,6 +18,7 @@ CHROMEOVER ?= false
 CMAKE ?= cmake
 RELEASE ?= false
 TREAT_WARNINGS_AS_ERRORS ?= false
+METRICS_API_KEY ?= ""
 
 # Release mode vs normal debug mode
 ifeq (${RELEASE}, true)
