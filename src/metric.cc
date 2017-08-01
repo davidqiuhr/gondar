@@ -74,7 +74,8 @@ QByteArray getMetricsApiKey() {
 }
 
 static QString getUuid() {
-  const QDir dir = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
+  const QDir dir =
+      QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
   QString filepath = dir.filePath("cloudready_installer_uuid");
   QFile uuidFile(filepath);
   QString id;

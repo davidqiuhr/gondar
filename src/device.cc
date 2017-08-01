@@ -63,8 +63,7 @@ void DeviceGuyList_append(DeviceGuyList* self,
 void DeviceGuyList_print(DeviceGuyList* self) {
   DeviceGuy* itr = self->head;
   while (itr != NULL) {
-    LOG_INFO << "device_num=" << itr->device_num
-             << ", name=" << itr->name;
+    LOG_INFO << "device_num=" << itr->device_num << ", name=" << itr->name;
     itr = itr->next;
   }
 }
