@@ -79,15 +79,18 @@ static QString getUuid() {
       QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
   QString filepath = dir.filePath("cloudready_installer_uuid");
   QFile uuidFile(filepath);
-  if (!uuidFile.exists()) {
+  // attempt to get an existing uuid
+  try {
+    id = readUtf8File(filepath).trimmed();
+    if (id.size() != 36) {
+      throw std::runtime_error("invalid UUID size");
+    }
+  } catch (const std::exception& err) {
     // then we make our uuid
     id = QUuid::createUuid().toString();
     uuidFile.open(QIODevice::WriteOnly);
     QTextStream outstream(&uuidFile);
     outstream << id;
-  } else {
-    // otherwise read the existing uuid from file
-    id = readUtf8File(filepath);
   }
   return id;
 }
