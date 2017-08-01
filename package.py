@@ -62,7 +62,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--release', action='store_true')
     parser.add_argument('--chromeover', action='store_true')
-    parser.add_argument('--apikey', default=None)
+    parser.add_argument('--apikey')
     return parser.parse_args()
 
 
