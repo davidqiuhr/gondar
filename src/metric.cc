@@ -69,11 +69,16 @@ QByteArray getMetricsApiKey() {
 }
 
 static QString getUuid() {
+  static QString id;
+  // if we've already initialized the UUID this program run, use the old value
+  if (!id.isEmpty()) {
+    return id;
+  }
+  // otherwise, go look up or make the value
   const QDir dir =
       QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
   QString filepath = dir.filePath("cloudready_installer_uuid");
   QFile uuidFile(filepath);
-  QString id;
   if (!uuidFile.exists()) {
     // then we make our uuid
     id = QUuid::createUuid().toString();
