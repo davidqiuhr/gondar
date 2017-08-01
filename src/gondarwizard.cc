@@ -97,9 +97,7 @@ void GondarWizard::catchError(const QString& error) {
 }
 
 double GondarWizard::getRunTime() {
-  double delta = QDateTime::currentDateTime().toMSecsSinceEpoch() -
-                 runTime.toMSecsSinceEpoch();
-  return delta;
+  return runTime.secsTo(QDateTime::currentDateTime());
 }
 
 UsbInsertPage::UsbInsertPage(QWidget* parent) : WizardPage(parent) {
