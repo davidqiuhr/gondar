@@ -54,7 +54,7 @@ std::string getMetricString(Metric metric) {
     case Metric::Use:
       return "use";
     case Metric::SuccessDuration:
-      return "success-time";
+      return "success-duration";
     // not sure we want to crash the program on a bad metric lookup
     default:
       return "unknown";
