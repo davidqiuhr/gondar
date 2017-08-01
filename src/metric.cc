@@ -82,10 +82,11 @@ static QString getUuid() {
   // attempt to get an existing uuid
   try {
     id = readUtf8File(filepath).trimmed();
-    if (id.size() != 36) {
+    if (id.size() != 38) {
       throw std::runtime_error("invalid UUID size");
     }
   } catch (const std::exception& err) {
+    LOG_INFO << "Creating new UUID";
     // then we make our uuid
     id = QUuid::createUuid().toString();
     uuidFile.open(QIODevice::WriteOnly);
