@@ -30,7 +30,6 @@ int main(int argc, char* argv[]) {
 
   gondar::InitializeLogging();
   gondar::SendMetric(gondar::Metric::Use);
-
   QApplication app(argc, argv);
   app.setStyleSheet(gondar::readUtf8File(":/style.css"));
 
