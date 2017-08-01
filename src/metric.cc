@@ -26,6 +26,7 @@
 
 #include "config.h"
 #include "log.h"
+#include "util.h"
 
 namespace gondar {
 
@@ -81,9 +82,7 @@ static QString getUuid() {
     outstream << id;
   } else {
     // otherwise read the existing uuid from file
-    uuidFile.open(QIODevice::ReadOnly);
-    id = uuidFile.readAll();
-    id = id.trimmed();
+    id = readUtf8File(filepath);
   }
   return id;
 }
