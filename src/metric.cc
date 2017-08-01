@@ -15,18 +15,18 @@
 
 #include "metric.h"
 
+#include <QDir>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QNetworkAccessManager>
-#include <QNetworkReply>
 #include <QNetworkRequest>
-#include <QSslError>
+#include <QStandardPaths>
 #include <QUrl>
-#include <QUrlQuery>
 #include <QUuid>
 
 #include "config.h"
 #include "log.h"
+#include "util.h"
 
 namespace gondar {
 
@@ -68,6 +68,34 @@ QByteArray getMetricsApiKey() {
 }
 }
 
+static QString getUuid() {
+  static QString id;
+  // if we've already initialized the UUID this program run, use the old value
+  if (!id.isEmpty()) {
+    return id;
+  }
+  // otherwise, go look up or make the value
+  const QDir dir =
+      QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
+  QString filepath = dir.filePath("cloudready_installer_uuid");
+  QFile uuidFile(filepath);
+  // attempt to get an existing uuid
+  try {
+    id = readUtf8File(filepath).trimmed();
+    if (id.size() != 38) {
+      throw std::runtime_error("invalid UUID size");
+    }
+  } catch (const std::exception& err) {
+    LOG_INFO << "Creating new UUID";
+    // then we make our uuid
+    id = QUuid::createUuid().toString();
+    uuidFile.open(QIODevice::WriteOnly);
+    QTextStream outstream(&uuidFile);
+    outstream << id;
+  }
+  return id;
+}
+
 void SendMetric(Metric metric, const std::string& value) {
   const auto api_key = getMetricsApiKey();
   if (api_key.isEmpty()) {
@@ -79,9 +107,7 @@ void SendMetric(Metric metric, const std::string& value) {
   QNetworkAccessManager* manager = getNetworkManager();
   QUrl url("https://gondar-metrics.neverware.com/prod");
   QJsonObject json;
-  // TODO: use a persistent UUID across a session, and potentially even
-  // across multiple runs
-  QString id = QUuid::createUuid().toString();
+  QString id = getUuid();
   json["identifier"] = id;
   json.insert("metric", QString::fromStdString(metricStr));
   if (!value.empty()) {
