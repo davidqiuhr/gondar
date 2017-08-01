@@ -79,12 +79,10 @@ static QString getUuid() {
     uuidFile.open(QIODevice::WriteOnly);
     QTextStream outstream(&uuidFile);
     outstream << id;
-    uuidFile.close();
   } else {
     // otherwise read the existing uuid from file
     uuidFile.open(QIODevice::ReadOnly);
     id = uuidFile.readAll();
-    uuidFile.close();
     id = id.trimmed();
   }
   return id;
