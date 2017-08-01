@@ -15,19 +15,13 @@
 
 #include "metric.h"
 
-#include <QCryptographicHash>
-#include <QDataStream>
 #include <QDir>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QNetworkAccessManager>
-#include <QNetworkInterface>
-#include <QNetworkReply>
 #include <QNetworkRequest>
-#include <QSslError>
 #include <QStandardPaths>
 #include <QUrl>
-#include <QUrlQuery>
 #include <QUuid>
 
 #include "config.h"
