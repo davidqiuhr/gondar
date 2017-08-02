@@ -39,13 +39,7 @@ int ErrorPage::nextId() const {
 void ErrorPage::setVisible(bool visible) {
   WizardPage::setVisible(visible);
   if (visible) {
-    setButtonText(QWizard::CustomButton1, "Exit");
-    wizard()->setOption(QWizard::HaveCustomButton1, true);
-    connect(wizard(), SIGNAL(customButtonClicked(int)),
-            QApplication::instance(), SLOT(quit()));
-  } else {
-    wizard()->setOption(QWizard::HaveCustomButton1, false);
-    disconnect(wizard(), SIGNAL(customButtonClicked(int)),
-               QApplication::instance(), SLOT(quit()));
+    // this is never set back; assumes error page is last page to be shown
+    setButtonText(QWizard::FinishButton, "Exit");
   }
 }
