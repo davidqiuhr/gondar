@@ -27,10 +27,6 @@ DownloadProgressPage::DownloadProgressPage(QWidget* parent)
 }
 
 void DownloadProgressPage::initializePage() {
-  // we don't support going back and redownloading right now
-  // there's no real reason why we could not do this.  it just does not work
-  // right now
-  setCommitPage(true);
   setLayout(&layout);
   const QUrl url = wizard()->imageSelectPage.getUrl();
   qDebug() << "using url= " << url;
