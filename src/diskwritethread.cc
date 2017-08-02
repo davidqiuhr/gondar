@@ -61,6 +61,9 @@ void DiskWriteThread::run() {
     setState(State::InstallFailed);
     return;
   }
+
+  LOG_INFO << "Install succeeded";
+  setState(State::Success);
 }
 
 void DiskWriteThread::setState(const State state) {
