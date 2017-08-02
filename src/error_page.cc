@@ -39,6 +39,7 @@ int ErrorPage::nextId() const {
 void ErrorPage::setVisible(bool visible) {
   WizardPage::setVisible(visible);
   if (visible) {
+    // this is never set back; assumes error page is last page to be shown
     setButtonText(QWizard::FinishButton, "Exit");
   }
 }
