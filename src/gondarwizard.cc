@@ -307,6 +307,7 @@ int WriteOperationPage::nextId() const {
 void WriteOperationPage::setVisible(bool visible) {
   WizardPage::setVisible(visible);
   GondarWizard* wiz = dynamic_cast<GondarWizard*>(wizard());
+  // TODO: can now simplify this logic; it's the only user of CustomButton1
   if (visible) {
     setButtonText(QWizard::CustomButton1, "Make Another USB");
     connect(wiz, SIGNAL(customButtonClicked(int)), wiz,
