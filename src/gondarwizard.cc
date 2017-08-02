@@ -256,6 +256,7 @@ void WriteOperationPage::writeToDrive() {
   diskWriteThread = new DiskWriteThread(selected_drive, image_path, this);
   connect(diskWriteThread, SIGNAL(finished()), this, SLOT(onDoneWriting()));
   qDebug() << "launching thread...";
+  gondar::SendMetric(gondar::Metric::UsbAttempt);
   diskWriteThread->start();
 }
 
@@ -282,6 +283,7 @@ void WriteOperationPage::onDoneWriting() {
 
     case DiskWriteThread::State::Success:
       // Hooray!
+      gondar::SendMetric(gondar::Metric::UsbSuccess);
       break;
   }
 
