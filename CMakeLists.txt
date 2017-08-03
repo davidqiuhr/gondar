@@ -35,7 +35,7 @@ set(WIN32_CONSOLE ON CACHE BOOL "On Windows, show the console")
 # Extra warnings sourced from:
 # https://stackoverflow.com/questions/5088460
 #
-# TODO(nicholasbishop): add -pedantic, -Wsign-conversion,
+# TODO(nicholasbishop): add -Wsign-conversion,
 # -Wold-style-cast, -Wcast-qual, -Wstrict-overflow=5
 set(EXTRA_WARNINGS ${EXTRA_WARNINGS}
   # Warnings limited to C++
@@ -47,6 +47,7 @@ set(EXTRA_WARNINGS ${EXTRA_WARNINGS}
     -Wstrict-null-sentinel
     -Wsuggest-override>
 
+  -pedantic
   -Wall
   -Wextra
 
