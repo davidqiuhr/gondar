@@ -58,7 +58,8 @@ To format all the source files run `make format`. You can also run
 
 ## Testing in a Windows VM
 
-Download and decompress the Windows image:
+Download and decompress the Windows image (this is only accessible to
+Neverware employees):
 
     aws s3 cp s3://windows-installed-images/win10-installed.raw.lz4 .
     lz4 win10-installed.raw.lz4
