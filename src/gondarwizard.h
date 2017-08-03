@@ -101,7 +101,6 @@ class WriteOperationPage : public gondar::WizardPage {
   bool validatePage() override;
   void showProgress();
   int nextId() const override;
-  void setVisible(bool visible) override;
  public slots:
   void onDoneWriting();
 
@@ -124,6 +123,7 @@ class GondarWizard : public QWizard {
   int nextId() const override;
   void postError(const QString& error);
   qint64 getRunTime();
+  void setMakeAnotherLayout();
   // There's an elaborate state-sharing solution via the 'field' mechanism
   // supported by QWizard.  I found the logic for that to be easy for sharing
   // some data types and convoluted for others.  In this case, a later page
@@ -157,6 +157,10 @@ class GondarWizard : public QWizard {
 
  private:
   void catchError(const QString& error);
+  // Set the button layout appropriate for most pages; no 'make another usb'
+  // button.
+  // The default layout includes a back button, which is now omitted.
+  void setNormalLayout();
 
   QShortcut about_shortcut_;
   QDateTime runTime;
