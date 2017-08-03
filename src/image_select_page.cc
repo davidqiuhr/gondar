@@ -21,16 +21,23 @@
 
 ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
   setTitle("Which version of CloudReady do you need?");
-  setSubTitle(
-      "64-bit should be suitable for most computers made after 2007.  Choose "
-      "32-bit for older computers or devices with Intel Atom CPUs.");
+  setSubTitle("Choose between 32-bit and 64-bit installers");
+
+  sixtyFourDetails.setText("Suitable for most computers made after 2007");
+  thirtyTwoDetails.setText(
+      "For older computers or devices with Intel Atom CPUs");
+
   thirtyTwo.setText("32-bit");
   sixtyFour.setText("64-bit (recommended)");
   sixtyFour.setChecked(true);
   bitnessButtons.addButton(&thirtyTwo);
   bitnessButtons.addButton(&sixtyFour);
-  layout.addWidget(&thirtyTwo);
+
   layout.addWidget(&sixtyFour);
+  layout.addWidget(&sixtyFourDetails);
+  layout.addWidget(&thirtyTwo);
+  layout.addWidget(&thirtyTwoDetails);
+
   setLayout(&layout);
   connect(&newestImageUrl, &NewestImageUrl::errorOccurred, this,
           &ImageSelectPage::handleNewestImageUrlError);

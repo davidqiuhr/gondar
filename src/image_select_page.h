@@ -17,7 +17,7 @@
 #define IMAGE_SELECT_PAGE_H
 
 #include <QButtonGroup>
-#include <QNetworkAccessManager>
+#include <QLabel>
 #include <QRadioButton>
 #include <QUrl>
 #include <QVBoxLayout>
@@ -45,7 +45,9 @@ class ImageSelectPage : public gondar::WizardPage {
  private:
   QButtonGroup bitnessButtons;
   QRadioButton thirtyTwo;
+  QLabel thirtyTwoDetails;
   QRadioButton sixtyFour;
+  QLabel sixtyFourDetails;
   QVBoxLayout layout;
   NewestImageUrl newestImageUrl;
   bool hasError;
