@@ -58,17 +58,33 @@ GondarWizard::GondarWizard(QWidget* parent)
   setWindowTitle(tr("Cloudready USB Creation Utility"));
   setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
 
-  setOption(QWizard::HaveCustomButton1, false);
-  setOption(QWizard::NoCancelButton, true);
-  setOption(QWizard::NoBackButtonOnLastPage, true);
+  setButtonText(QWizard::CustomButton1, "Make Another USB");
+  setNormalLayout();
 
   connect(&about_shortcut_, &QShortcut::activated, &about_dialog_,
           &gondar::AboutDialog::show);
+  connect(this, SIGNAL(customButtonClicked(int)), this,
+          SLOT(handleMakeAnother()));
+
   runTime = QDateTime::currentDateTime();
 }
 
+void GondarWizard::setNormalLayout() {
+  QList<QWizard::WizardButton> button_layout;
+  button_layout << QWizard::Stretch << QWizard::NextButton
+                << QWizard::FinishButton;
+  setButtonLayout(button_layout);
+}
+
+void GondarWizard::setMakeAnotherLayout() {
+  QList<QWizard::WizardButton> button_layout;
+  button_layout << QWizard::Stretch << QWizard::CustomButton1
+                << QWizard::NextButton << QWizard::FinishButton;
+  setButtonLayout(button_layout);
+}
 // handle event when 'make another usb' button pressed
 void GondarWizard::handleMakeAnother() {
+  setNormalLayout();
   // works as long as usbInsertPage is not the last page in wizard
   setStartId(usbInsertPage.nextId() - 1);
   restart();
@@ -293,7 +309,7 @@ void WriteOperationPage::onDoneWriting() {
   writeFinished = true;
   progress.setRange(0, 100);
   progress.setValue(100);
-  wizard()->setOption(QWizard::HaveCustomButton1, true);
+  wizard()->setMakeAnotherLayout();
   // when a USB was successfully created, report time the run took
   gondar::SendMetric(gondar::Metric::SuccessDuration,
                      QString::number(wizard()->getRunTime()).toStdString());
@@ -304,21 +320,6 @@ void WriteOperationPage::onDoneWriting() {
 // healthy flows
 int WriteOperationPage::nextId() const {
   return -1;
-}
-
-void WriteOperationPage::setVisible(bool visible) {
-  WizardPage::setVisible(visible);
-  GondarWizard* wiz = dynamic_cast<GondarWizard*>(wizard());
-  // TODO: can now simplify this logic; it's the only user of CustomButton1
-  if (visible) {
-    setButtonText(QWizard::CustomButton1, "Make Another USB");
-    connect(wiz, SIGNAL(customButtonClicked(int)), wiz,
-            SLOT(handleMakeAnother()));
-  } else {
-    wiz->setOption(QWizard::HaveCustomButton1, false);
-    disconnect(wiz, SIGNAL(customButtonClicked(int)), wiz,
-               SLOT(handleMakeAnother()));
-  }
 }
 
 void WriteOperationPage::writeFailed(const QString& errorMessage) {
