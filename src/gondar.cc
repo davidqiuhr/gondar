@@ -18,11 +18,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+// Set minimum SDK version to Win8, needed for
+// USB_GET_NODE_CONNECTION_INFORMATION_EX_V2
 #define _WIN32_WINNT _WIN32_WINNT_WIN8
 
 #include <windows.h>
-#include <usbioctl.h>
 #include <setupapi.h>
+#include <usbioctl.h>
+#include <versionhelpers.h>
 
 #include <inttypes.h>
 #include <stdio.h>
@@ -124,22 +127,6 @@ enum {
 #define HTAB_EMPTY \
   { NULL, 0, 0 }
 #define DEVID_HTAB_SIZE 257
-
-int nWindowsVersion;
-/* Windows versions */
-enum WindowsVersion {
-  WINDOWS_UNDEFINED = -1,
-  WINDOWS_UNSUPPORTED = 0,
-  WINDOWS_XP = 0x51,
-  WINDOWS_2003 = 0x52,  // Also XP x64
-  WINDOWS_VISTA = 0x60,
-  WINDOWS_7 = 0x61,
-  WINDOWS_8 = 0x62,
-  WINDOWS_8_1 = 0x63,
-  WINDOWS_10_PREVIEW1 = 0x64,
-  WINDOWS_10 = 0xA0,
-  WINDOWS_MAX
-};
 
 const GUID _GUID_DEVINTERFACE_DISK = {
     0x53f56307L,
@@ -884,7 +871,7 @@ static BOOL GetUSBProperties(char* parent_path,
 
   // In their great wisdom, Microsoft decided to BREAK the USB speed report
   // between Windows 7 and Windows 8
-  if (nWindowsVersion >= WINDOWS_8) {
+  if (IsWindows8OrGreater()) {
     memset(&conn_info_v2, 0, sizeof(conn_info_v2));
     size = sizeof(conn_info_v2);
     conn_info_v2.ConnectionIndex = (ULONG)props->port;
@@ -1499,7 +1486,7 @@ static void GetDevices(DeviceGuyList* device_list) {
   // of
   full_list_size = 0;
   ulFlags = CM_GETIDLIST_FILTER_SERVICE;
-  if (nWindowsVersion >= WINDOWS_7)
+  if (IsWindows7OrGreater())
     ulFlags |= CM_GETIDLIST_FILTER_PRESENT;
   for (s = 0; s < ARRAYSIZE_SIGNED(usbstor_name); s++) {
     // Get a list of device IDs for all USB storage devices
