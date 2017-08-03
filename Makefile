@@ -53,12 +53,24 @@ clean:
 	rm -rf ${BUILD_DIR}
 
 
+# Start an interactive shell in the MXE container. The current working
+# directory in the host is mounted in the container under /opt/host.
+docker-mxe-shell:
+	sudo docker run \
+		--volume ${PWD}:/opt/host \
+		--interactive \
+		--tty \
+		--workdir /opt/host \
+		neverware/gondar-build-mxe:v3 \
+		bash
+
+
 format:
 	CLANG_FORMAT=${CLANG_FORMAT} infra/format.py
 
 
 help:
-	@echo "usage: make [build-gondar|clean|format|jenkins|test]"
+	@echo "usage: make [build-gondar|clean|docker-mxe-shell|format|jenkins|test]"
 
 
 # The Jenkins entry point. The Jenkins job should be configured to run
@@ -107,6 +119,7 @@ endif
 .PHONY: all \
 		build-gondar \
 		clean \
+		docker-mxe-shell \
 		format \
 		jenkins \
 		jenkins-linux \
