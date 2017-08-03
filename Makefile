@@ -119,11 +119,11 @@ endif
 .PHONY: all \
 		build-gondar \
 		clean \
+		docker-mxe-shell \
 		format \
 		jenkins \
 		jenkins-linux \
 		jenkins-win32 \
-		docker-mxe-shell \
 		print-config \
 		test \
 		update-submodules
