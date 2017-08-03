@@ -60,6 +60,8 @@ GondarWizard::GondarWizard(QWidget* parent)
 
   setButtonText(QWizard::CustomButton1, "Make Another USB");
   setNormalLayout();
+  // remove '?' button that does not do anything in our current setup
+  setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
   connect(&about_shortcut_, &QShortcut::activated, &about_dialog_,
           &gondar::AboutDialog::show);
