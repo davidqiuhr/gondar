@@ -47,6 +47,7 @@ set(EXTRA_WARNINGS ${EXTRA_WARNINGS}
     -Wstrict-null-sentinel
     -Wsuggest-override>
 
+  -pedantic
   -Wall
   -Wextra
 

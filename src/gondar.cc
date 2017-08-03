@@ -18,8 +18,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <windows.h>
+#define _WIN32_WINNT _WIN32_WINNT_WIN8
 
+#include <windows.h>
+#include <usbioctl.h>
 #include <setupapi.h>
 
 #include <inttypes.h>
@@ -122,14 +124,6 @@ enum {
 #define HTAB_EMPTY \
   { NULL, 0, 0 }
 #define DEVID_HTAB_SIZE 257
-
-#define IOCTL_USB_GET_NODE_CONNECTION_INFORMATION_EX                \
-  CTL_CODE(FILE_DEVICE_USB, USB_GET_NODE_CONNECTION_INFORMATION_EX, \
-           METHOD_BUFFERED, FILE_ANY_ACCESS)
-
-#define IOCTL_USB_GET_NODE_CONNECTION_INFORMATION_EX_V2                \
-  CTL_CODE(FILE_DEVICE_USB, USB_GET_NODE_CONNECTION_INFORMATION_EX_V2, \
-           METHOD_BUFFERED, FILE_ANY_ACCESS)
 
 int nWindowsVersion;
 /* Windows versions */
@@ -807,78 +801,6 @@ static __inline BOOL IsVHD(const char* buffer) {
   return FALSE;
 }
 
-// usb jargon
-typedef enum USB_CONNECTION_STATUS {
-  NoDeviceConnected,
-  DeviceConnected,
-  DeviceFailedEnumeration,
-  DeviceGeneralFailure,
-  DeviceCausedOvercurrent,
-  DeviceNotEnoughPower,
-  DeviceNotEnoughBandwidth,
-  DeviceHubNestedTooDeeply,
-  DeviceInLegacyHub
-} USB_CONNECTION_STATUS,
-    *PUSB_CONNECTION_STATUS;
-
-typedef enum USB_HUB_NODE { UsbHub, UsbMIParent } USB_HUB_NODE;
-
-typedef struct _USB_DEVICE_DESCRIPTOR {
-  UCHAR bLength;
-  UCHAR bDescriptorType;
-  USHORT bcdUSB;
-  UCHAR bDeviceClass;
-  UCHAR bDeviceSubClass;
-  UCHAR bDeviceProtocol;
-  UCHAR bMaxPacketSize0;
-  USHORT idVendor;
-  USHORT idProduct;
-  USHORT bcdDevice;
-  UCHAR iManufacturer;
-  UCHAR iProduct;
-  UCHAR iSerialNumber;
-  UCHAR bNumConfigurations;
-} USB_DEVICE_DESCRIPTOR, *PUSB_DEVICE_DESCRIPTOR;
-
-typedef struct USB_NODE_CONNECTION_INFORMATION_EX {
-  ULONG ConnectionIndex;
-  USB_DEVICE_DESCRIPTOR DeviceDescriptor;
-  UCHAR CurrentConfigurationValue;
-  UCHAR Speed;
-  BOOLEAN DeviceIsHub;
-  USHORT DeviceAddress;
-  ULONG NumberOfOpenPipes;
-  USB_CONNECTION_STATUS ConnectionStatus;
-  //	USB_PIPE_INFO PipeList[0];
-} USB_NODE_CONNECTION_INFORMATION_EX, *PUSB_NODE_CONNECTION_INFORMATION_EX;
-
-typedef union _USB_PROTOCOLS {
-  ULONG ul;
-  struct {
-    ULONG Usb110 : 1;
-    ULONG Usb200 : 1;
-    ULONG Usb300 : 1;
-    ULONG ReservedMBZ : 29;
-  };
-} USB_PROTOCOLS, *PUSB_PROTOCOLS;
-
-typedef union _USB_NODE_CONNECTION_INFORMATION_EX_V2_FLAGS {
-  ULONG ul;
-  struct {
-    ULONG DeviceIsOperatingAtSuperSpeedOrHigher : 1;
-    ULONG DeviceIsSuperSpeedCapableOrHigher : 1;
-    ULONG ReservedMBZ : 30;
-  };
-} USB_NODE_CONNECTION_INFORMATION_EX_V2_FLAGS,
-    *PUSB_NODE_CONNECTION_INFORMATION_EX_V2_FLAGS;
-
-typedef struct _USB_NODE_CONNECTION_INFORMATION_EX_V2 {
-  ULONG ConnectionIndex;
-  ULONG Length;
-  USB_PROTOCOLS SupportedUsbProtocols;
-  USB_NODE_CONNECTION_INFORMATION_EX_V2_FLAGS Flags;
-} USB_NODE_CONNECTION_INFORMATION_EX_V2,
-    *PUSB_NODE_CONNECTION_INFORMATION_EX_V2;
 /* List of the properties we are interested in */
 typedef struct usb_device_props {
   uint32_t vid;
