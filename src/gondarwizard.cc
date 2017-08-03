@@ -119,6 +119,8 @@ void GondarWizard::postError(const QString& error) {
 void GondarWizard::catchError(const QString& error) {
   LOG_ERROR << "displaying error: " << error;
   errorPage.setErrorString(error);
+  // TODO: sanitize error string?
+  gondar::SendMetric(gondar::Metric::Error, error.toStdString());
   next();
 }
 
