@@ -36,7 +36,7 @@ set(WIN32_CONSOLE ON CACHE BOOL "On Windows, show the console")
 # https://stackoverflow.com/questions/5088460
 #
 # TODO(nicholasbishop): add -pedantic, -Wsign-conversion,
-# -Wold-style-cast, -Wcast-qual
+# -Wold-style-cast, -Wcast-qual, -Wstrict-overflow=5
 set(EXTRA_WARNINGS ${EXTRA_WARNINGS}
   # Warnings limited to C++
   $<$<COMPILE_LANGUAGE:CXX>:
@@ -59,7 +59,6 @@ set(EXTRA_WARNINGS ${EXTRA_WARNINGS}
   -Wmissing-declarations
   -Wredundant-decls
   -Wshadow
-  -Wstrict-overflow=5
   -Wundef
   -Wunused-macros
   -Wwrite-strings)
