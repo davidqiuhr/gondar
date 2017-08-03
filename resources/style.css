@@ -2,3 +2,11 @@
     /* give it the smithforrestr treatment */
     color: red;
 }
+
+ImageSelectPage QLabel {
+    /* Indent to align with QRadioButton text */
+    margin-left: 17px;
+
+    /* Add extra space to visually separate the options */
+    margin-bottom: 12px;
+}
