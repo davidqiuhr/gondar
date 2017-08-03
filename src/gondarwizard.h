@@ -157,8 +157,9 @@ class GondarWizard : public QWizard {
 
  private:
   void catchError(const QString& error);
-  // set the button layout appropriate for most pages; no 'make another usb'
-  // button
+  // Set the button layout appropriate for most pages; no 'make another usb'
+  // button.
+  // The default layout includes a back button, which is now omitted.
   void setNormalLayout();
 
   QShortcut about_shortcut_;
