@@ -59,6 +59,7 @@ GondarWizard::GondarWizard(QWidget* parent)
   setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
 
   setButtonText(QWizard::CustomButton1, "Make Another USB");
+  setButtonText(QWizard::CustomButton2, "About");
   setNormalLayout();
   // remove '?' button that does not do anything in our current setup
   setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -66,30 +67,37 @@ GondarWizard::GondarWizard(QWidget* parent)
   connect(&about_shortcut_, &QShortcut::activated, &about_dialog_,
           &gondar::AboutDialog::show);
   connect(this, SIGNAL(customButtonClicked(int)), this,
-          SLOT(handleMakeAnother()));
+          SLOT(handleCustomButton(int)));
 
   runTime = QDateTime::currentDateTime();
 }
 
 void GondarWizard::setNormalLayout() {
   QList<QWizard::WizardButton> button_layout;
-  button_layout << QWizard::Stretch << QWizard::NextButton
-                << QWizard::FinishButton;
+  button_layout << QWizard::CustomButton2 << QWizard::Stretch
+                << QWizard::NextButton << QWizard::FinishButton;
   setButtonLayout(button_layout);
 }
 
 void GondarWizard::setMakeAnotherLayout() {
   QList<QWizard::WizardButton> button_layout;
-  button_layout << QWizard::Stretch << QWizard::CustomButton1
-                << QWizard::NextButton << QWizard::FinishButton;
+  button_layout << QWizard::CustomButton2 << QWizard::Stretch
+                << QWizard::CustomButton1 << QWizard::NextButton
+                << QWizard::FinishButton;
   setButtonLayout(button_layout);
 }
 // handle event when 'make another usb' button pressed
-void GondarWizard::handleMakeAnother() {
-  setNormalLayout();
-  // works as long as usbInsertPage is not the last page in wizard
-  setStartId(usbInsertPage.nextId() - 1);
-  restart();
+void GondarWizard::handleCustomButton(int buttonIndex) {
+  if (buttonIndex == QWizard::CustomButton1) {
+    setNormalLayout();
+    // works as long as usbInsertPage is not the last page in wizard
+    setStartId(usbInsertPage.nextId() - 1);
+    restart();
+  } else if (buttonIndex == QWizard::CustomButton2) {
+    about_dialog_.show();
+  } else {
+    LOG_ERROR << "Unknown custom button pressed";
+  }
 }
 
 int GondarWizard::nextId() const {

@@ -153,7 +153,7 @@ class GondarWizard : public QWizard {
   };
 
  private slots:
-  void handleMakeAnother();
+  void handleCustomButton(int buttonIndex);
 
  private:
   void catchError(const QString& error);
