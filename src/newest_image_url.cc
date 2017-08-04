@@ -54,15 +54,15 @@ void NewestImageUrl::handleReply(QNetworkReply* reply) {
   reply->deleteLater();
 }
 
-void NewestImageUrl::set32Url(QUrl url_in) {
+void NewestImageUrl::set32Url(const QUrl& url_in) {
   thirtyTwoUrl = url_in;
 }
 
-void NewestImageUrl::set64Url(QUrl url_in) {
+void NewestImageUrl::set64Url(const QUrl& url_in) {
   sixtyFourUrl = url_in;
 }
 
-bool NewestImageUrl::isReady() {
+bool NewestImageUrl::isReady() const {
   if (thirtyTwoUrl.isEmpty() || sixtyFourUrl.isEmpty()) {
     return false;
   } else {
@@ -70,10 +70,10 @@ bool NewestImageUrl::isReady() {
   }
 }
 
-QUrl NewestImageUrl::get32Url() {
+const QUrl& NewestImageUrl::get32Url() const {
   return thirtyTwoUrl;
 }
 
-QUrl NewestImageUrl::get64Url() {
+const QUrl& NewestImageUrl::get64Url() const {
   return sixtyFourUrl;
 }
