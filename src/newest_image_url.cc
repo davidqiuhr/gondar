@@ -25,10 +25,6 @@ static QUrl getLatestUrl(QNetworkReply* reply) {
   const auto path = QString::fromUtf8(reply->readAll());
   return QUrl(base + path.trimmed());
 }
-NewestImageUrl::NewestImageUrl() {
-  url32Ready = false;
-  url64Ready = false;
-}
 
 void NewestImageUrl::fetch() {
   QString baseUrl(
@@ -51,10 +47,8 @@ void NewestImageUrl::handleReply(QNetworkReply* reply) {
   QUrl url = getLatestUrl(reply);
   if (reply->url().toString().contains("32bit")) {
     thirtyTwoUrl = url;
-    url32Ready = true;
   } else {
     sixtyFourUrl = url;
-    url64Ready = true;
   }
   LOG_INFO << "using latest url: " << url.toString();
   reply->deleteLater();

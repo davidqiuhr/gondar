@@ -23,7 +23,6 @@ class NewestImageUrl : public QObject {
   Q_OBJECT
 
  public:
-  NewestImageUrl();
   void fetch();
   bool isReady();
   void set32Url(QUrl url_in);
@@ -38,8 +37,6 @@ class NewestImageUrl : public QObject {
 
  private:
   QNetworkAccessManager networkManager;
-  bool url32Ready;
-  bool url64Ready;
   QUrl thirtyTwoUrl;
   QUrl sixtyFourUrl;
 };
