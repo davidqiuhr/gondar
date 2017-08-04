@@ -1,7 +1,7 @@
 # Gondar
 [Crummy Wizard!](https://www.youtube.com/watch?v=1TVjEGqJoMg)
 
-Gondar is a project that aims to allows users to download one of our latest
+Gondar is a project that aims to allow users to download one of our latest
 CloudReady releases and burn it onto a USB stick for immediate use.
 
 We're primarily targeting Windows 10 for compatibility.
