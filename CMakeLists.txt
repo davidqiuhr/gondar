@@ -116,10 +116,6 @@ add_library(app STATIC
   src/util.cc
   src/wizard_page.cc)
 
-if(${CHROMEOVER})
-  target_compile_definitions(app PUBLIC CHROMEOVER)
-endif()
-
 set_target_properties(app PROPERTIES AUTOMOC ON AUTORCC ON)
 target_compile_options(app PRIVATE ${EXTRA_WARNINGS})
 target_include_directories(app SYSTEM PUBLIC minizip plog/include)
