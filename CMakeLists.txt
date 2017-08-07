@@ -124,8 +124,8 @@ target_link_libraries(app PUBLIC
   Qt5::Network Qt5::Widgets minizip minizip_extra)
 
 # Gondar application
-add_executable(cloudready-usb-creator src/main.cc)
-target_link_libraries(cloudready-usb-creator app)
+add_executable(cloudready-usb-maker src/main.cc)
+target_link_libraries(cloudready-usb-maker app)
 
 # Test application
 add_executable(tests test/test.cc)
@@ -135,12 +135,12 @@ set_target_properties(tests PROPERTIES AUTOMOC ON)
 # Platform-specific build configuration
 if(WIN32)
   if(NOT ${WIN32_CONSOLE})
-    set_target_properties(cloudready-usb-creator PROPERTIES WIN32_EXECUTABLE ON)
+    set_target_properties(cloudready-usb-maker PROPERTIES WIN32_EXECUTABLE ON)
   endif()
 
   fix_qt_static_link(app)
   add_win32_usb_support(app)
-  target_sources(cloudready-usb-creator PRIVATE resources/gondar.rc)
+  target_sources(cloudready-usb-maker PRIVATE resources/gondar.rc)
 else()
   target_sources(app PRIVATE src/stubs.cc)
 endif()

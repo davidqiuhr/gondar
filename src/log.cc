@@ -29,7 +29,7 @@ namespace {
 // Get the log path, creating the parent directory if necessary.
 std::string CreateLogPath() {
   const auto vendor = QStringLiteral("neverware");
-  const auto product = QStringLiteral("cloudready-usb-creator.log");
+  const auto product = QStringLiteral("cloudready-usb-maker.log");
 
   const QDir dir =
       QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
