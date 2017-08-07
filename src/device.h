@@ -20,13 +20,12 @@ A linkedlist of device info passed between the C and C++ layer
 #define DEVICE_H
 
 #include <cstdint>
-
-#define MAX_NAME_LENGTH 64
+#include <string>
 
 // TODO(kendall): rename to something more thoughtful
 typedef struct DeviceGuy {
   uint32_t device_num;
-  char name[MAX_NAME_LENGTH];
+  std::string name;
   struct DeviceGuy* next;
   struct DeviceGuy* prev;
 } DeviceGuy;
@@ -36,12 +35,12 @@ typedef struct DeviceGuyList {
   DeviceGuy* tail;
 } DeviceGuyList;
 
-DeviceGuy* DeviceGuy_init(uint32_t device_num, const char* name);
+DeviceGuy* DeviceGuy_init(uint32_t device_num, const std::string& name);
 void DeviceGuy_copy(const DeviceGuy* src, DeviceGuy* dst);
 DeviceGuyList* DeviceGuyList_init();
 void DeviceGuyList_append(DeviceGuyList* self,
                           uint32_t index,
-                          const char* name);
+                          const std::string& name);
 void DeviceGuyList_print(DeviceGuyList* self);
 DeviceGuy* DeviceGuyList_getByIndex(DeviceGuyList* self, uint32_t index);
 uint32_t DeviceGuyList_length(DeviceGuyList* self);

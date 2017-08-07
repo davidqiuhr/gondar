@@ -22,13 +22,10 @@
 #include "log.h"
 #include "shared.h"
 
-DeviceGuy* DeviceGuy_init(uint32_t device_num, const char* name) {
+DeviceGuy* DeviceGuy_init(uint32_t device_num, const std::string& name) {
   DeviceGuy* self = new DeviceGuy();
-  memset(self, 0, sizeof(DeviceGuy));
   self->device_num = device_num;
-  // the name that came in is just a temporary buffer; we'll need to strcpy
-  strncpy(self->name, name, MAX_NAME_LENGTH);
-  self->name[MAX_NAME_LENGTH - 1] = '\0';
+  self->name = name;
   return self;
 }
 
@@ -48,7 +45,7 @@ DeviceGuyList* DeviceGuyList_init() {
 
 void DeviceGuyList_append(DeviceGuyList* self,
                           uint32_t device_num,
-                          const char* name) {
+                          const std::string& name) {
   DeviceGuy* newguy = DeviceGuy_init(device_num, name);
   if (self->head == NULL) {
     self->head = newguy;

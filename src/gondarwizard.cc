@@ -222,7 +222,8 @@ void DeviceSelectPage::initializePage() {
   // then i could look up index later easily
   while (itr != NULL) {
     // FIXME(kendall): clean these up
-    GondarButton* curRadio = new GondarButton(itr->name, itr->device_num, this);
+    GondarButton* curRadio = new GondarButton(QString::fromStdString(itr->name),
+                                              itr->device_num, this);
     radioGroup->addButton(curRadio);
     layout->addWidget(curRadio);
     itr = itr->next;
