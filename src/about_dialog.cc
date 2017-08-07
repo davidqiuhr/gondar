@@ -51,6 +51,6 @@ AboutDialog::AboutDialog() {
   layout_.addWidget(&close_button_, 0, Qt::AlignRight);
   setLayout(&layout_);
   setMinimumWidth(500);
-  setWindowTitle(tr("CloudReady USB Creator"));
+  setWindowTitle(tr("CloudReady USB Maker"));
 }
 }
