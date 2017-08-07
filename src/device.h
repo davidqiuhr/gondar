@@ -19,11 +19,7 @@ A linkedlist of device info passed between the C and C++ layer
 #ifndef DEVICE_H
 #define DEVICE_H
 
-#include <inttypes.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <cstdint>
 
 #define MAX_NAME_LENGTH 64
 
@@ -50,9 +46,5 @@ void DeviceGuyList_print(DeviceGuyList* self);
 DeviceGuy* DeviceGuyList_getByIndex(DeviceGuyList* self, uint32_t index);
 uint32_t DeviceGuyList_length(DeviceGuyList* self);
 void DeviceGuyList_free(DeviceGuyList* self);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* DEVICE_H */
