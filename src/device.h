@@ -36,11 +36,6 @@ class DeviceGuy {
 typedef std::vector<DeviceGuy> DeviceGuyList;
 
 DeviceGuyList* DeviceGuyList_init();
-void DeviceGuyList_append(DeviceGuyList* self,
-                          uint32_t index,
-                          const std::string& name);
-DeviceGuy* DeviceGuyList_getByIndex(DeviceGuyList* self, uint32_t index);
-uint32_t DeviceGuyList_length(DeviceGuyList* self);
 void DeviceGuyList_free(DeviceGuyList* self);
 
 #endif /* DEVICE_H */

@@ -1887,7 +1887,7 @@ static void GetDevices(DeviceGuyList* device_list) {
       // here we are.  the device has not been eliminated!  that is great!
       // if we don't already have a ret, make this our ret
       printf("kendall: %lu qualified\n", drive_index);
-      DeviceGuyList_append(device_list, drive_index, buffer);
+      device_list->emplace_back(DeviceGuy(drive_index, buffer));
     }
   }
 
