@@ -24,7 +24,7 @@ DeviceGuyList* GetDeviceList() {
   return list;
 }
 
-BOOL Install(DeviceGuy* target_device,
+bool Install(DeviceGuy* target_device,
              const char* image_path,
              int64_t image_size) {
   Q_UNUSED(target_device);
@@ -33,6 +33,6 @@ BOOL Install(DeviceGuy* target_device,
   return true;
 }
 
-BOOL IsCurrentProcessElevated() {
+bool IsCurrentProcessElevated() {
   return true;
 }
