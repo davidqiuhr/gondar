@@ -139,7 +139,9 @@ if(WIN32)
   endif()
 
   fix_qt_static_link(app)
-  add_win32_usb_support(app)
+
+  target_link_libraries(app PRIVATE setupapi)
+  target_sources(app PRIVATE src/gondar.cc)
   target_sources(cloudready-usb-maker PRIVATE resources/gondar.rc)
 else()
   target_sources(app PRIVATE src/stubs.cc)
