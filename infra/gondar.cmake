@@ -31,14 +31,3 @@ function(fix_qt_static_link target)
     ${widgets_extra_LDFLAGS}
     ${freetype_extra_LDFLAGS})
 endfunction()
-
-
-# Build gondar.c with a slightly different set of flags since it's a
-# partially third-party C file. The result is linked to |target| along
-# with any system libs that gondar.c needs.
-function(add_win32_usb_support target)
-  add_library(win32_usb STATIC src/gondar.cc)
-  set_target_properties(win32_usb PROPERTIES CXX_STANDARD 11)
-  target_compile_options(win32_usb PRIVATE ${EXTRA_WARNINGS})
-  target_link_libraries(app PRIVATE win32_usb setupapi)
-endfunction()
