@@ -226,8 +226,8 @@ void DeviceSelectPage::initializePage() {
   // then i could look up index later easily
   for (const auto& device : *drivelist) {
     // FIXME(kendall): clean these up
-    GondarButton* curRadio = new GondarButton(QString::fromStdString(device.name),
-                                              device.device_num, this);
+    GondarButton* curRadio = new GondarButton(
+        QString::fromStdString(device.name), device.device_num, this);
     radioGroup->addButton(curRadio);
     layout->addWidget(curRadio);
   }
