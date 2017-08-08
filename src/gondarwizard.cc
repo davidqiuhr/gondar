@@ -32,12 +32,6 @@
 DeviceGuyList* drivelist = NULL;
 DeviceGuy* selected_drive = NULL;
 
-GondarButton::GondarButton(const QString& text,
-                           unsigned int device_num,
-                           QWidget* parent)
-    : QRadioButton(text, parent) {
-  index = device_num;
-}
 GondarWizard::GondarWizard(QWidget* parent)
     : QWizard(parent), about_shortcut_(QKeySequence::HelpContents, this) {
   // these pages are automatically cleaned up
@@ -196,57 +190,19 @@ DeviceSelectPage::DeviceSelectPage(QWidget* parent) : WizardPage(parent) {
   // the usb device list.  or it could ask you to insert your device
   setTitle("USB device selection");
   setSubTitle("Choose your target device from the list of devices below.");
-  layout = new QVBoxLayout;
-  drivesLabel.setText("Select Drive:");
-  radioGroup = NULL;
-  setLayout(layout);
+
+  label_.setText("Select Drive:");
+  layout_.addWidget(&label_);
+  layout_.addWidget(&device_picker_);
+  setLayout(&layout_);
 }
 
 void DeviceSelectPage::initializePage() {
-  // while our layout is not empty, remove items from it
-  while (!layout->isEmpty()) {
-    QLayoutItem* curItem = layout->takeAt(0);
-    if (curItem->widget() != &drivesLabel) {
-      delete curItem->widget();
-    }
-  }
-
-  // remove our last listing
-  delete radioGroup;
-
-  if (drivelist == NULL) {
-    return;
-  }
-  DeviceGuy* itr = drivelist->head;
-  // Line up widgets horizontally
-  // use QVBoxLayout for vertically, H for horizontal
-  layout->addWidget(&drivesLabel);
-
-  radioGroup = new QButtonGroup();
-  // i could extend the button object to also have a secret index
-  // then i could look up index later easily
-  while (itr != NULL) {
-    // FIXME(kendall): clean these up
-    GondarButton* curRadio = new GondarButton(QString::fromStdString(itr->name),
-                                              itr->device_num, this);
-    radioGroup->addButton(curRadio);
-    layout->addWidget(curRadio);
-    itr = itr->next;
-  }
-  setLayout(layout);
+  device_picker_.refresh();
 }
 
 bool DeviceSelectPage::validatePage() {
-  // TODO(kendall): check for NULL on bad cast
-  GondarButton* selected =
-      dynamic_cast<GondarButton*>(radioGroup->checkedButton());
-  if (selected == NULL) {
-    return false;
-  } else {
-    unsigned int selected_index = selected->index;
-    selected_drive = DeviceGuyList_getByIndex(drivelist, selected_index);
-    return true;
-  }
+  return device_picker_.hasSelection();
 }
 
 int DeviceSelectPage::nextId() const {

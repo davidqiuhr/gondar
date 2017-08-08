@@ -13,12 +13,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <inttypes.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include "device.h"
 
+#include <algorithm>
+#include <cstdint>
+#include <string>
+
+#include "gondar.h"
 #include "log.h"
 #include "shared.h"
 
@@ -89,3 +90,42 @@ void DeviceGuyList_free(DeviceGuyList* self) {
   }
   delete self;
 }
+
+namespace gondar {
+
+bool Device::Id::operator==(const Id& other) const {
+  return value() == other.value();
+}
+
+bool Device::Id::operator<(const Id& other) const {
+  return value() < other.value();
+}
+
+std::vector<Device> Device::sortedDevices() {
+  std::vector<Device> result;
+
+  auto* devices = GetDeviceList();
+  for (DeviceGuy* item = devices->head; item; item = item->next) {
+    result.emplace_back(Device(item->name, Device::Id(item->device_num)));
+  }
+  DeviceGuyList_free(devices);
+
+  std::sort(result.begin(), result.end());
+
+  return result;
+}
+
+bool Device::operator==(const Device& other) const {
+  return name() == other.name() && id() == other.id();
+}
+
+bool Device::operator<(const Device& other) const {
+  const auto n = name().compare(other.name());
+  if (n == 0) {
+    return id() < other.id();
+  } else {
+    return n;
+  }
+}
+
+}  // namespace gondar
