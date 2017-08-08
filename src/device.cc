@@ -124,7 +124,7 @@ bool Device::operator<(const Device& other) const {
   if (n == 0) {
     return id() < other.id();
   } else {
-    return n;
+    return n < 0;
   }
 }
 
