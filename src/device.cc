@@ -29,20 +29,6 @@ DeviceGuyList* DeviceGuyList_init() {
   return new DeviceGuyList();
 }
 
-void DeviceGuyList_append(DeviceGuyList* self,
-                          uint32_t device_num,
-                          const std::string& name) {
-  self->emplace_back(DeviceGuy(device_num, name));
-}
-
-DeviceGuy* DeviceGuyList_getByIndex(DeviceGuyList* self, uint32_t index) {
-  return &self->at(index);
-}
-
-uint32_t DeviceGuyList_length(DeviceGuyList* self) {
-  return self->size();
-}
-
 void DeviceGuyList_free(DeviceGuyList* self) {
   delete self;
 }

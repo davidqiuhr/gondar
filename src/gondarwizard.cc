@@ -177,7 +177,7 @@ void UsbInsertPage::getDriveList() {
              << ")";
   }
 
-  if (DeviceGuyList_length(drivelist) == 0) {
+  if (drivelist->empty()) {
     DeviceGuyList_free(drivelist);
     drivelist = NULL;
     tim->start(1000);
@@ -242,7 +242,7 @@ bool DeviceSelectPage::validatePage() {
     return false;
   } else {
     unsigned int selected_index = selected->index;
-    selected_drive = DeviceGuyList_getByIndex(drivelist, selected_index);
+    selected_drive = &drivelist->at(selected_index);
     return true;
   }
 }
