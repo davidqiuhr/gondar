@@ -145,7 +145,7 @@ const GUID _GUID_DEVINTERFACE_USB_HUB = {
     0x11d0,
     {0x88, 0x15, 0x00, 0xa0, 0xc9, 0x06, 0xbe, 0xd8}};
 
-BOOL enable_vmdk = FALSE;
+bool enable_vmdk = false;
 
 /*
  * Windows DDK API definitions. Most of it copied from MinGW's includes
@@ -245,14 +245,14 @@ PF_TYPE_DECL(WINAPI,
 /* Read a generic registry key value. If a short key_name is used, assume that
    it belongs to
    the application and create the app subkey if required */
-static __inline BOOL _GetRegistryKey(HKEY key_root,
+static __inline bool _GetRegistryKey(HKEY key_root,
                                      const char* key_name,
                                      DWORD reg_type,
                                      LPBYTE dest,
                                      DWORD dest_size) {
   const char software_prefix[] = "SOFTWARE\\";
   char long_key_name[MAX_PATH] = {0};
-  BOOL r = FALSE;
+  bool r = false;
   size_t i;
   LONG s;
   HKEY hSoftware = NULL, hApp = NULL;
@@ -261,7 +261,7 @@ static __inline BOOL _GetRegistryKey(HKEY key_root,
   memset(dest, 0, dest_size);
 
   if (key_name == NULL)
-    return FALSE;
+    return false;
 
   for (i = safe_strlen(key_name); i > 0; i--) {
     if (key_name[i] == '\\')
@@ -305,7 +305,7 @@ static __inline BOOL _GetRegistryKey(HKEY key_root,
   // No key means default value of 0 or empty string
   if ((s == ERROR_FILE_NOT_FOUND) ||
       ((s == ERROR_SUCCESS) && (dwType == reg_type) && (dwSize > 0))) {
-    r = TRUE;
+    r = true;
   }
 out:
   if (hSoftware != NULL)
@@ -331,8 +331,8 @@ static __inline int32_t ReadRegistryKey32(HKEY root, const char* key) {
  * a member of the admin group
  */
 // TODO(kendall): include whatever this includes
-BOOL IsCurrentProcessElevated() {
-  BOOL r = FALSE;
+bool IsCurrentProcessElevated() {
+  BOOL r = false;
   DWORD size;
   HANDLE token = INVALID_HANDLE_VALUE;
   TOKEN_ELEVATION te;
@@ -359,7 +359,7 @@ BOOL IsCurrentProcessElevated() {
                                   &psid))
       goto out;
     if (!CheckTokenMembership(NULL, psid, &r))
-      r = FALSE;
+      r = false;
     FreeSid(psid);
   }
 
@@ -375,9 +375,9 @@ out:
  * failure.
  */
 static HANDLE GetHandle(char* Path,
-                        BOOL bLockDrive,
-                        BOOL bWriteAccess,
-                        BOOL bWriteShare) {
+                        bool bLockDrive,
+                        bool bWriteAccess,
+                        bool bWriteShare) {
   int i;
   DWORD size;
   HANDLE hDrive = INVALID_HANDLE_VALUE;
@@ -416,7 +416,7 @@ static HANDLE GetHandle(char* Path,
       printf(
           "Warning: Could not obtain exclusive rights. Retrying with write "
           "sharing enabled...");
-      bWriteShare = TRUE;
+      bWriteShare = true;
     }
     Sleep(DRIVE_ACCESS_TIMEOUT / DRIVE_ACCESS_RETRIES);
   }
@@ -456,13 +456,13 @@ out:
  * The string is allocated and must be freed (to ensure concurrent access)
  */
 static char* GetPhysicalName(DWORD DriveIndex) {
-  BOOL success = FALSE;
+  bool success = false;
   char physical_name[24];
 
   CheckDriveIndex(DriveIndex);
   safe_sprintf(physical_name, sizeof(physical_name), "\\\\.\\PHYSICALDRIVE%lu",
                DriveIndex);
-  success = TRUE;
+  success = true;
 out:
   return (success) ? safe_strdup(physical_name) : NULL;
 }
@@ -471,11 +471,11 @@ out:
  * Return a handle to the physical drive identified by DriveIndex
  */
 static HANDLE GetPhysicalHandle(DWORD DriveIndex,
-                                BOOL bLockDrive,
-                                BOOL bWriteAccess) {
+                                bool bLockDrive,
+                                bool bWriteAccess) {
   HANDLE hPhysical = INVALID_HANDLE_VALUE;
   char* PhysicalPath = GetPhysicalName(DriveIndex);
-  hPhysical = GetHandle(PhysicalPath, bLockDrive, bWriteAccess, FALSE);
+  hPhysical = GetHandle(PhysicalPath, bLockDrive, bWriteAccess, false);
   safe_free(PhysicalPath);
   return hPhysical;
 }
@@ -484,15 +484,15 @@ static HANDLE GetPhysicalHandle(DWORD DriveIndex,
  * Return the drive size
  */
 static uint64_t GetDriveSize(DWORD DriveIndex) {
-  BOOL r;
+  bool r;
   HANDLE hPhysical;
   DWORD size;
   BYTE geometry[256];
   PDISK_GEOMETRY_EX DiskGeometry = (PDISK_GEOMETRY_EX)(void*)geometry;
 
-  hPhysical = GetPhysicalHandle(DriveIndex, FALSE, FALSE);
+  hPhysical = GetPhysicalHandle(DriveIndex, false, false);
   if (hPhysical == INVALID_HANDLE_VALUE)
-    return FALSE;
+    return false;
 
   r = DeviceIoControl(hPhysical, IOCTL_DISK_GET_DRIVE_GEOMETRY_EX, NULL, 0,
                       geometry, sizeof(geometry), &size, NULL);
@@ -558,11 +558,11 @@ static int GetDriveNumber(HANDLE hDrive) {
  * as well as the drive type. This is used as base for the 2 function calls that
  * follow.
  */
-static BOOL _GetDriveLettersAndType(DWORD DriveIndex,
+static bool _GetDriveLettersAndType(DWORD DriveIndex,
                                     char* drive_letters,
                                     UINT* drive_type) {
   DWORD size;
-  BOOL r = FALSE;
+  bool r = false;
   HANDLE hDrive = INVALID_HANDLE_VALUE;
   UINT _drive_type;
   int i = 0, drive_number;
@@ -593,7 +593,7 @@ static BOOL _GetDriveLettersAndType(DWORD DriveIndex,
     goto out;
   }
 
-  r = TRUE;  // Required to detect drives that don't have volumes assigned
+  r = true;  // Required to detect drives that don't have volumes assigned
   for (drive = drives; *drive; drive += safe_strlen(drive) + 1) {
     if (!isalpha(*drive))
       continue;
@@ -622,7 +622,7 @@ static BOOL _GetDriveLettersAndType(DWORD DriveIndex,
     drive_number = GetDriveNumber(hDrive);
     safe_closehandle(hDrive);
     if (drive_number == dword_to_int(DriveIndex)) {
-      r = TRUE;
+      r = true;
       if (drive_letters != NULL)
         drive_letters[i++] = *drive;
       // The drive type should be the same for all volumes, so we can overwrite
@@ -714,7 +714,7 @@ static int IsHDD(DWORD DriveIndex,
                  const char* strid) {
   int score = 0;
   size_t i, mlen, ilen;
-  BOOL wc;
+  bool wc;
   uint64_t drive_size;
 
   // Boost the score if fixed, as these are *generally* HDDs
@@ -773,7 +773,7 @@ static int IsHDD(DWORD DriveIndex,
 // end kewl heuristics
 static const wchar_t wspace[] = L" \t";
 
-static __inline BOOL IsVHD(const char* buffer) {
+static __inline bool IsVHD(const char* buffer) {
   int i;
   // List of the Hardware IDs of the VHD devices we know
   const char* vhd_name[] = {
@@ -785,8 +785,8 @@ static __inline BOOL IsVHD(const char* buffer) {
 
   for (i = 0; i < (int)(ARRAYSIZE(vhd_name) - (enable_vmdk ? 0 : 1)); i++)
     if (safe_strstr(buffer, vhd_name[i]) != NULL)
-      return TRUE;
-  return FALSE;
+      return true;
+  return false;
 }
 
 /* List of the properties we are interested in */
@@ -807,10 +807,10 @@ typedef struct usb_device_props {
 /*
  * Get the VID, PID and current device speed
  */
-static BOOL GetUSBProperties(char* parent_path,
+static bool GetUSBProperties(char* parent_path,
                              char* device_id,
                              usb_device_props* props) {
-  BOOL r = FALSE;
+  bool r = false;
   CONFIGRET cr;
   HANDLE handle = INVALID_HANDLE_VALUE;
   DWORD size;
@@ -867,7 +867,7 @@ static BOOL GetUSBProperties(char* parent_path,
     props->vid = conn_info.DeviceDescriptor.idVendor;
     props->pid = conn_info.DeviceDescriptor.idProduct;
     props->speed = conn_info.Speed + 1;
-    r = TRUE;
+    r = true;
   }
 
   // In their great wisdom, Microsoft decided to BREAK the USB speed report
@@ -886,7 +886,7 @@ static BOOL GetUSBProperties(char* parent_path,
     } else if (conn_info_v2.Flags.DeviceIsOperatingAtSuperSpeedOrHigher) {
       props->speed = USB_SPEED_SUPER_OR_LATER;
     } else if (conn_info_v2.Flags.DeviceIsSuperSpeedCapableOrHigher) {
-      props->is_LowerSpeed = TRUE;
+      props->is_LowerSpeed = true;
     }
   }
 
@@ -902,8 +902,8 @@ out:
  */
 static wchar_t* get_token_data_line(const wchar_t* wtoken, wchar_t* wline) {
   size_t i, r;
-  BOOLEAN quoteth = FALSE;
-  BOOLEAN xml = FALSE;
+  BOOLEAN quoteth = false;
+  BOOLEAN xml = false;
 
   if ((wtoken == NULL) || (wline == NULL) || (wline[0] == 0))
     return NULL;
@@ -928,7 +928,7 @@ static wchar_t* get_token_data_line(const wchar_t* wtoken, wchar_t* wline) {
 
   // Check for '=' or '>' sign
   if (wline[i] == L'>')
-    xml = TRUE;
+    xml = true;
   else if (wline[i] != L'=')
     return NULL;
   i++;
@@ -938,7 +938,7 @@ static wchar_t* get_token_data_line(const wchar_t* wtoken, wchar_t* wline) {
 
   // eliminate leading quote, if it exists
   if (wline[i] == L'"') {
-    quoteth = TRUE;
+    quoteth = true;
     i++;
   }
 
@@ -1012,7 +1012,7 @@ out:
   get_token_data_file_indexed(token, filename, 1)
 
 // Could have used a #define, but this is clearer
-static BOOL GetDriveLetters(DWORD DriveIndex, char* drive_letters) {
+static bool GetDriveLetters(DWORD DriveIndex, char* drive_letters) {
   return _GetDriveLettersAndType(DriveIndex, drive_letters, NULL);
 }
 
@@ -1020,7 +1020,7 @@ static BOOL GetDriveLetters(DWORD DriveIndex, char* drive_letters) {
  * Return the drive letter and volume label
  * If the drive doesn't have a volume assigned, space is returned for the letter
  */
-static BOOL GetDriveLabel(DWORD DriveIndex, char* letters, const char** label) {
+static bool GetDriveLabel(DWORD DriveIndex, char* letters, const char** label) {
   HANDLE hPhysical;
   DWORD size;
   static char VolumeLabel[MAX_PATH + 1];
@@ -1030,10 +1030,10 @@ static BOOL GetDriveLabel(DWORD DriveIndex, char* letters, const char** label) {
   *label = STR_NO_LABEL;
 
   if (!GetDriveLetters(DriveIndex, letters))
-    return FALSE;
+    return false;
   if (letters[0] == 0) {
     // Drive without volume assigned - always enabled
-    return TRUE;
+    return true;
   }
   // We only care about an autorun.inf if we have a single volume
   AutorunPath[0] = letters[0];
@@ -1044,7 +1044,7 @@ static BOOL GetDriveLabel(DWORD DriveIndex, char* letters, const char** label) {
   // In the case of card readers with no card, users can get an annoying popup
   // asking them
   // to insert media. Use IOCTL_STORAGE_CHECK_VERIFY to prevent this
-  hPhysical = GetPhysicalHandle(DriveIndex, FALSE, FALSE);
+  hPhysical = GetPhysicalHandle(DriveIndex, false, false);
   if (DeviceIoControl(hPhysical, IOCTL_STORAGE_CHECK_VERIFY, NULL, 0, NULL, 0,
                       &size, NULL))
     AutorunLabel = get_token_data_file("label", AutorunPath);
@@ -1068,18 +1068,18 @@ static BOOL GetDriveLabel(DWORD DriveIndex, char* letters, const char** label) {
     printf("Failed to read label:");
   }
 
-  return TRUE;
+  return true;
 }
 /*
  * GET_DRIVE_GEOMETRY is used to tell if there is an actual media
  */
-static BOOL IsMediaPresent(DWORD DriveIndex) {
-  BOOL r;
+static bool IsMediaPresent(DWORD DriveIndex) {
+  bool r;
   HANDLE hPhysical;
   DWORD size;
   BYTE geometry[128];
 
-  hPhysical = GetPhysicalHandle(DriveIndex, FALSE, FALSE);
+  hPhysical = GetPhysicalHandle(DriveIndex, false, false);
   r = DeviceIoControl(hPhysical, IOCTL_DISK_GET_DRIVE_GEOMETRY_EX, NULL, 0,
                       geometry, sizeof(geometry), &size, NULL) &&
       (size > 0);
@@ -1087,13 +1087,13 @@ static BOOL IsMediaPresent(DWORD DriveIndex) {
   return r;
 }
 
-static __inline BOOL IsRemovable(const char* buffer) {
+static __inline bool IsRemovable(const char* buffer) {
   switch (*((DWORD*)buffer)) {
     case CM_REMOVAL_POLICY_EXPECT_SURPRISE_REMOVAL:
     case CM_REMOVAL_POLICY_EXPECT_ORDERLY_REMOVAL:
-      return TRUE;
+      return true;
     default:
-      return FALSE;
+      return false;
   }
 }
 
@@ -1131,7 +1131,7 @@ static void StrArrayCreate(StrArray* arr, uint32_t initial_size) {
     printf("Could not allocate string array\n");
 }
 
-static int32_t StrArrayAdd(StrArray* arr, const char* str, BOOL duplicate) {
+static int32_t StrArrayAdd(StrArray* arr, const char* str, bool duplicate) {
   char** old_table;
   if ((arr == NULL) || (arr->String == NULL) || (str == NULL))
     return -1;
@@ -1191,13 +1191,13 @@ static uint32_t isprime(uint32_t number) {
  * This is done for more effective indexing as explained in the
  * comment for the hash function.
  */
-static BOOL htab_create(uint32_t nel, htab_table* htab) {
+static bool htab_create(uint32_t nel, htab_table* htab) {
   if (htab == NULL) {
-    return FALSE;
+    return false;
   }
   if (htab->table != NULL) {
     printf("warning: htab_create() was called with a non empty table");
-    return FALSE;
+    return false;
   }
 
   // Change nel to the first prime number not smaller as nel.
@@ -1212,10 +1212,10 @@ static BOOL htab_create(uint32_t nel, htab_table* htab) {
   htab->table = (htab_entry*)calloc(htab->size + 1, sizeof(htab_entry));
   if (htab->table == NULL) {
     printf("could not allocate space for hash table\n");
-    return FALSE;
+    return false;
   }
 
-  return TRUE;
+  return true;
 }
 
 /* After using the hash table it has to be destroyed.  */
@@ -1334,12 +1334,12 @@ static uint32_t htab_hash(char* str, htab_table* htab) {
   return idx;
 }
 
-BOOL list_non_usb_removable_drives = FALSE;
+bool list_non_usb_removable_drives = false;
 #define MIN_DRIVE_SIZE 8
 
-BOOL enable_HDDs = FALSE;
+bool enable_HDDs = false;
 // look i don't know
-BOOL right_to_left_mode = FALSE;
+bool right_to_left_mode = false;
 
 char app_dir[512];
 char system_dir[512];
@@ -1391,7 +1391,7 @@ static void GetDevices(DeviceGuyList* device_list) {
   htab_table htab_devid = HTAB_EMPTY;
   StrArray dev_if_path;
   char drive_name[] = "?:\\";
-  BOOL post_backslash;
+  bool post_backslash;
   HDEVINFO dev_info = NULL;
   SP_DEVINFO_DATA dev_info_data;
   SP_DEVICE_INTERFACE_DATA devint_data;
@@ -1413,7 +1413,7 @@ static void GetDevices(DeviceGuyList* device_list) {
   StrArrayCreate(&dev_if_path, 128);
   // Add a dummy for string index zero, as this is what non matching hashes will
   // point to
-  StrArrayAdd(&dev_if_path, "", TRUE);
+  StrArrayAdd(&dev_if_path, "", true);
 
   device_id = (char*)malloc(MAX_PATH);
   if (device_id == NULL)
@@ -1451,7 +1451,7 @@ static void GetDevices(DeviceGuyList* device_list) {
                 CR_SUCCESS) {
               device_id[0] = 0;
               s = StrArrayAdd(&dev_if_path, devint_detail_data->DevicePath,
-                              TRUE);
+                              true);
               printf("  Hub[%d] = '%s'", s, devint_detail_data->DevicePath);
               if ((s >= 0) && (CM_Get_Device_IDA(device_inst, device_id,
                                                  MAX_PATH, 0) == CR_SUCCESS)) {
@@ -1561,9 +1561,9 @@ static void GetDevices(DeviceGuyList* device_list) {
 
     for (j = 0; j < ARRAYSIZE(usbstor_name); j++) {
       if (safe_stricmp(buffer, usbstor_name[0]) == 0) {
-        props.is_USB = TRUE;
+        props.is_USB = true;
         if ((j != 0) && (j < uasp_start))
-          props.is_CARD = TRUE;
+          props.is_CARD = true;
         break;
       }
     }
@@ -1572,9 +1572,9 @@ static void GetDevices(DeviceGuyList* device_list) {
     // to populate
     for (j = 0; j < ARRAYSIZE(genstor_name); j++) {
       if (safe_stricmp(buffer, genstor_name[j]) == 0) {
-        props.is_SCSI = TRUE;
+        props.is_SCSI = true;
         if (j >= card_start)
-          props.is_CARD = TRUE;
+          props.is_CARD = true;
         break;
       }
     }
@@ -1599,7 +1599,7 @@ static void GetDevices(DeviceGuyList* device_list) {
                        sizeof(scsi_disk_prefix) - 1) == 0)) {
       for (j = 0; j < ARRAYSIZE(scsi_card_name); j++) {
         if (safe_strstr(buffer, scsi_card_name[j]) != NULL) {
-          props.is_CARD = TRUE;
+          props.is_CARD = true;
           break;
         }
       }
@@ -1649,7 +1649,7 @@ static void GetDevices(DeviceGuyList* device_list) {
           if (device_inst != dev_info_data.DevInst)
             continue;
         }
-        post_backslash = FALSE;
+        post_backslash = false;
         method_str = "";
 
         // If we're not dealing with the USBSTOR part of our list, then this is
@@ -1667,7 +1667,7 @@ static void GetDevices(DeviceGuyList* device_list) {
         for (k = 0, l = 0; (k < strlen(device_id)) && (l < 2); k++) {
           // The ID is in the form USB_VENDOR_BUSID\VID_xxxx&PID_xxxx\...
           if (device_id[k] == '\\')
-            post_backslash = TRUE;
+            post_backslash = true;
           if (!post_backslash)
             continue;
           if (device_id[k] == '_') {
@@ -1903,15 +1903,15 @@ out:
 /*
  * Unmount of volume using the DISMOUNT_VOLUME ioctl
  */
-static BOOL UnmountVolume(HANDLE hDrive) {
+static bool UnmountVolume(HANDLE hDrive) {
   DWORD size;
 
   if (!DeviceIoControl(hDrive, FSCTL_DISMOUNT_VOLUME, NULL, 0, NULL, 0, &size,
                        NULL)) {
     printf("Could not unmount drive: \n");
-    return FALSE;
+    return false;
   }
-  return TRUE;
+  return true;
 }
 
 /*
@@ -1920,8 +1920,8 @@ static BOOL UnmountVolume(HANDLE hDrive) {
  * See http://msdn.microsoft.com/en-us/library/cc542456.aspx
  * The returned string is allocated and must be freed
  */
-static char* GetLogicalName(DWORD DriveIndex, BOOL bKeepTrailingBackslash) {
-  BOOL success = FALSE;
+static char* GetLogicalName(DWORD DriveIndex, bool bKeepTrailingBackslash) {
+  bool success = false;
   char volume_name[MAX_PATH];
   HANDLE hDrive = INVALID_HANDLE_VALUE, hVolume = INVALID_HANDLE_VALUE;
   size_t len;
@@ -2000,7 +2000,7 @@ static char* GetLogicalName(DWORD DriveIndex, BOOL bKeepTrailingBackslash) {
         (DiskExtents.Extents[0].DiskNumber == DriveIndex)) {
       if (bKeepTrailingBackslash)
         volume_name[len - 1] = '\\';
-      success = TRUE;
+      success = true;
       break;
     }
   }
@@ -2017,9 +2017,9 @@ out:
  * failure.
  */
 static HANDLE OldGetHandle(char* Path,
-                           BOOL bLockDrive,
-                           BOOL bWriteAccess,
-                           BOOL bWriteShare) {
+                           bool bLockDrive,
+                           bool bWriteAccess,
+                           bool bWriteShare) {
   int i;
   DWORD size;
   HANDLE hDrive = INVALID_HANDLE_VALUE;
@@ -2058,7 +2058,7 @@ static HANDLE OldGetHandle(char* Path,
       printf(
           "Warning: Could not obtain exclusive rights. Retrying with write "
           "sharing enabled...");
-      bWriteShare = TRUE;
+      bWriteShare = true;
     }
     Sleep(DRIVE_ACCESS_TIMEOUT / DRIVE_ACCESS_RETRIES);
   }
@@ -2103,11 +2103,11 @@ out:
  * of unpartitioned drives)
  */
 static HANDLE GetLogicalHandle(DWORD DriveIndex,
-                               BOOL bLockDrive,
-                               BOOL bWriteAccess,
-                               BOOL bWriteShare) {
+                               bool bLockDrive,
+                               bool bWriteAccess,
+                               bool bWriteShare) {
   HANDLE hLogical = INVALID_HANDLE_VALUE;
-  char* LogicalPath = GetLogicalName(DriveIndex, FALSE);
+  char* LogicalPath = GetLogicalName(DriveIndex, false);
 
   if (LogicalPath == NULL) {
     printf("No logical drive found (unpartitioned?)\n");
@@ -2120,8 +2120,8 @@ static HANDLE GetLogicalHandle(DWORD DriveIndex,
 }
 
 // from drive.c
-static BOOL RefreshDriveLayout(HANDLE hDrive) {
-  BOOL r;
+static bool RefreshDriveLayout(HANDLE hDrive) {
+  bool r;
   DWORD size;
 
   // Diskpart does call the following IOCTL this after updating the partition
@@ -2141,15 +2141,15 @@ static BOOL RefreshDriveLayout(HANDLE hDrive) {
 // ok, this could be useful in general.  i can return DiskGeometry->whatever
 
 static uint64_t GetSectorSize(DWORD DriveIndex) {
-  BOOL r;
+  bool r;
   HANDLE hPhysical;
   DWORD size;
   BYTE geometry[256];
   PDISK_GEOMETRY_EX DiskGeometry = (PDISK_GEOMETRY_EX)(void*)geometry;
 
-  hPhysical = GetPhysicalHandle(DriveIndex, FALSE, FALSE);
+  hPhysical = GetPhysicalHandle(DriveIndex, false, false);
   if (hPhysical == INVALID_HANDLE_VALUE)
-    return FALSE;
+    return false;
 
   r = DeviceIoControl(hPhysical, IOCTL_DISK_GET_DRIVE_GEOMETRY_EX, NULL, 0,
                       geometry, sizeof(geometry), &size, NULL);
@@ -2160,12 +2160,12 @@ static uint64_t GetSectorSize(DWORD DriveIndex) {
 }
 
 // from format.c
-static BOOL WriteDrive(HANDLE hPhysicalDrive,
+static bool WriteDrive(HANDLE hPhysicalDrive,
                        HANDLE hSourceImage,
                        uint64_t sector_size,
                        uint64_t drive_size,
                        int64_t image_size) {
-  BOOL s, ret = FALSE;
+  bool s, ret = false;
   LARGE_INTEGER li;
   DWORD rSize, wSize, BufSize;
   // ok; i found the logic for this in vhd.c.  we have the handles
@@ -2182,7 +2182,7 @@ static BOOL WriteDrive(HANDLE hPhysicalDrive,
   li.QuadPart = 0;
   printf("kendall: before if check\n");
   // works when i return here
-  // return TRUE;
+  // return true;
   if (!SetFilePointerEx(hPhysicalDrive, li, NULL, FILE_BEGIN))
     printf(
         "Warning: Unable to rewind image position - wrong data might be "
@@ -2197,7 +2197,7 @@ static BOOL WriteDrive(HANDLE hPhysicalDrive,
   if (sector_size < 512) {
     sector_size = 512;
   }
-  // return TRUE;
+  // return true;
   BufSize = ((DD_BUFFER_SIZE + sector_size - 1) / sector_size) * sector_size;
   buffer = (uint8_t*)_mm_malloc(BufSize, sector_size);
   if (buffer == NULL) {
@@ -2268,7 +2268,7 @@ static BOOL WriteDrive(HANDLE hPhysicalDrive,
       goto out;
   }
   RefreshDriveLayout(hPhysicalDrive);
-  ret = TRUE;
+  ret = true;
 out:
   safe_mm_free(buffer);
   return ret;
@@ -2280,27 +2280,27 @@ DeviceGuyList* GetDeviceList() {
   return device_list;
 }
 
-BOOL Install(DeviceGuy* target_device,
+bool Install(DeviceGuy* target_device,
              const char* image_path,
              int64_t image_size) {
   uint64_t device_num = target_device->device_num;
   uint64_t sector_size = GetSectorSize(device_num);
   uint64_t drive_size = GetDriveSize(device_num);
   char* physical_path = GetPhysicalName(device_num);
-  HANDLE phys_handle = GetHandle(physical_path, TRUE, TRUE, FALSE);
-  // HANDLE phys_handle = GetHandle(physical_path, TRUE, TRUE, TRUE);
+  HANDLE phys_handle = GetHandle(physical_path, true, true, false);
+  // HANDLE phys_handle = GetHandle(physical_path, true, true, true);
   // ^ i have not noticed any difference in behavior whether we share or not
   HANDLE source_img =
       CreateFileU(image_path, GENERIC_READ, FILE_SHARE_READ, NULL,
                   OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN, NULL);
-  BOOL ret = FALSE;
+  bool ret = false;
   // TODO(kendall): make sure the handlers don't equal INVALID_HANDLE_VALUE
   safe_free(physical_path);
   if (phys_handle != INVALID_HANDLE_VALUE &&
       source_img != INVALID_HANDLE_VALUE) {
     printf("handles are valid!\n");
   }
-  HANDLE hLogicalVolume = GetLogicalHandle(device_num, TRUE, FALSE, FALSE);
+  HANDLE hLogicalVolume = GetLogicalHandle(device_num, true, false, false);
   if (hLogicalVolume == INVALID_HANDLE_VALUE) {
     printf("kendall: Could not lock volume\n");
   }
