@@ -31,10 +31,6 @@ files
 #include <algorithm>
 #include <cstdint>
 
-#define TRUE 1
-#define FALSE 0
-#define BOOL int32_t
-
 #define safe_sprintf(dst, count, ...)   \
   do {                                  \
     _snprintf(dst, count, __VA_ARGS__); \
