@@ -120,11 +120,10 @@ bool Device::operator==(const Device& other) const {
 }
 
 bool Device::operator<(const Device& other) const {
-  const auto n = name().compare(other.name());
-  if (n == 0) {
+  if (name() == other.name()) {
     return id() < other.id();
   } else {
-    return n < 0;
+    return name() < other.name();
   }
 }
 
