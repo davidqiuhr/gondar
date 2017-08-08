@@ -19,7 +19,7 @@
 #include "device.h"
 #include "shared.h"
 
-DeviceGuyList* GetDeviceList();
+DeviceGuyList GetDeviceList();
 
 // Returns true on success
 bool Install(DeviceGuy* target_device,

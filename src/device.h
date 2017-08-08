@@ -35,7 +35,4 @@ class DeviceGuy {
 
 typedef std::vector<DeviceGuy> DeviceGuyList;
 
-DeviceGuyList* DeviceGuyList_init();
-void DeviceGuyList_free(DeviceGuyList* self);
-
 #endif /* DEVICE_H */

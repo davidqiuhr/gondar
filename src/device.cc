@@ -24,11 +24,3 @@
 
 DeviceGuy::DeviceGuy(uint32_t device_num_in, const std::string name_in)
     : device_num(device_num_in), name(name_in) {}
-
-DeviceGuyList* DeviceGuyList_init() {
-  return new DeviceGuyList();
-}
-
-void DeviceGuyList_free(DeviceGuyList* self) {
-  delete self;
-}
