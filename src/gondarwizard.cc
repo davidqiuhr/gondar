@@ -172,6 +172,11 @@ bool UsbInsertPage::isComplete() const {
 
 void UsbInsertPage::getDriveList() {
   drivelist = GetDeviceList();
+  for (DeviceGuy* itr = drivelist->head; itr; itr = itr->next) {
+    LOG_INFO << "Device(id: " << itr->device_num << ", name: " << itr->name
+             << ")";
+  }
+
   if (DeviceGuyList_length(drivelist) == 0) {
     DeviceGuyList_free(drivelist);
     drivelist = NULL;

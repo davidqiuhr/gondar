@@ -2277,17 +2277,6 @@ out:
 DeviceGuyList* GetDeviceList() {
   DeviceGuyList* device_list = DeviceGuyList_init();
   GetDevices(device_list);
-  BOOL success = false;
-  if (DeviceGuyList_length(device_list) > 0) {
-    success = true;
-  }
-  if (!success) {
-    printf("\n\nkendall: no device detected!\nhave a nice day!\n");
-  } else {
-    printf("\n\nkendall: devices detected!\nhave a nice day!\n");
-    DeviceGuyList_print(device_list);
-  }
-  // DeviceGuyList_free(device_list);
   return device_list;
 }
 
