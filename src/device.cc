@@ -36,56 +36,26 @@ void DeviceGuy_copy(const DeviceGuy* src, DeviceGuy* dst) {
   dst->prev = NULL;
 }
 DeviceGuyList* DeviceGuyList_init() {
-  DeviceGuyList* self = new DeviceGuyList();
-  memset(self, 0, sizeof(DeviceGuyList));
-  self->head = NULL;
-  self->tail = NULL;
-  return self;
+  return new DeviceGuyList();
 }
 
 void DeviceGuyList_append(DeviceGuyList* self,
                           uint32_t device_num,
                           const std::string& name) {
-  DeviceGuy* newguy = DeviceGuy_init(device_num, name);
-  if (self->head == NULL) {
-    self->head = newguy;
-    self->tail = newguy;
-  } else {
-    self->tail->next = newguy;
-    newguy->prev = self->tail;
-    self->tail = newguy;
-  }
+  DeviceGuy device;
+  device.device_num = device_num;
+  device.name = name;
+  self->emplace_back(device);
 }
 
 DeviceGuy* DeviceGuyList_getByIndex(DeviceGuyList* self, uint32_t index) {
-  DeviceGuy* itr = self->head;
-  while (self->head != NULL) {
-    if (itr->device_num == index) {
-      return itr;
-    }
-    itr = itr->next;
-  }
-  LOG_ERROR << "device at " << index << " not found";
-  return NULL;
+  return &self->at(index);
 }
 
 uint32_t DeviceGuyList_length(DeviceGuyList* self) {
-  uint32_t length = 0;
-  DeviceGuy* itr = self->head;
-  while (itr != NULL) {
-    itr = itr->next;
-    length++;
-  }
-  return length;
+  return self->size();
 }
 
 void DeviceGuyList_free(DeviceGuyList* self) {
-  DeviceGuy* itr = self->head;
-  DeviceGuy* next;
-  while (itr != NULL) {
-    next = itr->next;
-    delete itr;
-    itr = next;
-  }
   delete self;
 }

@@ -21,6 +21,7 @@ A linkedlist of device info passed between the C and C++ layer
 
 #include <cstdint>
 #include <string>
+#include <vector>
 
 // TODO(kendall): rename to something more thoughtful
 typedef struct DeviceGuy {
@@ -30,10 +31,7 @@ typedef struct DeviceGuy {
   struct DeviceGuy* prev = nullptr;
 } DeviceGuy;
 
-typedef struct DeviceGuyList {
-  DeviceGuy* head = nullptr;
-  DeviceGuy* tail = nullptr;
-} DeviceGuyList;
+typedef std::vector<DeviceGuy> DeviceGuyList;
 
 DeviceGuy* DeviceGuy_init(uint32_t device_num, const std::string& name);
 void DeviceGuy_copy(const DeviceGuy* src, DeviceGuy* dst);

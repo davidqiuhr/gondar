@@ -172,8 +172,8 @@ bool UsbInsertPage::isComplete() const {
 
 void UsbInsertPage::getDriveList() {
   drivelist = GetDeviceList();
-  for (DeviceGuy* itr = drivelist->head; itr; itr = itr->next) {
-    LOG_INFO << "Device(id: " << itr->device_num << ", name: " << itr->name
+  for (const auto& device : *drivelist) {
+    LOG_INFO << "Device(id: " << device.device_num << ", name: " << device.name
              << ")";
   }
 
@@ -217,7 +217,6 @@ void DeviceSelectPage::initializePage() {
   if (drivelist == NULL) {
     return;
   }
-  DeviceGuy* itr = drivelist->head;
   // Line up widgets horizontally
   // use QVBoxLayout for vertically, H for horizontal
   layout->addWidget(&drivesLabel);
@@ -225,13 +224,12 @@ void DeviceSelectPage::initializePage() {
   radioGroup = new QButtonGroup();
   // i could extend the button object to also have a secret index
   // then i could look up index later easily
-  while (itr != NULL) {
+  for (const auto& device : *drivelist) {
     // FIXME(kendall): clean these up
-    GondarButton* curRadio = new GondarButton(QString::fromStdString(itr->name),
-                                              itr->device_num, this);
+    GondarButton* curRadio = new GondarButton(
+        QString::fromStdString(device.name), device.device_num, this);
     radioGroup->addButton(curRadio);
     layout->addWidget(curRadio);
-    itr = itr->next;
   }
   setLayout(layout);
 }
