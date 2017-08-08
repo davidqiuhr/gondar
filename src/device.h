@@ -24,15 +24,15 @@ A linkedlist of device info passed between the C and C++ layer
 
 // TODO(kendall): rename to something more thoughtful
 typedef struct DeviceGuy {
-  uint32_t device_num;
+  uint32_t device_num = 0;
   std::string name;
-  struct DeviceGuy* next;
-  struct DeviceGuy* prev;
+  struct DeviceGuy* next = nullptr;
+  struct DeviceGuy* prev = nullptr;
 } DeviceGuy;
 
 typedef struct DeviceGuyList {
-  DeviceGuy* head;
-  DeviceGuy* tail;
+  DeviceGuy* head = nullptr;
+  DeviceGuy* tail = nullptr;
 } DeviceGuyList;
 
 DeviceGuy* DeviceGuy_init(uint32_t device_num, const std::string& name);
