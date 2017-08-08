@@ -24,17 +24,17 @@ A linkedlist of device info passed between the C and C++ layer
 #include <vector>
 
 // TODO(kendall): rename to something more thoughtful
-typedef struct DeviceGuy {
+class DeviceGuy {
+ public:
+  DeviceGuy(const DeviceGuy& other) = default;
+  DeviceGuy(uint32_t device_num, const std::string name);
+
   uint32_t device_num = 0;
   std::string name;
-  struct DeviceGuy* next = nullptr;
-  struct DeviceGuy* prev = nullptr;
-} DeviceGuy;
+};
 
 typedef std::vector<DeviceGuy> DeviceGuyList;
 
-DeviceGuy* DeviceGuy_init(uint32_t device_num, const std::string& name);
-void DeviceGuy_copy(const DeviceGuy* src, DeviceGuy* dst);
 DeviceGuyList* DeviceGuyList_init();
 void DeviceGuyList_append(DeviceGuyList* self,
                           uint32_t index,

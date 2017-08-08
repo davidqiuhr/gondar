@@ -22,19 +22,9 @@
 #include "log.h"
 #include "shared.h"
 
-DeviceGuy* DeviceGuy_init(uint32_t device_num, const std::string& name) {
-  DeviceGuy* self = new DeviceGuy();
-  self->device_num = device_num;
-  self->name = name;
-  return self;
-}
+DeviceGuy::DeviceGuy(uint32_t device_num_in, const std::string name_in)
+    : device_num(device_num_in), name(name_in) {}
 
-void DeviceGuy_copy(const DeviceGuy* src, DeviceGuy* dst) {
-  *dst = *src;
-  // we have no interest in copying the list-ness of this structure
-  dst->next = NULL;
-  dst->prev = NULL;
-}
 DeviceGuyList* DeviceGuyList_init() {
   return new DeviceGuyList();
 }
@@ -42,10 +32,7 @@ DeviceGuyList* DeviceGuyList_init() {
 void DeviceGuyList_append(DeviceGuyList* self,
                           uint32_t device_num,
                           const std::string& name) {
-  DeviceGuy device;
-  device.device_num = device_num;
-  device.name = name;
-  self->emplace_back(device);
+  self->emplace_back(DeviceGuy(device_num, name));
 }
 
 DeviceGuy* DeviceGuyList_getByIndex(DeviceGuyList* self, uint32_t index) {
