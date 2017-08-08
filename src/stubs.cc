@@ -17,11 +17,11 @@
 
 #include "gondar.h"
 
-DeviceGuyList* GetDeviceList() {
-  auto* list = DeviceGuyList_init();
-  list->emplace_back(DeviceGuy(0, "stubdevice0"));
-  list->emplace_back(DeviceGuy(1, "stubdevice1"));
-  return list;
+DeviceGuyList GetDeviceList() {
+  DeviceGuyList devices;
+  devices.emplace_back(DeviceGuy(0, "stubdevice0"));
+  devices.emplace_back(DeviceGuy(1, "stubdevice1"));
+  return devices;
 }
 
 bool Install(DeviceGuy* target_device,

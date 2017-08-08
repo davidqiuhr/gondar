@@ -29,7 +29,7 @@
 #include "metric.h"
 #include "neverware_unzipper.h"
 
-DeviceGuyList* drivelist = NULL;
+DeviceGuyList drivelist;
 DeviceGuy* selected_drive = NULL;
 
 GondarButton::GondarButton(const QString& text,
@@ -152,10 +152,7 @@ void UsbInsertPage::initializePage() {
   tim = new QTimer(this);
   connect(tim, SIGNAL(timeout()), SLOT(getDriveList()));
   // if the page is visited again, delete the old drivelist
-  if (drivelist != NULL) {
-    DeviceGuyList_free(drivelist);
-    drivelist = NULL;
-  }
+  drivelist.clear();
   // send a signal to check for drives
   emit driveListRequested();
 }
@@ -163,7 +160,7 @@ void UsbInsertPage::initializePage() {
 bool UsbInsertPage::isComplete() const {
   // this should return false unless we have a non-empty result from
   // GetDevices()
-  if (drivelist == NULL) {
+  if (drivelist.empty()) {
     return false;
   } else {
     return true;
@@ -172,14 +169,12 @@ bool UsbInsertPage::isComplete() const {
 
 void UsbInsertPage::getDriveList() {
   drivelist = GetDeviceList();
-  for (const auto& device : *drivelist) {
+  for (const auto& device : drivelist) {
     LOG_INFO << "Device(id: " << device.device_num << ", name: " << device.name
              << ")";
   }
 
-  if (drivelist->empty()) {
-    DeviceGuyList_free(drivelist);
-    drivelist = NULL;
+  if (drivelist.empty()) {
     tim->start(1000);
   } else {
     tim->stop();
@@ -214,9 +209,6 @@ void DeviceSelectPage::initializePage() {
   // remove our last listing
   delete radioGroup;
 
-  if (drivelist == NULL) {
-    return;
-  }
   // Line up widgets horizontally
   // use QVBoxLayout for vertically, H for horizontal
   layout->addWidget(&drivesLabel);
@@ -224,7 +216,7 @@ void DeviceSelectPage::initializePage() {
   radioGroup = new QButtonGroup();
   // i could extend the button object to also have a secret index
   // then i could look up index later easily
-  for (const auto& device : *drivelist) {
+  for (const auto& device : drivelist) {
     // FIXME(kendall): clean these up
     GondarButton* curRadio = new GondarButton(
         QString::fromStdString(device.name), device.device_num, this);
@@ -242,7 +234,7 @@ bool DeviceSelectPage::validatePage() {
     return false;
   } else {
     unsigned int selected_index = selected->index;
-    selected_drive = &drivelist->at(selected_index);
+    selected_drive = &drivelist.at(selected_index);
     return true;
   }
 }

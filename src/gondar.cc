@@ -2274,9 +2274,9 @@ out:
   return ret;
 }
 
-DeviceGuyList* GetDeviceList() {
-  DeviceGuyList* device_list = DeviceGuyList_init();
-  GetDevices(device_list);
+DeviceGuyList GetDeviceList() {
+  DeviceGuyList device_list;
+  GetDevices(&device_list);
   return device_list;
 }
 
