@@ -148,8 +148,6 @@ UsbInsertPage::UsbInsertPage(QWidget* parent) : WizardPage(parent) {
 }
 
 void UsbInsertPage::initializePage() {
-  tim = new QTimer(this);
-  connect(tim, SIGNAL(timeout()), SLOT(getDriveList()));
   // if the page is visited again, delete the old drivelist
   drivelist.clear();
   // send a signal to check for drives
@@ -174,9 +172,10 @@ void UsbInsertPage::getDriveList() {
   }
 
   if (drivelist.empty()) {
-    tim->start(1000);
+    const int second_in_milliseconds = 1000;
+    QTimer::singleShot(second_in_milliseconds, this,
+                       &UsbInsertPage::getDriveList);
   } else {
-    tim->stop();
     showDriveList();
   }
 }

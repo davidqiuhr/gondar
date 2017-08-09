@@ -62,7 +62,6 @@ class UsbInsertPage : public gondar::WizardPage {
  private:
   void showDriveList();
   QLabel label;
-  QTimer* tim;
   QVBoxLayout layout;
 
  public slots:
