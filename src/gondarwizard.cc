@@ -248,13 +248,14 @@ int DeviceSelectPage::nextId() const {
 }
 
 WriteOperationPage::WriteOperationPage(QWidget* parent) : WizardPage(parent) {
-  setTitle("Creating your CloudReady USB installer");
-  setSubTitle("This process may take up to 20 minutes.");
   layout.addWidget(&progress);
   setLayout(&layout);
 }
 
 void WriteOperationPage::initializePage() {
+  // set the titles in initializePage for 'make another' flow
+  setTitle("Creating your CloudReady USB installer");
+  setSubTitle("This process may take up to 20 minutes.");
   writeFinished = false;
   // what if we just start writing as soon as we get here
   if (selected_drive == NULL) {
