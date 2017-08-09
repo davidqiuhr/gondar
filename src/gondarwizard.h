@@ -95,6 +95,8 @@ class WriteOperationPage : public gondar::WizardPage {
  public:
   WriteOperationPage(QWidget* parent = 0);
 
+  void setDevice(const DeviceGuy& device);
+
  protected:
   void initializePage() override;
   bool isComplete() const override;
@@ -112,6 +114,7 @@ class WriteOperationPage : public gondar::WizardPage {
   bool writeFinished;
   DiskWriteThread* diskWriteThread;
   QString image_path;
+  DeviceGuy device;
 };
 
 class GondarWizard : public QWizard {
