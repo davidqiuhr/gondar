@@ -114,7 +114,8 @@ add_library(app STATIC
   src/site_select_page.cc
   src/unzipthread.cc
   src/util.cc
-  src/wizard_page.cc)
+  src/wizard_page.cc
+  src/write_operation_page.cc)
 
 set_target_properties(app PROPERTIES AUTOMOC ON AUTORCC ON)
 target_compile_options(app PRIVATE ${EXTRA_WARNINGS})
