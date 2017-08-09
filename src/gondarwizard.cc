@@ -30,7 +30,6 @@
 #include "neverware_unzipper.h"
 
 DeviceGuyList drivelist;
-DeviceGuy* selected_drive = NULL;
 
 GondarButton::GondarButton(const QString& text,
                            unsigned int device_num,
@@ -234,7 +233,7 @@ bool DeviceSelectPage::validatePage() {
     return false;
   } else {
     unsigned int selected_index = selected->index;
-    selected_drive = &drivelist.at(selected_index);
+    wizard()->writeOperationPage.setDevice(drivelist.at(selected_index));
     return true;
   }
 }
@@ -247,9 +246,14 @@ int DeviceSelectPage::nextId() const {
   }
 }
 
-WriteOperationPage::WriteOperationPage(QWidget* parent) : WizardPage(parent) {
+WriteOperationPage::WriteOperationPage(QWidget* parent)
+    : WizardPage(parent), device(0, std::string()) {
   layout.addWidget(&progress);
   setLayout(&layout);
+}
+
+void WriteOperationPage::setDevice(const DeviceGuy& device_in) {
+  device = device_in;
 }
 
 void WriteOperationPage::initializePage() {
@@ -257,12 +261,7 @@ void WriteOperationPage::initializePage() {
   setTitle("Creating your CloudReady USB installer");
   setSubTitle("This process may take up to 20 minutes.");
   writeFinished = false;
-  // what if we just start writing as soon as we get here
-  if (selected_drive == NULL) {
-    qDebug() << "ERROR: no drive selected";
-  } else {
-    writeToDrive();
-  }
+  writeToDrive();
 }
 
 bool WriteOperationPage::isComplete() const {
@@ -278,7 +277,7 @@ void WriteOperationPage::writeToDrive() {
   image_path.clear();
   image_path.append(wizard()->downloadProgressPage.getImageFileName());
   showProgress();
-  diskWriteThread = new DiskWriteThread(selected_drive, image_path, this);
+  diskWriteThread = new DiskWriteThread(&device, image_path, this);
   connect(diskWriteThread, SIGNAL(finished()), this, SLOT(onDoneWriting()));
   qDebug() << "launching thread...";
   gondar::SendMetric(gondar::Metric::UsbAttempt);
