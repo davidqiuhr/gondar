@@ -100,6 +100,7 @@ add_library(app STATIC
   src/newest_image_url.cc
   src/chromeover_login_page.cc
   src/device.cc
+  src/device_picker.cc
   src/diskwritethread.cc
   src/download_progress_page.cc
   src/downloader.cc
@@ -129,6 +130,7 @@ target_link_libraries(cloudready-usb-maker app)
 
 # Test application
 add_executable(tests test/test.cc)
+target_include_directories(tests PRIVATE src)
 target_link_libraries(tests Qt5::Test app)
 set_target_properties(tests PROPERTIES AUTOMOC ON)
 

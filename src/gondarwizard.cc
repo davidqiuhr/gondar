@@ -29,15 +29,6 @@
 #include "metric.h"
 #include "neverware_unzipper.h"
 
-DeviceGuyList drivelist;
-DeviceGuy* selected_drive = NULL;
-
-GondarButton::GondarButton(const QString& text,
-                           unsigned int device_num,
-                           QWidget* parent)
-    : QRadioButton(text, parent) {
-  index = device_num;
-}
 GondarWizard::GondarWizard(QWidget* parent)
     : QWizard(parent), about_shortcut_(QKeySequence::HelpContents, this) {
   // these pages are automatically cleaned up
@@ -143,47 +134,35 @@ UsbInsertPage::UsbInsertPage(QWidget* parent) : WizardPage(parent) {
 
   layout.addWidget(&label);
   setLayout(&layout);
-
-  // the next button should be grayed out until the user inserts a USB
-  connect(this, SIGNAL(driveListRequested()), this, SLOT(getDriveList()));
 }
 
 void UsbInsertPage::initializePage() {
-  tim = new QTimer(this);
-  connect(tim, SIGNAL(timeout()), SLOT(getDriveList()));
-  // if the page is visited again, delete the old drivelist
-  drivelist.clear();
-  // send a signal to check for drives
-  emit driveListRequested();
+  connect(&tim, &QTimer::timeout, this, &UsbInsertPage::getDriveList);
+  getDriveList();
 }
 
 bool UsbInsertPage::isComplete() const {
-  // this should return false unless we have a non-empty result from
-  // GetDevices()
-  if (drivelist.empty()) {
-    return false;
-  } else {
-    return true;
-  }
+  // Page is not complete until the device picker has at least one
+  // device available
+  return !wizard()->devicePicker()->isEmpty();
 }
 
 void UsbInsertPage::getDriveList() {
-  drivelist = GetDeviceList();
-  for (const auto& device : drivelist) {
+  auto* picker = wizard()->devicePicker();
+
+  picker->refresh();
+
+  for (const auto& device : picker->allDevices()) {
     LOG_INFO << "Device(id: " << device.device_num << ", name: " << device.name
              << ")";
   }
 
-  if (drivelist.empty()) {
-    tim->start(1000);
+  if (picker->isEmpty()) {
+    tim.start(1000);
   } else {
-    tim->stop();
-    showDriveList();
+    tim.stop();
+    emit completeChanged();
   }
-}
-
-void UsbInsertPage::showDriveList() {
-  emit completeChanged();
 }
 
 DeviceSelectPage::DeviceSelectPage(QWidget* parent) : WizardPage(parent) {
@@ -191,52 +170,19 @@ DeviceSelectPage::DeviceSelectPage(QWidget* parent) : WizardPage(parent) {
   // the usb device list.  or it could ask you to insert your device
   setTitle("USB device selection");
   setSubTitle("Choose your target device from the list of devices below.");
-  layout = new QVBoxLayout;
-  drivesLabel.setText("Select Drive:");
-  radioGroup = NULL;
-  setLayout(layout);
+
+  label_.setText("Select Drive:");
+  layout_.addWidget(&label_);
+  layout_.addWidget(&device_picker_);
+  setLayout(&layout_);
 }
 
 void DeviceSelectPage::initializePage() {
-  // while our layout is not empty, remove items from it
-  while (!layout->isEmpty()) {
-    QLayoutItem* curItem = layout->takeAt(0);
-    if (curItem->widget() != &drivesLabel) {
-      delete curItem->widget();
-    }
-  }
-
-  // remove our last listing
-  delete radioGroup;
-
-  // Line up widgets horizontally
-  // use QVBoxLayout for vertically, H for horizontal
-  layout->addWidget(&drivesLabel);
-
-  radioGroup = new QButtonGroup();
-  // i could extend the button object to also have a secret index
-  // then i could look up index later easily
-  for (const auto& device : drivelist) {
-    // FIXME(kendall): clean these up
-    GondarButton* curRadio = new GondarButton(
-        QString::fromStdString(device.name), device.device_num, this);
-    radioGroup->addButton(curRadio);
-    layout->addWidget(curRadio);
-  }
-  setLayout(layout);
+  device_picker_.refresh();
 }
 
 bool DeviceSelectPage::validatePage() {
-  // TODO(kendall): check for NULL on bad cast
-  GondarButton* selected =
-      dynamic_cast<GondarButton*>(radioGroup->checkedButton());
-  if (selected == NULL) {
-    return false;
-  } else {
-    unsigned int selected_index = selected->index;
-    selected_drive = &drivelist.at(selected_index);
-    return true;
-  }
+  return device_picker_.hasSelection();
 }
 
 int DeviceSelectPage::nextId() const {

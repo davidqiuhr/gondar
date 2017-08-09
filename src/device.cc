@@ -13,14 +13,21 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <inttypes.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include "device.h"
 
-#include "log.h"
-#include "shared.h"
+#include <string>
 
 DeviceGuy::DeviceGuy(uint32_t device_num_in, const std::string name_in)
     : device_num(device_num_in), name(name_in) {}
+
+bool DeviceGuy::operator==(const DeviceGuy& other) const {
+  return (name == other.name) && (device_num == other.device_num);
+}
+
+bool DeviceGuy::operator<(const DeviceGuy& other) const {
+  if (name == other.name) {
+    return device_num < other.device_num;
+  } else {
+    return name < other.name;
+  }
+}
