@@ -29,8 +29,6 @@
 #include "metric.h"
 #include "neverware_unzipper.h"
 
-DeviceGuyList drivelist;
-
 GondarButton::GondarButton(const QString& text,
                            unsigned int device_num,
                            QWidget* parent)
@@ -147,6 +145,10 @@ UsbInsertPage::UsbInsertPage(QWidget* parent) : WizardPage(parent) {
   connect(this, SIGNAL(driveListRequested()), this, SLOT(getDriveList()));
 }
 
+const DeviceGuyList& UsbInsertPage::devices() const {
+  return drivelist;
+}
+
 void UsbInsertPage::initializePage() {
   // if the page is visited again, delete the old drivelist
   drivelist.clear();
@@ -214,7 +216,7 @@ void DeviceSelectPage::initializePage() {
   radioGroup = new QButtonGroup();
   // i could extend the button object to also have a secret index
   // then i could look up index later easily
-  for (const auto& device : drivelist) {
+  for (const auto& device : wizard()->usbInsertPage.devices()) {
     // FIXME(kendall): clean these up
     GondarButton* curRadio = new GondarButton(
         QString::fromStdString(device.name), device.device_num, this);
@@ -232,7 +234,8 @@ bool DeviceSelectPage::validatePage() {
     return false;
   } else {
     try {
-      const auto device = findDevice(drivelist, selected->index);
+      const auto device =
+          findDevice(wizard()->usbInsertPage.devices(), selected->index);
       wizard()->writeOperationPage.setDevice(device);
       return true;
     } catch (const std::runtime_error& error) {

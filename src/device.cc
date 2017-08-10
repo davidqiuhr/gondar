@@ -13,11 +13,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <algorithm>
 #include <inttypes.h>
 #include <stdlib.h>
-#include <stdexcept>
 #include <string.h>
+#include <algorithm>
+#include <stdexcept>
 
 #include "device.h"
 
