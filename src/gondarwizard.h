@@ -16,7 +16,6 @@
 #ifndef GONDARWIZARD_H
 #define GONDARWIZARD_H
 
-#include <QProgressBar>
 #include <QRadioButton>
 #include <QShortcut>
 #include <QString>
@@ -27,12 +26,12 @@
 #include "admin_check_page.h"
 #include "chromeover_login_page.h"
 #include "device.h"
-#include "diskwritethread.h"
 #include "download_progress_page.h"
 #include "error_page.h"
 #include "image_select_page.h"
 #include "site_select_page.h"
 #include "wizard_page.h"
+#include "write_operation_page.h"
 
 class QCheckBox;
 class QGroupBox;
@@ -86,34 +85,6 @@ class DeviceSelectPage : public gondar::WizardPage {
   QGroupBox* drivesBox;
   QButtonGroup* radioGroup;
   QVBoxLayout* layout;
-};
-
-class WriteOperationPage : public gondar::WizardPage {
-  Q_OBJECT
-
- public:
-  WriteOperationPage(QWidget* parent = 0);
-
-  void setDevice(const DeviceGuy& device);
-
- protected:
-  void initializePage() override;
-  bool isComplete() const override;
-  bool validatePage() override;
-  void showProgress();
-  int nextId() const override;
- public slots:
-  void onDoneWriting();
-
- private:
-  void writeToDrive();
-  void writeFailed(const QString& errorMessage);
-  QVBoxLayout layout;
-  QProgressBar progress;
-  bool writeFinished;
-  DiskWriteThread* diskWriteThread;
-  QString image_path;
-  DeviceGuy device;
 };
 
 class GondarWizard : public QWizard {
