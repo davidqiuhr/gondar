@@ -13,8 +13,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include <algorithm>
 #include <inttypes.h>
 #include <stdlib.h>
+#include <stdexcept>
 #include <string.h>
 
 #include "device.h"
@@ -24,3 +26,16 @@
 
 DeviceGuy::DeviceGuy(uint32_t device_num_in, const std::string name_in)
     : device_num(device_num_in), name(name_in) {}
+
+DeviceGuy findDevice(const DeviceGuyList& devices, const uint32_t device_num) {
+  const auto match = [device_num](const DeviceGuy& device) {
+    return device.device_num == device_num;
+  };
+
+  const auto iter = std::find_if(devices.begin(), devices.end(), match);
+  if (iter == devices.end()) {
+    throw std::runtime_error("device not found");
+  }
+
+  return *iter;
+}

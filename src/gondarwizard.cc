@@ -231,9 +231,14 @@ bool DeviceSelectPage::validatePage() {
   if (selected == NULL) {
     return false;
   } else {
-    unsigned int selected_index = selected->index;
-    wizard()->writeOperationPage.setDevice(drivelist.at(selected_index));
-    return true;
+    try {
+      const auto device = findDevice(drivelist, selected->index);
+      wizard()->writeOperationPage.setDevice(device);
+      return true;
+    } catch (const std::runtime_error& error) {
+      LOG_ERROR << error.what();
+      return false;
+    }
   }
 }
 
