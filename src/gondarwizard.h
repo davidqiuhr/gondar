@@ -54,12 +54,15 @@ class UsbInsertPage : public gondar::WizardPage {
  public:
   UsbInsertPage(QWidget* parent = 0);
 
+  const DeviceGuyList& devices() const;
+
  protected:
   void initializePage() override;
   bool isComplete() const override;
 
  private:
   void showDriveList();
+  DeviceGuyList drivelist;
   QLabel label;
   QVBoxLayout layout;
 
