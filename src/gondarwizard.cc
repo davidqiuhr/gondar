@@ -26,7 +26,7 @@
 #include "site_select_page.h"
 
 class GondarWizard::Private {
-public:
+ public:
   gondar::AboutDialog aboutDialog;
 
   AdminCheckPage adminCheckPage;
@@ -38,7 +38,8 @@ public:
 };
 
 GondarWizard::GondarWizard(QWidget* parent)
-    : QWizard(parent), p_(new Private()),
+    : QWizard(parent),
+      p_(new Private()),
       about_shortcut_(QKeySequence::HelpContents, this) {
   // these pages are automatically cleaned up
   // new instances are made whenever navigation moves on to another page
