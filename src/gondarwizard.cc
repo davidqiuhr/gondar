@@ -17,25 +17,43 @@
 
 #include <QTimer>
 
+#include "about_dialog.h"
+#include "admin_check_page.h"
+#include "device_select_page.h"
+#include "error_page.h"
 #include "log.h"
 #include "metric.h"
+#include "site_select_page.h"
+
+class GondarWizard::Private {
+public:
+  gondar::AboutDialog aboutDialog;
+
+  AdminCheckPage adminCheckPage;
+  DeviceSelectPage deviceSelectPage;
+  SiteSelectPage siteSelectPage;
+  ErrorPage errorPage;
+
+  QDateTime runTime;
+};
 
 GondarWizard::GondarWizard(QWidget* parent)
-    : QWizard(parent), about_shortcut_(QKeySequence::HelpContents, this) {
+    : QWizard(parent), p_(new Private()),
+      about_shortcut_(QKeySequence::HelpContents, this) {
   // these pages are automatically cleaned up
   // new instances are made whenever navigation moves on to another page
   // according to qt docs
-  setPage(Page_adminCheck, &adminCheckPage);
+  setPage(Page_adminCheck, &p_->adminCheckPage);
   // chromeoverLogin and imageSelect are alternatives to each other
   // that both progress to usbInsertPage
   setPage(Page_chromeoverLogin, &chromeoverLoginPage);
-  setPage(Page_siteSelect, &siteSelectPage);
+  setPage(Page_siteSelect, &p_->siteSelectPage);
   setPage(Page_imageSelect, &imageSelectPage);
   setPage(Page_usbInsert, &usbInsertPage);
-  setPage(Page_deviceSelect, &deviceSelectPage);
+  setPage(Page_deviceSelect, &p_->deviceSelectPage);
   setPage(Page_downloadProgress, &downloadProgressPage);
   setPage(Page_writeOperation, &writeOperationPage);
-  setPage(Page_error, &errorPage);
+  setPage(Page_error, &p_->errorPage);
   setWizardStyle(QWizard::ModernStyle);
   setWindowTitle(tr("CloudReady USB Maker"));
   setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
@@ -46,13 +64,15 @@ GondarWizard::GondarWizard(QWidget* parent)
   // remove '?' button that does not do anything in our current setup
   setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-  connect(&about_shortcut_, &QShortcut::activated, &about_dialog_,
+  connect(&about_shortcut_, &QShortcut::activated, &p_->aboutDialog,
           &gondar::AboutDialog::show);
   connect(this, SIGNAL(customButtonClicked(int)), this,
           SLOT(handleCustomButton(int)));
 
-  runTime = QDateTime::currentDateTime();
+  p_->runTime = QDateTime::currentDateTime();
 }
+
+GondarWizard::~GondarWizard() {}
 
 void GondarWizard::setNormalLayout() {
   QList<QWizard::WizardButton> button_layout;
@@ -76,14 +96,14 @@ void GondarWizard::handleCustomButton(int buttonIndex) {
     setStartId(usbInsertPage.nextId() - 1);
     restart();
   } else if (buttonIndex == QWizard::CustomButton2) {
-    about_dialog_.show();
+    p_->aboutDialog.show();
   } else {
     LOG_ERROR << "Unknown custom button pressed";
   }
 }
 
 int GondarWizard::nextId() const {
-  if (errorPage.errorEmpty()) {
+  if (p_->errorPage.errorEmpty()) {
     return QWizard::nextId();
   } else {
     if (currentId() == Page_error) {
@@ -100,12 +120,12 @@ void GondarWizard::postError(const QString& error) {
 
 void GondarWizard::catchError(const QString& error) {
   LOG_ERROR << "displaying error: " << error;
-  errorPage.setErrorString(error);
+  p_->errorPage.setErrorString(error);
   // TODO: sanitize error string?
   gondar::SendMetric(gondar::Metric::Error, error.toStdString());
   next();
 }
 
 qint64 GondarWizard::getRunTime() {
-  return runTime.secsTo(QDateTime::currentDateTime());
+  return p_->runTime.secsTo(QDateTime::currentDateTime());
 }
