@@ -16,18 +16,15 @@
 #ifndef GONDARWIZARD_H
 #define GONDARWIZARD_H
 
+#include <memory>
+
 #include <QShortcut>
 #include <QString>
 #include <QWizard>
 
-#include "about_dialog.h"
-#include "admin_check_page.h"
 #include "chromeover_login_page.h"
-#include "device_select_page.h"
 #include "download_progress_page.h"
-#include "error_page.h"
 #include "image_select_page.h"
-#include "site_select_page.h"
 #include "usb_insert_page.h"
 #include "write_operation_page.h"
 
@@ -42,6 +39,8 @@ class GondarWizard : public QWizard {
  public:
   GondarWizard(QWidget* parent = 0);
 
+  ~GondarWizard();
+
   int nextId() const override;
   void postError(const QString& error);
   qint64 getRunTime();
@@ -51,14 +50,10 @@ class GondarWizard : public QWizard {
   // some data types and convoluted for others.  In this case, a later page
   // makes a decision based on a radio button seleciton in an earlier page,
   // so putting the shared state in the wizard seems more straightforward
-  AdminCheckPage adminCheckPage;
-  ErrorPage errorPage;
   ChromeoverLoginPage chromeoverLoginPage;
-  SiteSelectPage siteSelectPage;
   ImageSelectPage imageSelectPage;
   DownloadProgressPage downloadProgressPage;
   UsbInsertPage usbInsertPage;
-  DeviceSelectPage deviceSelectPage;
   WriteOperationPage writeOperationPage;
 
   // this enum determines page order
@@ -78,6 +73,9 @@ class GondarWizard : public QWizard {
   void handleCustomButton(int buttonIndex);
 
  private:
+  class Private;
+  std::unique_ptr<Private> p_;
+
   void catchError(const QString& error);
   // Set the button layout appropriate for most pages; no 'make another usb'
   // button.
@@ -85,8 +83,6 @@ class GondarWizard : public QWizard {
   void setNormalLayout();
 
   QShortcut about_shortcut_;
-  QDateTime runTime;
-  gondar::AboutDialog about_dialog_;
 };
 
 #endif /* GONDARWIZARD */
