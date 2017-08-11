@@ -16,79 +16,25 @@
 #ifndef GONDARWIZARD_H
 #define GONDARWIZARD_H
 
-#include <QRadioButton>
 #include <QShortcut>
 #include <QString>
 #include <QWizard>
-#include <QtWidgets>
 
 #include "about_dialog.h"
 #include "admin_check_page.h"
 #include "chromeover_login_page.h"
-#include "device.h"
+#include "device_select_page.h"
 #include "download_progress_page.h"
 #include "error_page.h"
 #include "image_select_page.h"
 #include "site_select_page.h"
-#include "wizard_page.h"
+#include "usb_insert_page.h"
 #include "write_operation_page.h"
 
 class QCheckBox;
 class QGroupBox;
 class QLabel;
 class QRadioButton;
-
-class GondarButton : public QRadioButton {
-  Q_OBJECT
-
- public:
-  GondarButton(const QString& text,
-               unsigned int device_num,
-               QWidget* parent = 0);
-  unsigned int index = 0;
-};
-
-class UsbInsertPage : public gondar::WizardPage {
-  Q_OBJECT
-
- public:
-  UsbInsertPage(QWidget* parent = 0);
-
-  const DeviceGuyList& devices() const;
-
- protected:
-  void initializePage() override;
-  bool isComplete() const override;
-
- private:
-  void showDriveList();
-  DeviceGuyList drivelist;
-  QLabel label;
-  QVBoxLayout layout;
-
- public slots:
-  void getDriveList();
- signals:
-  void driveListRequested();
-};
-
-class DeviceSelectPage : public gondar::WizardPage {
-  Q_OBJECT
-
- public:
-  DeviceSelectPage(QWidget* parent = 0);
-  int nextId() const override;
-
- protected:
-  void initializePage() override;
-  bool validatePage() override;
-
- private:
-  QLabel drivesLabel;
-  QGroupBox* drivesBox;
-  QButtonGroup* radioGroup;
-  QVBoxLayout* layout;
-};
 
 class GondarWizard : public QWizard {
   Q_OBJECT
