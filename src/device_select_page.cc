@@ -94,4 +94,3 @@ int DeviceSelectPage::nextId() const {
     return GondarWizard::Page_downloadProgress;
   }
 }
-

@@ -109,4 +109,3 @@ void GondarWizard::catchError(const QString& error) {
 qint64 GondarWizard::getRunTime() {
   return runTime.secsTo(QDateTime::currentDateTime());
 }
-
