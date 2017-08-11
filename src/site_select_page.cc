@@ -41,7 +41,7 @@ SiteSelectPage::SiteSelectPage(QWidget* parent) : WizardPage(parent) {
 }
 
 void SiteSelectPage::initializePage() {
-  const auto& sitesList = wizard()->chromeoverLoginPage.siteList;
+  const auto& sitesList = wizard()->sites();
   for (const auto& site : sitesList) {
     auto* curButton = new SiteButton(site);
     sitesButtons.addButton(curButton);

@@ -19,6 +19,7 @@
 
 #include "about_dialog.h"
 #include "admin_check_page.h"
+#include "chromeover_login_page.h"
 #include "device_select_page.h"
 #include "error_page.h"
 #include "log.h"
@@ -31,8 +32,11 @@ class GondarWizard::Private {
 
   AdminCheckPage adminCheckPage;
   DeviceSelectPage deviceSelectPage;
+  ChromeoverLoginPage chromeoverLoginPage;
   SiteSelectPage siteSelectPage;
   ErrorPage errorPage;
+
+  std::vector<GondarSite> sites;
 
   QDateTime runTime;
 };
@@ -47,7 +51,7 @@ GondarWizard::GondarWizard(QWidget* parent)
   setPage(Page_adminCheck, &p_->adminCheckPage);
   // chromeoverLogin and imageSelect are alternatives to each other
   // that both progress to usbInsertPage
-  setPage(Page_chromeoverLogin, &chromeoverLoginPage);
+  setPage(Page_chromeoverLogin, &p_->chromeoverLoginPage);
   setPage(Page_siteSelect, &p_->siteSelectPage);
   setPage(Page_imageSelect, &imageSelectPage);
   setPage(Page_usbInsert, &usbInsertPage);
@@ -89,6 +93,15 @@ void GondarWizard::setMakeAnotherLayout() {
                 << QWizard::FinishButton;
   setButtonLayout(button_layout);
 }
+
+const std::vector<GondarSite>& GondarWizard::sites() const {
+  return p_->sites;
+}
+
+void GondarWizard::setSites(const std::vector<GondarSite>& sites) {
+  p_->sites = sites;
+}
+
 // handle event when 'make another usb' button pressed
 void GondarWizard::handleCustomButton(int buttonIndex) {
   if (buttonIndex == QWizard::CustomButton1) {

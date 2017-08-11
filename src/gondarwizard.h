@@ -17,12 +17,12 @@
 #define GONDARWIZARD_H
 
 #include <memory>
+#include <vector>
 
 #include <QShortcut>
 #include <QString>
 #include <QWizard>
 
-#include "chromeover_login_page.h"
 #include "download_progress_page.h"
 #include "image_select_page.h"
 #include "usb_insert_page.h"
@@ -32,6 +32,8 @@ class QCheckBox;
 class QGroupBox;
 class QLabel;
 class QRadioButton;
+
+class GondarSite;
 
 class GondarWizard : public QWizard {
   Q_OBJECT
@@ -50,11 +52,13 @@ class GondarWizard : public QWizard {
   // some data types and convoluted for others.  In this case, a later page
   // makes a decision based on a radio button seleciton in an earlier page,
   // so putting the shared state in the wizard seems more straightforward
-  ChromeoverLoginPage chromeoverLoginPage;
   ImageSelectPage imageSelectPage;
   DownloadProgressPage downloadProgressPage;
   UsbInsertPage usbInsertPage;
   WriteOperationPage writeOperationPage;
+
+  const std::vector<GondarSite>& sites() const;
+  void setSites(const std::vector<GondarSite>& sites);
 
   // this enum determines page order
   enum {
