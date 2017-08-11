@@ -100,6 +100,7 @@ add_library(app STATIC
   src/newest_image_url.cc
   src/chromeover_login_page.cc
   src/device.cc
+  src/device_select_page.cc
   src/diskwritethread.cc
   src/download_progress_page.cc
   src/downloader.cc
@@ -113,6 +114,7 @@ add_library(app STATIC
   src/neverware_unzipper.cc
   src/site_select_page.cc
   src/unzipthread.cc
+  src/usb_insert_page.cc
   src/util.cc
   src/wizard_page.cc
   src/write_operation_page.cc)
