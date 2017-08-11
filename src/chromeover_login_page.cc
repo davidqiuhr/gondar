@@ -48,6 +48,7 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
 }
 
 int ChromeoverLoginPage::nextId() const {
+  const auto& siteList = wizard()->sites();
   if (siteList.size() == 0) {
     return GondarWizard::Page_error;
   } else if (siteList.size() > 1) {
@@ -77,7 +78,7 @@ bool ChromeoverLoginPage::validatePage() {
 
 void ChromeoverLoginPage::handleMeepoFinished() {
   if (meepo_.error().isEmpty()) {
-    siteList = meepo_.sites();
+    wizard()->setSites(meepo_.sites());
 
     // we don't want users to be able to pass through the screen by pressing
     // next while processing.  this will make validatePage pass and immediately
