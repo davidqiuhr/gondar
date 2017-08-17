@@ -124,12 +124,14 @@ add_library(app STATIC
   src/wizard_page.cc
   src/write_operation_page.cc)
 
+add_subdirectory(gdisk)
+
 set_target_properties(app PROPERTIES AUTOMOC ON AUTORCC ON)
 target_compile_options(app PRIVATE ${EXTRA_WARNINGS})
 target_include_directories(app SYSTEM PUBLIC minizip plog/include)
 target_include_directories(app PRIVATE ${CMAKE_BINARY_DIR}/src)
 target_link_libraries(app PUBLIC
-  Qt5::Network Qt5::Widgets minizip minizip_extra)
+  Qt5::Network Qt5::Widgets minizip minizip_extra gdisk)
 
 # Gondar application
 add_executable(cloudready-usb-maker src/main.cc)

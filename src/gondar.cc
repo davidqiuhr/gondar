@@ -42,6 +42,10 @@
 #include "device.h"
 #include "shared.h"
 
+// We use gdisk to clean up the GPT such that Windows is happy writing to
+// the disk
+#include "../gdisk/gpt.h"
+
 static ssize_t size_t_to_signed(const size_t value) {
   if (value <= SSIZE_MAX) {
     return (ssize_t)value;
@@ -2280,13 +2284,33 @@ DeviceGuyList GetDeviceList() {
   return device_list;
 }
 
+bool clearMbrGpt(char * physical_path) {
+  std::string physical_path_str(physical_path);
+  GPTData gptdata(physical_path_str);
+  // let's get some before/after data on the state of the gpt
+  printf("problems with gpt before=%d\n", gptdata.Verify());
+  gptdata.ClearGPTData();
+  gptdata.MakeProtectiveMBR();
+  int quiet = true;
+  gptdata.SaveGPTData(quiet);
+  printf("problems with gpt after=%d\n", gptdata.Verify());
+  return true;
+}
+
 bool Install(DeviceGuy* target_device,
              const char* image_path,
              int64_t image_size) {
   uint64_t device_num = target_device->device_num;
   uint64_t sector_size = GetSectorSize(device_num);
   uint64_t drive_size = GetDriveSize(device_num);
+  // FIXME: this is a leak
   char* physical_path = GetPhysicalName(device_num);
+  printf("using physical_path=%s\n", physical_path);
+  if (!clearMbrGpt(physical_path)) {
+    printf("error clearing mbr/gpt\n");
+  } else {
+    printf("success clearing mbr/gpt\n");
+  }
   HANDLE phys_handle = GetHandle(physical_path, true, true, false);
   // HANDLE phys_handle = GetHandle(physical_path, true, true, true);
   // ^ i have not noticed any difference in behavior whether we share or not
