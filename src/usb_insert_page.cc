@@ -64,8 +64,7 @@ bool UsbInsertPage::isComplete() const {
 void UsbInsertPage::getDriveList() {
   drivelist = GetDeviceList();
   for (const auto& device : drivelist) {
-    LOG_INFO << "Device(id: " << device.device_num << ", name: " << device.name
-             << ")";
+    LOG_INFO << device;
   }
 
   if (drivelist.empty()) {

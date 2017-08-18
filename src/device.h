@@ -29,6 +29,8 @@ class DeviceGuy {
   DeviceGuy(const DeviceGuy& other) = default;
   DeviceGuy(uint32_t device_num, const std::string name);
 
+  std::string toString() const;
+
   uint32_t device_num = 0;
   std::string name;
 };

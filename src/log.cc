@@ -22,6 +22,14 @@
 
 #include <plog/Appenders/ConsoleAppender.h>
 
+#include "device.h"
+
+namespace plog {
+void operator<<(util::nstringstream& stream, const DeviceGuy& device) {
+  stream << device.toString().c_str();
+}
+}  // namespace plog
+
 namespace gondar {
 
 namespace {
