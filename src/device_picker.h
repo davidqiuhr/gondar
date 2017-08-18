@@ -26,31 +26,28 @@
 namespace gondar {
 
 class DevicePicker : public QWidget {
+  Q_OBJECT
+
  public:
   DevicePicker();
 
-  DeviceGuyList allDevices() const;
+  bool hasSelection() const;
 
   bool isEmpty() const;
 
   DeviceGuy selection() const;
 
-  // Not const because of Qt internals
-  bool hasSelection();
-
   void refresh();
+
+ signals:
+  void selectionChanged();
 
  private:
   DeviceGuy deviceFromRow(int row) const;
 
   bool containsDevice(const DeviceGuy& device) const;
 
-  QItemSelectionModel* selectionModel();
-
-  void selectionChanged(const QItemSelection& selected,
-                        const QItemSelection& deselected);
-
-  void ensureSomethingSelected();
+  void onSelectionChanged();
 
   QVBoxLayout layout_;
   QListView list_view_;

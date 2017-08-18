@@ -29,11 +29,15 @@ class DeviceSelectPage : public gondar::WizardPage {
   DeviceSelectPage(QWidget* parent = 0);
   int nextId() const override;
 
+  gondar::DevicePicker* devicePicker();
+
  protected:
   void initializePage() override;
-  bool validatePage() override;
+  bool isComplete() const override;
 
  private:
+  void onSelectionChanged();
+
   QVBoxLayout layout_;
   QLabel label_;
   gondar::DevicePicker device_picker_;

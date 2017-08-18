@@ -3,6 +3,10 @@
     color: red;
 }
 
+DevicePicker QListView::item {
+    height: 3em;
+}
+
 ImageSelectPage QLabel {
     /* Indent to align with QRadioButton text */
     margin-left: 17px;

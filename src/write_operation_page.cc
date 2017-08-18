@@ -15,6 +15,7 @@
 
 #include "write_operation_page.h"
 
+#include "device_picker.h"
 #include "diskwritethread.h"
 #include "gondarwizard.h"
 #include "log.h"
@@ -24,10 +25,6 @@ WriteOperationPage::WriteOperationPage(QWidget* parent)
     : WizardPage(parent), device(0, std::string()) {
   layout.addWidget(&progress);
   setLayout(&layout);
-}
-
-void WriteOperationPage::setDevice(const DeviceGuy& device_in) {
-  device = device_in;
 }
 
 void WriteOperationPage::initializePage() {
@@ -51,6 +48,7 @@ void WriteOperationPage::writeToDrive() {
   image_path.clear();
   image_path.append(wizard()->downloadProgressPage.getImageFileName());
   showProgress();
+  device = wizard()->devicePicker()->selection();
   diskWriteThread = new DiskWriteThread(&device, image_path, this);
   connect(diskWriteThread, SIGNAL(finished()), this, SLOT(onDoneWriting()));
   LOG_INFO << "launching thread...";

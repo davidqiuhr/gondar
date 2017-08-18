@@ -15,6 +15,8 @@
 
 #include "device_picker.h"
 
+#include <stdexcept>
+
 #include "device.h"
 #include "gondar.h"
 #include "log.h"
@@ -28,15 +30,33 @@ DevicePicker::DevicePicker() {
   layout_.setContentsMargins(0, 0, 0, 0);
   setLayout(&layout_);
 
+  list_view_.setEditTriggers(QAbstractItemView::NoEditTriggers);
   list_view_.setModel(&model_);
   list_view_.setStyleSheet("::item { height: 3em; }");
 
-  connect(selectionModel(), &QItemSelectionModel::selectionChanged, this,
-          &DevicePicker::selectionChanged);
+  connect(list_view_.selectionModel(), &QItemSelectionModel::selectionChanged,
+          this, &DevicePicker::onSelectionChanged);
 }
 
-bool DevicePicker::hasSelection() {
-  return selectionModel()->hasSelection();
+bool DevicePicker::hasSelection() const {
+  return list_view_.selectionModel()->hasSelection();
+}
+
+bool DevicePicker::isEmpty() const {
+  return model_.rowCount() == 0;
+}
+
+DeviceGuy DevicePicker::selection() const {
+  const auto selection = list_view_.selectionModel()->selection();
+  const auto indices = selection.indexes();
+
+  if (indices.isEmpty()) {
+    throw std::runtime_error("no selection");
+  } else if (indices.size() > 1) {
+    throw std::runtime_error("multiple selections");
+  }
+
+  return deviceFromRow(indices[0].row());
 }
 
 void DevicePicker::refresh() {
@@ -48,6 +68,7 @@ void DevicePicker::refresh() {
     try {
       const auto rowDevice = deviceFromRow(row);
       if (!std::binary_search(devices.begin(), devices.end(), rowDevice)) {
+        LOG_INFO << "DevicePicker: removing " << rowDevice.toString();
         model_.removeRow(row);
         row--;
       }
@@ -60,16 +81,14 @@ void DevicePicker::refresh() {
   // stable)
   for (const auto& device : devices) {
     if (!containsDevice(device)) {
+      LOG_INFO << "DevicePicker: adding " << device.toString();
       auto* item = new QStandardItem(QString::fromStdString(device.name));
       item->setData(device.device_num, kIdRole);
       model_.appendRow(item);
     }
   }
 
-  // TODO(nicholasbishop): check that selection is stable in the above
-  // loops
-
-  ensureSomethingSelected();
+  // TODO(nicholasbishop): add a unit test for this
 }
 
 DeviceGuy DevicePicker::deviceFromRow(const int row) const {
@@ -100,20 +119,8 @@ bool DevicePicker::containsDevice(const DeviceGuy& device) const {
   return false;
 }
 
-QItemSelectionModel* DevicePicker::selectionModel() {
-  return list_view_.selectionModel();
-}
-
-void DevicePicker::selectionChanged(const QItemSelection&,
-                                    const QItemSelection&) {
-  ensureSomethingSelected();
-}
-
-void DevicePicker::ensureSomethingSelected() {
-  if (!hasSelection() && model_.rowCount() >= 1) {
-    selectionModel()->select(model_.item(0)->index(),
-                             QItemSelectionModel::ClearAndSelect);
-  }
+void DevicePicker::onSelectionChanged() {
+  emit selectionChanged();
 }
 
 }  // namespace gondar

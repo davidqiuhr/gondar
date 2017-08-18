@@ -30,8 +30,6 @@ class WriteOperationPage : public gondar::WizardPage {
  public:
   WriteOperationPage(QWidget* parent = 0);
 
-  void setDevice(const DeviceGuy& device);
-
  protected:
   void initializePage() override;
   bool isComplete() const override;
