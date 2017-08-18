@@ -26,7 +26,7 @@
 
 namespace plog {
 void operator<<(util::nstringstream& stream, const DeviceGuy& device) {
-  stream << device.toString();
+  stream << device.toString().c_str();
 }
 }  // namespace plog
 
