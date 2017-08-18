@@ -15,14 +15,25 @@
 
 #include "test.h"
 
+#include <algorithm>
+
+#include "device.h"
+
 #if defined(Q_OS_WIN)
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
 #endif
 
 namespace gondar {
 
-void Test::sanity() {
-  QVERIFY(true);
+void Test::deviceLessThan() {
+  QVERIFY(DeviceGuy(0, "a") < DeviceGuy(0, "b"));
+  QVERIFY(DeviceGuy(0, "a") < DeviceGuy(1, "a"));
+  QVERIFY(DeviceGuy(1, "a") < DeviceGuy(0, "b"));
+  QVERIFY(DeviceGuy(0, "stubdevice0") < DeviceGuy(1, "stubdevice1"));
+  std::vector<DeviceGuy> vec = {{DeviceGuy(1, "b"), DeviceGuy(0, "a")}};
+  std::sort(vec.begin(), vec.end());
+  QCOMPARE(vec.front(), DeviceGuy(0, "a"));
+  QCOMPARE(vec.back(), DeviceGuy(1, "b"));
 }
 }
 

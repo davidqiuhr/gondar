@@ -27,6 +27,18 @@
 DeviceGuy::DeviceGuy(uint32_t device_num_in, const std::string name_in)
     : device_num(device_num_in), name(name_in) {}
 
+bool DeviceGuy::operator==(const DeviceGuy& other) const {
+  return (name == other.name) && (device_num == other.device_num);
+}
+
+bool DeviceGuy::operator<(const DeviceGuy& other) const {
+  if (name == other.name) {
+    return device_num < other.device_num;
+  } else {
+    return name < other.name;
+  }
+}
+
 DeviceGuy findDevice(const DeviceGuyList& devices, const uint32_t device_num) {
   const auto match = [device_num](const DeviceGuy& device) {
     return device.device_num == device_num;

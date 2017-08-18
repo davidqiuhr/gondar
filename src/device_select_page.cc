@@ -28,15 +28,13 @@ GondarButton::GondarButton(const QString& text,
   index = device_num;
 }
 
-DeviceSelectPage::DeviceSelectPage(QWidget* parent) : WizardPage(parent) {
+DeviceSelectPage::DeviceSelectPage(QWidget* parent) :
+    WizardPage(parent), label_(tr("Select Drive:")) {
   // this page should just say 'hi how are you' while it stealthily loads
   // the usb device list.  or it could ask you to insert your device
   setTitle("USB device selection");
   setSubTitle("Choose your target device from the list of devices below.");
-  layout = new QVBoxLayout;
-  drivesLabel.setText("Select Drive:");
-  radioGroup = NULL;
-  setLayout(layout);
+  setLayout(&layout_);
 }
 
 void DeviceSelectPage::initializePage() {
