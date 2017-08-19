@@ -66,9 +66,13 @@ void DeviceSelectPage::initializePage() {
     layout->addWidget(curRadio);
   }
   setLayout(layout);
+
+  using ClickedSignal = void (QButtonGroup::*)(QAbstractButton*);
+  connect(radioGroup, static_cast<ClickedSignal>(&QButtonGroup::buttonClicked),
+          this, &DeviceSelectPage::completeChanged);
 }
 
-bool DeviceSelectPage::validatePage() {
+bool DeviceSelectPage::isComplete() const {
   return selectedDevice() != gondar::nullopt;
 }
 

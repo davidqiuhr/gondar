@@ -47,7 +47,7 @@ class DeviceSelectPage : public gondar::WizardPage {
 
  protected:
   void initializePage() override;
-  bool validatePage() override;
+  bool isComplete() const override;
 
  private:
   QLabel drivesLabel;
