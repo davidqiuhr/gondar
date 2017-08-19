@@ -64,6 +64,10 @@ set(EXTRA_WARNINGS ${EXTRA_WARNINGS}
   -Wunused-macros
   -Wwrite-strings)
 
+# C++14 needed for std::experimental::optional. (C++17 is not
+# supported in the version of gcc used by MXE.)
+set(CMAKE_CXX_STANDARD 14)
+
 set(METRICS_API_KEY CACHE STRING "metrics API key")
 configure_file(src/config.h.in src/config.h @ONLY)
 
