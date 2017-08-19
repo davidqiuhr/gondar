@@ -94,6 +94,10 @@ void GondarWizard::setMakeAnotherLayout() {
   setButtonLayout(button_layout);
 }
 
+gondar::Option<DeviceGuy> GondarWizard::selectedDevice() const {
+  return p_->deviceSelectPage.selectedDevice();
+}
+
 const std::vector<GondarSite>& GondarWizard::sites() const {
   return p_->sites;
 }

@@ -23,8 +23,10 @@
 #include <QString>
 #include <QWizard>
 
+#include "device.h"
 #include "download_progress_page.h"
 #include "image_select_page.h"
+#include "option.h"
 #include "usb_insert_page.h"
 #include "write_operation_page.h"
 
@@ -56,6 +58,8 @@ class GondarWizard : public QWizard {
   DownloadProgressPage downloadProgressPage;
   UsbInsertPage usbInsertPage;
   WriteOperationPage writeOperationPage;
+
+  gondar::Option<DeviceGuy> selectedDevice() const;
 
   const std::vector<GondarSite>& sites() const;
   void setSites(const std::vector<GondarSite>& sites);
