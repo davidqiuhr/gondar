@@ -19,6 +19,8 @@
 #include <QLabel>
 #include <QRadioButton>
 
+#include "device.h"
+#include "option.h"
 #include "wizard_page.h"
 
 class QButtonGroup;
@@ -40,6 +42,8 @@ class DeviceSelectPage : public gondar::WizardPage {
  public:
   DeviceSelectPage(QWidget* parent = 0);
   int nextId() const override;
+
+  gondar::Option<DeviceGuy> selectedDevice() const;
 
  protected:
   void initializePage() override;

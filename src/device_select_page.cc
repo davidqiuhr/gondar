@@ -69,22 +69,24 @@ void DeviceSelectPage::initializePage() {
 }
 
 bool DeviceSelectPage::validatePage() {
-  // TODO(kendall): check for NULL on bad cast
+  return selectedDevice() != gondar::nullopt;
+}
+
+gondar::Option<DeviceGuy> DeviceSelectPage::selectedDevice() const {
   GondarButton* selected =
       dynamic_cast<GondarButton*>(radioGroup->checkedButton());
-  if (selected == NULL) {
-    return false;
-  } else {
+  if (selected) {
     try {
       const auto device =
           findDevice(wizard()->usbInsertPage.devices(), selected->index);
       wizard()->writeOperationPage.setDevice(device);
-      return true;
+      return device;
     } catch (const std::runtime_error& error) {
       LOG_ERROR << error.what();
-      return false;
     }
   }
+
+  return gondar::nullopt;
 }
 
 int DeviceSelectPage::nextId() const {
