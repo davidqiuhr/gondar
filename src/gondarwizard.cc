@@ -25,6 +25,7 @@
 #include "log.h"
 #include "metric.h"
 #include "site_select_page.h"
+#include "write_operation_page.h"
 
 class GondarWizard::Private {
  public:
@@ -34,6 +35,7 @@ class GondarWizard::Private {
   DeviceSelectPage deviceSelectPage;
   ChromeoverLoginPage chromeoverLoginPage;
   SiteSelectPage siteSelectPage;
+  WriteOperationPage writeOperationPage;
   ErrorPage errorPage;
 
   std::vector<GondarSite> sites;
@@ -57,7 +59,7 @@ GondarWizard::GondarWizard(QWidget* parent)
   setPage(Page_usbInsert, &usbInsertPage);
   setPage(Page_deviceSelect, &p_->deviceSelectPage);
   setPage(Page_downloadProgress, &downloadProgressPage);
-  setPage(Page_writeOperation, &writeOperationPage);
+  setPage(Page_writeOperation, &p_->writeOperationPage);
   setPage(Page_error, &p_->errorPage);
   setWizardStyle(QWizard::ModernStyle);
   setWindowTitle(tr("CloudReady USB Maker"));

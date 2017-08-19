@@ -28,7 +28,6 @@
 #include "image_select_page.h"
 #include "option.h"
 #include "usb_insert_page.h"
-#include "write_operation_page.h"
 
 class QCheckBox;
 class QGroupBox;
@@ -57,7 +56,6 @@ class GondarWizard : public QWizard {
   ImageSelectPage imageSelectPage;
   DownloadProgressPage downloadProgressPage;
   UsbInsertPage usbInsertPage;
-  WriteOperationPage writeOperationPage;
 
   gondar::Option<DeviceGuy> selectedDevice() const;
 
