@@ -20,14 +20,9 @@
 #include "log.h"
 #include "metric.h"
 
-WriteOperationPage::WriteOperationPage(QWidget* parent)
-    : WizardPage(parent), device(0, std::string()) {
+WriteOperationPage::WriteOperationPage(QWidget* parent) : WizardPage(parent) {
   layout.addWidget(&progress);
   setLayout(&layout);
-}
-
-void WriteOperationPage::setDevice(const DeviceGuy& device_in) {
-  device = device_in;
 }
 
 void WriteOperationPage::initializePage() {
@@ -47,11 +42,17 @@ bool WriteOperationPage::validatePage() {
 }
 
 void WriteOperationPage::writeToDrive() {
+  const auto device = wizard()->selectedDevice();
+  if (device == gondar::nullopt) {
+    writeFailed("No device selected");
+    return;
+  }
+
   LOG_INFO << "Writing to drive...";
   image_path.clear();
   image_path.append(wizard()->downloadProgressPage.getImageFileName());
   showProgress();
-  diskWriteThread = new DiskWriteThread(&device, image_path, this);
+  diskWriteThread = new DiskWriteThread(device.value(), image_path, this);
   connect(diskWriteThread, SIGNAL(finished()), this, SLOT(onDoneWriting()));
   LOG_INFO << "launching thread...";
   gondar::SendMetric(gondar::Metric::UsbAttempt);

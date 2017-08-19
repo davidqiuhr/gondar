@@ -77,10 +77,7 @@ gondar::Option<DeviceGuy> DeviceSelectPage::selectedDevice() const {
       dynamic_cast<GondarButton*>(radioGroup->checkedButton());
   if (selected) {
     try {
-      const auto device =
-          findDevice(wizard()->usbInsertPage.devices(), selected->index);
-      wizard()->writeOperationPage.setDevice(device);
-      return device;
+      return findDevice(wizard()->usbInsertPage.devices(), selected->index);
     } catch (const std::runtime_error& error) {
       LOG_ERROR << error.what();
     }

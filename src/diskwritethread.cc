@@ -30,10 +30,10 @@ static int64_t getFileSize(QString& path) {
   return file.size();
 }
 
-DiskWriteThread::DiskWriteThread(DeviceGuy* drive_in,
+DiskWriteThread::DiskWriteThread(const DeviceGuy& drive_in,
                                  const QString& image_path_in,
                                  QObject* parent)
-    : QThread(parent), selected_drive(*drive_in) {
+    : QThread(parent), selected_drive(drive_in) {
   image_path = image_path_in;
 }
 

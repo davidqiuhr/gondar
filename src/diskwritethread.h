@@ -25,7 +25,7 @@
 class DiskWriteThread : public QThread {
   Q_OBJECT
  public:
-  DiskWriteThread(DeviceGuy* drive_in,
+  DiskWriteThread(const DeviceGuy& drive_in,
                   const QString& image_path_in,
                   QObject* parent = 0);
   ~DiskWriteThread();
