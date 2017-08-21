@@ -13,30 +13,42 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-/*
-A linkedlist of device info passed between the C and C++ layer
-*/
-#ifndef DEVICE_H
-#define DEVICE_H
+#ifndef SRC_DEVICE_PICKER_H_
+#define SRC_DEVICE_PICKER_H_
 
-#include <cstdint>
-#include <string>
-#include <vector>
+#include <QButtonGroup>
+#include <QVBoxLayout>
+#include <QWidget>
 
-// TODO(kendall): rename to something more thoughtful
-class DeviceGuy {
+#include "device.h"
+#include "option.h"
+
+namespace gondar {
+
+class DevicePicker : public QWidget {
+  Q_OBJECT
+
  public:
-  DeviceGuy(const DeviceGuy& other) = default;
-  DeviceGuy(uint32_t device_num, const std::string name);
+  DevicePicker();
 
-  bool operator==(const DeviceGuy& other) const;
+  Option<DeviceGuy> selectedDevice() const;
 
-  std::string toString() const;
+  void refresh(const DeviceGuyList& devices);
 
-  uint32_t device_num = 0;
-  std::string name;
+ signals:
+  void selectionChanged();
+
+ private:
+  class Button;
+
+  const Button* selectedButton() const;
+
+  void onButtonClicked(QAbstractButton* button);
+
+  QButtonGroup button_group_;
+  QVBoxLayout layout_;
 };
 
-typedef std::vector<DeviceGuy> DeviceGuyList;
+}  // namespace gondar
 
-#endif /* DEVICE_H */
+#endif  // SRC_DEVICE_PICKER_H_

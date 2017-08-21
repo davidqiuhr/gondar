@@ -64,6 +64,10 @@ set(EXTRA_WARNINGS ${EXTRA_WARNINGS}
   -Wunused-macros
   -Wwrite-strings)
 
+# C++14 needed for std::experimental::optional. (C++17 is not
+# supported in the version of gcc used by MXE.)
+set(CMAKE_CXX_STANDARD 14)
+
 set(METRICS_API_KEY CACHE STRING "metrics API key")
 configure_file(src/config.h.in src/config.h @ONLY)
 
@@ -100,6 +104,7 @@ add_library(app STATIC
   src/newest_image_url.cc
   src/chromeover_login_page.cc
   src/device.cc
+  src/device_picker.cc
   src/device_select_page.cc
   src/diskwritethread.cc
   src/download_progress_page.cc
@@ -132,6 +137,7 @@ target_link_libraries(cloudready-usb-maker app)
 
 # Test application
 add_executable(tests test/test.cc)
+target_include_directories(tests PRIVATE .)
 target_link_libraries(tests Qt5::Test app)
 set_target_properties(tests PROPERTIES AUTOMOC ON)
 

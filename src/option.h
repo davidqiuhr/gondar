@@ -13,30 +13,21 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-/*
-A linkedlist of device info passed between the C and C++ layer
-*/
-#ifndef DEVICE_H
-#define DEVICE_H
+#ifndef SRC_OPTION_H_
+#define SRC_OPTION_H_
 
-#include <cstdint>
-#include <string>
-#include <vector>
+// std::optional didn't make it into the C++14 standard, but it's
+// perfectly usable. Typedef'd here as gondar::Option for convenience.
 
-// TODO(kendall): rename to something more thoughtful
-class DeviceGuy {
- public:
-  DeviceGuy(const DeviceGuy& other) = default;
-  DeviceGuy(uint32_t device_num, const std::string name);
+#include <experimental/optional>
 
-  bool operator==(const DeviceGuy& other) const;
+namespace gondar {
 
-  std::string toString() const;
+template <typename T>
+using Option = std::experimental::optional<T>;
 
-  uint32_t device_num = 0;
-  std::string name;
-};
+using std::experimental::nullopt;
 
-typedef std::vector<DeviceGuy> DeviceGuyList;
+}  // namespace gondar
 
-#endif /* DEVICE_H */
+#endif  // SRC_OPTION_H_
