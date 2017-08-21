@@ -16,17 +16,23 @@
 #include "device_select_page.h"
 
 #include <QButtonGroup>
+#include <QRadioButton>
 #include <QVBoxLayout>
 
 #include "gondarwizard.h"
 #include "log.h"
 
-GondarButton::GondarButton(const QString& text,
-                           unsigned int device_num,
-                           QWidget* parent)
-    : QRadioButton(text, parent) {
-  index = device_num;
-}
+class GondarButton : public QRadioButton {
+ public:
+  GondarButton(const QString& text,
+               const unsigned int device_num,
+               QWidget* parent)
+      : QRadioButton(text, parent) {
+    index = device_num;
+  }
+
+  unsigned int index = 0;
+};
 
 DeviceSelectPage::DeviceSelectPage(QWidget* parent) : WizardPage(parent) {
   // this page should just say 'hi how are you' while it stealthily loads

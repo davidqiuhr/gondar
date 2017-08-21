@@ -17,22 +17,11 @@
 #define SRC_DEVICE_SELECT_PAGE_H_
 
 #include <QLabel>
-#include <QRadioButton>
 
 #include "wizard_page.h"
 
 class QButtonGroup;
 class QVBoxLayout;
-
-class GondarButton : public QRadioButton {
-  Q_OBJECT
-
- public:
-  GondarButton(const QString& text,
-               unsigned int device_num,
-               QWidget* parent = 0);
-  unsigned int index = 0;
-};
 
 class DeviceSelectPage : public gondar::WizardPage {
   Q_OBJECT
