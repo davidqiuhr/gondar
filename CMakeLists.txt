@@ -137,6 +137,7 @@ target_link_libraries(cloudready-usb-maker app)
 
 # Test application
 add_executable(tests test/test.cc)
+target_include_directories(tests PRIVATE .)
 target_link_libraries(tests Qt5::Test app)
 set_target_properties(tests PROPERTIES AUTOMOC ON)
 
