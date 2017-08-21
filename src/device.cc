@@ -27,6 +27,10 @@
 DeviceGuy::DeviceGuy(uint32_t device_num_in, const std::string name_in)
     : device_num(device_num_in), name(name_in) {}
 
+bool DeviceGuy::operator==(const DeviceGuy& other) const {
+  return (device_num == other.device_num) && (name == other.name);
+}
+
 std::string DeviceGuy::toString() const {
   return ("Device(id=" + std::to_string(device_num) + ", name=\"" + name +
           "\")");

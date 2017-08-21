@@ -29,6 +29,8 @@ class DeviceGuy {
   DeviceGuy(const DeviceGuy& other) = default;
   DeviceGuy(uint32_t device_num, const std::string name);
 
+  bool operator==(const DeviceGuy& other) const;
+
   std::string toString() const;
 
   uint32_t device_num = 0;
