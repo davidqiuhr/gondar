@@ -34,9 +34,10 @@ class DevicePicker::Button : public QRadioButton {
 DevicePicker::DevicePicker() {
   setLayout(&layout_);
 
-  using OnButtonClicked = void(QButtonGroup::*)(QAbstractButton *);
-  connect(&button_group_, static_cast<OnButtonClicked>(&QButtonGroup::buttonClicked),
-          this, &DevicePicker::onButtonClicked);
+  using OnButtonClicked = void (QButtonGroup::*)(QAbstractButton*);
+  connect(&button_group_,
+          static_cast<OnButtonClicked>(&QButtonGroup::buttonClicked), this,
+          &DevicePicker::onButtonClicked);
 }
 
 Option<DeviceGuy> DevicePicker::selectedDevice() const {

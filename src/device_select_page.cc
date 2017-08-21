@@ -29,8 +29,8 @@ DeviceSelectPage::DeviceSelectPage(QWidget* parent) : WizardPage(parent) {
   layout.addWidget(&picker);
   setLayout(&layout);
 
-  connect(&picker, &gondar::DevicePicker::selectionChanged,
-          this, &DeviceSelectPage::completeChanged);
+  connect(&picker, &gondar::DevicePicker::selectionChanged, this,
+          &DeviceSelectPage::completeChanged);
 }
 
 void DeviceSelectPage::initializePage() {
