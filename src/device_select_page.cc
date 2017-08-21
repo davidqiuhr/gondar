@@ -21,73 +21,27 @@
 #include "gondarwizard.h"
 #include "log.h"
 
-GondarButton::GondarButton(const QString& text,
-                           unsigned int device_num,
-                           QWidget* parent)
-    : QRadioButton(text, parent) {
-  index = device_num;
-}
-
-DeviceSelectPage::DeviceSelectPage(QWidget* parent) : WizardPage(parent) {
+DeviceSelectPage::DeviceSelectPage(QWidget* parent)
+    : WizardPage(parent), label_(tr("Select Drive:")) {
   // this page should just say 'hi how are you' while it stealthily loads
   // the usb device list.  or it could ask you to insert your device
   setTitle("USB device selection");
   setSubTitle("Choose your target device from the list of devices below.");
-  layout = new QVBoxLayout;
-  drivesLabel.setText("Select Drive:");
-  radioGroup = NULL;
-  setLayout(layout);
+  label_.setText("Select Drive:");
+  layout_.addWidget(&label_);
+  layout_.addWidget(&device_picker_);
+  setLayout(&layout_);
+
+  connect(&device_picker_, &gondar::DevicePicker::selectionChanged, this,
+          &DeviceSelectPage::completeChanged);
 }
 
 void DeviceSelectPage::initializePage() {
-  // while our layout is not empty, remove items from it
-  while (!layout->isEmpty()) {
-    QLayoutItem* curItem = layout->takeAt(0);
-    if (curItem->widget() != &drivesLabel) {
-      delete curItem->widget();
-    }
-  }
-
-  // remove our last listing
-  delete radioGroup;
-
-  // Line up widgets horizontally
-  // use QVBoxLayout for vertically, H for horizontal
-  layout->addWidget(&drivesLabel);
-
-  radioGroup = new QButtonGroup();
-  // i could extend the button object to also have a secret index
-  // then i could look up index later easily
-  for (const auto& device : wizard()->usbInsertPage.devices()) {
-    // FIXME(kendall): clean these up
-    GondarButton* curRadio = new GondarButton(
-        QString::fromStdString(device.name), device.device_num, this);
-    radioGroup->addButton(curRadio);
-    layout->addWidget(curRadio);
-  }
-  setLayout(layout);
-
-  using ClickedSignal = void (QButtonGroup::*)(QAbstractButton*);
-  connect(radioGroup, static_cast<ClickedSignal>(&QButtonGroup::buttonClicked),
-          this, &DeviceSelectPage::completeChanged);
+  device_picker_.refresh();
 }
 
 bool DeviceSelectPage::isComplete() const {
-  return selectedDevice() != gondar::nullopt;
-}
-
-gondar::Option<DeviceGuy> DeviceSelectPage::selectedDevice() const {
-  GondarButton* selected =
-      dynamic_cast<GondarButton*>(radioGroup->checkedButton());
-  if (selected) {
-    try {
-      return findDevice(wizard()->usbInsertPage.devices(), selected->index);
-    } catch (const std::runtime_error& error) {
-      LOG_ERROR << error.what();
-    }
-  }
-
-  return gondar::nullopt;
+  return device_picker_.hasSelection();
 }
 
 int DeviceSelectPage::nextId() const {
@@ -96,4 +50,8 @@ int DeviceSelectPage::nextId() const {
   } else {
     return GondarWizard::Page_downloadProgress;
   }
+}
+
+gondar::DevicePicker* DeviceSelectPage::devicePicker() {
+  return &device_picker_;
 }

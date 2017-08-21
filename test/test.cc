@@ -15,14 +15,59 @@
 
 #include "test.h"
 
+#include "device_list_model.h"
+#include "device_picker.h"
+
 #if defined(Q_OS_WIN)
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
 #endif
 
 namespace gondar {
 
-void Test::sanity() {
-  QVERIFY(true);
+void Test::deviceListModelEmpty() {
+  DeviceListModel model;
+  QCOMPARE(model.rowCount(), 0);
+  QCOMPARE(model.columnCount(), 2);
+  QVERIFY(model.deviceFromRow(0) == nullopt);
+  QVERIFY(!model.data(model.index(0, 0)).isValid());
+  QVERIFY(!model.hasDevice(DeviceGuy(123, "abc")));
+}
+
+void Test::deviceListModelOneDevice() {
+  DeviceListModel model;
+  model.addDevice(DeviceGuy(123, "abc"));
+  QCOMPARE(model.rowCount(), 1);
+  QCOMPARE(model.columnCount(), 2);
+  QCOMPARE(model.deviceFromRow(0).value(), DeviceGuy(123, "abc"));
+  QVERIFY(model.data(model.index(0, 0)).isValid());
+  QVERIFY(model.data(model.index(0, 1)).isValid());
+  QVERIFY(!model.data(model.index(1, 0)).isValid());
+  QVERIFY(!model.data(model.index(1, 1)).isValid());
+  QVERIFY(model.hasDevice(DeviceGuy(123, "abc")));
+  QVERIFY(!model.hasDevice(DeviceGuy(456, "abc")));
+}
+
+void Test::deviceListModelRefresh() {
+  DeviceListModel model;
+  DeviceGuyList devices = {DeviceGuy(123, "abc"), DeviceGuy(456, "def")};
+
+  model.refresh(devices);
+  QCOMPARE(model.rowCount(), 2);
+  QCOMPARE(model.deviceFromRow(0).value(), DeviceGuy(123, "abc"));
+  QCOMPARE(model.deviceFromRow(1).value(), DeviceGuy(456, "def"));
+
+  model.refresh(devices);
+  QCOMPARE(model.rowCount(), 2);
+  QCOMPARE(model.deviceFromRow(0).value(), DeviceGuy(123, "abc"));
+  QCOMPARE(model.deviceFromRow(1).value(), DeviceGuy(456, "def"));
+}
+
+void Test::devicePickerRefresh() {
+  DevicePicker picker;
+  DeviceGuyList devices = {DeviceGuy(123, "abc"), DeviceGuy(456, "def")};
+
+  picker.refresh(devices);
+  // picker.listView().
 }
 }
 

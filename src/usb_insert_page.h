@@ -19,7 +19,6 @@
 #include <QLabel>
 #include <QVBoxLayout>
 
-#include "device.h"
 #include "wizard_page.h"
 
 class UsbInsertPage : public gondar::WizardPage {
@@ -28,22 +27,15 @@ class UsbInsertPage : public gondar::WizardPage {
  public:
   UsbInsertPage(QWidget* parent = 0);
 
-  const DeviceGuyList& devices() const;
-
  protected:
   void initializePage() override;
   bool isComplete() const override;
 
  private:
-  void showDriveList();
-  DeviceGuyList drivelist;
+  void refreshDevices();
+
   QLabel label;
   QVBoxLayout layout;
-
- public slots:
-  void getDriveList();
- signals:
-  void driveListRequested();
 };
 
 #endif  // SRC_USB_INSERT_PAGE_H_

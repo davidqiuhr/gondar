@@ -17,7 +17,8 @@
 
 #include <QTimer>
 
-#include "gondar.h"
+#include "device_picker.h"
+#include "gondarwizard.h"
 #include "log.h"
 
 UsbInsertPage::UsbInsertPage(QWidget* parent) : WizardPage(parent) {
@@ -35,47 +36,26 @@ UsbInsertPage::UsbInsertPage(QWidget* parent) : WizardPage(parent) {
 
   layout.addWidget(&label);
   setLayout(&layout);
-
-  // the next button should be grayed out until the user inserts a USB
-  connect(this, SIGNAL(driveListRequested()), this, SLOT(getDriveList()));
-}
-
-const DeviceGuyList& UsbInsertPage::devices() const {
-  return drivelist;
 }
 
 void UsbInsertPage::initializePage() {
-  // if the page is visited again, delete the old drivelist
-  drivelist.clear();
-  // send a signal to check for drives
-  emit driveListRequested();
+  refreshDevices();
 }
 
 bool UsbInsertPage::isComplete() const {
-  // this should return false unless we have a non-empty result from
-  // GetDevices()
-  if (drivelist.empty()) {
-    return false;
-  } else {
-    return true;
-  }
+  // Page becomes complete when the device list is not empty
+  return !wizard()->devicePicker()->isEmpty();
 }
 
-void UsbInsertPage::getDriveList() {
-  drivelist = GetDeviceList();
-  for (const auto& device : drivelist) {
-    LOG_INFO << device;
-  }
+void UsbInsertPage::refreshDevices() {
+  auto* picker = wizard()->devicePicker();
+  picker->refresh();
 
-  if (drivelist.empty()) {
+  if (picker->isEmpty()) {
     const int second_in_milliseconds = 1000;
     QTimer::singleShot(second_in_milliseconds, this,
-                       &UsbInsertPage::getDriveList);
+                       &UsbInsertPage::refreshDevices);
   } else {
-    showDriveList();
+    emit completeChanged();
   }
-}
-
-void UsbInsertPage::showDriveList() {
-  emit completeChanged();
 }

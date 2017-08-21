@@ -13,24 +13,47 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TEST_TEST_H_
-#define TEST_TEST_H_
+#ifndef SRC_DEVICE_PICKER_H_
+#define SRC_DEVICE_PICKER_H_
 
-#include <QObject>
+#include <QListView>
+#include <QVBoxLayout>
+#include <QWidget>
 
-#include <QtTest/QtTest>
+#include "device.h"
+#include "device_list_model.h"
+#include "option.h"
 
 namespace gondar {
 
-class Test : public QObject {
+class DevicePicker : public QWidget {
   Q_OBJECT
 
- private slots:
-  void deviceListModelEmpty();
-  void deviceListModelOneDevice();
-  void deviceListModelRefresh();
-  void devicePickerRefresh();
-};
-}
+ public:
+  DevicePicker();
 
-#endif  // TEST_TEST_H_
+  bool hasSelection() const;
+
+  bool isEmpty() const;
+
+  Option<DeviceGuy> selection() const;
+
+  void refresh();
+
+  void refresh(const DeviceGuyList& devices);
+
+  // For tests
+  const QListView& listView() const;
+
+ signals:
+  void selectionChanged();
+
+ private:
+  QVBoxLayout layout_;
+  QListView list_view_;
+  DeviceListModel model_;
+};
+
+}  // namespace gondar
+
+#endif  // SRC_DEVICE_PICKER_H_

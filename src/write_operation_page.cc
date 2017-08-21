@@ -15,6 +15,7 @@
 
 #include "write_operation_page.h"
 
+#include "device_picker.h"
 #include "diskwritethread.h"
 #include "gondarwizard.h"
 #include "log.h"
@@ -42,7 +43,7 @@ bool WriteOperationPage::validatePage() {
 }
 
 void WriteOperationPage::writeToDrive() {
-  const auto device = wizard()->selectedDevice();
+  const auto device = wizard()->devicePicker()->selection();
   if (device == gondar::nullopt) {
     writeFailed("No device selected");
     return;

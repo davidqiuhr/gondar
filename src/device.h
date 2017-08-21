@@ -31,12 +31,12 @@ class DeviceGuy {
 
   std::string toString() const;
 
+  bool operator==(const DeviceGuy& other) const;
+
   uint32_t device_num = 0;
   std::string name;
 };
 
 typedef std::vector<DeviceGuy> DeviceGuyList;
-
-DeviceGuy findDevice(const DeviceGuyList& devices, const uint32_t device_num);
 
 #endif /* DEVICE_H */

@@ -25,6 +25,7 @@
 #include "log.h"
 #include "metric.h"
 #include "site_select_page.h"
+#include "usb_insert_page.h"
 #include "write_operation_page.h"
 
 class GondarWizard::Private {
@@ -35,6 +36,7 @@ class GondarWizard::Private {
   DeviceSelectPage deviceSelectPage;
   ChromeoverLoginPage chromeoverLoginPage;
   SiteSelectPage siteSelectPage;
+  UsbInsertPage usbInsertPage;
   WriteOperationPage writeOperationPage;
   ErrorPage errorPage;
 
@@ -56,7 +58,7 @@ GondarWizard::GondarWizard(QWidget* parent)
   setPage(Page_chromeoverLogin, &p_->chromeoverLoginPage);
   setPage(Page_siteSelect, &p_->siteSelectPage);
   setPage(Page_imageSelect, &imageSelectPage);
-  setPage(Page_usbInsert, &usbInsertPage);
+  setPage(Page_usbInsert, &p_->usbInsertPage);
   setPage(Page_deviceSelect, &p_->deviceSelectPage);
   setPage(Page_downloadProgress, &downloadProgressPage);
   setPage(Page_writeOperation, &p_->writeOperationPage);
@@ -96,8 +98,8 @@ void GondarWizard::setMakeAnotherLayout() {
   setButtonLayout(button_layout);
 }
 
-gondar::Option<DeviceGuy> GondarWizard::selectedDevice() const {
-  return p_->deviceSelectPage.selectedDevice();
+gondar::DevicePicker* GondarWizard::devicePicker() {
+  return p_->deviceSelectPage.devicePicker();
 }
 
 const std::vector<GondarSite>& GondarWizard::sites() const {
@@ -113,7 +115,7 @@ void GondarWizard::handleCustomButton(int buttonIndex) {
   if (buttonIndex == QWizard::CustomButton1) {
     setNormalLayout();
     // works as long as usbInsertPage is not the last page in wizard
-    setStartId(usbInsertPage.nextId() - 1);
+    setStartId(p_->usbInsertPage.nextId() - 1);
     restart();
   } else if (buttonIndex == QWizard::CustomButton2) {
     p_->aboutDialog.show();

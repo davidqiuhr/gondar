@@ -16,6 +16,8 @@
 #ifndef SRC_UTIL_H_
 #define SRC_UTIL_H_
 
+#include <algorithm>
+
 #include <QString>
 
 namespace gondar {
@@ -24,6 +26,13 @@ namespace gondar {
 // exception on failure.
 QString readUtf8File(const QString& filepath);
 bool isChromeover();
+
+// Shortcut for common use of std::find
+template <typename Container, typename Key>
+bool contains(const Container& container, const Key& key) {
+  const auto end = container.end();
+  return std::find(container.begin(), end, key) != end;
+}
 
 }  // namespace gondar
 

@@ -27,7 +27,6 @@
 #include "download_progress_page.h"
 #include "image_select_page.h"
 #include "option.h"
-#include "usb_insert_page.h"
 
 class QCheckBox;
 class QGroupBox;
@@ -35,6 +34,10 @@ class QLabel;
 class QRadioButton;
 
 class GondarSite;
+
+namespace gondar {
+class DevicePicker;
+}
 
 class GondarWizard : public QWizard {
   Q_OBJECT
@@ -55,9 +58,8 @@ class GondarWizard : public QWizard {
   // so putting the shared state in the wizard seems more straightforward
   ImageSelectPage imageSelectPage;
   DownloadProgressPage downloadProgressPage;
-  UsbInsertPage usbInsertPage;
 
-  gondar::Option<DeviceGuy> selectedDevice() const;
+  gondar::DevicePicker* devicePicker();
 
   const std::vector<GondarSite>& sites() const;
   void setSites(const std::vector<GondarSite>& sites);
