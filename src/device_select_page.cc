@@ -24,14 +24,14 @@
 
 class GondarButton : public QRadioButton {
  public:
-  GondarButton(const QString& text,
-               const unsigned int device_num,
-               QWidget* parent)
-      : QRadioButton(text, parent) {
-    index = device_num;
-  }
+  GondarButton(const DeviceGuy& device, QWidget* parent)
+      : QRadioButton(QString::fromStdString(device.name), parent),
+        device_(device) {}
 
-  unsigned int index = 0;
+  const DeviceGuy& device() const { return device_; }
+
+ private:
+  DeviceGuy device_;
 };
 
 DeviceSelectPage::DeviceSelectPage(QWidget* parent) : WizardPage(parent) {
@@ -66,8 +66,7 @@ void DeviceSelectPage::initializePage() {
   // then i could look up index later easily
   for (const auto& device : wizard()->usbInsertPage.devices()) {
     // FIXME(kendall): clean these up
-    GondarButton* curRadio = new GondarButton(
-        QString::fromStdString(device.name), device.device_num, this);
+    GondarButton* curRadio = new GondarButton(device, this);
     radioGroup->addButton(curRadio);
     layout->addWidget(curRadio);
   }
@@ -81,15 +80,9 @@ bool DeviceSelectPage::validatePage() {
   if (selected == NULL) {
     return false;
   } else {
-    try {
-      const auto device =
-          findDevice(wizard()->usbInsertPage.devices(), selected->index);
-      wizard()->writeOperationPage.setDevice(device);
-      return true;
-    } catch (const std::runtime_error& error) {
-      LOG_ERROR << error.what();
-      return false;
-    }
+    const auto device = selected->device();
+    wizard()->writeOperationPage.setDevice(device);
+    return true;
   }
 }
 

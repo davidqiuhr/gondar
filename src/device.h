@@ -39,6 +39,4 @@ class DeviceGuy {
 
 typedef std::vector<DeviceGuy> DeviceGuyList;
 
-DeviceGuy findDevice(const DeviceGuyList& devices, const uint32_t device_num);
-
 #endif /* DEVICE_H */
