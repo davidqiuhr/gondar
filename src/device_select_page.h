@@ -17,11 +17,10 @@
 #define SRC_DEVICE_SELECT_PAGE_H_
 
 #include <QLabel>
+#include <QVBoxLayout>
 
+#include "device_picker.h"
 #include "wizard_page.h"
-
-class QButtonGroup;
-class QVBoxLayout;
 
 class DeviceSelectPage : public gondar::WizardPage {
   Q_OBJECT
@@ -33,11 +32,12 @@ class DeviceSelectPage : public gondar::WizardPage {
  protected:
   void initializePage() override;
   bool validatePage() override;
+  bool isComplete() const override;
 
  private:
+  QVBoxLayout layout;
   QLabel drivesLabel;
-  QButtonGroup* radioGroup;
-  QVBoxLayout* layout;
+  gondar::DevicePicker picker;
 };
 
 #endif  // SRC_DEVICE_SELECT_PAGE_H_
