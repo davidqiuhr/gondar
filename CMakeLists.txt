@@ -104,6 +104,7 @@ add_library(app STATIC
   src/newest_image_url.cc
   src/chromeover_login_page.cc
   src/device.cc
+  src/device_picker.cc
   src/device_select_page.cc
   src/diskwritethread.cc
   src/download_progress_page.cc
