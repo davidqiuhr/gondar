@@ -35,12 +35,12 @@ void DownloadManager::append(const QStringList& urlList) {
     append(QUrl::fromEncoded(url.toLocal8Bit()));
 
   if (downloadQueue.isEmpty())
-    QTimer::singleShot(0, this, SIGNAL(finished()));
+    QTimer::singleShot(0, this, &DownloadManager::finished);
 }
 
 void DownloadManager::append(const QUrl& url) {
   if (downloadQueue.isEmpty())
-    QTimer::singleShot(0, this, SLOT(startNextDownload()));
+    QTimer::singleShot(0, this, &DownloadManager::startNextDownload);
 
   downloadQueue.enqueue(url);
   ++totalCount;
@@ -77,8 +77,10 @@ void DownloadManager::startNextDownload() {
   QNetworkRequest request(url);
   gondar::SendMetric(gondar::Metric::DownloadAttempt);
   currentDownload = manager.get(request);
-  connect(currentDownload, SIGNAL(finished()), SLOT(downloadFinished()));
-  connect(currentDownload, SIGNAL(readyRead()), SLOT(downloadReadyRead()));
+  connect(currentDownload, &QNetworkReply::finished, this,
+          &DownloadManager::downloadFinished);
+  connect(currentDownload, &QNetworkReply::readyRead, this,
+          &DownloadManager::downloadReadyRead);
   emit started();
 
   // prepare the output

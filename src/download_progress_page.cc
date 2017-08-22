@@ -30,9 +30,11 @@ void DownloadProgressPage::initializePage() {
   setLayout(&layout);
   const QUrl url = wizard()->imageSelectPage.getUrl();
   qDebug() << "using url= " << url;
-  connect(&manager, SIGNAL(finished()), this, SLOT(markComplete()));
+  connect(&manager, &DownloadManager::finished, this,
+          &DownloadProgressPage::markComplete);
   manager.append(url.toString());
-  connect(&manager, SIGNAL(started()), this, SLOT(onDownloadStarted()));
+  connect(&manager, &DownloadManager::started, this,
+          &DownloadProgressPage::onDownloadStarted);
 }
 
 void DownloadProgressPage::onDownloadStarted() {
@@ -54,7 +56,8 @@ void DownloadProgressPage::markComplete() {
   // now that the download is finished, let's unzip the build.
   notifyUnzip();
   unzipThread = new UnzipThread(manager.outputFileInfo(), this);
-  connect(unzipThread, SIGNAL(finished()), this, SLOT(onUnzipFinished()));
+  connect(unzipThread, &UnzipThread::finished, this,
+          &DownloadProgressPage::onUnzipFinished);
   unzipThread->start();
 }
 

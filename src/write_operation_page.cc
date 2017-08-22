@@ -52,7 +52,8 @@ void WriteOperationPage::writeToDrive() {
   image_path.append(wizard()->downloadProgressPage.getImageFileName());
   showProgress();
   diskWriteThread = new DiskWriteThread(&device, image_path, this);
-  connect(diskWriteThread, SIGNAL(finished()), this, SLOT(onDoneWriting()));
+  connect(diskWriteThread, &DiskWriteThread::finished, this,
+          &WriteOperationPage::onDoneWriting);
   LOG_INFO << "launching thread...";
   gondar::SendMetric(gondar::Metric::UsbAttempt);
   diskWriteThread->start();

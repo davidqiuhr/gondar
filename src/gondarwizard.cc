@@ -71,8 +71,8 @@ GondarWizard::GondarWizard(QWidget* parent)
 
   connect(&about_shortcut_, &QShortcut::activated, &p_->aboutDialog,
           &gondar::AboutDialog::show);
-  connect(this, SIGNAL(customButtonClicked(int)), this,
-          SLOT(handleCustomButton(int)));
+  connect(this, &GondarWizard::customButtonClicked, this,
+          &GondarWizard::handleCustomButton);
 
   p_->runTime = QDateTime::currentDateTime();
 }
