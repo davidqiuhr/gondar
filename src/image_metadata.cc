@@ -13,34 +13,16 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef NEWEST_IMAGE_URL_H
-#define NEWEST_IMAGE_URL_H
-
-#include <QNetworkReply>
-#include <QUrl>
-
 #include "image_metadata.h"
 
-class NewestImageUrl : public QObject {
-  Q_OBJECT
+namespace gondar {
 
- public:
-  void fetch();
-  bool isReady() const;
-  void set32Url(const QUrl& url_in);
-  void set64Url(const QUrl& url_in);
-  const gondar::ImageMetadata& getImage32() const;
-  const gondar::ImageMetadata& getImage64() const;
- signals:
-  void errorOccurred();
+const QUrl& ImageMetadata::url() const {
+  return url_;
+}
 
- protected:
-  void handleReply(QNetworkReply* reply);
+void ImageMetadata::setUrl(const QUrl& url) {
+  url_ = url;
+}
 
- private:
-  QNetworkAccessManager networkManager;
-  gondar::ImageMetadata image32_;
-  gondar::ImageMetadata image64_;
-};
-
-#endif
+}  // namespace gondar

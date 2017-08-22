@@ -79,12 +79,12 @@ void ImageSelectPage::set64Url(QUrl url_in) {
 QUrl ImageSelectPage::getUrl() {
   QAbstractButton* selected = bitnessButtons.checkedButton();
   if (selected == &thirtyTwo) {
-    return newestImageUrl.get32Url();
+    return newestImageUrl.getImage32().url();
   } else if (selected == &sixtyFour) {
-    return newestImageUrl.get64Url();
+    return newestImageUrl.getImage64().url();
   } else {
     // TODO: decide what this behavior should be
-    return newestImageUrl.get64Url();
+    return newestImageUrl.getImage64().url();
   }
 }
 

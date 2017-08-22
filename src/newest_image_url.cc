@@ -46,34 +46,34 @@ void NewestImageUrl::handleReply(QNetworkReply* reply) {
   // we find out which request this is a response for
   QUrl url = getLatestUrl(reply);
   if (reply->url().toString().contains("32bit")) {
-    thirtyTwoUrl = url;
+    image32_.setUrl(url);
   } else {
-    sixtyFourUrl = url;
+    image64_.setUrl(url);
   }
   LOG_INFO << "using latest url: " << url.toString();
   reply->deleteLater();
 }
 
 void NewestImageUrl::set32Url(const QUrl& url_in) {
-  thirtyTwoUrl = url_in;
+  image32_.setUrl(url_in);
 }
 
 void NewestImageUrl::set64Url(const QUrl& url_in) {
-  sixtyFourUrl = url_in;
+  image64_.setUrl(url_in);
 }
 
 bool NewestImageUrl::isReady() const {
-  if (thirtyTwoUrl.isEmpty() || sixtyFourUrl.isEmpty()) {
+  if (image32_.url().isEmpty() || image64_.url().isEmpty()) {
     return false;
   } else {
     return true;
   }
 }
 
-const QUrl& NewestImageUrl::get32Url() const {
-  return thirtyTwoUrl;
+const gondar::ImageMetadata& NewestImageUrl::getImage32() const {
+  return image32_;
 }
 
-const QUrl& NewestImageUrl::get64Url() const {
-  return sixtyFourUrl;
+const gondar::ImageMetadata& NewestImageUrl::getImage64() const {
+  return image64_;
 }
