@@ -117,6 +117,7 @@ add_library(app STATIC
   src/meepo.cc
   src/metric.cc
   src/neverware_unzipper.cc
+  src/sha512.cc
   src/site_select_page.cc
   src/unzipthread.cc
   src/usb_insert_page.cc

@@ -18,6 +18,7 @@
 #include "test.h"
 
 #include "src/device_picker.h"
+#include "src/sha512.h"
 
 #if defined(Q_OS_WIN)
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
@@ -55,6 +56,23 @@ void Test::testDevicePicker() {
   btn->click();
 
   QCOMPARE(*picker.selectedDevice(), DeviceGuy(3, "c"));
+}
+
+void Test::testSha512() {
+  // Invalid
+  QVERIFY(Sha512::fromBytes(QByteArray("xyz")) == nullopt);
+  QVERIFY(Sha512::fromHex("xyz") == nullopt);
+  QVERIFY(Sha512::fromHex(QString(64, 'x')) == nullopt);
+
+  // Valid
+  QVERIFY(Sha512::fromBytes(QByteArray(64, 'x')) != nullopt);
+  QVERIFY(Sha512::fromHex(QString(128, 'a')) != nullopt);
+
+  // Comparison
+  QVERIFY(Sha512::fromHex(QString(128, 'a')).value() ==
+          Sha512::fromHex(QString(128, 'a')).value());
+  QVERIFY(Sha512::fromBytes(QByteArray(64, 'x')).value() !=
+          Sha512::fromHex(QString(128, 'a')).value());
 }
 
 }  // namespace gondar

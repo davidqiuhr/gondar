@@ -13,22 +13,32 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TEST_TEST_H_
-#define TEST_TEST_H_
+#ifndef SRC_SHA512_H_
+#define SRC_SHA512_H_
 
-#include <QObject>
+#include <QByteArray>
 
-#include <QtTest/QtTest>
+#include "option.h"
 
 namespace gondar {
 
-class Test : public QObject {
-  Q_OBJECT
+class Sha512 {
+ public:
+  static Option<Sha512> calculateFileHash(const QString& filePath);
 
- private slots:
-  void testDevicePicker();
-  void testSha512();
+  static Option<Sha512> fromBytes(const QByteArray& bytes);
+
+  static Option<Sha512> fromHex(const QString& str);
+
+  bool operator==(const Sha512& other) const;
+  bool operator!=(const Sha512& other) const;
+
+ private:
+  explicit Sha512(const QByteArray& bytes);
+
+  const QByteArray bytes_;
 };
-}
 
-#endif  // TEST_TEST_H_
+}  // namespace gondar
+
+#endif  // SRC_SHA512_H_
