@@ -37,7 +37,8 @@ UsbInsertPage::UsbInsertPage(QWidget* parent) : WizardPage(parent) {
   setLayout(&layout);
 
   // the next button should be grayed out until the user inserts a USB
-  connect(this, SIGNAL(driveListRequested()), this, SLOT(getDriveList()));
+  connect(this, &UsbInsertPage::driveListRequested, this,
+          &UsbInsertPage::getDriveList);
 }
 
 const DeviceGuyList& UsbInsertPage::devices() const {
