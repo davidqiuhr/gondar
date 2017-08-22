@@ -35,7 +35,31 @@ class QRadioButton;
 
 class GondarSite;
 
-class GondarWizard : public QWizard {
+namespace gondar {
+class Wizard : public QDialog {
+  Q_OBJECT
+
+ public:
+  explicit Wizard(QWidget* parent = nullptr);
+
+  void next();
+
+ signals:
+  void customButtonClicked(int buttonIndex);
+
+ protected:
+  int currentId() const;
+  virtual int nextId() const;
+  void restart();
+  void setButtonLayout(const QList<QWizard::WizardButton>& layout);
+  void setButtonText(QWizard::WizardButton which, const QString& text);
+  void setPage(int id, WizardPage* page);
+  void setStartId(int id);
+
+};
+}  // gondar
+
+class GondarWizard : public gondar::Wizard {
   Q_OBJECT
 
  public:

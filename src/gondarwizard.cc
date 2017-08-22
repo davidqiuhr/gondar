@@ -26,6 +26,23 @@
 #include "metric.h"
 #include "site_select_page.h"
 
+namespace gondar {
+Wizard::Wizard(QWidget* parent) : QDialog(parent) {}
+
+void Wizard::next() {}
+
+int Wizard::currentId() const {}
+int Wizard::nextId() const {}
+
+void Wizard::restart() {}
+
+void Wizard::setButtonLayout(const QList<QWizard::WizardButton>& layout) {}
+void Wizard::setButtonText(QWizard::WizardButton which, const QString& text) {}
+void Wizard::setPage(int id, WizardPage* page) {}
+void Wizard::setStartId(int id) {}
+
+}  // namespace gondar
+
 class GondarWizard::Private {
  public:
   gondar::AboutDialog aboutDialog;
@@ -42,7 +59,7 @@ class GondarWizard::Private {
 };
 
 GondarWizard::GondarWizard(QWidget* parent)
-    : QWizard(parent),
+    : Wizard(parent),
       p_(new Private()),
       about_shortcut_(QKeySequence::HelpContents, this) {
   // these pages are automatically cleaned up
@@ -59,9 +76,7 @@ GondarWizard::GondarWizard(QWidget* parent)
   setPage(Page_downloadProgress, &downloadProgressPage);
   setPage(Page_writeOperation, &writeOperationPage);
   setPage(Page_error, &p_->errorPage);
-  setWizardStyle(QWizard::ModernStyle);
   setWindowTitle(tr("CloudReady USB Maker"));
-  setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
 
   setButtonText(QWizard::CustomButton1, "Make Another USB");
   setButtonText(QWizard::CustomButton2, "About");
@@ -118,7 +133,7 @@ void GondarWizard::handleCustomButton(int buttonIndex) {
 
 int GondarWizard::nextId() const {
   if (p_->errorPage.errorEmpty()) {
-    return QWizard::nextId();
+    return Wizard::nextId();
   } else {
     if (currentId() == Page_error) {
       return -1;
