@@ -40,9 +40,9 @@
 
 // gondar-level includes
 #include "device.h"
-#include "shared.h"
-#include "log.h"
 #include "gpt_pal.h"
+#include "log.h"
+#include "shared.h"
 
 static ssize_t size_t_to_signed(const size_t value) {
   if (value <= SSIZE_MAX) {
