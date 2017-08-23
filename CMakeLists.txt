@@ -17,7 +17,6 @@ cmake_minimum_required(VERSION 3.4)
 project(gondar)
 
 include(infra/gondar.cmake)
-include(infra/gdisk.cmake)
 
 # Choose between free and paid product downloads
 set(CHROMEOVER OFF CACHE BOOL "Build for Chromeover customers")
@@ -144,6 +143,7 @@ set_target_properties(tests PROPERTIES AUTOMOC ON)
 
 # Platform-specific build configuration
 if(WIN32)
+  include(infra/gdisk.cmake)
   if(NOT ${WIN32_CONSOLE})
     set_target_properties(cloudready-usb-maker PROPERTIES WIN32_EXECUTABLE ON)
   endif()
