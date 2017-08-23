@@ -1,11 +1,4 @@
 
-cmake_minimum_required(VERSION 3.4)
-project(gdisk)
-
-#include_directories(${CMAKE_CURRENT_SOURCE_DIR}/gdisk)
-#file(GLOB gdisk_sources "${CMAKE_CURRENT_SOURCE_DIR}/gdisk/*.cc")
-#add_library(gdisk STATIC ${gdisk_sources})
-
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/gdisk)
 add_library(gdisk STATIC
   gdisk/basicmbr.cc
