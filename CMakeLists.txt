@@ -143,6 +143,7 @@ set_target_properties(tests PROPERTIES AUTOMOC ON)
 
 # Platform-specific build configuration
 if(WIN32)
+  include(infra/gdisk.cmake)
   if(NOT ${WIN32_CONSOLE})
     set_target_properties(cloudready-usb-maker PROPERTIES WIN32_EXECUTABLE ON)
   endif()
@@ -150,6 +151,7 @@ if(WIN32)
   fix_qt_static_link(app)
 
   target_link_libraries(app PRIVATE setupapi)
+  target_link_libraries(app PRIVATE gdisk)
   target_sources(app PRIVATE src/gondar.cc)
   target_sources(cloudready-usb-maker PRIVATE resources/gondar.rc)
 else()

@@ -38,8 +38,10 @@
 
 #include "hdd_vs_ufd.h"
 
-// kendall specialz
+// gondar-level includes
 #include "device.h"
+#include "gpt_pal.h"
+#include "log.h"
 #include "shared.h"
 
 static ssize_t size_t_to_signed(const size_t value) {
@@ -2286,7 +2288,15 @@ bool Install(DeviceGuy* target_device,
   uint64_t device_num = target_device->device_num;
   uint64_t sector_size = GetSectorSize(device_num);
   uint64_t drive_size = GetDriveSize(device_num);
+  // FIXME: this is a leak
   char* physical_path = GetPhysicalName(device_num);
+  LOG_INFO << "using physical_path=" << physical_path;
+  if (!clearMbrGpt(physical_path)) {
+    LOG_WARNING << "error clearing mbr/gpt";
+    // The operation is unlikely to succeed if there was an error cleaning gpt
+    return false;
+  }
+  LOG_INFO << "success clearing mbr/gpt";
   HANDLE phys_handle = GetHandle(physical_path, true, true, false);
   // HANDLE phys_handle = GetHandle(physical_path, true, true, true);
   // ^ i have not noticed any difference in behavior whether we share or not
