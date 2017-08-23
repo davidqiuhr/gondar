@@ -27,10 +27,13 @@ add_library(gdisk STATIC
   gdisk/crc32.cc
   gdisk/parttypes.cc
   gdisk/attributes.cc
-  gdisk/diskio.cc)
+  gdisk/diskio.cc
+  src/gpt_pal.cc)
 
 target_compile_options(gdisk PRIVATE
   -D_FILE_OFFSET_BITS=64)
+
+target_compile_options(gdisk PRIVATE -Wno-shadow)
 
 target_include_directories(gdisk PUBLIC gdisk)
 target_link_libraries(gdisk rpcrt4)
