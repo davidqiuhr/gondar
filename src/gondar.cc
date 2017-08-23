@@ -2294,8 +2294,13 @@ bool clearMbrGpt(char * physical_path) {
   gptdata.MakeProtectiveMBR();
   int quiet = true;
   gptdata.SaveGPTData(quiet);
-  LOG_INFO << "problems with gpt after reformat=" << gptdata.Verify() << std::endl;
-  return true;
+  int problems = gptdata.Verify();
+  LOG_INFO << "problems with gpt after reformat=" << problems << std::endl;
+  if (problems > 0) {
+    return false;
+  } else {
+    return true;
+  }
 }
 
 bool Install(DeviceGuy* target_device,
@@ -2308,9 +2313,11 @@ bool Install(DeviceGuy* target_device,
   char* physical_path = GetPhysicalName(device_num);
   printf("using physical_path=%s\n", physical_path);
   if (!clearMbrGpt(physical_path)) {
-    printf("error clearing mbr/gpt\n");
+    LOG_WARNING << "error clearing mbr/gpt" << std::endl;
+    // The operation is unlikely to succeed if there was an error cleaning gpt
+    return false;
   } else {
-    printf("success clearing mbr/gpt\n");
+    LOG_INFO << "success clearing mbr/gpt" << std::endl;
   }
   HANDLE phys_handle = GetHandle(physical_path, true, true, false);
   // HANDLE phys_handle = GetHandle(physical_path, true, true, true);
