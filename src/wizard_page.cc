@@ -24,7 +24,6 @@ WizardPage::WizardPage(QWidget* parent) : QWidget(parent) {
   layout_.addWidget(&header_);
   layout_.addWidget(&center_, 1);
   setEmptyMargins(&layout_);
-  setContentsMargins(0, 0, 0, 0);
   QWidget::setLayout(&layout_);
 }
 
@@ -46,6 +45,7 @@ GondarWizard* WizardPage::wizard() const {
 }
 
 void WizardPage::setLayout(QLayout* layout) {
+  setDefaultMargins(layout);
   center_.setLayout(layout);
 }
 
