@@ -130,7 +130,7 @@ target_compile_options(app PRIVATE ${EXTRA_WARNINGS})
 target_include_directories(app SYSTEM PUBLIC minizip plog/include)
 target_include_directories(app PRIVATE ${CMAKE_BINARY_DIR}/src)
 target_link_libraries(app PUBLIC
-  Qt5::Network Qt5::Widgets minizip minizip_extra gdisk)
+  Qt5::Network Qt5::Widgets minizip minizip_extra)
 
 # Gondar application
 add_executable(cloudready-usb-maker src/main.cc)
@@ -151,6 +151,7 @@ if(WIN32)
   fix_qt_static_link(app)
 
   target_link_libraries(app PRIVATE setupapi)
+  target_link_libraries(app PRIVATE gdisk)
   target_sources(app PRIVATE src/gondar.cc)
   target_sources(cloudready-usb-maker PRIVATE resources/gondar.rc)
 else()
