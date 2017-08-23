@@ -4,3 +4,7 @@
 [submodule "plog"]
 	path = plog
 	url = git@github.com:SergiusTheBest/plog.git
+[submodule "gdisk"]
+	path = gdisk
+	url = ssh://git@github.com/neverware/gdisk
+	branch = debian-copy
