@@ -2316,9 +2316,8 @@ bool Install(DeviceGuy* target_device,
     LOG_WARNING << "error clearing mbr/gpt" << std::endl;
     // The operation is unlikely to succeed if there was an error cleaning gpt
     return false;
-  } else {
-    LOG_INFO << "success clearing mbr/gpt" << std::endl;
   }
+  LOG_INFO << "success clearing mbr/gpt" << std::endl;
   HANDLE phys_handle = GetHandle(physical_path, true, true, false);
   // HANDLE phys_handle = GetHandle(physical_path, true, true, true);
   // ^ i have not noticed any difference in behavior whether we share or not
