@@ -112,6 +112,7 @@ add_library(app STATIC
   src/error_page.cc
   src/gondarsite.cc
   src/gondarwizard.cc
+  src/gpt_pal.cc
   src/image_select_page.cc
   src/log.cc
   src/meepo.cc
