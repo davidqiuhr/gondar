@@ -38,9 +38,10 @@
 
 #include "hdd_vs_ufd.h"
 
-// kendall specialz
+// gondar-level includes
 #include "device.h"
 #include "shared.h"
+#include "log.h"
 
 // We use gdisk to clean up the GPT such that Windows is happy writing to
 // the disk
@@ -2288,12 +2289,12 @@ bool clearMbrGpt(char * physical_path) {
   std::string physical_path_str(physical_path);
   GPTData gptdata(physical_path_str);
   // let's get some before/after data on the state of the gpt
-  printf("problems with gpt before reformat=%d\n", gptdata.Verify());
+  LOG_INFO << "problems with gpt before reformat=" << gptdata.Verify() << std::endl;
   gptdata.ClearGPTData();
   gptdata.MakeProtectiveMBR();
   int quiet = true;
   gptdata.SaveGPTData(quiet);
-  printf("problems with gpt after reformat=%d\n", gptdata.Verify());
+  LOG_INFO << "problems with gpt after reformat=" << gptdata.Verify() << std::endl;
   return true;
 }
 
