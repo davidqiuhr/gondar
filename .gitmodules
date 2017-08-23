@@ -7,4 +7,3 @@
 [submodule "gdisk"]
 	path = gdisk
 	url = https://git.code.sf.net/p/gptfdisk/code
-	branch = 846a9e30cda88f75369d175f2f549cad3ea15db2
