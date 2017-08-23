@@ -2292,11 +2292,11 @@ bool Install(DeviceGuy* target_device,
   char* physical_path = GetPhysicalName(device_num);
   printf("using physical_path=%s\n", physical_path);
   if (!clearMbrGpt(physical_path)) {
-    LOG_WARNING << "error clearing mbr/gpt" << std::endl;
+    LOG_WARNING << "error clearing mbr/gpt";
     // The operation is unlikely to succeed if there was an error cleaning gpt
     return false;
   }
-  LOG_INFO << "success clearing mbr/gpt" << std::endl;
+  LOG_INFO << "success clearing mbr/gpt";
   HANDLE phys_handle = GetHandle(physical_path, true, true, false);
   // HANDLE phys_handle = GetHandle(physical_path, true, true, true);
   // ^ i have not noticed any difference in behavior whether we share or not
