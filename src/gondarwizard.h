@@ -42,6 +42,8 @@ class Wizard : public QDialog {
  public:
   explicit Wizard(QWidget* parent = nullptr);
 
+  ~Wizard();
+
   void next();
 
  signals:
@@ -56,6 +58,9 @@ class Wizard : public QDialog {
   void setPage(int id, WizardPage* page);
   void setStartId(int id);
 
+ private:
+  class Private;
+  std::unique_ptr<Private> p_;
 };
 }  // gondar
 

@@ -14,17 +14,51 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "wizard_page.h"
+
 #include "gondarwizard.h"
+#include "util.h"
 
 namespace gondar {
 
-WizardPage::WizardPage(QWidget* parent) : QWizardPage(parent) {}
+WizardPage::WizardPage(QWidget* parent) : QWidget(parent) {
+  layout_.addWidget(&header_);
+  layout_.addWidget(&center_, 1);
+  setEmptyMargins(&layout_);
+  setContentsMargins(0, 0, 0, 0);
+  QWidget::setLayout(&layout_);
+}
+
+int WizardPage::nextId() const {
+  return -1;
+}
+
+void WizardPage::setWizard(GondarWizard* wizard) {
+  wizard_ = wizard;
+}
+
+void WizardPage::initializePage() {
+  // Allow the header to bleed to the edges of the dialog
+  parentWidget()->setContentsMargins(0, 0, 0, 0);
+}
 
 GondarWizard* WizardPage::wizard() const {
-  QWizard* base_wiz = QWizardPage::wizard();
-  Q_ASSERT(base_wiz);
-  GondarWizard* gee_wiz = dynamic_cast<GondarWizard*>(base_wiz);
-  Q_ASSERT(gee_wiz);
-  return gee_wiz;
+  return wizard_;
 }
+
+void WizardPage::setLayout(QLayout* layout) {
+  center_.setLayout(layout);
+}
+
+void WizardPage::setButtonText(QWizard::WizardButton button,
+                               const QString& text) {}
+
+void WizardPage::setTitle(const QString& text) {
+  header_.setTitle(text);
+}
+void WizardPage::setSubTitle(const QString& text) {
+  header_.setSubtitle(text);
+}
+
+bool WizardPage::isComplete() const {}
+bool WizardPage::validatePage() {}
 }

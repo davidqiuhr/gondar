@@ -121,6 +121,7 @@ add_library(app STATIC
   src/unzipthread.cc
   src/usb_insert_page.cc
   src/util.cc
+  src/wizard_header.cc
   src/wizard_page.cc
   src/write_operation_page.cc)
 

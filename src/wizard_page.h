@@ -16,7 +16,10 @@
 #ifndef SRC_WIZARD_PAGE_H_
 #define SRC_WIZARD_PAGE_H_
 
+#include <QVBoxLayout>
 #include <QWizard>
+
+#include "wizard_header.h"
 
 class GondarWizard;
 
@@ -29,13 +32,37 @@ namespace gondar {
 // The one minor piece of functionality it provides is that wizard()
 // returns GondarWizard directly, rather than a generic QWizard
 // pointer.
-class WizardPage : public QWizardPage {
+class WizardPage : public QWidget {
   Q_OBJECT
 
  public:
   explicit WizardPage(QWidget* parent = nullptr);
 
+  virtual int nextId() const;
+
+  void setWizard(GondarWizard* wizard);
+
+ signals:
+  void completeChanged();
+
+ protected:
   GondarWizard* wizard() const;
+
+  void setButtonText(QWizard::WizardButton button, const QString& text);
+  void setLayout(QLayout* layout);
+  void setTitle(const QString& text);
+  void setSubTitle(const QString& text);
+
+  virtual void initializePage();
+  virtual bool isComplete() const;
+  virtual bool validatePage();
+
+ private:
+  GondarWizard* wizard_ = nullptr;
+
+  QVBoxLayout layout_;
+  WizardHeader header_;
+  QWidget center_;
 };
 }
 

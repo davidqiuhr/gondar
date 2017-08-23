@@ -10,3 +10,14 @@ ImageSelectPage QLabel {
     /* Add extra space to visually separate the options */
     margin-bottom: 12px;
 }
+
+gondar--WizardHeader {
+    background-color: white;
+    min-width: 640px;
+    min-height: 5.5em;
+    max-height: 5.5em;
+}
+
+gondar--WizardHeader #title {
+    font-weight: bold;
+}

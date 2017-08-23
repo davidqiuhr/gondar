@@ -15,6 +15,7 @@
 
 #include "gondarwizard.h"
 
+#include <QStackedLayout>
 #include <QTimer>
 
 #include "about_dialog.h"
@@ -27,18 +28,35 @@
 #include "site_select_page.h"
 
 namespace gondar {
-Wizard::Wizard(QWidget* parent) : QDialog(parent) {}
+class Wizard::Private {
+ public:
+  QVBoxLayout layout;
+  QStackedLayout stackedLayout;
+};
+
+Wizard::Wizard(QWidget* parent) : QDialog(parent), p_(new Private()) {
+  p_->layout.addLayout(&p_->stackedLayout);
+  // p_->layout.addWidget(
+  setLayout(&p_->layout);
+  setEmptyMargins(&p_->layout);
+}
+
+Wizard::~Wizard() {}
 
 void Wizard::next() {}
 
 int Wizard::currentId() const {}
 int Wizard::nextId() const {}
 
-void Wizard::restart() {}
+void Wizard::restart() {
+  p_->stackedLayout.setCurrentIndex(0);
+}
 
 void Wizard::setButtonLayout(const QList<QWizard::WizardButton>& layout) {}
 void Wizard::setButtonText(QWizard::WizardButton which, const QString& text) {}
-void Wizard::setPage(int id, WizardPage* page) {}
+void Wizard::setPage(int id, WizardPage* page) {
+  p_->stackedLayout.addWidget(page);
+}
 void Wizard::setStartId(int id) {}
 
 }  // namespace gondar
@@ -90,6 +108,8 @@ GondarWizard::GondarWizard(QWidget* parent)
           &GondarWizard::handleCustomButton);
 
   p_->runTime = QDateTime::currentDateTime();
+
+  restart();
 }
 
 GondarWizard::~GondarWizard() {}

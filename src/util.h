@@ -16,14 +16,26 @@
 #ifndef SRC_UTIL_H_
 #define SRC_UTIL_H_
 
+#include <QFrame>
 #include <QString>
 
+class QLayout;
+
 namespace gondar {
+
+class HorizontalLine : public QFrame {
+ public:
+  HorizontalLine();
+};
 
 // Read the contents of |filepath| and decode as UTF-8. Throws an
 // exception on failure.
 QString readUtf8File(const QString& filepath);
 bool isChromeover();
+
+void setEmptyMargins(QLayout* layout);
+
+void setDefaultMargins(QLayout* layout);
 
 }  // namespace gondar
 
