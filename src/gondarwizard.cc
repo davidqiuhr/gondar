@@ -15,6 +15,8 @@
 
 #include "gondarwizard.h"
 
+#include <map>
+
 #include <QStackedLayout>
 #include <QTimer>
 
@@ -30,8 +32,11 @@
 namespace gondar {
 class Wizard::Private {
  public:
+  int startId = -1;
+  int currentId = -1;
   QVBoxLayout layout;
   QStackedLayout stackedLayout;
+  std::map<int, WizardPage*> pages;
 };
 
 Wizard::Wizard(QWidget* parent) : QDialog(parent), p_(new Private()) {
@@ -43,21 +48,52 @@ Wizard::Wizard(QWidget* parent) : QDialog(parent), p_(new Private()) {
 
 Wizard::~Wizard() {}
 
-void Wizard::next() {}
+void Wizard::goToPage(const int id) {
+  auto* page = p_->pages[id];
+  page->initializePage();
+  p_->stackedLayout.setCurrentWidget(page);
+  p_->currentId = id;
+}
+
+void Wizard::next() {
+  goToPage(nextId());
+}
 
 int Wizard::currentId() const {}
-int Wizard::nextId() const {}
+
+int Wizard::nextId() const {
+  if (p_->currentId == -1) {
+    return p_->startId;
+  } else {
+    throw std::runtime_error("not implemented");
+  }
+}
 
 void Wizard::restart() {
-  p_->stackedLayout.setCurrentIndex(0);
+  p_->currentId = -1;
+  next();
 }
 
 void Wizard::setButtonLayout(const QList<QWizard::WizardButton>& layout) {}
 void Wizard::setButtonText(QWizard::WizardButton which, const QString& text) {}
 void Wizard::setPage(int id, WizardPage* page) {
+  if (id < 0) {
+    throw std::runtime_error("negative page ID");
+  }
   p_->stackedLayout.addWidget(page);
+  p_->pages[id] = page;
+
+  if (p_->startId == -1) {
+    p_->startId = id;
+  }
+
+  if (p_->currentId == -1) {
+    next();
+  }
 }
-void Wizard::setStartId(int id) {}
+void Wizard::setStartId(int id) {
+  p_->startId = id;
+}
 
 }  // namespace gondar
 
@@ -108,8 +144,6 @@ GondarWizard::GondarWizard(QWidget* parent)
           &GondarWizard::handleCustomButton);
 
   p_->runTime = QDateTime::currentDateTime();
-
-  restart();
 }
 
 GondarWizard::~GondarWizard() {}

@@ -44,6 +44,7 @@ class Wizard : public QDialog {
 
   ~Wizard();
 
+  void goToPage(int id);
   void next();
 
  signals:

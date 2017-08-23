@@ -38,6 +38,7 @@ class WizardPage : public QWidget {
  public:
   explicit WizardPage(QWidget* parent = nullptr);
 
+  virtual void initializePage();
   virtual int nextId() const;
 
   void setWizard(GondarWizard* wizard);
@@ -53,7 +54,6 @@ class WizardPage : public QWidget {
   void setTitle(const QString& text);
   void setSubTitle(const QString& text);
 
-  virtual void initializePage();
   virtual bool isComplete() const;
   virtual bool validatePage();
 
