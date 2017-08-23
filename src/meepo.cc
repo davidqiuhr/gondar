@@ -22,6 +22,7 @@
 #include <QUrl>
 #include <QUrlQuery>
 
+#include "config.h"
 #include "gondarsite.h"
 #include "log.h"
 
@@ -33,7 +34,13 @@ const char path_downloads[] = "/downloads";
 
 // TODO(nicholasbishop): this is hardcoded to the staging URL for now
 QUrl createUrl(const QString& path) {
+#ifdef RELEASE
+  LOG_INFO << "Using release licensing endpoint";
+  return QUrl("https://api.neverware.com/poof" + path);
+#else
+  LOG_INFO << "Using dev licensing endpoint";
   return QUrl("https://api.grv.neverware.com/poof" + path);
+#endif
 }
 
 QString redactedUrl(QUrl url) {
