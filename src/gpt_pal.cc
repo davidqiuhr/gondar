@@ -22,7 +22,7 @@
 bool clearMbrGpt(const char* physical_path) {
   std::string physical_path_str(physical_path);
   GPTData gptdata(physical_path_str);
-  // let's get some before/after data on the state of the gpt
+  // attempt to fix any gpt/mbr problems by setting to a sane, empty state
   gptdata.ClearGPTData();
   gptdata.MakeProtectiveMBR();
   int quiet = true;
