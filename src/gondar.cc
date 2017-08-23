@@ -2288,12 +2288,12 @@ bool clearMbrGpt(char * physical_path) {
   std::string physical_path_str(physical_path);
   GPTData gptdata(physical_path_str);
   // let's get some before/after data on the state of the gpt
-  printf("problems with gpt before=%d\n", gptdata.Verify());
+  printf("problems with gpt before reformat=%d\n", gptdata.Verify());
   gptdata.ClearGPTData();
   gptdata.MakeProtectiveMBR();
   int quiet = true;
   gptdata.SaveGPTData(quiet);
-  printf("problems with gpt after=%d\n", gptdata.Verify());
+  printf("problems with gpt after reformat=%d\n", gptdata.Verify());
   return true;
 }
 
