@@ -2290,7 +2290,7 @@ bool Install(DeviceGuy* target_device,
   uint64_t drive_size = GetDriveSize(device_num);
   // FIXME: this is a leak
   char* physical_path = GetPhysicalName(device_num);
-  printf("using physical_path=%s\n", physical_path);
+  LOG_INFO << "using physical_path=" << physical_path;
   if (!clearMbrGpt(physical_path)) {
     LOG_WARNING << "error clearing mbr/gpt";
     // The operation is unlikely to succeed if there was an error cleaning gpt
