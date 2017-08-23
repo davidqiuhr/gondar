@@ -1,6 +1,6 @@
 FROM neverware/gondar-build-mxe:v3
 
-ENV TREAT_WARNINGS_AS_ERRORS=false
+ENV TREAT_WARNINGS_AS_ERRORS=true
 
 ADD CMakeLists.txt Makefile /opt/gondar/
 ADD infra /opt/gondar/infra
