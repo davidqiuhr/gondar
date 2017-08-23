@@ -32,7 +32,6 @@ const char path_auth[] = "/auth";
 const char path_sites[] = "/sites";
 const char path_downloads[] = "/downloads";
 
-// TODO(nicholasbishop): this is hardcoded to the staging URL for now
 QUrl createUrl(const QString& path) {
 #ifdef RELEASE
   LOG_INFO << "Using release licensing endpoint";
