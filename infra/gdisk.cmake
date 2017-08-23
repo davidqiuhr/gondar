@@ -15,19 +15,19 @@
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/gdisk)
 add_library(gdisk STATIC
+  gdisk/attributes.cc
   gdisk/basicmbr.cc
   gdisk/bsd.cc
+  gdisk/crc32.cc
+  gdisk/diskio.cc
   gdisk/diskio-windows.cc
-  gdisk/support.cc
-  gdisk/guid.cc
   gdisk/gpt.cc
   gdisk/gptpart.cc
-  gdisk/mbrpart.cc
+  gdisk/guid.cc
   gdisk/mbr.cc
-  gdisk/crc32.cc
+  gdisk/mbrpart.cc
   gdisk/parttypes.cc
-  gdisk/attributes.cc
-  gdisk/diskio.cc
+  gdisk/support.cc
   src/gpt_pal.cc)
 
 target_compile_options(gdisk PRIVATE
