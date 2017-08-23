@@ -17,6 +17,7 @@ cmake_minimum_required(VERSION 3.4)
 project(gondar)
 
 include(infra/gondar.cmake)
+include(infra/gdisk.cmake)
 
 # Choose between free and paid product downloads
 set(CHROMEOVER OFF CACHE BOOL "Build for Chromeover customers")
@@ -124,8 +125,6 @@ add_library(app STATIC
   src/util.cc
   src/wizard_page.cc
   src/write_operation_page.cc)
-
-add_subdirectory(gdisk)
 
 set_target_properties(app PROPERTIES AUTOMOC ON AUTORCC ON)
 target_compile_options(app PRIVATE ${EXTRA_WARNINGS})
