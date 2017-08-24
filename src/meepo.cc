@@ -25,6 +25,7 @@
 #include "config.h"
 #include "gondarsite.h"
 #include "log.h"
+#include "util.h"
 
 namespace {
 
@@ -33,13 +34,13 @@ const char path_sites[] = "/sites";
 const char path_downloads[] = "/downloads";
 
 QUrl createUrl(const QString& path) {
-#ifdef RELEASE
-  LOG_INFO << "Using release licensing endpoint";
-  return QUrl("https://api.neverware.com/poof" + path);
-#else
-  LOG_INFO << "Using dev licensing endpoint";
-  return QUrl("https://api.grv.neverware.com/poof" + path);
-#endif
+  if (gondar::isRelease()) {
+    LOG_INFO << "Using release licensing endpoint";
+    return QUrl("https://api.neverware.com/poof" + path);
+  } else {
+    LOG_INFO << "Using dev licensing endpoint";
+    return QUrl("https://api.grv.neverware.com/poof" + path);
+  }
 }
 
 QString redactedUrl(QUrl url) {

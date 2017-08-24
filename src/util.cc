@@ -41,4 +41,12 @@ bool isChromeover() {
 #endif
 }
 
+bool isRelease() {
+#ifdef RELEASE
+  return true;
+#else
+  return false;
+#endif
+}
+
 }  // namespace gondar

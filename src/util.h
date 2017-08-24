@@ -24,6 +24,7 @@ namespace gondar {
 // exception on failure.
 QString readUtf8File(const QString& filepath);
 bool isChromeover();
+bool isRelease();
 
 }  // namespace gondar
 
