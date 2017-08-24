@@ -21,6 +21,9 @@ include(infra/gondar.cmake)
 # Choose between free and paid product downloads
 set(CHROMEOVER OFF CACHE BOOL "Build for Chromeover customers")
 
+# Whether the build is release (console, grv.neverware.com, etc.)
+set(RELEASE OFF CACHE BOOL "Release build")
+
 # This is for the builders, to make sure new warnings don't creep in
 set(TREAT_WARNINGS_AS_ERRORS OFF CACHE BOOL "Compile with -Werror")
 
