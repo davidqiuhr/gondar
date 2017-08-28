@@ -50,7 +50,7 @@ void NewestImageUrl::handleReply(QNetworkReply* reply) {
   } else {
     sixtyFourUrl = url;
   }
-  LOG_INFO << "using latest url: " << url.toString();
+  LOG_INFO << "using latest url: " << url;
   reply->deleteLater();
 }
 

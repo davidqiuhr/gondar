@@ -28,6 +28,11 @@ namespace plog {
 void operator<<(util::nstringstream& stream, const DeviceGuy& device) {
   stream << device.toString().c_str();
 }
+
+void operator<<(util::nstringstream& stream, const QUrl& url) {
+  const auto bytes = url.toString().toUtf8();
+  stream << bytes.data();
+}
 }  // namespace plog
 
 namespace gondar {
