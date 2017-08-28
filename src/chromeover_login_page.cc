@@ -24,7 +24,7 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
   setSubTitle("Enter credentials for my.neverware.com.");
   // configure username fields
   usernameLineEditLabel.setBuddy(&usernameLineEdit);
-  usernameLineEditLabel.setText("Username:");
+  usernameLineEditLabel.setText("Email:");
   layout.addWidget(&usernameLineEditLabel, 0, 0);
   layout.addWidget(&usernameLineEdit, 0, 1);
   // configure password fields
