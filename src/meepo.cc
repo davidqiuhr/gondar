@@ -45,8 +45,6 @@ QUrl createUrl(const QString& path) {
 
 QString redactedUrl(QUrl url) {
   QUrlQuery query(url);
-  query.removeQueryItem("password");
-  query.removeQueryItem("token");
   url.setQuery(query);
   return url.toString();
 }
@@ -80,16 +78,13 @@ int siteIdFromUrl(const QUrl& url) {
   return site_id;
 }
 
-QNetworkRequest createAuthRequest(const QAuthenticator& auth) {
+QNetworkRequest createAuthRequest(QByteArray postDataSize) {
   auto url = createUrl(path_auth);
-  QUrlQuery query;
-  query.addQueryItem("email", auth.user());
-  query.addQueryItem("password", auth.password());
-  url.setQuery(query);
-
   QNetworkRequest request(url);
   request.setHeader(QNetworkRequest::ContentTypeHeader,
                     "application/x-www-form-urlencoded");
+  request.setRawHeader("Content-Type", "application/json");
+  request.setRawHeader("Content-Length", postDataSize);
 
   return request;
 }
@@ -163,9 +158,17 @@ Meepo::Sites Meepo::sites() const {
 }
 
 void Meepo::requestAuth(const QAuthenticator& auth) {
-  const auto request = createAuthRequest(auth);
+  // TODO: sanitize?
+  QString credsJson = "{\"email\":\""
+                          + auth.user()
+                          + "\",\"password\":\""
+                          + auth.password()
+                          + "\"}";
+  QByteArray postData = credsJson.toUtf8();
+  QByteArray postDataSize = QByteArray::number(postData.size());
+  auto request = createAuthRequest(postDataSize);
   LOG_INFO << "POST " << redactedUrl(request.url());
-  network_manager_.post(request, QByteArray());
+  network_manager_.post(request, postData);
 }
 
 void Meepo::handleAuthReply(QNetworkReply* reply) {
