@@ -72,14 +72,11 @@ int siteIdFromUrl(const QUrl& url) {
   return site_id;
 }
 
-QNetworkRequest createAuthRequest(QByteArray postDataSize) {
+QNetworkRequest createAuthRequest() {
   auto url = createUrl(path_auth);
   QNetworkRequest request(url);
   request.setHeader(QNetworkRequest::ContentTypeHeader,
-                    "application/x-www-form-urlencoded");
-  request.setRawHeader("Content-Type", "application/json");
-  request.setRawHeader("Content-Length", postDataSize);
-
+                    "application/json");
   return request;
 }
 
@@ -159,8 +156,7 @@ void Meepo::requestAuth(const QAuthenticator& auth) {
                           + auth.password()
                           + "\"}";
   QByteArray postData = credsJson.toUtf8();
-  QByteArray postDataSize = QByteArray::number(postData.size());
-  auto request = createAuthRequest(postDataSize);
+  auto request = createAuthRequest();
   LOG_INFO << "POST " << request.url().toString();
   network_manager_.post(request, postData);
 }
