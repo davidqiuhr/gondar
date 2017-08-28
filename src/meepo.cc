@@ -153,10 +153,9 @@ void Meepo::requestAuth(const QAuthenticator& auth) {
   json["email"] = auth.user();
   json["password"] = auth.password();
   QJsonDocument doc(json);
-  QString strJson(doc.toJson(QJsonDocument::Compact));
   auto request = createAuthRequest();
   LOG_INFO << "POST " << request.url().toString();
-  network_manager_.post(request, strJson.toUtf8());
+  network_manager_.post(request, doc.toJson(QJsonDocument::Compact));
 }
 
 void Meepo::handleAuthReply(QNetworkReply* reply) {
