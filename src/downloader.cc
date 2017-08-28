@@ -69,7 +69,7 @@ void DownloadManager::startNextDownload() {
 
   if (!output.open(QIODevice::WriteOnly)) {
     LOG_ERROR << "failed to open " << filename << ": " << output.errorString();
-    LOG_ERROR << "skipping download of " << url.toString();
+    LOG_ERROR << "skipping download of " << url;
     startNextDownload();
     return;  // skip this download
   }
@@ -84,7 +84,7 @@ void DownloadManager::startNextDownload() {
   emit started();
 
   // prepare the output
-  LOG_INFO << "downloading " << url.toString();
+  LOG_INFO << "downloading " << url;
   downloadTime.start();
 }
 

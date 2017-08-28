@@ -16,9 +16,10 @@
 #ifndef LOG_H
 #define LOG_H
 
-// Qt header first to ensure that the plog internal ifdefs enable Qt
+// Qt headers first to ensure that the plog internal ifdefs enable Qt
 // support
 #include <QString>
+#include <QUrl>
 
 #include "plog/Log.h"
 
@@ -26,6 +27,7 @@ class DeviceGuy;
 
 namespace plog {
 void operator<<(util::nstringstream& stream, const DeviceGuy& device);
+void operator<<(util::nstringstream& stream, const QUrl& url);
 }  // namespace plog
 
 namespace gondar {
