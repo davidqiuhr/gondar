@@ -149,16 +149,14 @@ Meepo::Sites Meepo::sites() const {
 }
 
 void Meepo::requestAuth(const QAuthenticator& auth) {
-  // TODO: sanitize?
-  QString credsJson = "{\"email\":\""
-                          + auth.user()
-                          + "\",\"password\":\""
-                          + auth.password()
-                          + "\"}";
-  QByteArray postData = credsJson.toUtf8();
+  QJsonObject json;
+  json["email"] = auth.user();
+  json["password"] = auth.password();
+  QJsonDocument doc(json);
+  QString strJson(doc.toJson(QJsonDocument::Compact));
   auto request = createAuthRequest();
   LOG_INFO << "POST " << request.url().toString();
-  network_manager_.post(request, postData);
+  network_manager_.post(request, strJson.toUtf8());
 }
 
 void Meepo::handleAuthReply(QNetworkReply* reply) {
