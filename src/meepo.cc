@@ -43,25 +43,19 @@ QUrl createUrl(const QString& path) {
   }
 }
 
-QString redactedUrl(QUrl url) {
-  QUrlQuery query(url);
-  url.setQuery(query);
-  return url.toString();
-}
-
 int siteIdFromUrl(const QUrl& url) {
   const auto path = url.path();
   const auto parts = path.split('/');
   const auto sites_index = parts.lastIndexOf("sites");
 
   if (sites_index == -1) {
-    LOG_ERROR << "failed to find 'sites' in " << redactedUrl(url);
+    LOG_ERROR << "failed to find 'sites' in " << url.toString();
     return -1;
   }
 
   const auto site_id_index = sites_index + 1;
   if (site_id_index >= parts.size()) {
-    LOG_ERROR << "url ended without a site ID: " << redactedUrl(url);
+    LOG_ERROR << "url ended without a site ID: " << url.toString();
     return -1;
   }
 
@@ -71,7 +65,7 @@ int siteIdFromUrl(const QUrl& url) {
   const auto site_id = site_id_str.toInt(&ok);
 
   if (!ok) {
-    LOG_ERROR << "site ID is not an integer: " << redactedUrl(url);
+    LOG_ERROR << "site ID is not an integer: " << url.toString();
     return -1;
   }
 
@@ -167,7 +161,7 @@ void Meepo::requestAuth(const QAuthenticator& auth) {
   QByteArray postData = credsJson.toUtf8();
   QByteArray postDataSize = QByteArray::number(postData.size());
   auto request = createAuthRequest(postDataSize);
-  LOG_INFO << "POST " << redactedUrl(request.url());
+  LOG_INFO << "POST " << request.url().toString();
   network_manager_.post(request, postData);
 }
 
@@ -185,7 +179,7 @@ void Meepo::handleAuthReply(QNetworkReply* reply) {
 
 void Meepo::requestSites() {
   const auto request = createSitesRequest(api_token_);
-  LOG_INFO << "GET " << redactedUrl(request.url());
+  LOG_INFO << "GET " << request.url().toString();
   network_manager_.get(request);
 }
 
@@ -202,7 +196,7 @@ void Meepo::handleSitesReply(QNetworkReply* reply) {
 
 void Meepo::requestDownloads(const GondarSite& site) {
   const auto request = createDownloadsRequest(api_token_, site.getSiteId());
-  LOG_INFO << "GET " << redactedUrl(request.url());
+  LOG_INFO << "GET " << request.url().toString();
   network_manager_.get(request);
 }
 
@@ -254,7 +248,7 @@ void Meepo::dispatchReply(QNetworkReply* reply) {
 
   if (error != QNetworkReply::NoError) {
     // TODO(nicholasbishop): make this more readable
-    LOG_ERROR << "network error: " << redactedUrl(url) << ", error " << error;
+    LOG_ERROR << "network error: " << url.toString() << ", error " << error;
     // TODO(nicholasbishop): move the error handling into each of the
     // three handlers below so that errors can be more specific
     fail("network error");
