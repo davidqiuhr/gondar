@@ -207,22 +207,22 @@ void Meepo::handleDownloadsReply(QNetworkReply* reply) {
   }
 
   const auto jsonObj = jsonFromReply(reply);
-  QJsonObject downloadsObj = jsonObj["links"].toObject();
-  // for starters, let's just use use the cloudready product
-  QJsonValue downloadsValue = downloadsObj["CloudReady"];
-  QJsonArray downloadsArray = downloadsValue.toArray();
-  // for starters, let's just use "32-bit" and "64-bit" builds
-  for (int i = 0; i < downloadsArray.size(); i++) {
-    QJsonObject download = downloadsArray.at(i).toObject();
-    if (download["title"] == "64-Bit") {
-      QUrl url64(download["url"].toString());
-      site->set64Url(url64);
-    } else if (download["title"] == "32-Bit") {
-      QUrl url32(download["url"].toString());
-      site->set32Url(url32);
-    }
-  }
+  QJsonObject productsObj = jsonObj["links"].toObject();
+  QJsonDocument doc(productsObj);
+  QString productsStr(doc.toJson(QJsonDocument::Compact));
 
+  int productItr = 0;
+  for (QJsonValueRef product : productsObj) {
+    QJsonArray productArray = product.toArray();
+    QString curProduct = productsObj.keys().at(productItr);
+    for (int i = 0; i < productArray.size(); i++) {
+      QJsonObject curImage = productArray[i].toObject();
+      QString curImageName(curImage["title"].toString());
+      QUrl curUrl(curImage["url"].toString());
+      site->addImage(curProduct, curImageName, curUrl);
+    }
+    productItr++;
+  }
   sites_remaining_--;
 
   // see if we're done

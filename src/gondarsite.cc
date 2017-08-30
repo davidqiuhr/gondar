@@ -29,18 +29,10 @@ const QString& GondarSite::getSiteName() const {
   return siteName;
 }
 
-void GondarSite::set32Url(QUrl url) {
-  url32 = url;
+QList<GondarImage> GondarSite::getImages() const {
+  return imageList;
 }
-
-void GondarSite::set64Url(QUrl url) {
-  url64 = url;
-}
-
-QUrl GondarSite::get32Url() const {
-  return url32;
-}
-
-QUrl GondarSite::get64Url() const {
-  return url64;
+void GondarSite::addImage(QString product, QString imageName, QUrl url) {
+  GondarImage image(product, imageName, url);
+  imageList.append(image);
 }
