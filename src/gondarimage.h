@@ -19,9 +19,6 @@
 class GondarImage {
   public:
     GondarImage() {
-        this->product = QString("");
-        this->imageName = QString("");
-        this->url = QUrl();
     }
     GondarImage(QString productIn, QString imageNameIn, QUrl urlIn) {
         this->product = productIn;
