@@ -20,11 +20,10 @@ class GondarImage {
   public:
     GondarImage() {
     }
-    GondarImage(QString productIn, QString imageNameIn, QUrl urlIn) {
-        this->product = productIn;
-        this->imageName = imageNameIn;
-        this->url = urlIn;
-    }
+    GondarImage(QString productIn, QString imageNameIn, QUrl urlIn) : 
+        product(productIn), 
+        imageName(imageNameIn),
+        url(urlIn) { }
     QString getCompositeName() {
         return product + " " + imageName;
     }
