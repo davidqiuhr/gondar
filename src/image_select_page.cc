@@ -23,7 +23,7 @@
 
 class DownloadButton : public QRadioButton {
  public:
-  DownloadButton(QUrl& url_in) : url(url_in) { }
+  DownloadButton(QUrl& url_in) : url(url_in) {}
   QUrl getUrl() const { return url; }
 
  private:
@@ -35,7 +35,9 @@ ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
   setSubTitle(" ");
 
   thirtyTwo.setText("32-bit");
-  thirtyTwoDetails.setText("<a href=\"https://guide.neverware.com/supported-devices\">Only intended for certified models marked '32-bit Only'</a>");
+  thirtyTwoDetails.setText(
+      "<a href=\"https://guide.neverware.com/supported-devices\">Only intended "
+      "for certified models marked '32-bit Only'</a>");
   thirtyTwoDetails.setTextFormat(Qt::RichText);
   thirtyTwoDetails.setTextInteractionFlags(Qt::TextBrowserInteraction);
   thirtyTwoDetails.setOpenExternalLinks(true);
@@ -88,7 +90,7 @@ void ImageSelectPage::addImage(GondarImage image) {
     return;
   }
   // FIXME: leak
-  DownloadButton * newButton = new DownloadButton(image.url);
+  DownloadButton* newButton = new DownloadButton(image.url);
   newButton->setText(image.getCompositeName());
   bitnessButtons.addButton(newButton);
   layout.addWidget(newButton);
@@ -99,14 +101,14 @@ void ImageSelectPage::addImage(GondarImage image) {
 
 void ImageSelectPage::addImages(QList<GondarImage> images) {
   GondarImage curImage;
-  foreach(curImage, images) {
+  foreach (curImage, images) {
     // FIXME: 32-bit images should be last.  For the time being, this must be
     // handled on the Gondar side.
     if (!curImage.is32Bit()) {
       addImage(curImage);
     }
   }
-  foreach(curImage, images) {
+  foreach (curImage, images) {
     if (curImage.is32Bit()) {
       addImage(curImage);
     }
@@ -118,8 +120,8 @@ QUrl ImageSelectPage::getUrl() {
   QAbstractButton* selected = bitnessButtons.checkedButton();
   if (gondar::isChromeover()) {
     // for chromeover, use the download button's url attribute
-    DownloadButton * selected_download_button =
-        dynamic_cast<DownloadButton *>(selected);
+    DownloadButton* selected_download_button =
+        dynamic_cast<DownloadButton*>(selected);
     return selected_download_button->getUrl();
   } else {
     // for beerover, we had to wait on a url lookup and we consult newestImage

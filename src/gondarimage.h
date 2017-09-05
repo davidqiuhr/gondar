@@ -17,25 +17,18 @@
 #define GONDARIMAGE_H
 
 class GondarImage {
-  public:
-    GondarImage() {
-    }
-    GondarImage(QString productIn, QString imageNameIn, QUrl urlIn) : 
-        product(productIn), 
-        imageName(imageNameIn),
-        url(urlIn) { }
-    QString getCompositeName() {
-        return product + " " + imageName;
-    }
-    bool is32Bit() {
-        return imageName.contains("32-bit", Qt::CaseInsensitive);
-    }
-    bool isDeployable() {
-        return imageName.contains("deployable", Qt::CaseInsensitive);
-    }
-    QString product;
-    QString imageName;
-    QUrl url;
+ public:
+  GondarImage() {}
+  GondarImage(QString productIn, QString imageNameIn, QUrl urlIn)
+      : product(productIn), imageName(imageNameIn), url(urlIn) {}
+  QString getCompositeName() { return product + " " + imageName; }
+  bool is32Bit() { return imageName.contains("32-bit", Qt::CaseInsensitive); }
+  bool isDeployable() {
+    return imageName.contains("deployable", Qt::CaseInsensitive);
+  }
+  QString product;
+  QString imageName;
+  QUrl url;
 };
 
 #endif
