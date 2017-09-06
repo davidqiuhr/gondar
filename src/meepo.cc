@@ -207,8 +207,6 @@ void Meepo::handleDownloadsReply(QNetworkReply* reply) {
 
   const auto jsonObj = jsonFromReply(reply);
   QJsonObject productsObj = jsonObj["links"].toObject();
-  QJsonDocument doc(productsObj);
-  QString productsStr(doc.toJson(QJsonDocument::Compact));
 
   int productItr = 0;
   for (QJsonValueRef product : productsObj) {
