@@ -35,17 +35,17 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
   meanWordsLabel.setText("That's not right!  Try again.");
   QString forgotText = "<a href=\"https://my." + gondar::getDomain() +
                        "/forgot-password\">Forgot your password?</a>";
-  frogotLabel.setText(forgotText);
-  frogotLabel.setTextFormat(Qt::RichText);
-  frogotLabel.setTextInteractionFlags(Qt::TextBrowserInteraction);
-  frogotLabel.setOpenExternalLinks(true);
+  forgotLabel.setText(forgotText);
+  forgotLabel.setTextFormat(Qt::RichText);
+  forgotLabel.setTextInteractionFlags(Qt::TextBrowserInteraction);
+  forgotLabel.setOpenExternalLinks(true);
   meanWordsLabel.setObjectName("loginError");
   layout.addWidget(&passwordLineEditLabel, 1, 0);
   layout.addWidget(&passwordLineEdit, 1, 1);
   layout.addWidget(&meanWordsLabel, 2, 0, 1, 2);
-  layout.addWidget(&frogotLabel, 3, 0, 1, 2);
+  layout.addWidget(&forgotLabel, 3, 0, 1, 2);
   meanWordsLabel.setVisible(false);
-  frogotLabel.setVisible(false);
+  forgotLabel.setVisible(false);
   setLayout(&layout);
   // don't allow progressing to next page yet
   finished = false;
@@ -99,6 +99,6 @@ void ChromeoverLoginPage::handleMeepoFinished() {
   } else {
     started = false;
     meanWordsLabel.setVisible(true);
-    frogotLabel.setVisible(true);
+    forgotLabel.setVisible(true);
   }
 }
