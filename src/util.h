@@ -25,6 +25,7 @@ namespace gondar {
 QString readUtf8File(const QString& filepath);
 bool isChromeover();
 bool isRelease();
+QString getDomain();
 
 }  // namespace gondar
 

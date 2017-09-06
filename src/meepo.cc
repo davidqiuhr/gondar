@@ -34,13 +34,7 @@ const char path_sites[] = "/sites";
 const char path_downloads[] = "/downloads";
 
 QUrl createUrl(const QString& path) {
-  if (gondar::isRelease()) {
-    LOG_INFO << "Using release licensing endpoint";
-    return QUrl("https://api.neverware.com/poof" + path);
-  } else {
-    LOG_INFO << "Using dev licensing endpoint";
-    return QUrl("https://api.grv.neverware.com/poof" + path);
-  }
+  return QUrl("https://api." + gondar::getDomain() + "/poof" + path);
 }
 
 int siteIdFromUrl(const QUrl& url) {
