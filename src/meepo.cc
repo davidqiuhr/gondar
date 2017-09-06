@@ -208,18 +208,15 @@ void Meepo::handleDownloadsReply(QNetworkReply* reply) {
   const auto jsonObj = jsonFromReply(reply);
   QJsonObject productsObj = jsonObj["links"].toObject();
 
-  int productItr = 0;
-  for (QJsonValueRef product : productsObj) {
-    QJsonArray productArray = product.toArray();
-    QString curProduct = productsObj.keys().at(productItr);
-    for (int i = 0; i < productArray.size(); i++) {
-      QJsonObject curImage = productArray[i].toObject();
-      QString curImageName(curImage["title"].toString());
-      QUrl curUrl(curImage["url"].toString());
-      GondarImage gondarImage(curProduct, curImageName, curUrl);
+  for (const auto& product : productsObj.keys()) {
+    for (const auto& image : productsObj[product].toArray()) {
+      const auto imageObj = image.toObject();
+      const auto imageName(imageObj["title"].toString());
+      const QUrl url(imageObj["url"].toString());
+      LOG_INFO << "Product: " << product << ", Image name:" << imageName;
+      GondarImage gondarImage(product, imageName, url);
       site->addImage(gondarImage);
     }
-    productItr++;
   }
   sites_remaining_--;
 
