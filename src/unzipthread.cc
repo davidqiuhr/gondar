@@ -32,9 +32,9 @@ void UnzipThread::run() {
   try {
     const QFileInfo binfile = neverware_unzip(inputFile);
     filename = binfile.absoluteFilePath();
+    LOG_INFO << "unzip succeeded";
   } catch (const std::exception& exc) {
     LOG_ERROR << "unzip failed: " << exc.what();
     filename = QString();
   }
-  qDebug() << "worker thread says complete";
 }
