@@ -75,8 +75,7 @@ int siteIdFromUrl(const QUrl& url) {
 QNetworkRequest createAuthRequest() {
   auto url = createUrl(path_auth);
   QNetworkRequest request(url);
-  request.setHeader(QNetworkRequest::ContentTypeHeader,
-                    "application/json");
+  request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
   return request;
 }
 
