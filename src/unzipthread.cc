@@ -36,5 +36,5 @@ void UnzipThread::run() {
     LOG_ERROR << "unzip failed: " << exc.what();
     filename = QString();
   }
-  qDebug() << "worker thread says complete";
+  LOG_INFO << "Unzip succeeded";
 }
