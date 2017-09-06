@@ -75,8 +75,7 @@ int siteIdFromUrl(const QUrl& url) {
 QNetworkRequest createAuthRequest() {
   auto url = createUrl(path_auth);
   QNetworkRequest request(url);
-  request.setHeader(QNetworkRequest::ContentTypeHeader,
-                    "application/json");
+  request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
   return request;
 }
 
@@ -207,22 +206,18 @@ void Meepo::handleDownloadsReply(QNetworkReply* reply) {
   }
 
   const auto jsonObj = jsonFromReply(reply);
-  QJsonObject downloadsObj = jsonObj["links"].toObject();
-  // for starters, let's just use use the cloudready product
-  QJsonValue downloadsValue = downloadsObj["CloudReady"];
-  QJsonArray downloadsArray = downloadsValue.toArray();
-  // for starters, let's just use "32-bit" and "64-bit" builds
-  for (int i = 0; i < downloadsArray.size(); i++) {
-    QJsonObject download = downloadsArray.at(i).toObject();
-    if (download["title"] == "64-Bit") {
-      QUrl url64(download["url"].toString());
-      site->set64Url(url64);
-    } else if (download["title"] == "32-Bit") {
-      QUrl url32(download["url"].toString());
-      site->set32Url(url32);
+  QJsonObject productsObj = jsonObj["links"].toObject();
+
+  for (const auto& product : productsObj.keys()) {
+    for (const auto& image : productsObj[product].toArray()) {
+      const auto imageObj = image.toObject();
+      const auto imageName(imageObj["title"].toString());
+      const QUrl url(imageObj["url"].toString());
+      LOG_INFO << "Product: " << product << ", Image name:" << imageName;
+      GondarImage gondarImage(product, imageName, url);
+      site->addImage(gondarImage);
     }
   }
-
   sites_remaining_--;
 
   // see if we're done

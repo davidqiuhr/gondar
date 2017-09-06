@@ -55,9 +55,7 @@ int ChromeoverLoginPage::nextId() const {
     // if there are multiple sites, we'll set the urls on the site select page
     return GondarWizard::Page_siteSelect;
   } else {
-    // otherwise, we can skip that step and update the urls here
-    wizard()->imageSelectPage.set64Url(siteList[0].get64Url());
-    wizard()->imageSelectPage.set32Url(siteList[0].get32Url());
+    wizard()->imageSelectPage.addImages(siteList[0].getImages());
     return GondarWizard::Page_imageSelect;
   }
 }

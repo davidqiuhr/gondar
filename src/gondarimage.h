@@ -13,25 +13,22 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "gondarsite.h"
-#include <QDebug>
+#ifndef GONDARIMAGE_H
+#define GONDARIMAGE_H
 
-GondarSite::GondarSite(int siteIdIn, QString siteNameIn) {
-  siteId = siteIdIn;
-  siteName = siteNameIn;
-}
+class GondarImage {
+ public:
+  GondarImage() {}
+  GondarImage(QString productIn, QString imageNameIn, QUrl urlIn)
+      : product(productIn), imageName(imageNameIn), url(urlIn) {}
+  QString getCompositeName() { return product + " " + imageName; }
+  bool is32Bit() const { return imageName.contains("32-bit", Qt::CaseInsensitive); }
+  bool isDeployable() const {
+    return imageName.contains("deployable", Qt::CaseInsensitive);
+  }
+  QString product;
+  QString imageName;
+  QUrl url;
+};
 
-int GondarSite::getSiteId() const {
-  return siteId;
-}
-
-const QString& GondarSite::getSiteName() const {
-  return siteName;
-}
-
-QList<GondarImage> GondarSite::getImages() const {
-  return imageList;
-}
-void GondarSite::addImage(const GondarImage& image) {
-  imageList.append(image);
-}
+#endif

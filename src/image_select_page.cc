@@ -15,28 +15,44 @@
 
 #include "image_select_page.h"
 
+#include "gondarimage.h"
+
 #include "gondarwizard.h"
 #include "log.h"
 #include "util.h"
 
+class DownloadButton : public QRadioButton {
+ public:
+  DownloadButton(QUrl& url_in) : url(url_in) {}
+  QUrl getUrl() const { return url; }
+
+ private:
+  QUrl url;
+};
+
 ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
   setTitle("Which version of CloudReady do you need?");
-  setSubTitle("Choose between 32-bit and 64-bit installers");
-
-  sixtyFourDetails.setText("Suitable for most computers made after 2007");
-  thirtyTwoDetails.setText(
-      "For older computers or devices with Intel Atom CPUs");
+  setSubTitle(" ");
 
   thirtyTwo.setText("32-bit");
-  sixtyFour.setText("64-bit (recommended)");
-  sixtyFour.setChecked(true);
-  bitnessButtons.addButton(&thirtyTwo);
-  bitnessButtons.addButton(&sixtyFour);
-
-  layout.addWidget(&sixtyFour);
-  layout.addWidget(&sixtyFourDetails);
-  layout.addWidget(&thirtyTwo);
-  layout.addWidget(&thirtyTwoDetails);
+  thirtyTwoDetails.setText(
+      "<a href=\"https://guide.neverware.com/supported-devices\">Only intended "
+      "for certified models marked '32-bit Only'</a>");
+  thirtyTwoDetails.setTextFormat(Qt::RichText);
+  thirtyTwoDetails.setTextInteractionFlags(Qt::TextBrowserInteraction);
+  thirtyTwoDetails.setOpenExternalLinks(true);
+  // we use these buttons for beerover only now
+  if (!gondar::isChromeover()) {
+    sixtyFourDetails.setText("Suitable for most computers made after 2007");
+    sixtyFour.setText("64-bit (recommended)");
+    sixtyFour.setChecked(true);
+    bitnessButtons.addButton(&thirtyTwo);
+    bitnessButtons.addButton(&sixtyFour);
+    layout.addWidget(&sixtyFour);
+    layout.addWidget(&sixtyFourDetails);
+    layout.addWidget(&thirtyTwo);
+    layout.addWidget(&thirtyTwoDetails);
+  }
 
   setLayout(&layout);
   connect(&newestImageUrl, &NewestImageUrl::errorOccurred, this,
@@ -68,23 +84,53 @@ int ImageSelectPage::nextId() const {
   return GondarWizard::Page_usbInsert;
 }
 
-void ImageSelectPage::set32Url(QUrl url_in) {
-  newestImageUrl.set32Url(url_in);
+void ImageSelectPage::addImage(GondarImage image) {
+  // do not list deployable images
+  if (image.isDeployable()) {
+    return;
+  }
+  DownloadButton* newButton = new DownloadButton(image.url);
+  newButton->setText(image.getCompositeName());
+  bitnessButtons.addButton(newButton);
+  layout.addWidget(newButton);
+  if (image.is32Bit()) {
+    layout.addWidget(&thirtyTwoDetails);
+  }
 }
 
-void ImageSelectPage::set64Url(QUrl url_in) {
-  newestImageUrl.set64Url(url_in);
+void ImageSelectPage::addImages(QList<GondarImage> images) {
+  for (const auto& curImage : images) {
+    // FIXME: 32-bit images should be last.  For the time being, this must be
+    // handled on the Gondar side.
+    if (!curImage.is32Bit()) {
+      addImage(curImage);
+    }
+  }
+  for (const auto& curImage : images) {
+    if (curImage.is32Bit()) {
+      addImage(curImage);
+    }
+  }
 }
 
+// this is what is used later in the wizard to find what url should be used
 QUrl ImageSelectPage::getUrl() {
   QAbstractButton* selected = bitnessButtons.checkedButton();
-  if (selected == &thirtyTwo) {
-    return newestImageUrl.get32Url();
-  } else if (selected == &sixtyFour) {
-    return newestImageUrl.get64Url();
+  if (gondar::isChromeover()) {
+    // for chromeover, use the download button's url attribute
+    DownloadButton* selected_download_button =
+        dynamic_cast<DownloadButton*>(selected);
+    return selected_download_button->getUrl();
   } else {
-    // TODO: decide what this behavior should be
-    return newestImageUrl.get64Url();
+    // for beerover, we had to wait on a url lookup and we consult newestImage
+    if (selected == &thirtyTwo) {
+      return newestImageUrl.get32Url();
+    } else if (selected == &sixtyFour) {
+      return newestImageUrl.get64Url();
+    } else {
+      // TODO: decide what this behavior should be
+      return newestImageUrl.get64Url();
+    }
   }
 }
 

@@ -26,6 +26,8 @@
 
 #include "wizard_page.h"
 
+#include "gondarimage.h"
+
 class ImageSelectPage : public gondar::WizardPage {
   Q_OBJECT
 
@@ -33,8 +35,8 @@ class ImageSelectPage : public gondar::WizardPage {
   ImageSelectPage(QWidget* parent = 0);
   QUrl getUrl() const;
   int nextId() const override;
-  void set32Url(QUrl url_in);
-  void set64Url(QUrl url_in);
+  void addImage(GondarImage image);
+  void addImages(QList<GondarImage> images);
   QUrl getUrl();
   void handleNewestImageUrlError();
 

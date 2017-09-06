@@ -19,19 +19,20 @@
 #include <QString>
 #include <QUrl>
 
+#include "gondarimage.h"
+
 class GondarSite {
  public:
   GondarSite(int siteIdIn, QString siteNameIn);
   int getSiteId() const;
   const QString& getSiteName() const;
-  void set32Url(QUrl url);
-  void set64Url(QUrl url);
-  QUrl get32Url() const;
-  QUrl get64Url() const;
+  QList<GondarImage> getImages() const;
+  void addImage(const GondarImage& image);
 
  private:
   int siteId;
   QString siteName;
+  QList<GondarImage> imageList;
   QUrl url32;
   QUrl url64;
 };

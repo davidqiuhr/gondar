@@ -57,13 +57,8 @@ bool SiteSelectPage::validatePage() {
     return false;
   } else {
     const auto site = selected->site();
-
-    // if we have a site selected, update our download links for that
-    // go find the sitesList
-    qDebug() << "DEBUG: url64 selected=" << site.get64Url();
-    qDebug() << "DEBUG: url32 selected=" << site.get32Url();
-    wizard()->imageSelectPage.set64Url(site.get64Url());
-    wizard()->imageSelectPage.set32Url(site.get32Url());
+    QList<GondarImage> imageList = site.getImages();
+    wizard()->imageSelectPage.addImages(imageList);
     return true;
   }
 }
