@@ -32,11 +32,19 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
   passwordLineEditLabel.setBuddy(&passwordLineEdit);
   passwordLineEditLabel.setText("Password:");
   meanWordsLabel.setText("That's not right!  Try again.");
+  frogotLabel.setText(
+      "<a href=\"https://my.neverware.com/forgot-password\">Forgot your "
+      "password?</a>");
+  frogotLabel.setTextFormat(Qt::RichText);
+  frogotLabel.setTextInteractionFlags(Qt::TextBrowserInteraction);
+  frogotLabel.setOpenExternalLinks(true);
   meanWordsLabel.setObjectName("loginError");
   layout.addWidget(&passwordLineEditLabel, 1, 0);
   layout.addWidget(&passwordLineEdit, 1, 1);
   layout.addWidget(&meanWordsLabel, 2, 0, 1, 2);
+  layout.addWidget(&frogotLabel, 3, 0, 1, 2);
   meanWordsLabel.setVisible(false);
+  frogotLabel.setVisible(false);
   setLayout(&layout);
   // don't allow progressing to next page yet
   finished = false;
@@ -90,5 +98,6 @@ void ChromeoverLoginPage::handleMeepoFinished() {
   } else {
     started = false;
     meanWordsLabel.setVisible(true);
+    frogotLabel.setVisible(true);
   }
 }
