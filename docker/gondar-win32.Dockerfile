@@ -14,5 +14,4 @@ ADD test /opt/gondar/test
 ARG RELEASE=false
 ARG CHROMEOVER=false
 ARG METRICS_API_KEY=""
-ARG GONDAR_VERSION=""
 RUN make -C /opt/gondar build-gondar

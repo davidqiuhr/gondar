@@ -6,6 +6,5 @@
 #cmakedefine CHROMEOVER "@CHROMEOVER@"
 #cmakedefine RELEASE "@RELEASE@"
 #cmakedefine METRICS_API_KEY "@METRICS_API_KEY@"
-#cmakedefine GONDAR_VERSION "@GONDAR_VERSION@"
 
 #endif  // SRC_CONFIG_H_IN_

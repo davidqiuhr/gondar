@@ -72,11 +72,7 @@ QByteArray getMetricsApiKey() {
 }
 
 QString getGondarVersion() {
-#ifdef GONDAR_VERSION
-  return QString(GONDAR_VERSION);
-#else
   return QString();
-#endif
 }
 }
 
