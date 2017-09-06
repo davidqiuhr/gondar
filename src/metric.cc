@@ -129,8 +129,6 @@ void SendMetric(Metric metric, const std::string& value) {
   const auto version = getGondarVersion();
   if (!version.isEmpty()) {
     json.insert("version", version);
-  } else {
-    LOG_WARNING << "version was empty!";
   }
   QNetworkRequest request(url);
   request.setRawHeader(QByteArray("x-api-key"), api_key);
@@ -138,7 +136,6 @@ void SendMetric(Metric metric, const std::string& value) {
                     "application/x-www-form-urlencoded");
   QJsonDocument doc(json);
   QString strJson(doc.toJson(QJsonDocument::Compact));
-  LOG_WARNING << "sending metric:" << strJson;
   manager->post(request, QByteArray(strJson.toUtf8()));
 }
 }
