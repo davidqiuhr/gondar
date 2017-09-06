@@ -22,8 +22,8 @@ class GondarImage {
   GondarImage(QString productIn, QString imageNameIn, QUrl urlIn)
       : product(productIn), imageName(imageNameIn), url(urlIn) {}
   QString getCompositeName() { return product + " " + imageName; }
-  bool is32Bit() { return imageName.contains("32-bit", Qt::CaseInsensitive); }
-  bool isDeployable() {
+  bool is32Bit() const { return imageName.contains("32-bit", Qt::CaseInsensitive); }
+  bool isDeployable() const {
     return imageName.contains("deployable", Qt::CaseInsensitive);
   }
   QString product;

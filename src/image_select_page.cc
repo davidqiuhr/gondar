@@ -99,15 +99,14 @@ void ImageSelectPage::addImage(GondarImage image) {
 }
 
 void ImageSelectPage::addImages(QList<GondarImage> images) {
-  GondarImage curImage;
-  foreach (curImage, images) {
+  for (const auto& curImage : images) {
     // FIXME: 32-bit images should be last.  For the time being, this must be
     // handled on the Gondar side.
     if (!curImage.is32Bit()) {
       addImage(curImage);
     }
   }
-  foreach (curImage, images) {
+  for (const auto& curImage : images) {
     if (curImage.is32Bit()) {
       addImage(curImage);
     }
