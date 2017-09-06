@@ -89,7 +89,6 @@ void ImageSelectPage::addImage(GondarImage image) {
   if (image.isDeployable()) {
     return;
   }
-  // FIXME: leak
   DownloadButton* newButton = new DownloadButton(image.url);
   newButton->setText(image.getCompositeName());
   bitnessButtons.addButton(newButton);
