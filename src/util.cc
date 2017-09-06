@@ -49,4 +49,14 @@ bool isRelease() {
 #endif
 }
 
+QString getDomain() {
+  if (gondar::isRelease()) {
+    LOG_INFO << "Using release licensing endpoint";
+    return QString("neverware.com");
+  } else {
+    LOG_INFO << "Using dev licensing endpoint";
+    return QString("grv.neverware.com");
+  }
+}
+
 }  // namespace gondar

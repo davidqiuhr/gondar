@@ -18,6 +18,7 @@
 #include "gondarsite.h"
 #include "gondarwizard.h"
 #include "log.h"
+#include "util.h"
 
 ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
   setTitle("Login");
@@ -32,9 +33,9 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
   passwordLineEditLabel.setBuddy(&passwordLineEdit);
   passwordLineEditLabel.setText("Password:");
   meanWordsLabel.setText("That's not right!  Try again.");
-  frogotLabel.setText(
-      "<a href=\"https://my.neverware.com/forgot-password\">Forgot your "
-      "password?</a>");
+  QString forgotText = "<a href=\"https://my." + gondar::getDomain() +
+                       "/forgot-password\">Forgot your password?</a>";
+  frogotLabel.setText(forgotText);
   frogotLabel.setTextFormat(Qt::RichText);
   frogotLabel.setTextInteractionFlags(Qt::TextBrowserInteraction);
   frogotLabel.setOpenExternalLinks(true);
