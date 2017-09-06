@@ -32,7 +32,6 @@ const QString& GondarSite::getSiteName() const {
 QList<GondarImage> GondarSite::getImages() const {
   return imageList;
 }
-void GondarSite::addImage(QString product, QString imageName, QUrl url) {
-  GondarImage image(product, imageName, url);
+void GondarSite::addImage(const GondarImage& image) {
   imageList.append(image);
 }

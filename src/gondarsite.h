@@ -27,7 +27,7 @@ class GondarSite {
   int getSiteId() const;
   const QString& getSiteName() const;
   QList<GondarImage> getImages() const;
-  void addImage(QString product, QString imageName, QUrl url);
+  void addImage(const GondarImage& image);
 
  private:
   int siteId;

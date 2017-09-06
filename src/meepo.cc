@@ -216,7 +216,8 @@ void Meepo::handleDownloadsReply(QNetworkReply* reply) {
       QJsonObject curImage = productArray[i].toObject();
       QString curImageName(curImage["title"].toString());
       QUrl curUrl(curImage["url"].toString());
-      site->addImage(curProduct, curImageName, curUrl);
+      GondarImage gondarImage(curProduct, curImageName, curUrl);
+      site->addImage(gondarImage);
     }
     productItr++;
   }
