@@ -15,6 +15,7 @@
 
 #include "gondarwizard.h"
 
+#include <QMessageBox>
 #include <QTimer>
 
 #include "about_dialog.h"
@@ -25,6 +26,7 @@
 #include "log.h"
 #include "metric.h"
 #include "site_select_page.h"
+#include "util.h"
 
 class GondarWizard::Private {
  public:
@@ -60,7 +62,7 @@ GondarWizard::GondarWizard(QWidget* parent)
   setPage(Page_writeOperation, &writeOperationPage);
   setPage(Page_error, &p_->errorPage);
   setWizardStyle(QWizard::ModernStyle);
-  setWindowTitle(tr("CloudReady USB Maker"));
+  setWindowTitle("CloudReady USB Maker " + gondar::getGondarVersion());
   setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
 
   setButtonText(QWizard::CustomButton1, "Make Another USB");
@@ -75,6 +77,8 @@ GondarWizard::GondarWizard(QWidget* parent)
           &GondarWizard::handleCustomButton);
 
   p_->runTime = QDateTime::currentDateTime();
+
+  startLatestVersionCheck();
 }
 
 GondarWizard::~GondarWizard() {}
@@ -142,4 +146,43 @@ void GondarWizard::catchError(const QString& error) {
 
 qint64 GondarWizard::getRunTime() {
   return p_->runTime.secsTo(QDateTime::currentDateTime());
+}
+
+void GondarWizard::showUpdateNeeded(QString latestVersionString) {
+  LOG_WARNING << "show update needed fires";
+  QMessageBox::information(
+      this, "CloudReady USB Maker",
+      "<a href=\"https://guide.neverware.com/supported-devices\">A new version "
+      "of CloudReady USB Maker (" +
+          latestVersionString + ") is available.</a>");
+}
+
+namespace {
+QNetworkAccessManager* getNetworkManager() {
+  static QNetworkAccessManager manager;
+  return &manager;
+}
+}
+
+void GondarWizard::startLatestVersionCheck() {
+  QNetworkAccessManager* networkManager = getNetworkManager();
+  connect(networkManager, &QNetworkAccessManager::finished, this,
+          &GondarWizard::handleVersionReply);
+  if (gondar::getGondarVersion().isEmpty()) {
+    LOG_INFO << "Skipping latest version check for dev build";
+    return;
+  }
+  networkManager->get(QNetworkRequest(
+      QUrl("http://neverware.com/hypothetical-latest-gondar-release-file")));
+}
+
+void GondarWizard::handleVersionReply(QNetworkReply* reply) {
+  QString latestVersionString = reply->readAll();
+  double latestVersion = latestVersionString.toDouble();
+  double currentVersion = gondar::getGondarVersion().toDouble();
+  LOG_INFO << "Latest version: " << latestVersion
+           << ", currentVersion: " << currentVersion;
+  if (currentVersion < latestVersion) {
+    showUpdateNeeded(latestVersionString);
+  }
 }
