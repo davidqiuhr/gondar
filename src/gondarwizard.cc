@@ -149,7 +149,6 @@ qint64 GondarWizard::getRunTime() {
 }
 
 void GondarWizard::showUpdateNeeded(QString latestVersionString) {
-  LOG_WARNING << "show update needed fires";
   QMessageBox::information(this, "CloudReady USB Maker",
                            "<a "
                            "href=\"https://d2znie75my0pef.cloudfront.net/20/"
