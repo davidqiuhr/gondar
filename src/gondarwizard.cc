@@ -150,11 +150,13 @@ qint64 GondarWizard::getRunTime() {
 
 void GondarWizard::showUpdateNeeded(QString latestVersionString) {
   LOG_WARNING << "show update needed fires";
-  QMessageBox::information(
-      this, "CloudReady USB Maker",
-      "<a href=\"https://guide.neverware.com/supported-devices\">A new version "
-      "of CloudReady USB Maker (" +
-          latestVersionString + ") is available.</a>");
+  QMessageBox::information(this, "CloudReady USB Maker",
+                           "<a "
+                           "href=\"https://d2znie75my0pef.cloudfront.net/20/"
+                           "cloudready-free/cloudready-usb-maker.exe\">A new "
+                           "version "
+                           "of CloudReady USB Maker (" +
+                               latestVersionString + ") is available.</a>");
 }
 
 namespace {
@@ -173,7 +175,7 @@ void GondarWizard::startLatestVersionCheck() {
     return;
   }
   networkManager->get(QNetworkRequest(
-      //TODO: create actual endpoint file
+      // TODO: create actual endpoint file
       QUrl("http://neverware.com/hypothetical-latest-gondar-release-file")));
 }
 
