@@ -173,6 +173,7 @@ void GondarWizard::startLatestVersionCheck() {
     return;
   }
   networkManager->get(QNetworkRequest(
+      //TODO: create actual endpoint file
       QUrl("http://neverware.com/hypothetical-latest-gondar-release-file")));
 }
 
