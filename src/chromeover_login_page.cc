@@ -45,7 +45,6 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
   layout.addWidget(&meanWordsLabel, 2, 0, 1, 2);
   layout.addWidget(&forgotLabel, 3, 0, 1, 2);
   meanWordsLabel.setVisible(false);
-  forgotLabel.setVisible(false);
   setLayout(&layout);
   // don't allow progressing to next page yet
   finished = false;
@@ -97,6 +96,5 @@ void ChromeoverLoginPage::handleMeepoFinished() {
   } else {
     started = false;
     meanWordsLabel.setVisible(true);
-    forgotLabel.setVisible(true);
   }
 }
