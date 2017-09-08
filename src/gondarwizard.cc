@@ -152,11 +152,11 @@ void GondarWizard::showUpdateNeeded(QString latestVersionString) {
   QString downloadUrl;
   if (gondar::isChromeover()) {
     downloadUrl =
-        "https://d20slnb0el8xd1.cloudfront.net/stable/cloudready/"
+        "https://usb-maker-downloads.neverware.com/stable/cloudready/"
         "cloudready-usb-maker.exe";
   } else {
     downloadUrl =
-        "https://d20slnb0el8xd1.cloudfront.net/stable/cloudready-free/"
+        "https://usb-maker-downloads.neverware.com/stable/cloudready-free/"
         "cloudready-usb-maker.exe";
   }
   QMessageBox::information(this, "CloudReady USB Maker",
