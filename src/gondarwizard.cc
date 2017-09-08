@@ -149,12 +149,23 @@ qint64 GondarWizard::getRunTime() {
 }
 
 void GondarWizard::showUpdateNeeded(QString latestVersionString) {
+  QString downloadUrl;
+  if (gondar::isChromeover()) {
+    downloadUrl =
+        "https://d20slnb0el8xd1.cloudfront.net/stable/cloudready/"
+        "cloudready-usb-maker.exe";
+  } else {
+    downloadUrl =
+        "https://d20slnb0el8xd1.cloudfront.net/stable/cloudready-free/"
+        "cloudready-usb-maker.exe";
+  }
   QMessageBox::information(this, "CloudReady USB Maker",
                            "<a "
-                           "href=\"https://d2znie75my0pef.cloudfront.net/20/"
-                           "cloudready-free/cloudready-usb-maker.exe\">A new "
-                           "version "
-                           "of CloudReady USB Maker (" +
+                           "href=\"" +
+                               downloadUrl +
+                               "\">A new "
+                               "version "
+                               "of CloudReady USB Maker (" +
                                latestVersionString + ") is available.</a>");
 }
 
