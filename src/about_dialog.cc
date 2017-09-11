@@ -48,7 +48,7 @@ AboutDialog::AboutDialog() {
   close_button_.setText(tr("&Close"));
   connect(&close_button_, &QPushButton::clicked, this, &AboutDialog::accept);
 
-  QString version =  gondar::getGondarVersion();
+  QString version = gondar::getGondarVersion();
   // if version is non-empty
   if (version.size() > 0) {
     version_label_.setText("Version " + version);
