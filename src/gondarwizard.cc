@@ -148,7 +148,7 @@ qint64 GondarWizard::getRunTime() {
   return p_->runTime.secsTo(QDateTime::currentDateTime());
 }
 
-void GondarWizard::showUpdateNeeded(QString latestVersionString) {
+void GondarWizard::showUpdateNeeded(const QString& latestVersionString) {
   QString baseUrl = "https://usb-maker-downloads.neverware.com/stable/";
   QString product;
   QString filename = "cloudready-usb-maker.exe";

@@ -87,7 +87,7 @@ class GondarWizard : public QWizard {
   void setNormalLayout();
 
   QShortcut about_shortcut_;
-  void showUpdateNeeded(QString latestVersionString);
+  void showUpdateNeeded(const QString& latestVersionString);
   void startLatestVersionCheck();
   void handleVersionReply(QNetworkReply* reply);
 };
