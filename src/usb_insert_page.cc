@@ -23,7 +23,7 @@
 UsbInsertPage::UsbInsertPage(QWidget* parent) : WizardPage(parent) {
   setTitle("Please insert an 8GB or 16GB USB storage device");
   setSubTitle(
-      "In the next step, the selected device will be permanantly erased and "
+      "In the next step, the selected device will be permanently erased and "
       "turned into a CloudReady installer.");
 
   label.setText(
