@@ -15,7 +15,6 @@
 
 #include "gondarwizard.h"
 
-#include <QMessageBox>
 #include <QTimer>
 
 #include "about_dialog.h"
@@ -26,10 +25,11 @@
 #include "log.h"
 #include "metric.h"
 #include "site_select_page.h"
-#include "util.h"
+#include "update_check.h"
 
 class GondarWizard::Private {
  public:
+  gondar::UpdateCheck updateCheck;
   gondar::AboutDialog aboutDialog;
 
   AdminCheckPage adminCheckPage;
@@ -78,7 +78,7 @@ GondarWizard::GondarWizard(QWidget* parent)
 
   p_->runTime = QDateTime::currentDateTime();
 
-  startLatestVersionCheck();
+  p_->updateCheck.start(this);
 }
 
 GondarWizard::~GondarWizard() {}
@@ -146,55 +146,4 @@ void GondarWizard::catchError(const QString& error) {
 
 qint64 GondarWizard::getRunTime() {
   return p_->runTime.secsTo(QDateTime::currentDateTime());
-}
-
-void GondarWizard::showUpdateNeeded(const QString& latestVersionString) {
-  QString baseUrl = "https://usb-maker-downloads.neverware.com/stable/";
-  QString product;
-  QString filename = "cloudready-usb-maker.exe";
-  if (gondar::isChromeover()) {
-    product = "cloudready/";
-  } else {
-    product = "cloudready-free/";
-  }
-  QString downloadUrl = baseUrl + product + filename;
-  QMessageBox::information(this, "CloudReady USB Maker",
-                           "<a "
-                           "href=\"" +
-                               downloadUrl +
-                               "\">A new "
-                               "version "
-                               "of CloudReady USB Maker (" +
-                               latestVersionString + ") is available.</a>");
-}
-
-namespace {
-QNetworkAccessManager* getNetworkManager() {
-  static QNetworkAccessManager manager;
-  return &manager;
-}
-}
-
-void GondarWizard::startLatestVersionCheck() {
-  QNetworkAccessManager* networkManager = getNetworkManager();
-  connect(networkManager, &QNetworkAccessManager::finished, this,
-          &GondarWizard::handleVersionReply);
-  if (gondar::getGondarVersion().isEmpty()) {
-    LOG_INFO << "Skipping latest version check for dev build";
-    return;
-  }
-  networkManager->get(QNetworkRequest(
-      // TODO: create actual endpoint file
-      QUrl("http://neverware.com/hypothetical-latest-gondar-release-file")));
-}
-
-void GondarWizard::handleVersionReply(QNetworkReply* reply) {
-  QString latestVersionString = reply->readAll();
-  double latestVersion = latestVersionString.toDouble();
-  double currentVersion = gondar::getGondarVersion().toDouble();
-  LOG_INFO << "Latest version: " << latestVersion
-           << ", currentVersion: " << currentVersion;
-  if (currentVersion < latestVersion) {
-    showUpdateNeeded(latestVersionString);
-  }
 }
