@@ -85,20 +85,27 @@ def upload_file(prod_client, local_path, beerover):
 def parse_args():
   parser = argparse.ArgumentParser()
   parser.add_argument('candidate')
-  parser.add_argument('--beerover', action='store_true')
   return parser.parse_args()
 
-def main():
-  args = parse_args()
+def release(dev_client, prod_client, local_path, candidate, beerover):
+  # empty work directory of contents
   clean_workdir()
-  dev_client, prod_client = get_clients()
-  local_path = os.path.join(WORKDIR, DEST_FILENAME)
   # first we download the gondar RC to a local file
-  if not download_file(dev_client, local_path, args.candidate, args.beerover):
+  if not download_file(dev_client, local_path, candidate, beerover):
     print("Release candidate not found")
     return
   # then we upload it to the appropriate prod bucket and set public readable
-  upload_file(prod_client, local_path, args.beerover)
+  upload_file(prod_client, local_path, beerover)
+
+def main():
+  args = parse_args()
+  dev_client, prod_client = get_clients()
+  local_path = os.path.join(WORKDIR, DEST_FILENAME)
+  # release beerover
+  release(dev_client, prod_client, local_path, args.candidate, True)
+  # release chromeover
+  release(dev_client, prod_client, local_path, args.candidate, False)
+  # when we are finished, delete the directory
   clean_workdir(makedir=False)
 
 if __name__ == "__main__":
