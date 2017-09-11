@@ -15,9 +15,11 @@
 
 #include "update_check.h"
 
+#include <QDesktopServices>
 #include <QMessageBox>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QPushButton>
 
 #include "log.h"
 #include "util.h"
@@ -67,13 +69,21 @@ void UpdateCheck::showMessage(const QString& latestVersionString) {
     product = "cloudready-free/";
   }
   const QString downloadUrl = baseUrl + product + filename;
-  QMessageBox::information(parent_, "CloudReady USB Maker",
-                           "<a "
-                           "href=\"" +
-                               downloadUrl +
-                               "\">A new "
-                               "version "
-                               "of CloudReady USB Maker (" +
-                               latestVersionString + ") is available.</a>");
+  QMessageBox box(QMessageBox::Information, "Update Available",
+                  "A new version of CloudReady USB Maker is now available.");
+  box.setInformativeText(
+      QString("Click 'Download Update' to download version %2 in your web "
+              "browser.  When your download starts you can close CloudReady "
+              "USB Maker.  To complete the upgrade just launch the new "
+              "version.")
+          .arg(latestVersionString));
+  auto reject = box.addButton("&Not Now", QMessageBox::RejectRole);
+  auto accept = box.addButton("&Download Update", QMessageBox::AcceptRole);
+  box.setEscapeButton(reject);
+  box.setDefaultButton(accept);
+  box.exec();
+  if (box.clickedButton() == accept) {
+    QDesktopServices::openUrl(downloadUrl);
+  }
 }
 }
