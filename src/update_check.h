@@ -13,21 +13,28 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SRC_UTIL_H_
-#define SRC_UTIL_H_
+#ifndef SRC_UPDATE_CHECK_H_
+#define SRC_UPDATE_CHECK_H_
 
-#include <QString>
+#include <QObject>
+
+class QNetworkReply;
 
 namespace gondar {
 
-// Read the contents of |filepath| and decode as UTF-8. Throws an
-// exception on failure.
-QString readUtf8File(const QString& filepath);
-bool isChromeover();
-bool isRelease();
-QString getDomain();
-QString getGondarVersion();
+class UpdateCheck : public QObject {
+  Q_OBJECT
 
-}  // namespace gondar
+ public:
+  void start(QWidget* parent);
 
-#endif  // SRC_UTIL_H_
+ private:
+  void handleReply(QNetworkReply* reply);
+  void showMessage(const QString& version);
+
+  // Parent widget for the "update-now" dialog
+  QWidget* parent_ = nullptr;
+};
+}
+
+#endif  // SRC_UPDATE_CHECK_H_

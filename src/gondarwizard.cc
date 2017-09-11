@@ -25,9 +25,11 @@
 #include "log.h"
 #include "metric.h"
 #include "site_select_page.h"
+#include "update_check.h"
 
 class GondarWizard::Private {
  public:
+  gondar::UpdateCheck updateCheck;
   gondar::AboutDialog aboutDialog;
 
   AdminCheckPage adminCheckPage;
@@ -75,6 +77,8 @@ GondarWizard::GondarWizard(QWidget* parent)
           &GondarWizard::handleCustomButton);
 
   p_->runTime = QDateTime::currentDateTime();
+
+  p_->updateCheck.start(this);
 }
 
 GondarWizard::~GondarWizard() {}

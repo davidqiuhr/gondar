@@ -59,4 +59,7 @@ QString getDomain() {
   }
 }
 
+QString getGondarVersion() {
+  return QString("");
+}
 }  // namespace gondar

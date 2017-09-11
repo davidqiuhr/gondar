@@ -70,10 +70,6 @@ QByteArray getMetricsApiKey() {
   return QByteArray();
 #endif
 }
-
-QString getGondarVersion() {
-  return QString();
-}
 }
 
 static QString getUuid() {
@@ -122,7 +118,7 @@ void SendMetric(Metric metric, const std::string& value) {
     // then we append the value to the metric
     json.insert("value", QString::fromStdString(value));
   }
-  const auto version = getGondarVersion();
+  const auto version = gondar::getGondarVersion();
   if (!version.isEmpty()) {
     json.insert("version", version);
   }
