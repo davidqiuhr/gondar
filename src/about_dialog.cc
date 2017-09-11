@@ -19,6 +19,8 @@
 
 #include <QFile>
 
+#include "util.h"
+
 namespace gondar {
 
 namespace {
@@ -46,6 +48,12 @@ AboutDialog::AboutDialog() {
   close_button_.setText(tr("&Close"));
   connect(&close_button_, &QPushButton::clicked, this, &AboutDialog::accept);
 
+  QString version =  gondar::getGondarVersion();
+  // if version is non-empty
+  if (version.size() > 0) {
+    version_label_.setText("Version " + version);
+    layout_.addWidget(&version_label_);
+  }
   layout_.addWidget(&about_label_);
   layout_.addWidget(&license_text_browser_);
   layout_.addWidget(&close_button_, 0, Qt::AlignRight);

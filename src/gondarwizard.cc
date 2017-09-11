@@ -62,7 +62,7 @@ GondarWizard::GondarWizard(QWidget* parent)
   setPage(Page_writeOperation, &writeOperationPage);
   setPage(Page_error, &p_->errorPage);
   setWizardStyle(QWizard::ModernStyle);
-  setWindowTitle("CloudReady USB Maker " + gondar::getGondarVersion());
+  setWindowTitle(tr("CloudReady USB Maker"));
   setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
 
   setButtonText(QWizard::CustomButton1, "Make Another USB");

@@ -32,6 +32,7 @@ class AboutDialog : public QDialog {
 
  private:
   QVBoxLayout layout_;
+  QLabel version_label_;
   QLabel about_label_;
   QTextBrowser license_text_browser_;
   QPushButton close_button_;
