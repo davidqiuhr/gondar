@@ -149,16 +149,15 @@ qint64 GondarWizard::getRunTime() {
 }
 
 void GondarWizard::showUpdateNeeded(QString latestVersionString) {
-  QString downloadUrl;
+  QString baseUrl = "https://usb-maker-downloads.neverware.com/stable/";
+  QString product;
+  QString filename = "cloudready-usb-maker.exe";
   if (gondar::isChromeover()) {
-    downloadUrl =
-        "https://usb-maker-downloads.neverware.com/stable/cloudready/"
-        "cloudready-usb-maker.exe";
+    product = "cloudready/";
   } else {
-    downloadUrl =
-        "https://usb-maker-downloads.neverware.com/stable/cloudready-free/"
-        "cloudready-usb-maker.exe";
+    product = "cloudready-free/";
   }
+  QString downloadUrl = baseUrl + product + filename;
   QMessageBox::information(this, "CloudReady USB Maker",
                            "<a "
                            "href=\"" +
