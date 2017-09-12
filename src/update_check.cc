@@ -44,7 +44,7 @@ void UpdateCheck::start(QWidget* parent) {
           &UpdateCheck::handleReply);
 
   manager.get(QNetworkRequest(
-      QUrl("https://usb-maker-downloads.neverware.com/gondar-newest.json")));
+      QUrl("https://usb-maker-downloads.neverware.com/api/v1/metadata.json")));
 }
 
 void UpdateCheck::handleReply(QNetworkReply* reply) {
