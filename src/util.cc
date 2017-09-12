@@ -16,6 +16,8 @@
 #include "util.h"
 
 #include <QFile>
+#include <QJsonDocument>
+#include <QNetworkReply>
 
 #include "config.h"
 #include "log.h"
@@ -60,6 +62,11 @@ QString getDomain() {
 }
 
 QString getGondarVersion() {
-  return QString("");
+  return QString("1.8");
+}
+
+QJsonObject jsonFromReply(QNetworkReply* reply) {
+  QJsonDocument jsonDoc = QJsonDocument::fromJson(reply->readAll());
+  return jsonDoc.object();
 }
 }  // namespace gondar

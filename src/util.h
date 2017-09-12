@@ -16,6 +16,8 @@
 #ifndef SRC_UTIL_H_
 #define SRC_UTIL_H_
 
+#include <QJsonObject>
+#include <QNetworkReply>
 #include <QString>
 
 namespace gondar {
@@ -27,6 +29,7 @@ bool isChromeover();
 bool isRelease();
 QString getDomain();
 QString getGondarVersion();
+QJsonObject jsonFromReply(QNetworkReply* reply);
 
 }  // namespace gondar
 
