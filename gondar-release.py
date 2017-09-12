@@ -26,10 +26,11 @@ WORKDIR = 'gondar-release-workdir'
 SOURCE_BUCKET = 'neverware-gondar-release-candidates'
 SOURCE_FILENAME = 'cloudready-usb-maker.exe'
 DEST_BUCKET = 'neverware-cloudready-usb-releases'
+
 BEEROVER_UPLOAD_NAME = 'cloudready-free'
 CHROMEOVER_UPLOAD_NAME = 'cloudready'
 
-DEST_KEY_PREFIX = 'stable'
+STABLE_KEY_PREFIX = 'stable'
 DEST_FILENAME = 'cloudready-usb-maker.exe'
 
 def clean_workdir(makedir=True):
@@ -66,28 +67,38 @@ def download_file(dev_client, local_path, candidate, beerover):
     else:
       raise
 
-def upload_file(prod_client, local_path, beerover):
+def set_public_read(client, bucket, key):
+  client.put_object_acl(ACL='public-read',
+                        Bucket=bucket,
+                        Key=key)
+
+def upload_file(prod_client, local_path, candidate, beerover):
   # then we upload it to the prod bucket
   if beerover:
     product_upload_name = BEEROVER_UPLOAD_NAME
   else:
     product_upload_name = CHROMEOVER_UPLOAD_NAME
-  dest_key_path = '/'.join([DEST_KEY_PREFIX,
+  stable_key_path = '/'.join([STABLE_KEY_PREFIX,
                             product_upload_name,
                             DEST_FILENAME])
-  print("uploading to key={}".format(dest_key_path))
-  prod_client.upload_file(local_path, DEST_BUCKET, dest_key_path)
-  # make the file public
-  prod_client.put_object_acl(ACL='public-read',
-                             Bucket=DEST_BUCKET,
-                             Key=dest_key_path)
+  candidate_key_path = '/'.join([candidate,
+                                 product_upload_name,
+                                 DEST_FILENAME])
+  print("uploading to key={}".format(stable_key_path))
+  print("archiving release to key={}".format(candidate_key_path))
+  prod_client.upload_file(local_path, DEST_BUCKET, stable_key_path)
+  prod_client.upload_file(local_path, DEST_BUCKET, candidate_key_path)
+  # make the files public
+  set_public_read(prod_client, DEST_BUCKET, stable_key_path)
+  set_public_read(prod_client, DEST_BUCKET, candidate_key_path)
 
 def parse_args():
   parser = argparse.ArgumentParser()
   parser.add_argument('candidate')
   return parser.parse_args()
 
-def release(dev_client, prod_client, local_path, candidate, beerover):
+def release(dev_client, prod_client, candidate, beerover):
+  local_path = os.path.join(WORKDIR, DEST_FILENAME)
   # empty work directory of contents
   clean_workdir()
   # first we download the gondar RC to a local file
@@ -95,16 +106,15 @@ def release(dev_client, prod_client, local_path, candidate, beerover):
     print("Release candidate not found")
     return
   # then we upload it to the appropriate prod bucket and set public readable
-  upload_file(prod_client, local_path, beerover)
+  upload_file(prod_client, local_path, candidate, beerover)
 
 def main():
   args = parse_args()
   dev_client, prod_client = get_clients()
-  local_path = os.path.join(WORKDIR, DEST_FILENAME)
   # release beerover
-  release(dev_client, prod_client, local_path, args.candidate, True)
+  release(dev_client, prod_client, args.candidate, True)
   # release chromeover
-  release(dev_client, prod_client, local_path, args.candidate, False)
+  release(dev_client, prod_client, args.candidate, False)
   # when we are finished, delete the directory
   clean_workdir(makedir=False)
 
