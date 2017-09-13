@@ -112,9 +112,9 @@ def main():
   args = parse_args()
   dev_client, prod_client = get_clients()
   # release beerover
-  release(dev_client, prod_client, args.candidate, True)
+  release(dev_client, prod_client, args.candidate, beerover=True)
   # release chromeover
-  release(dev_client, prod_client, args.candidate, False)
+  release(dev_client, prod_client, args.candidate, beerover=False)
   # when we are finished, delete the directory
   clean_workdir(makedir=False)
 
