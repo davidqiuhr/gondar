@@ -93,13 +93,8 @@ QNetworkRequest createDownloadsRequest(const QString& api_token,
   return request;
 }
 
-QJsonObject jsonFromReply(QNetworkReply* reply) {
-  QJsonDocument jsonDoc = QJsonDocument::fromJson(reply->readAll());
-  return jsonDoc.object();
-}
-
 std::vector<GondarSite> sitesFromReply(QNetworkReply* reply) {
-  const QJsonArray rawSites = jsonFromReply(reply)["sites"].toArray();
+  const QJsonArray rawSites = gondar::jsonFromReply(reply)["sites"].toArray();
   std::vector<GondarSite> sites;
 
   for (const QJsonValue& cur : rawSites) {

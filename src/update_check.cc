@@ -44,12 +44,12 @@ void UpdateCheck::start(QWidget* parent) {
           &UpdateCheck::handleReply);
 
   manager.get(QNetworkRequest(
-      // TODO: create actual endpoint file
-      QUrl("http://neverware.com/hypothetical-latest-gondar-release-file")));
+      QUrl("https://usb-maker-downloads.neverware.com/api/v1/metadata.json")));
 }
 
 void UpdateCheck::handleReply(QNetworkReply* reply) {
-  const QString latestVersionString = reply->readAll();
+  const QString latestVersionString =
+      gondar::jsonFromReply(reply)["newest_release"].toString();
   const double latestVersion = latestVersionString.toDouble();
   const double currentVersion = gondar::getGondarVersion().toDouble();
   LOG_INFO << "Latest version: " << latestVersion
