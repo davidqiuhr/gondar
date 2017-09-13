@@ -48,7 +48,6 @@ void UpdateCheck::start(QWidget* parent) {
 }
 
 void UpdateCheck::handleReply(QNetworkReply* reply) {
-  //TODO: parse json
   const QString latestVersionString =
       gondar::jsonFromReply(reply)["newest_release"].toString();
   const double latestVersion = latestVersionString.toDouble();
