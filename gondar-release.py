@@ -86,11 +86,10 @@ def upload_file(prod_client, local_path, candidate, beerover):
                                  DEST_FILENAME])
   print("uploading to key={}".format(stable_key_path))
   print("archiving release to key={}".format(candidate_key_path))
-  prod_client.upload_file(local_path, DEST_BUCKET, stable_key_path)
-  prod_client.upload_file(local_path, DEST_BUCKET, candidate_key_path)
-  # make the files public
-  set_public_read(prod_client, DEST_BUCKET, stable_key_path)
-  set_public_read(prod_client, DEST_BUCKET, candidate_key_path)
+  for key in (stable_key_pay, candidate_key_path):
+    prod_client.upload_file(local_path, DEST_BUCKET, key)
+    # make the files public
+    set_public_read(prod_client, DEST_BUCKET, key)
 
 def parse_args():
   parser = argparse.ArgumentParser()
