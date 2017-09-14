@@ -79,8 +79,8 @@ def upload_file(prod_client, local_path, candidate, beerover):
   else:
     product_upload_name = CHROMEOVER_UPLOAD_NAME
   stable_key_path = '/'.join([STABLE_KEY_PREFIX,
-                            product_upload_name,
-                            DEST_FILENAME])
+                              product_upload_name,
+                              DEST_FILENAME])
   candidate_key_path = '/'.join([candidate,
                                  product_upload_name,
                                  DEST_FILENAME])
