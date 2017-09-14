@@ -1889,7 +1889,8 @@ static void GetDevices(DeviceGuyList* device_list) {
       // here we are.  the device has not been eliminated!  that is great!
       // if we don't already have a ret, make this our ret
       printf("kendall: %lu qualified\n", drive_index);
-      device_list->emplace_back(DeviceGuy(drive_index, buffer));
+       bool big = (GetDriveSize(drive_index) > 6 * GB);
+      device_list->emplace_back(DeviceGuy(drive_index, buffer, big));
     }
   }
 
