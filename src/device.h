@@ -27,7 +27,9 @@ A linkedlist of device info passed between the C and C++ layer
 class DeviceGuy {
  public:
   DeviceGuy(const DeviceGuy& other) = default;
-  DeviceGuy(uint32_t device_num, const std::string name, bool big = true);
+  DeviceGuy(uint32_t device_num,
+            const std::string name,
+            uint64_t num_bytes = 0);
 
   bool operator==(const DeviceGuy& other) const;
 
@@ -35,8 +37,7 @@ class DeviceGuy {
 
   uint32_t device_num = 0;
   std::string name;
-  // whether or not device is sufficiently large
-  bool big;
+  uint64_t num_bytes;
 };
 
 typedef std::vector<DeviceGuy> DeviceGuyList;

@@ -25,8 +25,8 @@
 
 DeviceGuy::DeviceGuy(uint32_t device_num_in,
                      const std::string name_in,
-                     bool big_in)
-    : device_num(device_num_in), name(name_in), big(big_in) {}
+                     uint64_t num_bytes_in)
+    : device_num(device_num_in), name(name_in), num_bytes(num_bytes_in) {}
 
 bool DeviceGuy::operator==(const DeviceGuy& other) const {
   return (device_num == other.device_num) && (name == other.name);

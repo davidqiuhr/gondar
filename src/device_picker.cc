@@ -24,7 +24,8 @@ class DevicePicker::Button : public QRadioButton {
   Button(const DeviceGuy& device, QWidget* parent)
       : QRadioButton(QString::fromStdString(device.name), parent),
         device_(device) {
-    if (!device.big) {
+    const uint64_t gigabyte = 1073741824LL;
+    if (device.num_bytes < 6 * gigabyte) {
       setEnabled(false);
       setText(QString::fromStdString(device.name) + " (too small)");
     }
