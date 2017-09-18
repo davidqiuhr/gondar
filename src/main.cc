@@ -16,6 +16,7 @@
 #include <QApplication>
 #include <QLibraryInfo>
 #include <QtPlugin>
+
 #include "gondarwizard.h"
 #include "log.h"
 #include "metric.h"
