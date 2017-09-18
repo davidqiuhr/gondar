@@ -22,6 +22,8 @@
 #include "src/device_picker.h"
 #include "src/gondarwizard.h"
 
+#include "src/log.h"
+
 #if defined(Q_OS_WIN)
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
 #endif
@@ -74,9 +76,14 @@ void Test::testDevicePicker() {
 // the wizard one time
 void Test::testLinuxStubFlow() {
   initResource();
+  gondar::InitializeLogging();
   GondarWizard wizard;
   wizard.show();
-  //QTest::mouseClick(wizard.button(QWizard::NextButton), Qt::LeftButton, Qt::NoModifier, QPoint(), 3);
+  LOG_WARNING << "currentId=" << wizard.currentId();
+  // TODO: print current wizard page
+  QTest::mouseClick(wizard.button(QWizard::NextButton), Qt::LeftButton, Qt::NoModifier, QPoint(), 3);
+  // TODO: print current wizard page
+  LOG_WARNING << "currentId=" << wizard.currentId();
 }
 }  // namespace gondar
 QTEST_MAIN(gondar::Test)
