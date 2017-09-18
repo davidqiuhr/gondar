@@ -17,10 +17,12 @@
 
 #include "gondar.h"
 
+#include "util.h"
+
 DeviceGuyList GetDeviceList() {
   DeviceGuyList devices;
-  devices.emplace_back(DeviceGuy(0, "stubdevice0"));
-  devices.emplace_back(DeviceGuy(1, "stubdevice1"));
+  devices.emplace_back(DeviceGuy(0, "stubdevice0", 10 * gondar::getGigabyte()));
+  devices.emplace_back(DeviceGuy(1, "stubdevice1", 4 * gondar::getGigabyte()));
   return devices;
 }
 

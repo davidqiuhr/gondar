@@ -501,6 +501,7 @@ static uint64_t GetDriveSize(DWORD DriveIndex) {
   safe_closehandle(hPhysical);
   if (!r || size <= 0)
     return 0;
+  printf("DISK SIZE=%llu\n", DiskGeometry->DiskSize.QuadPart);
   return DiskGeometry->DiskSize.QuadPart;
 }
 
@@ -1889,7 +1890,8 @@ static void GetDevices(DeviceGuyList* device_list) {
       // here we are.  the device has not been eliminated!  that is great!
       // if we don't already have a ret, make this our ret
       printf("kendall: %lu qualified\n", drive_index);
-      device_list->emplace_back(DeviceGuy(drive_index, buffer));
+      uint64_t num_bytes = GetDriveSize(drive_index);
+      device_list->emplace_back(DeviceGuy(drive_index, buffer, num_bytes));
     }
   }
 
