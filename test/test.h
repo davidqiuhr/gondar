@@ -26,6 +26,8 @@ class Test : public QObject {
   Q_OBJECT
 
  private slots:
+  void initTestCase();
+
   void testDevicePicker();
   void testLinuxStubFlow();
 };

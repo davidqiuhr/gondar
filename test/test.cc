@@ -26,6 +26,10 @@
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
 #endif
 
+static void initResources() {
+  Q_INIT_RESOURCE(gondarwizard);
+}
+
 namespace gondar {
 
 namespace {
@@ -36,6 +40,15 @@ QAbstractButton* getDevicePickerButton(DevicePicker* picker, const int index) {
 }
 
 }  // namespace
+
+uint64_t getValidDiskSize() {
+    const uint64_t gigabyte = 1073741824LL;
+    return 10 * gigabyte;
+}
+
+void Test::initTestCase() {
+  initResources();
+}
 
 void Test::testDevicePicker() {
   DevicePicker picker;
