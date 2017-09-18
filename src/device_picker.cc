@@ -17,6 +17,7 @@
 
 #include "device_picker.h"
 
+#include "log.h"
 #include "util.h"
 
 namespace gondar {
@@ -30,6 +31,7 @@ class DevicePicker::Button : public QRadioButton {
       setEnabled(false);
       setText(QString::fromStdString(device.name) + " (too small)");
     }
+    LOG_WARNING << "made button with name=" << device.name;
   }
 
   const DeviceGuy& device() const { return device_; }

@@ -14,6 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QAbstractButton>
+#include <QPushButton>
 #include <QTest>
 #include <QWizard>
 
@@ -72,6 +73,19 @@ void Test::testDevicePicker() {
   QCOMPARE(*picker.selectedDevice(), DeviceGuy(3, "c", getValidDiskSize()));
 }
 
+void proceed1(GondarWizard * wizard) {
+  QTest::mouseClick(wizard->button(QWizard::NextButton), Qt::LeftButton, Qt::NoModifier, QPoint(), 3);
+  LOG_WARNING << "currentId=" << wizard->currentId();
+}
+
+void proceed2(GondarWizard * wizard) {
+  // when we're on the device select page, we need to select a device
+  // get the device select page
+  QPushButton* button = wizard->findChild<QPushButton*>("stubdevice0");
+  QTest::mouseClick(wizard->button(QWizard::NextButton), Qt::LeftButton, Qt::NoModifier, QPoint(), 3);
+  LOG_WARNING << "currentId=" << wizard->currentId();
+}
+
 // an integration test for a simple linux flow wherein the user finishes
 // the wizard one time
 void Test::testLinuxStubFlow() {
@@ -80,10 +94,9 @@ void Test::testLinuxStubFlow() {
   GondarWizard wizard;
   wizard.show();
   LOG_WARNING << "currentId=" << wizard.currentId();
-  // TODO: print current wizard page
-  QTest::mouseClick(wizard.button(QWizard::NextButton), Qt::LeftButton, Qt::NoModifier, QPoint(), 3);
-  // TODO: print current wizard page
-  LOG_WARNING << "currentId=" << wizard.currentId();
+  proceed1(& wizard);
+  // now we are on device select page
+  //proceed2(wizard);
 }
 }  // namespace gondar
 QTEST_MAIN(gondar::Test)
