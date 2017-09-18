@@ -14,10 +14,13 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QAbstractButton>
+#include <QTest>
+#include <QWizard>
 
 #include "test.h"
 
 #include "src/device_picker.h"
+#include "src/gondarwizard.h"
 
 #if defined(Q_OS_WIN)
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
@@ -57,6 +60,13 @@ void Test::testDevicePicker() {
   QCOMPARE(*picker.selectedDevice(), DeviceGuy(3, "c"));
 }
 
+// an integration test for a simple linux flow wherein the user finishes
+// the wizard one time
+void Test::testLinuxStubFlow() {
+  //Q_INIT_RESOURCE(gondarwizard);
+  GondarWizard wizard;
+  wizard.show();
+  QTest::mouseClick(wizard.button(QWizard::NextButton), Qt::LeftButton, Qt::NoModifier, QPoint(), 3);
+}
 }  // namespace gondar
-
 QTEST_MAIN(gondar::Test)
