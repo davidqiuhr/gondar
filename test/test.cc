@@ -39,22 +39,22 @@ void Test::testDevicePicker() {
   QVERIFY(picker.selectedDevice() == nullopt);
 
   // Add a single device, does not get auto selected
-  picker.refresh({DeviceGuy(1, "a")});
+  picker.refresh({DeviceGuy(1, "a", 0)});
   QVERIFY(picker.selectedDevice() == nullopt);
 
   // Select the first device
   getDevicePickerButton(&picker, 0)->click();
-  QCOMPARE(*picker.selectedDevice(), DeviceGuy(1, "a"));
+  QCOMPARE(*picker.selectedDevice(), DeviceGuy(1, "a", 0));
 
   // Replace with two new devices
-  picker.refresh({DeviceGuy(2, "b"), DeviceGuy(3, "c")});
+  picker.refresh({DeviceGuy(2, "b", 0), DeviceGuy(3, "c", 0)});
   QVERIFY(picker.selectedDevice() == nullopt);
 
   // Select the last device
   auto* btn = getDevicePickerButton(&picker, 1);
   btn->click();
 
-  QCOMPARE(*picker.selectedDevice(), DeviceGuy(3, "c"));
+  QCOMPARE(*picker.selectedDevice(), DeviceGuy(3, "c", 0));
 }
 
 }  // namespace gondar

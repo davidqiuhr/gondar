@@ -21,7 +21,7 @@
 #include "metric.h"
 
 WriteOperationPage::WriteOperationPage(QWidget* parent)
-    : WizardPage(parent), device(0, std::string()) {
+    : WizardPage(parent), device(0, std::string(), 0) {
   layout.addWidget(&progress);
   setLayout(&layout);
 }

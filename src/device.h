@@ -29,7 +29,7 @@ class DeviceGuy {
   DeviceGuy(const DeviceGuy& other) = default;
   DeviceGuy(uint32_t device_num,
             const std::string name,
-            uint64_t num_bytes = 0);
+            uint64_t num_bytes);
 
   bool operator==(const DeviceGuy& other) const;
 
@@ -37,7 +37,7 @@ class DeviceGuy {
 
   uint32_t device_num = 0;
   std::string name;
-  uint64_t num_bytes;
+  uint64_t num_bytes = 0;
 };
 
 typedef std::vector<DeviceGuy> DeviceGuyList;
