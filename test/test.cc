@@ -26,6 +26,11 @@
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
 #endif
 
+inline void initResource() {
+
+  Q_INIT_RESOURCE(gondarwizard);
+}
+
 namespace gondar {
 
 namespace {
@@ -68,7 +73,7 @@ void Test::testDevicePicker() {
 // an integration test for a simple linux flow wherein the user finishes
 // the wizard one time
 void Test::testLinuxStubFlow() {
-  //Q_INIT_RESOURCE(gondarwizard);
+  initResource();
   GondarWizard wizard;
   //wizard.show();
   //QTest::mouseClick(wizard.button(QWizard::NextButton), Qt::LeftButton, Qt::NoModifier, QPoint(), 3);
