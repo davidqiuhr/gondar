@@ -30,7 +30,6 @@ class DeviceGuy {
   DeviceGuy(uint32_t device_num,
             const std::string name,
             uint64_t num_bytes);
-
   bool operator==(const DeviceGuy& other) const;
 
   std::string toString() const;

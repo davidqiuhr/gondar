@@ -17,6 +17,8 @@
 
 #include "device_picker.h"
 
+#include "util.h"
+
 namespace gondar {
 
 class DevicePicker::Button : public QRadioButton {
@@ -24,8 +26,7 @@ class DevicePicker::Button : public QRadioButton {
   Button(const DeviceGuy& device, QWidget* parent)
       : QRadioButton(QString::fromStdString(device.name), parent),
         device_(device) {
-    const uint64_t gigabyte = 1073741824LL;
-    if (device.num_bytes < 6 * gigabyte) {
+    if (device.num_bytes < 6 * gondar::getGigabyte()) {
       setEnabled(false);
       setText(QString::fromStdString(device.name) + " (too small)");
     }

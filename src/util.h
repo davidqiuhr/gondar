@@ -30,6 +30,7 @@ bool isRelease();
 QString getDomain();
 QString getGondarVersion();
 QJsonObject jsonFromReply(QNetworkReply* reply);
+uint64_t getGigabyte();
 
 }  // namespace gondar
 
