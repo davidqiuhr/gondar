@@ -82,6 +82,9 @@ void proceed2(GondarWizard * wizard) {
   // when we're on the device select page, we need to select a device
   // get the device select page
   QPushButton* button = wizard->findChild<QPushButton*>("stubdevice0");
+  // select this device
+  //QTest::mouseClick(button, Qt::LeftButton, Qt::NoModifier, QPoint(), 3);
+  // hit next
   QTest::mouseClick(wizard->button(QWizard::NextButton), Qt::LeftButton, Qt::NoModifier, QPoint(), 3);
   LOG_WARNING << "currentId=" << wizard->currentId();
 }
@@ -96,7 +99,7 @@ void Test::testLinuxStubFlow() {
   LOG_WARNING << "currentId=" << wizard.currentId();
   proceed1(& wizard);
   // now we are on device select page
-  //proceed2(wizard);
+  proceed2(& wizard);
 }
 }  // namespace gondar
 QTEST_MAIN(gondar::Test)
