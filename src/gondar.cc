@@ -501,6 +501,7 @@ static uint64_t GetDriveSize(DWORD DriveIndex) {
   safe_closehandle(hPhysical);
   if (!r || size <= 0)
     return 0;
+  printf("DISK SIZE=%llu\n", DiskGeometry->DiskSize.QuadPart);
   return DiskGeometry->DiskSize.QuadPart;
 }
 
