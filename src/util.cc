@@ -69,4 +69,9 @@ QJsonObject jsonFromReply(QNetworkReply* reply) {
   QJsonDocument jsonDoc = QJsonDocument::fromJson(reply->readAll());
   return jsonDoc.object();
 }
+
+// the number of bytes in a gigabyte (2**30)
+uint64_t getGigabyte() {
+  return 1073741824LL;
+}
 }  // namespace gondar
