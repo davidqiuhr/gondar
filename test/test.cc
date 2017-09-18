@@ -75,7 +75,7 @@ void Test::testDevicePicker() {
 void Test::testLinuxStubFlow() {
   initResource();
   GondarWizard wizard;
-  //wizard.show();
+  wizard.show();
   //QTest::mouseClick(wizard.button(QWizard::NextButton), Qt::LeftButton, Qt::NoModifier, QPoint(), 3);
 }
 }  // namespace gondar
