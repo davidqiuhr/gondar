@@ -56,3 +56,7 @@ int DeviceSelectPage::nextId() const {
     return GondarWizard::Page_downloadProgress;
   }
 }
+
+QAbstractButton* DeviceSelectPage::getButton(int index) {
+  return picker.getButton(index);
+}

@@ -84,4 +84,7 @@ void DevicePicker::onButtonClicked(QAbstractButton*) {
   emit selectionChanged();
 }
 
+QAbstractButton* DevicePicker::getButton(int index) {
+  return button_group_.button(index);
+}
 }  // namespace gondar

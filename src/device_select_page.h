@@ -28,6 +28,8 @@ class DeviceSelectPage : public gondar::WizardPage {
  public:
   DeviceSelectPage(QWidget* parent = 0);
   int nextId() const override;
+  // for tests
+  QAbstractButton* getButton(int index);
 
  protected:
   void initializePage() override;

@@ -16,6 +16,7 @@
 #ifndef SRC_DEVICE_PICKER_H_
 #define SRC_DEVICE_PICKER_H_
 
+#include <QAbstractButton>
 #include <QButtonGroup>
 #include <QVBoxLayout>
 #include <QWidget>
@@ -34,6 +35,8 @@ class DevicePicker : public QWidget {
   Option<DeviceGuy> selectedDevice() const;
 
   void refresh(const DeviceGuyList& devices);
+  // for tests
+  QAbstractButton* getButton(int index);
 
  signals:
   void selectionChanged();
