@@ -75,7 +75,7 @@ bool ImageSelectPage::validatePage() {
   }
   // currently this is only a concern in the chromeover case, but we would
   // be equally worried were this true in either case
-  if (bitnessButtons.checkedButton() == NULL) {
+  if (!bitnessButtons.checkedButton()) {
     return false;
   }
   if (!gondar::isChromeover()) {
