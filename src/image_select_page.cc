@@ -68,16 +68,21 @@ void ImageSelectPage::initializePage() {
 }
 
 bool ImageSelectPage::validatePage() {
-  // we only need to prevent proceeding to next page in the beerover case
-  if (gondar::isChromeover()) {
+  // if there is an error, we need to allow the user to proceed to the error
+  // screen
+  if (hasError) {
     return true;
-    // if there is an error, we need to allow the user to proceed to the error
-    // screen
-  } else if (hasError) {
-    return true;
-  } else {
+  }
+  // currently this is only a concern in the chromeover case, but we would
+  // be equally worried were this true in either case
+  if (bitnessButtons.checkedButton() == NULL) {
+    return false;
+  }
+  if (!gondar::isChromeover()) {
+    // in the beerover case, we need to have retrieved the latest image url
     return newestImageUrl.isReady();
   }
+  return true;
 }
 
 int ImageSelectPage::nextId() const {
