@@ -58,5 +58,6 @@ int DeviceSelectPage::nextId() const {
 }
 
 QAbstractButton* DeviceSelectPage::getButton(int index) {
+  LOG_WARNING << "getButton is called though!";
   return picker.getButton(index);
 }

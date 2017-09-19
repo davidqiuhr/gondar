@@ -22,6 +22,7 @@
 
 #include "src/device_picker.h"
 #include "src/gondarwizard.h"
+#include "src/device_select_page.h"
 
 #include "src/log.h"
 
@@ -73,8 +74,8 @@ void Test::testDevicePicker() {
   QCOMPARE(*picker.selectedDevice(), DeviceGuy(3, "c", getValidDiskSize()));
 }
 
-void proceed1(GondarWizard * wizard) {
-  LOG_WARNING << "id before click=" << wizard->currentId();
+// just wait 3 seconds and hit the 'next' button
+void proceed(GondarWizard * wizard) {
   // oh i see.  the last arg is a wait in MILLIseconds
   QTest::mouseClick(wizard->button(QWizard::NextButton), Qt::LeftButton, Qt::NoModifier, QPoint(), 3000);
   LOG_WARNING << "id after click=" << wizard->currentId();
@@ -87,8 +88,16 @@ void Test::testLinuxStubFlow() {
   gondar::InitializeLogging();
   GondarWizard wizard;
   wizard.show();
-  proceed1(& wizard);
-  proceed1(& wizard);
+  // 0->3
+  proceed(& wizard);
+  // 3->4
+  proceed(& wizard);
+  // 4->5
+  proceed(& wizard);
+  // on 5 (deviceselect, we must find the first device and click it
+  QAbstractButton* first_device = (static_cast<DeviceSelectPage*>(wizard.page(GondarWizard::Page_deviceSelect)))->getButton(0);
+  LOG_WARNING << "first_device=" << first_device;
+  //QTest::mouseClick(first_device, Qt::LeftButton, Qt::NoModifier, QPoint(), 3000);
 }
 }  // namespace gondar
 QTEST_MAIN(gondar::Test)
