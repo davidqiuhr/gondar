@@ -17,7 +17,6 @@
 
 #include "device_picker.h"
 
-#include "log.h"
 #include "util.h"
 
 namespace gondar {
@@ -31,7 +30,6 @@ class DevicePicker::Button : public QRadioButton {
       setEnabled(false);
       setText(QString::fromStdString(device.name) + " (too small)");
     }
-    LOG_WARNING << "made button with name=" << device.name;
   }
 
   const DeviceGuy& device() const { return device_; }
@@ -76,19 +74,12 @@ void DevicePicker::refresh(const DeviceGuyList& devices) {
 }
 
 const DevicePicker::Button* DevicePicker::selectedButton() const {
-  //const QAbstractButton* selected = button_group_.checkedButton();
-  QList<QAbstractButton*> buttonz = button_group_.buttons();
-  //return dynamic_cast<const Button*>(selected);
-  return dynamic_cast<const Button*>(buttonz.at(0));
+  const QAbstractButton* selected = button_group_.checkedButton();
+  return dynamic_cast<const Button*>(selected);
 }
 
 void DevicePicker::onButtonClicked(QAbstractButton*) {
   emit selectionChanged();
 }
 
-QAbstractButton* DevicePicker::getButton(int index) {
-  QList<QAbstractButton*> buttonz = button_group_.buttons();
-  LOG_WARNING << "num buttons=" << buttonz.length();
-  return buttonz.at(index);
-}
 }  // namespace gondar
