@@ -40,6 +40,7 @@ void DeviceSelectPage::initializePage() {
 bool DeviceSelectPage::validatePage() {
   if (const auto device = picker.selectedDevice()) {
     wizard()->writeOperationPage.setDevice(*device);
+    LOG_WARNING << "selected device=" << device->toString();
     return true;
   }
   return false;
