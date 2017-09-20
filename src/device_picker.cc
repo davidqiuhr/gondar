@@ -73,9 +73,22 @@ void DevicePicker::refresh(const DeviceGuyList& devices) {
   emit selectionChanged();
 }
 
+// i had the idea earlier to make this return the first valid device if one
+// exists
 const DevicePicker::Button* DevicePicker::selectedButton() const {
   const QAbstractButton* selected = button_group_.checkedButton();
-  return dynamic_cast<const Button*>(selected);
+  if (selected) {
+    return dynamic_cast<const Button*>(selected);
+  } else {
+    // let's see if there's a valid choice
+    for (auto button : button_group_.buttons()) {
+      if (button->isEnabled()) {
+        return dynamic_cast<const Button*>(button);
+      }
+    }
+    // the case in which none were enabled
+    return NULL;
+  }
 }
 
 void DevicePicker::onButtonClicked(QAbstractButton*) {
