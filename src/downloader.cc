@@ -51,6 +51,10 @@ QString DownloadManager::saveFileName(const QUrl& url) {
 }
 
 void DownloadManager::startNextDownload() {
+//tmp
+  emit finished();
+  return;
+//
   if (downloadQueue.isEmpty()) {
     LOG_INFO << downloadedCount << "/" << totalCount
              << " files downloaded successfully";

@@ -96,9 +96,9 @@ void Test::testLinuxStubFlow() {
   proceed(& wizard);
   // 5->6
   proceed(& wizard);
-  // then we download.  let's give it like 5 mins.  the unzip and burn are
+  // then we download.  let's give it like 1 min  the unzip and burn are
   // stubbed so that should be instant.
-  QTest::qWait(5 * 60 * 1000);
+  QTest::qWait(60 * 1000);
   LOG_WARNING << "id after 5 minute wait=" << wizard.currentId();
 }
 }  // namespace gondar

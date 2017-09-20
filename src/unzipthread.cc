@@ -29,6 +29,7 @@ const QString& UnzipThread::getFileName() const {
   return filename;
 }
 void UnzipThread::run() {
+  return;
   try {
     const QFileInfo binfile = neverware_unzip(inputFile);
     filename = binfile.absoluteFilePath();
