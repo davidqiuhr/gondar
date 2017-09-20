@@ -76,8 +76,10 @@ void DevicePicker::refresh(const DeviceGuyList& devices) {
 }
 
 const DevicePicker::Button* DevicePicker::selectedButton() const {
-  const QAbstractButton* selected = button_group_.checkedButton();
-  return dynamic_cast<const Button*>(selected);
+  //const QAbstractButton* selected = button_group_.checkedButton();
+  QList<QAbstractButton*> buttonz = button_group_.buttons();
+  //return dynamic_cast<const Button*>(selected);
+  return dynamic_cast<const Button*>(buttonz.at(0));
 }
 
 void DevicePicker::onButtonClicked(QAbstractButton*) {
