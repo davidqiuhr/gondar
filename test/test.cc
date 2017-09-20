@@ -94,11 +94,12 @@ void Test::testLinuxStubFlow() {
   proceed(& wizard);
   // 4->5
   proceed(& wizard);
-  // on 5 (deviceselect, we must find the first device and click it
-  //QAbstractButton* first_device = (static_cast<DeviceSelectPage*>(wizard.page(GondarWizard::Page_deviceSelect)))->getButton(0);
-  //LOG_WARNING << "first_device=" << first_device;
-  //QTest::mouseClick(first_device, Qt::LeftButton, Qt::NoModifier, QPoint(), 3000);
+  // 5->6
   proceed(& wizard);
+  // then we download.  let's give it like 5 mins.  the unzip and burn are
+  // stubbed so that should be instant.
+  QTest::qWait(5 * 60 * 1000);
+  LOG_WARNING << "id after 5 minute wait=" << wizard.currentId();
 }
 }  // namespace gondar
 QTEST_MAIN(gondar::Test)
