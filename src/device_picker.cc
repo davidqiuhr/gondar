@@ -87,6 +87,6 @@ void DevicePicker::onButtonClicked(QAbstractButton*) {
 QAbstractButton* DevicePicker::getButton(int index) {
   QList<QAbstractButton*> buttonz = button_group_.buttons();
   LOG_WARNING << "num buttons=" << buttonz.length();
-  return button_group_.button(index);
+  return buttonz.at(index);
 }
 }  // namespace gondar

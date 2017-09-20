@@ -97,7 +97,7 @@ void Test::testLinuxStubFlow() {
   // on 5 (deviceselect, we must find the first device and click it
   QAbstractButton* first_device = (static_cast<DeviceSelectPage*>(wizard.page(GondarWizard::Page_deviceSelect)))->getButton(0);
   LOG_WARNING << "first_device=" << first_device;
-  //QTest::mouseClick(first_device, Qt::LeftButton, Qt::NoModifier, QPoint(), 3000);
+  QTest::mouseClick(first_device, Qt::LeftButton, Qt::NoModifier, QPoint(), 3000);
 }
 }  // namespace gondar
 QTEST_MAIN(gondar::Test)
