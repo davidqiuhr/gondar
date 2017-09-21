@@ -24,6 +24,9 @@
 
 static int64_t getFileSize(QString& path) {
   QFile file(path);
+  //tmp
+  return 0;
+  //
   if (!file.exists()) {
     return -1;
   }

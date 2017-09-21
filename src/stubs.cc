@@ -38,3 +38,10 @@ bool Install(DeviceGuy* target_device,
 bool IsCurrentProcessElevated() {
   return true;
 }
+
+/*
+static int64_t getFileSize(QString& path) {
+  path = path;
+  return 0;
+}
+*/
