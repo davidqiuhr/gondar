@@ -43,6 +43,11 @@ class TestDevicePicker : public DevicePicker {
   const DevicePicker::Button* selectedButton() const;
 };
 
+class TestWizard : public GondarWizard {
+  Q_OBJECT
+ public:
+  TestWizard();
+}
 }
 
 #endif  // TEST_TEST_H_
