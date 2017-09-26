@@ -23,6 +23,9 @@
 #include "src/gondarwizard.h"
 #include "src/log.h"
 
+// for test objects
+#include "src/device_picker.h"
+
 #if defined(Q_OS_WIN)
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
 #endif
@@ -32,6 +35,24 @@ inline void initResource() {
 }
 
 namespace gondar {
+
+// used by selectedButton() for test flow
+const DevicePicker::Button* TestDevicePicker::selectedButton() const {
+  // honor user selection in case we figure that bit out
+  const QAbstractButton* selected = button_group_.checkedButton();
+  if (selected) {
+    return dynamic_cast<const Button*>(selected);
+  } else {
+    // let's see if there's a valid choice
+    for (auto button : button_group_.buttons()) {
+      if (button->isEnabled()) {
+        return dynamic_cast<const Button*>(button);
+      }
+    }
+    // the case in which none were enabled
+    return NULL;
+  }
+}
 
 namespace {
 

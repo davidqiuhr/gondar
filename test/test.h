@@ -20,6 +20,10 @@
 
 #include <QtTest/QtTest>
 
+#include "src/device_picker.h"
+
+#include "src/util.h"
+
 namespace gondar {
 
 class Test : public QObject {
@@ -29,6 +33,16 @@ class Test : public QObject {
   void testDevicePicker();
   void testLinuxStubFlow();
 };
+
+// test objects
+class TestDevicePicker : public DevicePicker {
+  Q_OBJECT
+ public:
+  TestDevicePicker();
+ private:
+  const DevicePicker::Button* selectedButton() const;
+};
+
 }
 
 #endif  // TEST_TEST_H_

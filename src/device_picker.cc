@@ -13,30 +13,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <QRadioButton>
-
 #include "device_picker.h"
 
 #include "util.h"
 
 namespace gondar {
-
-class DevicePicker::Button : public QRadioButton {
- public:
-  Button(const DeviceGuy& device, QWidget* parent)
-      : QRadioButton(QString::fromStdString(device.name), parent),
-        device_(device) {
-    if (device.num_bytes < 6 * gondar::getGigabyte()) {
-      setEnabled(false);
-      setText(QString::fromStdString(device.name) + " (too small)");
-    }
-  }
-
-  const DeviceGuy& device() const { return device_; }
-
- private:
-  DeviceGuy device_;
-};
 
 DevicePicker::DevicePicker() {
   setLayout(&layout_);
