@@ -27,14 +27,14 @@
 #include "site_select_page.h"
 #include "update_check.h"
 
-class GondarWizard::Buddy {
+//class GondarWizard::Goodies {
   // this should contain pointers to the pages which should vary
 
   // let's enumerate the different goodies we need to run the integration test
   // - i believe diskwritethread does a file size check so that is no good.
   // - devicePicker's selectedButton() needs to call getFirstValidButton() (new)
   // - downloader.cc needs a stub for its append method
-}
+//}
 
 class GondarWizard::Private {
  public:
