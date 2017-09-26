@@ -26,7 +26,7 @@ import botocore
 WORKDIR = 'gondar-release-workdir'
 SOURCE_BUCKET = 'neverware-gondar-release-candidates'
 SOURCE_FILENAME = 'cloudready-usb-maker.exe'
-DEST_BUCKET = 'neverware-cloudready-usb-releases'
+DEST_BUCKET = 'neverware-cloudready-usb-maker-releases'
 
 BEEROVER_UPLOAD_NAME = 'cloudready-free'
 CHROMEOVER_UPLOAD_NAME = 'cloudready'
