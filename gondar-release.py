@@ -17,10 +17,11 @@ aws_secret_access_key = (secret)
 """
 
 import argparse
-import boto3
-import botocore
 import os
 import shutil
+
+import boto3
+import botocore
 
 WORKDIR = 'gondar-release-workdir'
 SOURCE_BUCKET = 'neverware-gondar-release-candidates'
