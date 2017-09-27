@@ -27,22 +27,12 @@
 #include "site_select_page.h"
 #include "update_check.h"
 
-//class GondarWizard::Goodies {
-  // this should contain pointers to the pages which should vary
-
-  // let's enumerate the different goodies we need to run the integration test
-  // - i believe diskwritethread does a file size check so that is no good.
-  // - devicePicker's selectedButton() needs to call getFirstValidButton() (new)
-  // - downloader.cc needs a stub for its append method
-//}
-
 class GondarWizard::Private {
  public:
   gondar::UpdateCheck updateCheck;
   gondar::AboutDialog aboutDialog;
 
   AdminCheckPage adminCheckPage;
-  DeviceSelectPage deviceSelectPage;
   ChromeoverLoginPage chromeoverLoginPage;
   SiteSelectPage siteSelectPage;
   ErrorPage errorPage;
@@ -52,9 +42,21 @@ class GondarWizard::Private {
   QDateTime runTime;
 };
 
+class GondarWizard::ModularPages {
+ public:
+  DeviceSelectPage* getDeviceSelectPage();
+ private:
+  DeviceSelectPage deviceSelectPage;
+}
+
+DeviceSelectPage* GondarWizard::ModularPages::getDeviceSelectPage() {
+  return &deviceSelectPage;
+}
+
 GondarWizard::GondarWizard(QWidget* parent)
     : QWizard(parent),
       p_(new Private()),
+      m_(new ModularPages()),
       about_shortcut_(QKeySequence::HelpContents, this) {
   // these pages are automatically cleaned up
   // new instances are made whenever navigation moves on to another page
@@ -66,7 +68,7 @@ GondarWizard::GondarWizard(QWidget* parent)
   setPage(Page_siteSelect, &p_->siteSelectPage);
   setPage(Page_imageSelect, &imageSelectPage);
   setPage(Page_usbInsert, &usbInsertPage);
-  setPage(Page_deviceSelect, &p_->deviceSelectPage);
+  setPage(Page_deviceSelect, &m_->getDeviceSelectPage());
   setPage(Page_downloadProgress, &downloadProgressPage);
   setPage(Page_writeOperation, &writeOperationPage);
   setPage(Page_error, &p_->errorPage);

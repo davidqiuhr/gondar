@@ -54,7 +54,18 @@ const DevicePicker::Button* TestDevicePicker::selectedButton() const {
   }
 }
 
+TestDevicePicker::TestDevicePicker() {
+}
+
+TestDeviceSelectPage::TestDeviceSelectPage(QWidget* parent) : DeviceSelectPage(parent) {}
+
+void TestDeviceSelectPage::initializePage() { }
+
 TestWizard::TestWizard(QWidget* parent) : GondarWizard(parent) { }
+
+Private* TestWizard::getPrivate() {
+  return p_; 
+}
 
 namespace {
 

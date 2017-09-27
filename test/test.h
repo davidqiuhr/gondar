@@ -35,13 +35,38 @@ class Test : public QObject {
   void testLinuxStubFlow();
 };
 
+class TestWizard::Private {
+ public:  
+  gondar::UpdateCheck updateCheck;
+  gondar::AboutDialog aboutDialog;
+  
+  AdminCheckPage adminCheckPage;
+  // use a special test version of device select page
+  TestDeviceSelectPage deviceSelectPage;
+  ChromeoverLoginPage chromeoverLoginPage;
+  SiteSelectPage siteSelectPage;
+  ErrorPage errorPage;
+  
+  std::vector<GondarSite> sites;
+
+  QDateTime runTime;
+};
+
 // test objects
 class TestDevicePicker : public DevicePicker {
-  Q_OBJECT
  public:
   TestDevicePicker();
  private:
   const DevicePicker::Button* selectedButton() const;
+};
+
+class TestDeviceSelectPage : public DeviceSelectPage {
+ protected:
+  void initializePage() override; 
+  // TODO: what should the return of this be?
+  void getPrivate() override;
+  class Private;
+  std::unique_ptr<Private> p_;
 };
 
 class TestWizard : public GondarWizard {

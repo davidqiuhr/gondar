@@ -72,6 +72,9 @@ class GondarWizard : public QWizard {
     Page_writeOperation,
     Page_error
   };
+ protected:
+  class ModularPages;
+  virtual ModularPages* getModularPages();
 
  private slots:
   void handleCustomButton(int buttonIndex);
@@ -79,6 +82,7 @@ class GondarWizard : public QWizard {
  private:
   class Private;
   std::unique_ptr<Private> p_;
+  std::unique_ptr<ModularPages> m_;
 
   void catchError(const QString& error);
   // Set the button layout appropriate for most pages; no 'make another usb'

@@ -30,7 +30,7 @@ class DeviceSelectPage : public gondar::WizardPage {
   int nextId() const override;
 
  protected:
-  void initializePage() override;
+  virtual void initializePage() override;
   bool validatePage() override;
   bool isComplete() const override;
 
