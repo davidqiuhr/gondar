@@ -54,6 +54,8 @@ const DevicePicker::Button* TestDevicePicker::selectedButton() const {
   }
 }
 
+TestWizard::TestWizard(QWidget* parent) : GondarWizard(parent) { }
+
 namespace {
 
 QAbstractButton* getDevicePickerButton(DevicePicker* picker, const int index) {
@@ -106,7 +108,7 @@ void Test::testLinuxStubFlow() {
   // whatever makes the disk write thread would need a mocked version
   // the download page will have to be mocked 
   //IntegrationTestGondarWizard wizard;
-  GondarWizard wizard;
+  TestWizard wizard;
   wizard.show();
   // 0->3
   proceed(& wizard);

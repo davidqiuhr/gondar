@@ -22,6 +22,7 @@
 
 #include "src/device_picker.h"
 
+#include "src/gondarwizard.h"
 #include "src/util.h"
 
 namespace gondar {
@@ -46,8 +47,8 @@ class TestDevicePicker : public DevicePicker {
 class TestWizard : public GondarWizard {
   Q_OBJECT
  public:
-  TestWizard();
-}
+  TestWizard(QWidget* parent = 0);
+};
 }
 
 #endif  // TEST_TEST_H_
