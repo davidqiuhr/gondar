@@ -6,4 +6,4 @@
 	url = git@github.com:SergiusTheBest/plog.git
 [submodule "gdisk"]
 	path = gdisk
-	url = https://git.code.sf.net/p/gptfdisk/code
+	url = https://github.com/neverware/gdisk
