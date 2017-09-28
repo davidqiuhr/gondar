@@ -36,6 +36,7 @@ WhichToUse PalData::UseWhichPartitions(void) {
 bool clearMbrGpt(const char* physical_path) {
   std::string physical_path_str(physical_path);
   PalData gptdata;
+  // set the physical path for this GPT object to act on
   gptdata.LoadPartitions(std::string(physical_path));
   int quiet = true;
   // attempt to fix any gpt/mbr problems by setting to a sane, empty state
