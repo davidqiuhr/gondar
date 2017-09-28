@@ -17,15 +17,16 @@ aws_secret_access_key = (secret)
 """
 
 import argparse
-import boto3
-import botocore
 import os
 import shutil
+
+import boto3
+import botocore
 
 WORKDIR = 'gondar-release-workdir'
 SOURCE_BUCKET = 'neverware-gondar-release-candidates'
 SOURCE_FILENAME = 'cloudready-usb-maker.exe'
-DEST_BUCKET = 'neverware-cloudready-usb-releases'
+DEST_BUCKET = 'neverware-cloudready-usb-maker-releases'
 
 BEEROVER_UPLOAD_NAME = 'cloudready-free'
 CHROMEOVER_UPLOAD_NAME = 'cloudready'
@@ -86,7 +87,7 @@ def upload_file(prod_client, local_path, candidate, beerover):
                                  DEST_FILENAME])
   print("uploading to key={}".format(stable_key_path))
   print("archiving release to key={}".format(candidate_key_path))
-  for key in (stable_key_pay, candidate_key_path):
+  for key in (stable_key_path, candidate_key_path):
     prod_client.upload_file(local_path, DEST_BUCKET, key)
     # make the files public
     set_public_read(prod_client, DEST_BUCKET, key)
