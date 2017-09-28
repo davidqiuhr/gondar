@@ -19,13 +19,27 @@
 // the disk
 #include "../gdisk/gpt.h"
 
+class PalData : public GPTData {
+public:
+  PalData();
+  WhichToUse UseWhichPartitions(void) override;
+};
+
+PalData::PalData() : GPTData() { }
+
+WhichToUse PalData::UseWhichPartitions(void) {
+  // The disk may be in a weird state, but we are about to reformat it.
+  // Just always use a new partition table.
+  return use_new;
+}
+
 bool clearMbrGpt(const char* physical_path) {
   std::string physical_path_str(physical_path);
-  GPTData gptdata(physical_path_str);
-  // attempt to fix any gpt/mbr problems by setting to a sane, empty state
-  gptdata.ClearGPTData();
-  gptdata.MakeProtectiveMBR();
+  PalData gptdata;
+  // set the physical path for this GPT object to act on
+  gptdata.LoadPartitions(std::string(physical_path));
   int quiet = true;
+  // attempt to fix any gpt/mbr problems by setting to a sane, empty state
   gptdata.SaveGPTData(quiet);
   int problems = gptdata.Verify();
   if (problems > 0) {
