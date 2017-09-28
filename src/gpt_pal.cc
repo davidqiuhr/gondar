@@ -30,7 +30,7 @@ PalData::PalData() : GPTData() { }
 WhichToUse PalData::UseWhichPartitions(void) {
   // The disk may be in a weird state, but we are about to reformat it.
   // Just always use a new partition table.
-  return use_gpt;
+  return use_new;
 }
 
 bool clearMbrGpt(const char* physical_path) {
@@ -38,8 +38,6 @@ bool clearMbrGpt(const char* physical_path) {
   PalData gptdata;
   gptdata.LoadPartitions(std::string(physical_path));
   // attempt to fix any gpt/mbr problems by setting to a sane, empty state
-  gptdata.ClearGPTData();
-  gptdata.MakeProtectiveMBR();
   int quiet = true;
   gptdata.SaveGPTData(quiet);
   int problems = gptdata.Verify();
