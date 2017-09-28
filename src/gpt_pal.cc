@@ -37,8 +37,8 @@ bool clearMbrGpt(const char* physical_path) {
   std::string physical_path_str(physical_path);
   PalData gptdata;
   gptdata.LoadPartitions(std::string(physical_path));
-  // attempt to fix any gpt/mbr problems by setting to a sane, empty state
   int quiet = true;
+  // attempt to fix any gpt/mbr problems by setting to a sane, empty state
   gptdata.SaveGPTData(quiet);
   int problems = gptdata.Verify();
   if (problems > 0) {
