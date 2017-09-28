@@ -42,11 +42,7 @@ class GondarWizard::Private {
   QDateTime runTime;
 };
 
-class GondarWizard::ModularPages {
- public:
-  DeviceSelectPage* getDeviceSelectPage();
- private:
-  DeviceSelectPage deviceSelectPage;
+GondarWizard::ModularPages::ModularPages() {
 }
 
 DeviceSelectPage* GondarWizard::ModularPages::getDeviceSelectPage() {
@@ -68,7 +64,7 @@ GondarWizard::GondarWizard(QWidget* parent)
   setPage(Page_siteSelect, &p_->siteSelectPage);
   setPage(Page_imageSelect, &imageSelectPage);
   setPage(Page_usbInsert, &usbInsertPage);
-  setPage(Page_deviceSelect, &m_->getDeviceSelectPage());
+  setPage(Page_deviceSelect, m_->getDeviceSelectPage());
   setPage(Page_downloadProgress, &downloadProgressPage);
   setPage(Page_writeOperation, &writeOperationPage);
   setPage(Page_error, &p_->errorPage);
@@ -93,6 +89,10 @@ GondarWizard::GondarWizard(QWidget* parent)
 }
 
 GondarWizard::~GondarWizard() {}
+
+*ModularPages GondarWizard::getModularPages() {
+  return m_.get();
+}
 
 void GondarWizard::setNormalLayout() {
   QList<QWizard::WizardButton> button_layout;

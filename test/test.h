@@ -35,6 +35,12 @@ class Test : public QObject {
   void testLinuxStubFlow();
 };
 
+class TestWizard : public GondarWizard {
+  Q_OBJECT
+ public:
+  TestWizard(QWidget* parent = 0);
+};
+
 class TestWizard::Private {
  public:  
   gondar::UpdateCheck updateCheck;
@@ -69,11 +75,6 @@ class TestDeviceSelectPage : public DeviceSelectPage {
   std::unique_ptr<Private> p_;
 };
 
-class TestWizard : public GondarWizard {
-  Q_OBJECT
- public:
-  TestWizard(QWidget* parent = 0);
-};
 }
 
 #endif  // TEST_TEST_H_

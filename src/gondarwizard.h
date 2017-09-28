@@ -28,19 +28,21 @@
 #include "usb_insert_page.h"
 #include "write_operation_page.h"
 
+#include "device_select_page.h"
+
 class QCheckBox;
 class QGroupBox;
 class QLabel;
 class QRadioButton;
 
 class GondarSite;
+//class DeviceSelectPage;
 
 class GondarWizard : public QWizard {
   Q_OBJECT
 
  public:
   GondarWizard(QWidget* parent = 0);
-
   ~GondarWizard();
 
   int nextId() const override;
@@ -76,10 +78,6 @@ class GondarWizard : public QWizard {
   class ModularPages;
   virtual ModularPages* getModularPages();
 
- private slots:
-  void handleCustomButton(int buttonIndex);
-
- private:
   class Private;
   std::unique_ptr<Private> p_;
   std::unique_ptr<ModularPages> m_;
@@ -91,6 +89,16 @@ class GondarWizard : public QWizard {
   void setNormalLayout();
 
   QShortcut about_shortcut_;
+ protected slots:
+  void handleCustomButton(int buttonIndex);
+};
+
+class GondarWizard::ModularPages {
+ public:
+  ModularPages();
+  DeviceSelectPage* getDeviceSelectPage();
+ private:
+  DeviceSelectPage deviceSelectPage;
 };
 
 #endif /* GONDARWIZARD */
