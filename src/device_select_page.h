@@ -27,6 +27,8 @@ class DeviceSelectPage : public gondar::WizardPage {
 
  public:
   DeviceSelectPage(QWidget* parent = 0);
+  DeviceSelectPage(gondar::DevicePicker * picker_in, QWidget* parent = 0);
+  void init();
   int nextId() const override;
 
  protected:
@@ -37,7 +39,8 @@ class DeviceSelectPage : public gondar::WizardPage {
  private:
   QVBoxLayout layout;
   QLabel drivesLabel;
-  gondar::DevicePicker picker;
+  gondar::DevicePicker pickerGuy;
+  gondar::DevicePicker* picker;
 };
 
 #endif  // SRC_DEVICE_SELECT_PAGE_H_
