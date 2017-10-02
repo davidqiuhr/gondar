@@ -17,26 +17,10 @@
 
 #include "device_picker.h"
 
+#include "log.h"
 #include "util.h"
 
 namespace gondar {
-
-class DevicePicker::Button : public QRadioButton {
- public:
-  Button(const DeviceGuy& device, QWidget* parent)
-      : QRadioButton(QString::fromStdString(device.name), parent),
-        device_(device) {
-    if (device.num_bytes < 6 * gondar::getGigabyte()) {
-      setEnabled(false);
-      setText(QString::fromStdString(device.name) + " (too small)");
-    }
-  }
-
-  const DeviceGuy& device() const { return device_; }
-
- private:
-  DeviceGuy device_;
-};
 
 DevicePicker::DevicePicker() {
   setLayout(&layout_);
@@ -74,6 +58,7 @@ void DevicePicker::refresh(const DeviceGuyList& devices) {
 }
 
 const DevicePicker::Button* DevicePicker::selectedButton() const {
+  LOG_WARNING << "USING ORIGINAL DEVICE PICKER FUNC";
   const QAbstractButton* selected = button_group_.checkedButton();
   return dynamic_cast<const Button*>(selected);
 }

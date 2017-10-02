@@ -25,6 +25,33 @@
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
 #endif
 
+// test object stuff
+
+TestDevicePicker::TestDevicePicker() {
+  LOG_WARNING << "CREATING CUSTOM PICKER";
+}
+
+// used by selectedButton() for test flow
+const gondar::DevicePicker::Button* TestDevicePicker::selectedButton() const {
+  LOG_WARNING << "USING TEST DEVICE PICKER FUNC";
+  // honor user selection in case we figure that bit out
+  const QAbstractButton* selected = button_group_.checkedButton();
+  if (selected) {
+    return dynamic_cast<const Button*>(selected);
+  } else {
+    // let's see if there's a valid choice
+    for (auto button : button_group_.buttons()) {
+      if (button->isEnabled()) {
+        return dynamic_cast<const Button*>(button);
+      }
+    }
+    // the case in which none were enabled
+    return NULL;
+  }
+}
+
+// end test object stuff
+
 inline void initResource() {
   Q_INIT_RESOURCE(gondarwizard);
 }
@@ -83,7 +110,8 @@ void Test::testLinuxStubFlow() {
   // whatever makes the disk write thread would need a mocked version
   // the download page will have to be mocked 
   //IntegrationTestGondarWizard wizard;
-  GondarWizard wizard;
+  TestDevicePicker * testpicker = new TestDevicePicker(); 
+  GondarWizard wizard(testpicker);
   wizard.show();
   // 0->3
   proceed(& wizard);
@@ -96,7 +124,7 @@ void Test::testLinuxStubFlow() {
   // wait a sec'
   QTest::qWait(1000);
   //QVERIFY(wizard.currentId() == 6);
-  LOG_WARNING << "curId" << wizard.currentId();
+  LOG_WARNING << "ended on " << wizard.currentId();
 }
 
 }  // namespace gondar

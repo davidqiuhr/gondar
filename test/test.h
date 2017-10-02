@@ -20,6 +20,17 @@
 
 #include <QtTest/QtTest>
 
+// for test objects
+#include "src/device_picker.h"
+
+// test objects
+class TestDevicePicker : public gondar::DevicePicker {
+ public:
+  TestDevicePicker();
+ private:
+  const DevicePicker::Button* selectedButton() const override;
+};
+
 namespace gondar {
 
 class Test : public QObject {

@@ -35,7 +35,7 @@ class GondarWizard::Private {
   gondar::AboutDialog aboutDialog;
 
   AdminCheckPage adminCheckPage;
-  DeviceSelectPage deviceSelectPage;
+  DeviceSelectPage * deviceSelectPage;
   ChromeoverLoginPage chromeoverLoginPage;
   SiteSelectPage siteSelectPage;
   ErrorPage errorPage;
@@ -45,9 +45,12 @@ class GondarWizard::Private {
   QDateTime runTime;
 };
 
-GondarWizard::Private::Private() { }
-GondarWizard::Private::Private(gondar::DevicePicker * picker_in)
-    : deviceSelectPage(new DeviceSelectPage(picker_in)) { }
+GondarWizard::Private::Private() { 
+  deviceSelectPage = new DeviceSelectPage();
+}
+GondarWizard::Private::Private(gondar::DevicePicker * picker_in) {
+  deviceSelectPage = new DeviceSelectPage(picker_in);
+}
 
 GondarWizard::GondarWizard(QWidget* parent)
     : QWizard(parent),
@@ -76,7 +79,7 @@ void GondarWizard::init() {
   setPage(Page_siteSelect, &p_->siteSelectPage);
   setPage(Page_imageSelect, &imageSelectPage);
   setPage(Page_usbInsert, &usbInsertPage);
-  setPage(Page_deviceSelect, &p_->deviceSelectPage);
+  setPage(Page_deviceSelect, p_->deviceSelectPage);
   setPage(Page_downloadProgress, &downloadProgressPage);
   setPage(Page_writeOperation, &writeOperationPage);
   setPage(Page_error, &p_->errorPage);
