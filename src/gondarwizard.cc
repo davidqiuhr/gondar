@@ -47,6 +47,19 @@ GondarWizard::GondarWizard(QWidget* parent)
     : QWizard(parent),
       p_(new Private()),
       about_shortcut_(QKeySequence::HelpContents, this) {
+  init();
+}
+
+GondarWizard::GondarWizard(gondar::DevicePicker * picker_in, QWidget* parent)
+    : QWizard(parent),
+      p_(new Private()),
+      about_shortcut_(QKeySequence::HelpContents, this) {
+  init();
+}
+
+GondarWizard::~GondarWizard() {}
+
+void GondarWizard::init() {
   // these pages are automatically cleaned up
   // new instances are made whenever navigation moves on to another page
   // according to qt docs
@@ -80,8 +93,6 @@ GondarWizard::GondarWizard(QWidget* parent)
 
   p_->updateCheck.start(this);
 }
-
-GondarWizard::~GondarWizard() {}
 
 void GondarWizard::setNormalLayout() {
   QList<QWizard::WizardButton> button_layout;
