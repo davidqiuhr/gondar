@@ -118,7 +118,8 @@ void Test::testLinuxStubFlow() {
   // the download page will have to be mocked 
   //IntegrationTestGondarWizard wizard;
   TestDevicePicker * testpicker = new TestDevicePicker(); 
-  GondarWizard wizard(testpicker);
+  TestUnzipThread * testunzip = new TestUnzipThread();
+  GondarWizard wizard(testpicker, testunzip);
   wizard.show();
   // 0->3
   proceed(& wizard);

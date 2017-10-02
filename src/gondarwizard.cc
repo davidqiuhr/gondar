@@ -59,9 +59,10 @@ GondarWizard::GondarWizard(QWidget* parent)
   init();
 }
 
-GondarWizard::GondarWizard(gondar::DevicePicker * picker_in, QWidget* parent)
+GondarWizard::GondarWizard(gondar::DevicePicker * picker_in,
+                           UnzipThread * unzip_in, QWidget* parent)
     : QWizard(parent),
-      p_(new Private(picker_in)),
+      p_(new Private(picker_in, unzip_in)),
       about_shortcut_(QKeySequence::HelpContents, this) {
   init();
 }
