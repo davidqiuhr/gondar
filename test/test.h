@@ -17,8 +17,64 @@
 #define TEST_TEST_H_
 
 #include <QObject>
+#include <QWidget>
 
 #include <QtTest/QtTest>
+
+// for test objects
+#include "src/device_picker.h"
+#include "src/diskwritethread.h"
+#include "src/download_progress_page.h"
+#include "src/unzipthread.h"
+#include "src/write_operation_page.h"
+
+// test objects
+class TestDevicePicker : public gondar::DevicePicker {
+ public:
+  TestDevicePicker();
+
+ private:
+  const DevicePicker::Button* selectedButton() const override;
+};
+
+class TestUnzipThread : public UnzipThread {
+  Q_OBJECT
+ public:
+  TestUnzipThread(const QFileInfo& inputFile, QObject* parent = 0);
+  const QString& getFileName() const override;
+  const QString& kewlstr = "";
+  void run() override;
+};
+
+class TestDownloadProgressPage : public DownloadProgressPage {
+  Q_OBJECT
+ public:
+  TestDownloadProgressPage(DownloadManager* manager_in, QWidget* parent = 0);
+  UnzipThread* makeUnzipThread() override;
+};
+
+class TestDiskWriteThread : public DiskWriteThread {
+  Q_OBJECT
+ public:
+  TestDiskWriteThread(DeviceGuy* drive_in,
+                      const QString& image_path_in,
+                      QObject* parent = 0);
+  void run() override;
+};
+
+class TestWriteOperationPage : public WriteOperationPage {
+ public:
+  TestWriteOperationPage(QWidget* parent = 0);
+  DiskWriteThread* makeDiskWriteThread(DeviceGuy* drive_in,
+                                       const QString& image_path_in,
+                                       QObject* parent) override;
+};
+
+class TestDownloadManager : public DownloadManager {
+ public:
+  TestDownloadManager(QObject* parent = 0);
+  void append(const QUrl& url) override;
+};
 
 namespace gondar {
 
@@ -27,6 +83,7 @@ class Test : public QObject {
 
  private slots:
   void testDevicePicker();
+  void testLinuxStubFlow();
 };
 }
 

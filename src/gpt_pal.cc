@@ -20,12 +20,12 @@
 #include "../gdisk/gpt.h"
 
 class PalData : public GPTData {
-public:
+ public:
   PalData();
   WhichToUse UseWhichPartitions(void) override;
 };
 
-PalData::PalData() : GPTData() { }
+PalData::PalData() : GPTData() {}
 
 WhichToUse PalData::UseWhichPartitions(void) {
   // The disk may be in a weird state, but we are about to reformat it.
