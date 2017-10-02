@@ -18,10 +18,16 @@
 #include "test.h"
 
 #include "src/device_picker.h"
+#include "src/gondarwizard.h"
+#include "src/log.h"
 
 #if defined(Q_OS_WIN)
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
 #endif
+
+inline void initResource() {
+  Q_INIT_RESOURCE(gondarwizard);
+}
 
 namespace gondar {
 
@@ -60,6 +66,37 @@ void Test::testDevicePicker() {
   btn->click();
 
   QCOMPARE(*picker.selectedDevice(), DeviceGuy(3, "c", getValidDiskSize()));
+}
+
+void proceed(GondarWizard * wizard) {
+  // oh i see.  the last arg is a wait in MILLIseconds
+  QTest::mouseClick(wizard->button(QWizard::NextButton), Qt::LeftButton, Qt::NoModifier, QPoint(), 3000);
+  LOG_WARNING << "id after click=" << wizard->currentId();
+}
+
+void Test::testLinuxStubFlow() {
+  initResource();
+  gondar::InitializeLogging();
+  // let's instead make a mock-wizard?
+  // then a mock wizard would make special screens for those that need to be
+  // mocked?
+  // whatever makes the disk write thread would need a mocked version
+  // the download page will have to be mocked 
+  //IntegrationTestGondarWizard wizard;
+  GondarWizard wizard;
+  wizard.show();
+  // 0->3
+  proceed(& wizard);
+  // 3->4
+  proceed(& wizard);
+  // 4->5
+  proceed(& wizard);
+  // 5->6
+  proceed(& wizard);
+  // wait a sec'
+  QTest::qWait(1000);
+  //QVERIFY(wizard.currentId() == 6);
+  LOG_WARNING << "curId" << wizard.currentId();
 }
 
 }  // namespace gondar
