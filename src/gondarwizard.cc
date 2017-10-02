@@ -29,6 +29,8 @@
 
 class GondarWizard::Private {
  public:
+  Private();
+  Private(gondar::DevicePicker * picker_in);
   gondar::UpdateCheck updateCheck;
   gondar::AboutDialog aboutDialog;
 
@@ -43,6 +45,10 @@ class GondarWizard::Private {
   QDateTime runTime;
 };
 
+GondarWizard::Private::Private() { }
+GondarWizard::Private::Private(gondar::DevicePicker * picker_in)
+    : deviceSelectPage(new DeviceSelectPage(picker_in)) { }
+
 GondarWizard::GondarWizard(QWidget* parent)
     : QWizard(parent),
       p_(new Private()),
@@ -52,7 +58,7 @@ GondarWizard::GondarWizard(QWidget* parent)
 
 GondarWizard::GondarWizard(gondar::DevicePicker * picker_in, QWidget* parent)
     : QWizard(parent),
-      p_(new Private()),
+      p_(new Private(picker_in)),
       about_shortcut_(QKeySequence::HelpContents, this) {
   init();
 }
