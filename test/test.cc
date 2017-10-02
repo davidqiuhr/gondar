@@ -50,6 +50,13 @@ const gondar::DevicePicker::Button* TestDevicePicker::selectedButton() const {
   }
 }
 
+TestUnzipThread::TestUnzipThread(const QFileInfo& inputFile, QObject* parent) : UnzipThread(inputFile, parent) {
+}
+
+const QString& TestUnzipThread::getFileName() const {
+  return kewlstr;
+}
+
 // end test object stuff
 
 inline void initResource() {

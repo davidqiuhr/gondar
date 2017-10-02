@@ -22,6 +22,7 @@
 
 // for test objects
 #include "src/device_picker.h"
+#include "src/unzipthread.h"
 
 // test objects
 class TestDevicePicker : public gondar::DevicePicker {
@@ -29,6 +30,14 @@ class TestDevicePicker : public gondar::DevicePicker {
   TestDevicePicker();
  private:
   const DevicePicker::Button* selectedButton() const override;
+};
+
+class TestUnzipThread : public UnzipThread {
+  Q_OBJECT
+ public:
+  TestUnzipThread(const QFileInfo& inputFile, QObject* parent = 0);
+  const QString& getFileName() const override;
+  const QString& kewlstr = ""; 
 };
 
 namespace gondar {
