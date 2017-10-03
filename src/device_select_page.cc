@@ -21,14 +21,13 @@
 DeviceSelectPage::DeviceSelectPage(QWidget* parent) : WizardPage(parent) {
   // this page should just say 'hi how are you' while it stealthily loads
   // the usb device list.  or it could ask you to insert your device
-  picker = & pickerGuy;
+  picker = & realPicker;
   init();
 }
 
 DeviceSelectPage::DeviceSelectPage(gondar::DevicePicker * picker_in, QWidget* parent) : WizardPage(parent) {
   // this page should just say 'hi how are you' while it stealthily loads
   // the usb device list.  or it could ask you to insert your device
-  LOG_WARNING << "SETTING PICKER TO CUSTOM PICKER HORSES HORSES HORSES";
   picker = picker_in;
   init();
 }

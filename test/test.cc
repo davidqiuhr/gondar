@@ -158,16 +158,9 @@ void proceed(GondarWizard * wizard) {
 void Test::testLinuxStubFlow() {
   initResource();
   gondar::InitializeLogging();
-  // let's instead make a mock-wizard?
-  // then a mock wizard would make special screens for those that need to be
-  // mocked?
-  // whatever makes the disk write thread would need a mocked version
-  // the download page will have to be mocked 
-  //IntegrationTestGondarWizard wizard;
   TestDevicePicker * testpicker = new TestDevicePicker(); 
   TestDownloadManager * testmgr = new TestDownloadManager();
   DownloadProgressPage * testprogress = new TestDownloadProgressPage(testmgr);
-  //TODO: make this a TestWriteOperationPage
   WriteOperationPage * testWriteOp = new TestWriteOperationPage();
   GondarWizard wizard(testpicker, testprogress, testWriteOp);
   wizard.show();
@@ -181,7 +174,6 @@ void Test::testLinuxStubFlow() {
   proceed(& wizard);
   // wait a sec'
   QTest::qWait(1000);
-  LOG_WARNING << "currentId=" << wizard.currentId();
   QVERIFY(wizard.currentId() == 6);
 }
 

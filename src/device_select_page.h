@@ -39,7 +39,7 @@ class DeviceSelectPage : public gondar::WizardPage {
  private:
   QVBoxLayout layout;
   QLabel drivesLabel;
-  gondar::DevicePicker pickerGuy;
+  gondar::DevicePicker realPicker;
   gondar::DevicePicker* picker;
 };
 

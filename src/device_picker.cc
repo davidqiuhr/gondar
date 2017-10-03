@@ -17,7 +17,6 @@
 
 #include "device_picker.h"
 
-#include "log.h"
 #include "util.h"
 
 namespace gondar {
@@ -58,7 +57,6 @@ void DevicePicker::refresh(const DeviceGuyList& devices) {
 }
 
 const DevicePicker::Button* DevicePicker::selectedButton() const {
-  LOG_WARNING << "USING ORIGINAL DEVICE PICKER FUNC";
   const QAbstractButton* selected = button_group_.checkedButton();
   return dynamic_cast<const Button*>(selected);
 }
