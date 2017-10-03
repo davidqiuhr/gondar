@@ -57,6 +57,12 @@ const QString& TestUnzipThread::getFileName() const {
   return kewlstr;
 }
 
+TestDownloadProgressPage::TestDownloadProgressPage() {
+}
+
+UnzipThread * TestDownloadProgressPage::makeUnzipThread() {
+  return new TestUnzipThread(manager.outputFileInfo(), this);
+}
 // end test object stuff
 
 inline void initResource() {

@@ -23,6 +23,8 @@
 #include "unzipthread.h"
 #include "wizard_page.h"
 
+class UnzipThread;
+
 class DownloadProgressPage : public gondar::WizardPage {
   Q_OBJECT
 
@@ -30,6 +32,7 @@ class DownloadProgressPage : public gondar::WizardPage {
   DownloadProgressPage(QWidget* parent = 0);
   bool isComplete() const override;
   const QString& getImageFileName();
+  virtual UnzipThread * makeUnzipThread();
 
  protected:
   void initializePage() override;

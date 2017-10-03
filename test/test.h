@@ -40,6 +40,13 @@ class TestUnzipThread : public UnzipThread {
   const QString& kewlstr = ""; 
 };
 
+class TestDownloadProgressPage : public DownloadProgressPage {
+  Q_OBJECT
+ public:
+  TestDownloadProgressPage(QObject* parent = 0);
+  UnzipThread * makeUnzipThread() override; 
+}
+
 namespace gondar {
 
 class Test : public QObject {
