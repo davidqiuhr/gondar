@@ -17,11 +17,13 @@
 #define TEST_TEST_H_
 
 #include <QObject>
+#include <QWidget>
 
 #include <QtTest/QtTest>
 
 // for test objects
 #include "src/device_picker.h"
+#include "src/download_progress_page.h"
 #include "src/unzipthread.h"
 
 // test objects
@@ -38,14 +40,15 @@ class TestUnzipThread : public UnzipThread {
   TestUnzipThread(const QFileInfo& inputFile, QObject* parent = 0);
   const QString& getFileName() const override;
   const QString& kewlstr = ""; 
+  void run() override;
 };
 
 class TestDownloadProgressPage : public DownloadProgressPage {
   Q_OBJECT
  public:
-  TestDownloadProgressPage(QObject* parent = 0);
+  TestDownloadProgressPage(QWidget* parent = 0);
   UnzipThread * makeUnzipThread() override; 
-}
+};
 
 namespace gondar {
 

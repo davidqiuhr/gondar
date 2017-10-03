@@ -61,7 +61,7 @@ bool DeviceSelectPage::isComplete() const {
 }
 
 int DeviceSelectPage::nextId() const {
-  if (wizard()->downloadProgressPage.isComplete()) {
+  if (wizard()->downloadProgressPage->isComplete()) {
     return GondarWizard::Page_writeOperation;
   } else {
     return GondarWizard::Page_downloadProgress;

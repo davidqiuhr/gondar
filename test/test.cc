@@ -50,19 +50,26 @@ const gondar::DevicePicker::Button* TestDevicePicker::selectedButton() const {
   }
 }
 
-TestUnzipThread::TestUnzipThread(const QFileInfo& inputFile, QObject* parent) : UnzipThread(inputFile, parent) {
+TestUnzipThread::TestUnzipThread(const QFileInfo& inputFile, QObject* parent) :
+ UnzipThread(inputFile, parent) {
+
 }
 
 const QString& TestUnzipThread::getFileName() const {
   return kewlstr;
 }
 
-TestDownloadProgressPage::TestDownloadProgressPage() {
+void TestUnzipThread::run() {
+}
+
+TestDownloadProgressPage::TestDownloadProgressPage(QWidget* parent) : DownloadProgressPage(parent) {
 }
 
 UnzipThread * TestDownloadProgressPage::makeUnzipThread() {
+  LOG_WARNING << "USING CORRECT MAKEUNZIPTHREAD";
   return new TestUnzipThread(manager.outputFileInfo(), this);
 }
+
 // end test object stuff
 
 inline void initResource() {
@@ -124,8 +131,9 @@ void Test::testLinuxStubFlow() {
   // the download page will have to be mocked 
   //IntegrationTestGondarWizard wizard;
   TestDevicePicker * testpicker = new TestDevicePicker(); 
-  TestUnzipThread * testunzip = new TestUnzipThread();
-  GondarWizard wizard(testpicker, testunzip);
+  //TestUnzipThread * testunzip = new TestUnzipThread();
+  TestDownloadProgressPage * testprogress = new TestDownloadProgressPage();
+  GondarWizard wizard(testpicker, testprogress);
   wizard.show();
   // 0->3
   proceed(& wizard);

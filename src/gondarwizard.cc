@@ -57,13 +57,16 @@ GondarWizard::GondarWizard(QWidget* parent)
       p_(new Private()),
       about_shortcut_(QKeySequence::HelpContents, this) {
   init();
+  downloadProgressPage = new DownloadProgressPage();
 }
 
 GondarWizard::GondarWizard(gondar::DevicePicker * picker_in,
-                           UnzipThread * unzip_in, QWidget* parent)
+                           DownloadProgressPage * downloadProgressIn,
+                           QWidget* parent)
     : QWizard(parent),
-      p_(new Private(picker_in, unzip_in)),
+      p_(new Private(picker_in)),
       about_shortcut_(QKeySequence::HelpContents, this) {
+  downloadProgressPage = downloadProgressIn;
   init();
 }
 
@@ -81,7 +84,7 @@ void GondarWizard::init() {
   setPage(Page_imageSelect, &imageSelectPage);
   setPage(Page_usbInsert, &usbInsertPage);
   setPage(Page_deviceSelect, p_->deviceSelectPage);
-  setPage(Page_downloadProgress, &downloadProgressPage);
+  setPage(Page_downloadProgress, downloadProgressPage);
   setPage(Page_writeOperation, &writeOperationPage);
   setPage(Page_error, &p_->errorPage);
   setWizardStyle(QWizard::ModernStyle);

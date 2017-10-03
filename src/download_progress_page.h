@@ -34,17 +34,16 @@ class DownloadProgressPage : public gondar::WizardPage {
   const QString& getImageFileName();
   virtual UnzipThread * makeUnzipThread();
 
- protected:
-  void initializePage() override;
-  void notifyUnzip();
-
  public slots:
   void markComplete();
   void downloadProgress(qint64 sofar, qint64 total);
   void onDownloadStarted();
   void onUnzipFinished();
 
- private:
+ protected:
+  void initializePage() override;
+  void notifyUnzip();
+
   bool range_set;
   DownloadManager manager;
   QProgressBar progress;

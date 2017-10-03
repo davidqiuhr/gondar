@@ -16,6 +16,8 @@
 #include "download_progress_page.h"
 #include "gondarwizard.h"
 
+#include "log.h"
+
 DownloadProgressPage::DownloadProgressPage(QWidget* parent)
     : WizardPage(parent) {
   setTitle("CloudReady Download");
@@ -52,6 +54,7 @@ void DownloadProgressPage::downloadProgress(qint64 sofar, qint64 total) {
 }
 
 UnzipThread * DownloadProgressPage::makeUnzipThread() {
+  LOG_WARNING << "USING INCORRECT MAKEUNZIPTHREAD";
   return new UnzipThread(manager.outputFileInfo(), this);
 }
 

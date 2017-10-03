@@ -27,7 +27,7 @@ class UnzipThread : public QThread {
   virtual const QString& getFileName() const;
 
  protected:
-  void run() override;
+  virtual void run() override;
   QFileInfo inputFile;
   QString filename;
 };

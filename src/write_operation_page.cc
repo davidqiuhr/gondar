@@ -49,7 +49,7 @@ bool WriteOperationPage::validatePage() {
 void WriteOperationPage::writeToDrive() {
   LOG_INFO << "Writing to drive...";
   image_path.clear();
-  image_path.append(wizard()->downloadProgressPage.getImageFileName());
+  image_path.append(wizard()->downloadProgressPage->getImageFileName());
   showProgress();
   diskWriteThread = new DiskWriteThread(&device, image_path, this);
   connect(diskWriteThread, &DiskWriteThread::finished, this,

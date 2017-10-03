@@ -41,7 +41,7 @@ class GondarWizard : public QWizard {
 
  public:
   GondarWizard(QWidget* parent = 0);
-  GondarWizard(gondar::DevicePicker * picker_in, UnzipThread * unzip_in, QWidget* parent = 0);
+  GondarWizard(gondar::DevicePicker * picker_in, DownloadProgressPage * downloadProgressIn, QWidget* parent = 0);
   ~GondarWizard();
   void init();
   int nextId() const override;
@@ -54,8 +54,7 @@ class GondarWizard : public QWizard {
   // makes a decision based on a radio button seleciton in an earlier page,
   // so putting the shared state in the wizard seems more straightforward
   ImageSelectPage imageSelectPage;
-  //TODO: move to private
-  DownloadProgressPage downloadProgressPage;
+  DownloadProgressPage * downloadProgressPage;
   UsbInsertPage usbInsertPage;
   WriteOperationPage writeOperationPage;
 
