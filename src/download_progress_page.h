@@ -41,11 +41,12 @@ class DownloadProgressPage : public gondar::WizardPage {
   void onUnzipFinished();
 
  protected:
+  void init();
   void initializePage() override;
   void notifyUnzip();
 
   bool range_set;
-  DownloadManager manager;
+  DownloadManager * manager;
   QProgressBar progress;
   bool download_finished;
   QVBoxLayout layout;

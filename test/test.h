@@ -48,7 +48,7 @@ class TestUnzipThread : public UnzipThread {
 class TestDownloadProgressPage : public DownloadProgressPage {
   Q_OBJECT
  public:
-  TestDownloadProgressPage(QWidget* parent = 0);
+  TestDownloadProgressPage(DownloadManager * manager_in, QWidget* parent = 0);
   UnzipThread * makeUnzipThread() override; 
 };
 
@@ -63,6 +63,12 @@ class TestWriteOperationPage : public WriteOperationPage {
  public:
   TestWriteOperationPage(QWidget* parent = 0);
   DiskWriteThread * makeDiskWriteThread(DeviceGuy* drive_in, const QString& image_path_in, QObject* parent) override; 
+};
+
+class TestDownloadManager : public DownloadManager {
+ public:
+  TestDownloadManager(QObject* parent = 0);
+  void append(const QUrl& url) override;
 };
 
 namespace gondar {

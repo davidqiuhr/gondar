@@ -64,11 +64,16 @@ const QString& TestUnzipThread::getFileName() const {
 void TestUnzipThread::run() {
 }
 
-TestDownloadProgressPage::TestDownloadProgressPage(QWidget* parent) : DownloadProgressPage(parent) {
+TestDownloadProgressPage::TestDownloadProgressPage(
+    DownloadManager * manager_in,
+    QWidget* parent)
+    : DownloadProgressPage(parent) {
+  manager = manager_in;
+  init();
 }
 
 UnzipThread * TestDownloadProgressPage::makeUnzipThread() { 
-  return new TestUnzipThread(manager.outputFileInfo(), this);
+  return new TestUnzipThread(manager->outputFileInfo(), this);
 }
 
 TestDiskWriteThread::TestDiskWriteThread(DeviceGuy* drive_in, const QString& image_path_in, QObject* parent) :
@@ -87,6 +92,18 @@ DiskWriteThread* TestWriteOperationPage::makeDiskWriteThread(
     QObject* parent) { 
   return new TestDiskWriteThread(drive_in, image_path_in, parent);
 }
+
+TestDownloadManager::TestDownloadManager(QObject* parent)
+    : DownloadManager(parent) {
+}
+
+void TestDownloadManager::append(const QUrl& url) {
+  LOG_WARNING << "USING THE APPEND I WANT";
+  // do nothing
+  QUrl a = url;
+  a = a;
+}
+
 // end test object stuff
 
 inline void initResource() {
@@ -148,8 +165,8 @@ void Test::testLinuxStubFlow() {
   // the download page will have to be mocked 
   //IntegrationTestGondarWizard wizard;
   TestDevicePicker * testpicker = new TestDevicePicker(); 
-  //TestUnzipThread * testunzip = new TestUnzipThread();
-  TestDownloadProgressPage * testprogress = new TestDownloadProgressPage();
+  TestDownloadManager * testmgr = new TestDownloadManager();
+  DownloadProgressPage * testprogress = new TestDownloadProgressPage(testmgr);
   //TODO: make this a TestWriteOperationPage
   WriteOperationPage * testWriteOp = new TestWriteOperationPage();
   GondarWizard wizard(testpicker, testprogress, testWriteOp);

@@ -20,6 +20,11 @@
 
 DownloadProgressPage::DownloadProgressPage(QWidget* parent)
     : WizardPage(parent) {
+  manager = new DownloadManager();
+  init();
+}
+
+void DownloadProgressPage::init() {
   setTitle("CloudReady Download");
   setSubTitle("Your installer is currently downloading.");
   download_finished = false;
@@ -32,15 +37,15 @@ void DownloadProgressPage::initializePage() {
   setLayout(&layout);
   const QUrl url = wizard()->imageSelectPage.getUrl();
   qDebug() << "using url= " << url;
-  connect(&manager, &DownloadManager::finished, this,
+  connect(manager, &DownloadManager::finished, this,
           &DownloadProgressPage::markComplete);
-  manager.append(url.toString());
-  connect(&manager, &DownloadManager::started, this,
+  manager->append(url.toString());
+  connect(manager, &DownloadManager::started, this,
           &DownloadProgressPage::onDownloadStarted);
 }
 
 void DownloadProgressPage::onDownloadStarted() {
-  QNetworkReply* cur_download = manager.getCurrentDownload();
+  QNetworkReply* cur_download = manager->getCurrentDownload();
   connect(cur_download, &QNetworkReply::downloadProgress, this,
           &DownloadProgressPage::downloadProgress);
 }
@@ -54,8 +59,7 @@ void DownloadProgressPage::downloadProgress(qint64 sofar, qint64 total) {
 }
 
 UnzipThread * DownloadProgressPage::makeUnzipThread() {
-  LOG_WARNING << "USING INCORRECT MAKEUNZIPTHREAD";
-  return new UnzipThread(manager.outputFileInfo(), this);
+  return new UnzipThread(manager->outputFileInfo(), this);
 }
 
 void DownloadProgressPage::markComplete() {
