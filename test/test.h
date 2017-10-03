@@ -23,8 +23,10 @@
 
 // for test objects
 #include "src/device_picker.h"
+#include "src/diskwritethread.h"
 #include "src/download_progress_page.h"
 #include "src/unzipthread.h"
+#include "src/write_operation_page.h"
 
 // test objects
 class TestDevicePicker : public gondar::DevicePicker {
@@ -48,6 +50,19 @@ class TestDownloadProgressPage : public DownloadProgressPage {
  public:
   TestDownloadProgressPage(QWidget* parent = 0);
   UnzipThread * makeUnzipThread() override; 
+};
+
+class TestDiskWriteThread : public DiskWriteThread {
+  Q_OBJECT
+ public:
+  TestDiskWriteThread(DeviceGuy * drive_in, const QString& image_path_in, QObject* parent = 0);
+  void run() override;
+};
+
+class TestWriteOperationPage : public WriteOperationPage {
+ public:
+  TestWriteOperationPage(QWidget* parent = 0);
+  DiskWriteThread * makeDiskWriteThread(DeviceGuy* drive_in, const QString& image_path_in, QObject* parent) override; 
 };
 
 namespace gondar {

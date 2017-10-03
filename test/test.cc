@@ -14,9 +14,11 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QAbstractButton>
+#include <QString>
 
 #include "test.h"
 
+#include "src/device.h"
 #include "src/device_picker.h"
 #include "src/gondarwizard.h"
 #include "src/log.h"
@@ -65,11 +67,26 @@ void TestUnzipThread::run() {
 TestDownloadProgressPage::TestDownloadProgressPage(QWidget* parent) : DownloadProgressPage(parent) {
 }
 
-UnzipThread * TestDownloadProgressPage::makeUnzipThread() {
-  LOG_WARNING << "USING CORRECT MAKEUNZIPTHREAD";
+UnzipThread * TestDownloadProgressPage::makeUnzipThread() { 
   return new TestUnzipThread(manager.outputFileInfo(), this);
 }
 
+TestDiskWriteThread::TestDiskWriteThread(DeviceGuy* drive_in, const QString& image_path_in, QObject* parent) :
+ DiskWriteThread(drive_in, image_path_in, parent) {
+}
+
+void TestDiskWriteThread::run() {
+}
+
+TestWriteOperationPage::TestWriteOperationPage(QWidget* parent) : WriteOperationPage(parent) {
+}
+
+DiskWriteThread* TestWriteOperationPage::makeDiskWriteThread(
+    DeviceGuy* drive_in,
+    const QString& image_path_in,
+    QObject* parent) { 
+  return new TestDiskWriteThread(drive_in, image_path_in, parent);
+}
 // end test object stuff
 
 inline void initResource() {
@@ -134,7 +151,7 @@ void Test::testLinuxStubFlow() {
   //TestUnzipThread * testunzip = new TestUnzipThread();
   TestDownloadProgressPage * testprogress = new TestDownloadProgressPage();
   //TODO: make this a TestWriteOperationPage
-  WriteOperationPage * testWriteOp = new WriteOperationPage();
+  WriteOperationPage * testWriteOp = new TestWriteOperationPage();
   GondarWizard wizard(testpicker, testprogress, testWriteOp);
   wizard.show();
   // 0->3
@@ -147,8 +164,8 @@ void Test::testLinuxStubFlow() {
   proceed(& wizard);
   // wait a sec'
   QTest::qWait(1000);
-  //QVERIFY(wizard.currentId() == 6);
-  LOG_WARNING << "ended on " << wizard.currentId();
+  LOG_WARNING << "currentId=" << wizard.currentId();
+  QVERIFY(wizard.currentId() == 6);
 }
 
 }  // namespace gondar
