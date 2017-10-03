@@ -16,8 +16,6 @@
 #include "download_progress_page.h"
 #include "gondarwizard.h"
 
-#include "log.h"
-
 DownloadProgressPage::DownloadProgressPage(QWidget* parent)
     : WizardPage(parent) {
   manager = new DownloadManager();
@@ -58,7 +56,7 @@ void DownloadProgressPage::downloadProgress(qint64 sofar, qint64 total) {
   progress.setValue(sofar);
 }
 
-UnzipThread * DownloadProgressPage::makeUnzipThread() {
+UnzipThread* DownloadProgressPage::makeUnzipThread() {
   return new UnzipThread(manager->outputFileInfo(), this);
 }
 
@@ -66,8 +64,6 @@ void DownloadProgressPage::markComplete() {
   download_finished = true;
   // now that the download is finished, let's unzip the build.
   notifyUnzip();
-  //TODO: this is a pickle.  whenever it seems like the most obvious solution
-  // is a factory you know you're in a pickle
   unzipThread = makeUnzipThread();
   connect(unzipThread, &UnzipThread::finished, this,
           &DownloadProgressPage::onUnzipFinished);

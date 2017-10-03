@@ -32,6 +32,7 @@
 class TestDevicePicker : public gondar::DevicePicker {
  public:
   TestDevicePicker();
+
  private:
   const DevicePicker::Button* selectedButton() const override;
 };
@@ -41,28 +42,32 @@ class TestUnzipThread : public UnzipThread {
  public:
   TestUnzipThread(const QFileInfo& inputFile, QObject* parent = 0);
   const QString& getFileName() const override;
-  const QString& kewlstr = ""; 
+  const QString& kewlstr = "";
   void run() override;
 };
 
 class TestDownloadProgressPage : public DownloadProgressPage {
   Q_OBJECT
  public:
-  TestDownloadProgressPage(DownloadManager * manager_in, QWidget* parent = 0);
-  UnzipThread * makeUnzipThread() override; 
+  TestDownloadProgressPage(DownloadManager* manager_in, QWidget* parent = 0);
+  UnzipThread* makeUnzipThread() override;
 };
 
 class TestDiskWriteThread : public DiskWriteThread {
   Q_OBJECT
  public:
-  TestDiskWriteThread(DeviceGuy * drive_in, const QString& image_path_in, QObject* parent = 0);
+  TestDiskWriteThread(DeviceGuy* drive_in,
+                      const QString& image_path_in,
+                      QObject* parent = 0);
   void run() override;
 };
 
 class TestWriteOperationPage : public WriteOperationPage {
  public:
   TestWriteOperationPage(QWidget* parent = 0);
-  DiskWriteThread * makeDiskWriteThread(DeviceGuy* drive_in, const QString& image_path_in, QObject* parent) override; 
+  DiskWriteThread* makeDiskWriteThread(DeviceGuy* drive_in,
+                                       const QString& image_path_in,
+                                       QObject* parent) override;
 };
 
 class TestDownloadManager : public DownloadManager {

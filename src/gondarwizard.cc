@@ -30,12 +30,12 @@
 class GondarWizard::Private {
  public:
   Private();
-  Private(gondar::DevicePicker * picker_in);
+  Private(gondar::DevicePicker* picker_in);
   gondar::UpdateCheck updateCheck;
   gondar::AboutDialog aboutDialog;
 
   AdminCheckPage adminCheckPage;
-  DeviceSelectPage * deviceSelectPage;
+  DeviceSelectPage* deviceSelectPage;
   ChromeoverLoginPage chromeoverLoginPage;
   SiteSelectPage siteSelectPage;
   ErrorPage errorPage;
@@ -45,10 +45,10 @@ class GondarWizard::Private {
   QDateTime runTime;
 };
 
-GondarWizard::Private::Private() { 
+GondarWizard::Private::Private() {
   deviceSelectPage = new DeviceSelectPage();
 }
-GondarWizard::Private::Private(gondar::DevicePicker * picker_in) {
+GondarWizard::Private::Private(gondar::DevicePicker* picker_in) {
   deviceSelectPage = new DeviceSelectPage(picker_in);
 }
 
@@ -61,9 +61,9 @@ GondarWizard::GondarWizard(QWidget* parent)
   writeOperationPage = new WriteOperationPage();
 }
 
-GondarWizard::GondarWizard(gondar::DevicePicker * picker_in,
-                           DownloadProgressPage * downloadProgressIn,
-                           WriteOperationPage * writeOpIn,
+GondarWizard::GondarWizard(gondar::DevicePicker* picker_in,
+                           DownloadProgressPage* downloadProgressIn,
+                           WriteOperationPage* writeOpIn,
                            QWidget* parent)
     : QWizard(parent),
       p_(new Private(picker_in)),

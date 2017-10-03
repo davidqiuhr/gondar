@@ -39,7 +39,6 @@ void DownloadManager::append(const QStringList& urlList) {
 }
 
 void DownloadManager::append(const QUrl& url) {
-  LOG_WARNING << "OH GOD WE ARE USING THE OLD APPEND";
   if (downloadQueue.isEmpty())
     QTimer::singleShot(0, this, &DownloadManager::startNextDownload);
 

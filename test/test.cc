@@ -30,12 +30,10 @@ Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
 // test object stuff
 
 TestDevicePicker::TestDevicePicker() {
-  LOG_WARNING << "CREATING CUSTOM PICKER";
 }
 
 // used by selectedButton() for test flow
 const gondar::DevicePicker::Button* TestDevicePicker::selectedButton() const {
-  LOG_WARNING << "USING TEST DEVICE PICKER FUNC";
   // honor user selection in case we figure that bit out
   const QAbstractButton* selected = button_group_.checkedButton();
   if (selected) {
@@ -52,53 +50,47 @@ const gondar::DevicePicker::Button* TestDevicePicker::selectedButton() const {
   }
 }
 
-TestUnzipThread::TestUnzipThread(const QFileInfo& inputFile, QObject* parent) :
- UnzipThread(inputFile, parent) {
-
-}
+TestUnzipThread::TestUnzipThread(const QFileInfo& inputFile, QObject* parent)
+    : UnzipThread(inputFile, parent) {}
 
 const QString& TestUnzipThread::getFileName() const {
   return kewlstr;
 }
 
-void TestUnzipThread::run() {
-}
+void TestUnzipThread::run() {}
 
-TestDownloadProgressPage::TestDownloadProgressPage(
-    DownloadManager * manager_in,
-    QWidget* parent)
+TestDownloadProgressPage::TestDownloadProgressPage(DownloadManager* manager_in,
+                                                   QWidget* parent)
     : DownloadProgressPage(parent) {
   manager = manager_in;
   init();
 }
 
-UnzipThread * TestDownloadProgressPage::makeUnzipThread() { 
+UnzipThread* TestDownloadProgressPage::makeUnzipThread() {
   return new TestUnzipThread(manager->outputFileInfo(), this);
 }
 
-TestDiskWriteThread::TestDiskWriteThread(DeviceGuy* drive_in, const QString& image_path_in, QObject* parent) :
- DiskWriteThread(drive_in, image_path_in, parent) {
-}
+TestDiskWriteThread::TestDiskWriteThread(DeviceGuy* drive_in,
+                                         const QString& image_path_in,
+                                         QObject* parent)
+    : DiskWriteThread(drive_in, image_path_in, parent) {}
 
-void TestDiskWriteThread::run() {
-}
+void TestDiskWriteThread::run() {}
 
-TestWriteOperationPage::TestWriteOperationPage(QWidget* parent) : WriteOperationPage(parent) {
-}
+TestWriteOperationPage::TestWriteOperationPage(QWidget* parent)
+    : WriteOperationPage(parent) {}
 
 DiskWriteThread* TestWriteOperationPage::makeDiskWriteThread(
     DeviceGuy* drive_in,
     const QString& image_path_in,
-    QObject* parent) { 
+    QObject* parent) {
   return new TestDiskWriteThread(drive_in, image_path_in, parent);
 }
 
 TestDownloadManager::TestDownloadManager(QObject* parent)
-    : DownloadManager(parent) {
-}
+    : DownloadManager(parent) {}
 
 void TestDownloadManager::append(const QUrl& url) {
-  LOG_WARNING << "USING THE APPEND I WANT";
   // do nothing
   QUrl a = url;
   a = a;
@@ -122,8 +114,8 @@ QAbstractButton* getDevicePickerButton(DevicePicker* picker, const int index) {
 }  // namespace
 
 uint64_t getValidDiskSize() {
-    const uint64_t gigabyte = 1073741824LL;
-    return 10 * gigabyte;
+  const uint64_t gigabyte = 1073741824LL;
+  return 10 * gigabyte;
 }
 
 void Test::testDevicePicker() {
@@ -139,7 +131,8 @@ void Test::testDevicePicker() {
   QCOMPARE(*picker.selectedDevice(), DeviceGuy(1, "a", getValidDiskSize()));
 
   // Replace with two new devices
-  picker.refresh({DeviceGuy(2, "b", getValidDiskSize()), DeviceGuy(3, "c", getValidDiskSize())});
+  picker.refresh({DeviceGuy(2, "b", getValidDiskSize()),
+                  DeviceGuy(3, "c", getValidDiskSize())});
   QVERIFY(picker.selectedDevice() == nullopt);
 
   // Select the last device
@@ -149,29 +142,31 @@ void Test::testDevicePicker() {
   QCOMPARE(*picker.selectedDevice(), DeviceGuy(3, "c", getValidDiskSize()));
 }
 
-void proceed(GondarWizard * wizard) {
-  // oh i see.  the last arg is a wait in MILLIseconds
-  QTest::mouseClick(wizard->button(QWizard::NextButton), Qt::LeftButton, Qt::NoModifier, QPoint(), 3000);
+void proceed(GondarWizard* wizard) {
+  // occassionally with 3 seconds (3k ms) i get stuck on page 3.
+  QTest::mouseClick(wizard->button(QWizard::NextButton), Qt::LeftButton,
+                    Qt::NoModifier, QPoint(), 3000);
   LOG_WARNING << "id after click=" << wizard->currentId();
 }
 
 void Test::testLinuxStubFlow() {
   initResource();
   gondar::InitializeLogging();
-  TestDevicePicker * testpicker = new TestDevicePicker(); 
-  TestDownloadManager * testmgr = new TestDownloadManager();
-  DownloadProgressPage * testprogress = new TestDownloadProgressPage(testmgr);
-  WriteOperationPage * testWriteOp = new TestWriteOperationPage();
+  TestDevicePicker* testpicker = new TestDevicePicker();
+  TestDownloadManager* testmgr = new TestDownloadManager();
+  DownloadProgressPage* testprogress = new TestDownloadProgressPage(testmgr);
+  WriteOperationPage* testWriteOp = new TestWriteOperationPage();
   GondarWizard wizard(testpicker, testprogress, testWriteOp);
   wizard.show();
+  QTest::qWait(1000);
   // 0->3
-  proceed(& wizard);
+  proceed(&wizard);
   // 3->4
-  proceed(& wizard);
+  proceed(&wizard);
   // 4->5
-  proceed(& wizard);
+  proceed(&wizard);
   // 5->6
-  proceed(& wizard);
+  proceed(&wizard);
   // wait a sec'
   QTest::qWait(1000);
   QVERIFY(wizard.currentId() == 6);

@@ -47,7 +47,7 @@ bool WriteOperationPage::validatePage() {
 }
 
 DiskWriteThread* WriteOperationPage::makeDiskWriteThread(
-    DeviceGuy * drive_in,
+    DeviceGuy* drive_in,
     const QString& image_path_in,
     QObject* parent) {
   return new DiskWriteThread(drive_in, image_path_in, parent);

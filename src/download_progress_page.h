@@ -32,7 +32,7 @@ class DownloadProgressPage : public gondar::WizardPage {
   DownloadProgressPage(QWidget* parent = 0);
   bool isComplete() const override;
   const QString& getImageFileName();
-  virtual UnzipThread * makeUnzipThread();
+  virtual UnzipThread* makeUnzipThread();
 
  public slots:
   void markComplete();
@@ -46,7 +46,7 @@ class DownloadProgressPage : public gondar::WizardPage {
   void notifyUnzip();
 
   bool range_set;
-  DownloadManager * manager;
+  DownloadManager* manager;
   QProgressBar progress;
   bool download_finished;
   QVBoxLayout layout;

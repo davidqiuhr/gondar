@@ -27,7 +27,7 @@ class DeviceSelectPage : public gondar::WizardPage {
 
  public:
   DeviceSelectPage(QWidget* parent = 0);
-  DeviceSelectPage(gondar::DevicePicker * picker_in, QWidget* parent = 0);
+  DeviceSelectPage(gondar::DevicePicker* picker_in, QWidget* parent = 0);
   void init();
   int nextId() const override;
 

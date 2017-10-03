@@ -27,9 +27,7 @@ A linkedlist of device info passed between the C and C++ layer
 class DeviceGuy {
  public:
   DeviceGuy(const DeviceGuy& other) = default;
-  DeviceGuy(uint32_t device_num,
-            const std::string name,
-            uint64_t num_bytes);
+  DeviceGuy(uint32_t device_num, const std::string name, uint64_t num_bytes);
   bool operator==(const DeviceGuy& other) const;
 
   std::string toString() const;
