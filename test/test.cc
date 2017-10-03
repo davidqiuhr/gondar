@@ -133,7 +133,9 @@ void Test::testLinuxStubFlow() {
   TestDevicePicker * testpicker = new TestDevicePicker(); 
   //TestUnzipThread * testunzip = new TestUnzipThread();
   TestDownloadProgressPage * testprogress = new TestDownloadProgressPage();
-  GondarWizard wizard(testpicker, testprogress);
+  //TODO: make this a TestWriteOperationPage
+  WriteOperationPage * testWriteOp = new WriteOperationPage();
+  GondarWizard wizard(testpicker, testprogress, testWriteOp);
   wizard.show();
   // 0->3
   proceed(& wizard);

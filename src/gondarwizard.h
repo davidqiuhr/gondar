@@ -41,7 +41,10 @@ class GondarWizard : public QWizard {
 
  public:
   GondarWizard(QWidget* parent = 0);
-  GondarWizard(gondar::DevicePicker * picker_in, DownloadProgressPage * downloadProgressIn, QWidget* parent = 0);
+  GondarWizard(gondar::DevicePicker * picker_in,
+               DownloadProgressPage * downloadProgressIn,
+               WriteOperationPage * writeOpIn,
+               QWidget* parent = 0);
   ~GondarWizard();
   void init();
   int nextId() const override;
@@ -56,7 +59,7 @@ class GondarWizard : public QWizard {
   ImageSelectPage imageSelectPage;
   DownloadProgressPage * downloadProgressPage;
   UsbInsertPage usbInsertPage;
-  WriteOperationPage writeOperationPage;
+  WriteOperationPage * writeOperationPage;
 
   const std::vector<GondarSite>& sites() const;
   void setSites(const std::vector<GondarSite>& sites);

@@ -58,15 +58,18 @@ GondarWizard::GondarWizard(QWidget* parent)
       about_shortcut_(QKeySequence::HelpContents, this) {
   init();
   downloadProgressPage = new DownloadProgressPage();
+  writeOperationPage = new WriteOperationPage();
 }
 
 GondarWizard::GondarWizard(gondar::DevicePicker * picker_in,
                            DownloadProgressPage * downloadProgressIn,
+                           WriteOperationPage * writeOpIn,
                            QWidget* parent)
     : QWizard(parent),
       p_(new Private(picker_in)),
       about_shortcut_(QKeySequence::HelpContents, this) {
   downloadProgressPage = downloadProgressIn;
+  writeOperationPage = writeOpIn;
   init();
 }
 
@@ -85,7 +88,7 @@ void GondarWizard::init() {
   setPage(Page_usbInsert, &usbInsertPage);
   setPage(Page_deviceSelect, p_->deviceSelectPage);
   setPage(Page_downloadProgress, downloadProgressPage);
-  setPage(Page_writeOperation, &writeOperationPage);
+  setPage(Page_writeOperation, writeOperationPage);
   setPage(Page_error, &p_->errorPage);
   setWizardStyle(QWizard::ModernStyle);
   setWindowTitle(tr("CloudReady USB Maker"));
