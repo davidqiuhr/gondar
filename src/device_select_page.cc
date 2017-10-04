@@ -22,7 +22,7 @@ DeviceSelectPage::DeviceSelectPage(QWidget* parent) : WizardPage(parent) {
   // this page should just say 'hi how are you' while it stealthily loads
   // the usb device list.  or it could ask you to insert your device
   setTitle("USB device selection");
-  setSubTitle("Choose your target device from the list of devices below.");
+  setSubTitle("Choose your target USB device from the list of devices below.");
   drivesLabel.setText("Select Drive:");
 
   layout.addWidget(&drivesLabel);
