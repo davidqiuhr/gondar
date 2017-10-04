@@ -139,7 +139,7 @@ void Test::testDevicePicker() {
 }
 
 void proceed(GondarWizard* wizard) {
-  // occassionally with 3 seconds (3k ms) i get stuck on page 3.
+  // occasionally with 3 seconds (3k ms) i get stuck on page 3.
   QTest::mouseClick(wizard->button(QWizard::NextButton), Qt::LeftButton,
                     Qt::NoModifier, QPoint(), 3000);
   LOG_WARNING << "id after click=" << wizard->currentId();
