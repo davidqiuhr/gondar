@@ -19,7 +19,7 @@
 DownloadProgressPage::DownloadProgressPage(QWidget* parent)
     : WizardPage(parent) {
   setTitle("CloudReady Download");
-  setSubTitle("Your installer is currently downloading.");
+  setSubTitle("Your installer image is currently downloading.");
   download_finished = false;
   layout.addWidget(&progress);
   setLayout(&layout);
