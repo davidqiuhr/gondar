@@ -35,8 +35,8 @@ QAbstractButton* getDevicePickerButton(DevicePicker* picker, const int index) {
 }  // namespace
 
 uint64_t getValidDiskSize() {
-    const uint64_t gigabyte = 1073741824LL;
-    return 10 * gigabyte;
+  const uint64_t gigabyte = 1073741824LL;
+  return 10 * gigabyte;
 }
 
 void Test::testDevicePicker() {
@@ -52,7 +52,8 @@ void Test::testDevicePicker() {
   QCOMPARE(*picker.selectedDevice(), DeviceGuy(1, "a", getValidDiskSize()));
 
   // Replace with two new devices
-  picker.refresh({DeviceGuy(2, "b", getValidDiskSize()), DeviceGuy(3, "c", getValidDiskSize())});
+  picker.refresh({DeviceGuy(2, "b", getValidDiskSize()),
+                  DeviceGuy(3, "c", getValidDiskSize())});
   QVERIFY(picker.selectedDevice() == nullopt);
 
   // Select the last device
