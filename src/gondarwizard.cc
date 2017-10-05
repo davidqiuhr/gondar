@@ -59,17 +59,20 @@ GondarWizard::GondarWizard(QWidget* parent)
   init();
   downloadProgressPage = new DownloadProgressPage();
   writeOperationPage = new WriteOperationPage();
+  imageSelectPage = new ImageSelectPage();
 }
 
 GondarWizard::GondarWizard(gondar::DevicePicker* picker_in,
                            DownloadProgressPage* downloadProgressIn,
                            WriteOperationPage* writeOpIn,
+                           ImageSelectPage* imageSelectIn,
                            QWidget* parent)
     : QWizard(parent),
       p_(new Private(picker_in)),
       about_shortcut_(QKeySequence::HelpContents, this) {
   downloadProgressPage = downloadProgressIn;
   writeOperationPage = writeOpIn;
+  imageSelectPage = imageSelectIn;
   init();
 }
 
@@ -84,7 +87,7 @@ void GondarWizard::init() {
   // that both progress to usbInsertPage
   setPage(Page_chromeoverLogin, &p_->chromeoverLoginPage);
   setPage(Page_siteSelect, &p_->siteSelectPage);
-  setPage(Page_imageSelect, &imageSelectPage);
+  setPage(Page_imageSelect, imageSelectPage);
   setPage(Page_usbInsert, &usbInsertPage);
   setPage(Page_deviceSelect, p_->deviceSelectPage.get());
   setPage(Page_downloadProgress, downloadProgressPage);

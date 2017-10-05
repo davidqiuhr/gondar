@@ -103,6 +103,13 @@ class MockDownloadManager : public DownloadManager {
   void append(const QUrl& url) override {}
 };
 
+class MockNewestImage : public NewestImageUrl {
+ public:
+  bool isReady() const override {
+    return true;
+  } 
+};
+
 }  // namespace
 
 // end test object stuff
@@ -165,7 +172,9 @@ void Test::testLinuxStubFlow() {
   MockDownloadManager* testmgr = new MockDownloadManager();
   DownloadProgressPage* testprogress = new MockDownloadProgressPage(testmgr);
   WriteOperationPage* testWriteOp = new MockWriteOperationPage();
-  GondarWizard wizard(testpicker, testprogress, testWriteOp);
+  NewestImageUrl* testNewest = new MockNewestImage();
+  ImageSelectPage* testImageSelect = new ImageSelectPage(testNewest);
+  GondarWizard wizard(testpicker, testprogress, testWriteOp, testImageSelect);
   wizard.show();
   QTest::qWait(1000);
   // 0->3

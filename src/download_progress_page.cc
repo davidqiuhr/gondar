@@ -33,7 +33,7 @@ void DownloadProgressPage::init() {
 
 void DownloadProgressPage::initializePage() {
   setLayout(&layout);
-  const QUrl url = wizard()->imageSelectPage.getUrl();
+  const QUrl url = wizard()->imageSelectPage->getUrl();
   qDebug() << "using url= " << url;
   connect(manager, &DownloadManager::finished, this,
           &DownloadProgressPage::markComplete);
