@@ -33,11 +33,6 @@ namespace gondar {
 
 namespace {
 
-QAbstractButton* getDevicePickerButton(DevicePicker* picker, const int index) {
-  auto* widget = picker->layout()->itemAt(index)->widget();
-  return dynamic_cast<QAbstractButton*>(widget);
-}
-
 class MockDevicePicker : public gondar::DevicePicker {
  private:
   const DevicePicker::Button* selectedButton() const override {
