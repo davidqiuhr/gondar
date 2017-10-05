@@ -105,6 +105,7 @@ class MockDownloadManager : public DownloadManager {
 
 class MockNewestImage : public NewestImageUrl {
  public:
+  void fetch() override { }
   bool isReady() const override {
     return true;
   } 
@@ -161,7 +162,7 @@ void Test::testDevicePicker() {
 void proceed(GondarWizard* wizard) {
   // occasionally with 3 seconds (3k ms) i get stuck on page 3.
   QTest::mouseClick(wizard->button(QWizard::NextButton), Qt::LeftButton,
-                    Qt::NoModifier, QPoint(), 3000);
+                    Qt::NoModifier, QPoint(), 500);
   LOG_WARNING << "id after click=" << wizard->currentId();
 }
 

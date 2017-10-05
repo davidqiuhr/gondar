@@ -23,7 +23,7 @@ class NewestImageUrl : public QObject {
   Q_OBJECT
 
  public:
-  void fetch();
+  virtual void fetch();
   virtual bool isReady() const;
   void set32Url(const QUrl& url_in);
   void set64Url(const QUrl& url_in);
