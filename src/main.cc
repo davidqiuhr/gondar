@@ -32,6 +32,10 @@ int main(int argc, char* argv[]) {
   gondar::SendMetric(gondar::Metric::Use);
   QApplication app(argc, argv);
   app.setStyleSheet(gondar::readUtf8File(":/style.css"));
+  // embiggen font
+  QFont font;
+  font.setPointSize(font.pointSize() + 4);
+  app.setFont(font);
 
   GondarWizard wizard;
   wizard.show();
