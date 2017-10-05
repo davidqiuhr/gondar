@@ -35,7 +35,7 @@ class GondarWizard::Private {
   gondar::AboutDialog aboutDialog;
 
   AdminCheckPage adminCheckPage;
-  DeviceSelectPage* deviceSelectPage;
+  std::unique_ptr<DeviceSelectPage> deviceSelectPage;
   ChromeoverLoginPage chromeoverLoginPage;
   SiteSelectPage siteSelectPage;
   ErrorPage errorPage;
@@ -46,10 +46,10 @@ class GondarWizard::Private {
 };
 
 GondarWizard::Private::Private() {
-  deviceSelectPage = new DeviceSelectPage();
+  deviceSelectPage.reset(new DeviceSelectPage());
 }
 GondarWizard::Private::Private(gondar::DevicePicker* picker_in) {
-  deviceSelectPage = new DeviceSelectPage(picker_in);
+  deviceSelectPage.reset(new DeviceSelectPage(picker_in));
 }
 
 GondarWizard::GondarWizard(QWidget* parent)
@@ -86,7 +86,7 @@ void GondarWizard::init() {
   setPage(Page_siteSelect, &p_->siteSelectPage);
   setPage(Page_imageSelect, &imageSelectPage);
   setPage(Page_usbInsert, &usbInsertPage);
-  setPage(Page_deviceSelect, p_->deviceSelectPage);
+  setPage(Page_deviceSelect, p_->deviceSelectPage.get());
   setPage(Page_downloadProgress, downloadProgressPage);
   setPage(Page_writeOperation, writeOperationPage);
   setPage(Page_error, &p_->errorPage);
