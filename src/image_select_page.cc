@@ -31,13 +31,13 @@ class DownloadButton : public QRadioButton {
 };
 
 ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
-  newestImageUrl = new NewestImageUrl();
+  newestImageUrl.reset(new NewestImageUrl());
   init();
 }
 
 ImageSelectPage::ImageSelectPage(NewestImageUrl * newIn, QWidget* parent)
     : WizardPage(parent) {
-  newestImageUrl = newIn;
+  newestImageUrl.reset(newIn);
   init();
 }
 
@@ -66,7 +66,7 @@ void ImageSelectPage::init() {
   }
 
   setLayout(&layout);
-  connect(newestImageUrl, &NewestImageUrl::errorOccurred, this,
+  connect(newestImageUrl.get(), &NewestImageUrl::errorOccurred, this,
           &ImageSelectPage::handleNewestImageUrlError);
   hasError = false;
 }

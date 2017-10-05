@@ -62,7 +62,6 @@ void NewestImageUrl::set64Url(const QUrl& url_in) {
   sixtyFourUrl = url_in;
 }
 
-//TODO: stub this out in a test subclass
 bool NewestImageUrl::isReady() const {
   if (thirtyTwoUrl.isEmpty() || sixtyFourUrl.isEmpty()) {
     return false;
