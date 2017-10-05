@@ -33,6 +33,8 @@ class ImageSelectPage : public gondar::WizardPage {
 
  public:
   ImageSelectPage(QWidget* parent = 0);
+  ImageSelectPage(NewestImageUrl * newestIn, QWidget* parent = 0);
+  void init();
   QUrl getUrl() const;
   int nextId() const override;
   void addImage(GondarImage image);
@@ -51,7 +53,7 @@ class ImageSelectPage : public gondar::WizardPage {
   QRadioButton sixtyFour;
   QLabel sixtyFourDetails;
   QVBoxLayout layout;
-  NewestImageUrl newestImageUrl;
+  NewestImageUrl * newestImageUrl;
   bool hasError;
 };
 
