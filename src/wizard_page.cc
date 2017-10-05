@@ -18,7 +18,12 @@
 
 namespace gondar {
 
-WizardPage::WizardPage(QWidget* parent) : QWizardPage(parent) {}
+WizardPage::WizardPage(QWidget* parent) : QWizardPage(parent) {
+  // change the font size for the wizard
+  QFont newFont(font());
+  newFont.setPointSize(font().pointSize() + 4);
+  setFont(newFont);
+}
 
 GondarWizard* WizardPage::wizard() const {
   QWizard* base_wiz = QWizardPage::wizard();

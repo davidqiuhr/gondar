@@ -79,10 +79,6 @@ GondarWizard::GondarWizard(QWidget* parent)
   p_->runTime = QDateTime::currentDateTime();
 
   p_->updateCheck.start(this);
-  // change the font size for the wizard
-  QFont newFont(font());
-  newFont.setPointSize(font().pointSize() + 4);
-  setFont(newFont);
 }
 
 GondarWizard::~GondarWizard() {}
