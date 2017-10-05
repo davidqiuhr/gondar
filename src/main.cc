@@ -36,6 +36,7 @@ int main(int argc, char* argv[]) {
   QFont font;
   font.setPointSize(font.pointSize() + 4);
   app.setFont(font);
+  LOG_WARNING << "DEFAULT FONT SIZE = " << font.pointSize();
 
   GondarWizard wizard;
   wizard.show();
