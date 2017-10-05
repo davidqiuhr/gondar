@@ -15,7 +15,7 @@
 
 #include <QAbstractButton>
 
-#include "bigtest.h"
+#include "slow_test.h"
 
 #include "src/device_picker.h"
 #include "src/gondarwizard.h"
