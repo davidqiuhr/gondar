@@ -10,3 +10,7 @@ ImageSelectPage QLabel {
     /* Add extra space to visually separate the options */
     margin-bottom: 12px;
 }
+
+* {
+  font-size: 17px;
+}
