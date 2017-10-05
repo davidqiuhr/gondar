@@ -20,8 +20,12 @@
 
 #include "src/device.h"
 #include "src/device_picker.h"
+#include "src/diskwritethread.h"
+#include "src/download_progress_page.h"
 #include "src/gondarwizard.h"
 #include "src/log.h"
+#include "src/unzipthread.h"
+#include "src/write_operation_page.h"
 
 #if defined(Q_OS_WIN)
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
@@ -29,68 +33,77 @@ Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
 
 // test object stuff
 
-TestDevicePicker::TestDevicePicker() {}
+namespace {
 
-// used by selectedButton() for test flow
-const gondar::DevicePicker::Button* TestDevicePicker::selectedButton() const {
-  // honor user selection in case we figure that bit out
-  const QAbstractButton* selected = button_group_.checkedButton();
-  if (selected) {
-    return dynamic_cast<const Button*>(selected);
-  } else {
-    // let's see if there's a valid choice
-    for (auto button : button_group_.buttons()) {
-      if (button->isEnabled()) {
-        return dynamic_cast<const Button*>(button);
+class MockDevicePicker : public gondar::DevicePicker {
+ private:
+  const DevicePicker::Button* selectedButton() const override {
+    // honor user selection in case we figure that bit out
+    const QAbstractButton* selected = button_group_.checkedButton();
+    if (selected) {
+      return dynamic_cast<const Button*>(selected);
+    } else {
+      // let's see if there's a valid choice
+      for (auto button : button_group_.buttons()) {
+        if (button->isEnabled()) {
+          return dynamic_cast<const Button*>(button);
+        }
       }
+      // the case in which none were enabled
+      return NULL;
     }
-    // the case in which none were enabled
-    return NULL;
   }
-}
+};
 
-TestUnzipThread::TestUnzipThread(const QFileInfo& inputFile, QObject* parent)
-    : UnzipThread(inputFile, parent) {}
+class MockUnzipThread : public UnzipThread {
+ public:
+  MockUnzipThread(const QFileInfo& inputFile, QObject* parent = 0)
+      : UnzipThread(inputFile, parent) {}
 
-const QString& TestUnzipThread::getFileName() const {
-  return kewlstr;
-}
+  const QString& getFileName() const { return kewlstr; }
 
-void TestUnzipThread::run() {}
+  const QString& kewlstr = "";
 
-TestDownloadProgressPage::TestDownloadProgressPage(DownloadManager* manager_in,
-                                                   QWidget* parent)
-    : DownloadProgressPage(parent) {
-  manager = manager_in;
-  init();
-}
+  void run() override {}
+};
 
-UnzipThread* TestDownloadProgressPage::makeUnzipThread() {
-  return new TestUnzipThread(manager->outputFileInfo(), this);
-}
+class MockDownloadProgressPage : public DownloadProgressPage {
+ public:
+  MockDownloadProgressPage(DownloadManager* manager_in) {
+    manager = manager_in;
+    init();
+  }
 
-TestDiskWriteThread::TestDiskWriteThread(DeviceGuy* drive_in,
-                                         const QString& image_path_in,
-                                         QObject* parent)
-    : DiskWriteThread(drive_in, image_path_in, parent) {}
+  UnzipThread* makeUnzipThread() {
+    return new MockUnzipThread(manager->outputFileInfo(), this);
+  }
+};
 
-void TestDiskWriteThread::run() {}
+class MockDiskWriteThread : public DiskWriteThread {
+ public:
+  MockDiskWriteThread(DeviceGuy* drive_in,
+                      const QString& image_path_in,
+                      QObject* parent = 0)
+      : DiskWriteThread(drive_in, image_path_in, parent) {}
 
-TestWriteOperationPage::TestWriteOperationPage(QWidget* parent)
-    : WriteOperationPage(parent) {}
+  void run() override {}
+};
 
-DiskWriteThread* TestWriteOperationPage::makeDiskWriteThread(
-    DeviceGuy* drive_in,
-    const QString& image_path_in,
-    QObject* parent) {
-  return new TestDiskWriteThread(drive_in, image_path_in, parent);
-}
+class MockWriteOperationPage : public WriteOperationPage {
+ public:
+  DiskWriteThread* makeDiskWriteThread(DeviceGuy* drive_in,
+                                       const QString& image_path_in,
+                                       QObject* parent) override {
+    return new MockDiskWriteThread(drive_in, image_path_in, parent);
+  }
+};
 
-TestDownloadManager::TestDownloadManager(QObject* parent)
-    : DownloadManager(parent) {}
+class MockDownloadManager : public DownloadManager {
+ public:
+  void append(const QUrl& url) override {}
+};
 
-void TestDownloadManager::append(const QUrl& url) {
-}
+}  // namespace
 
 // end test object stuff
 
@@ -148,10 +161,10 @@ void proceed(GondarWizard* wizard) {
 void Test::testLinuxStubFlow() {
   initResource();
   gondar::InitializeLogging();
-  TestDevicePicker* testpicker = new TestDevicePicker();
-  TestDownloadManager* testmgr = new TestDownloadManager();
-  DownloadProgressPage* testprogress = new TestDownloadProgressPage(testmgr);
-  WriteOperationPage* testWriteOp = new TestWriteOperationPage();
+  MockDevicePicker* testpicker = new MockDevicePicker();
+  MockDownloadManager* testmgr = new MockDownloadManager();
+  DownloadProgressPage* testprogress = new MockDownloadProgressPage(testmgr);
+  WriteOperationPage* testWriteOp = new MockWriteOperationPage();
   GondarWizard wizard(testpicker, testprogress, testWriteOp);
   wizard.show();
   QTest::qWait(1000);
