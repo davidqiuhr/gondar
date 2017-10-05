@@ -55,10 +55,10 @@ class MockDevicePicker : public gondar::DevicePicker {
 
 }  // namespace
 
-void proceed(GondarWizard* wizard) {
+void proceed(GondarWizard* wizard, int ms = 500) {
   // occasionally with 3 seconds (3k ms) i get stuck on page 3.
   QTest::mouseClick(wizard->button(QWizard::NextButton), Qt::LeftButton,
-                    Qt::NoModifier, QPoint(), 3000);
+                    Qt::NoModifier, QPoint(), ms);
   LOG_WARNING << "id after click=" << wizard->currentId();
 }
 
@@ -72,7 +72,7 @@ void Test::testDownloadFlow() {
   // 0->3
   proceed(&wizard);
   // 3->4
-  proceed(&wizard);
+  proceed(&wizard, 5000);
   // 4->5
   proceed(&wizard);
   // 5->6
