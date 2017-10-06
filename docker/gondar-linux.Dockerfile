@@ -18,5 +18,7 @@ ADD resources /opt/gondar/resources
 ADD src /opt/gondar/src
 ADD test /opt/gondar/test
 
+# needed by slowtest
+RUN mkdir /root/Downloads
 # Build gondar and run tests
 RUN make -C /opt/gondar build-gondar test
