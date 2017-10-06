@@ -57,17 +57,17 @@ class MockDevicePicker : public gondar::DevicePicker {
 
 void proceed(GondarWizard* wizard, int ms = 500);
 void proceed(GondarWizard* wizard, int ms) {
-  // occasionally with 3 seconds (3k ms) i get stuck on page 3.
+  QTest::qWait(ms);
   QTest::mouseClick(wizard->button(QWizard::NextButton), Qt::LeftButton,
-                    Qt::NoModifier, QPoint(), ms);
+                    Qt::NoModifier, QPoint(), 0);
   LOG_WARNING << "id after click=" << wizard->currentId();
 }
 
 void Test::testDownloadFlow() {
   initResource();
   gondar::InitializeLogging();
-  MockDevicePicker* testpicker = new MockDevicePicker();
-  GondarWizard wizard(testpicker);
+  auto testpicker = std::make_unique<MockDevicePicker>();
+  GondarWizard wizard(testpicker.get());
   wizard.show();
   QTest::qWait(1000);
   // 0->3
