@@ -28,8 +28,7 @@ class DeviceSelectPage : public gondar::WizardPage {
   Q_OBJECT
 
  public:
-  DeviceSelectPage(QWidget* parent = 0);
-  DeviceSelectPage(std::shared_ptr<gondar::DevicePicker> picker_in, QWidget* parent = 0);
+  DeviceSelectPage(std::shared_ptr<gondar::DevicePicker> picker_in = 0, QWidget* parent = 0);
   void init();
   int nextId() const override;
 

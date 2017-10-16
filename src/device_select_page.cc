@@ -18,17 +18,14 @@
 #include "gondarwizard.h"
 #include "log.h"
 
-DeviceSelectPage::DeviceSelectPage(QWidget* parent)
-    : WizardPage(parent), picker(new gondar::DevicePicker()) {
-  // this page should just say 'hi how are you' while it stealthily loads
-  // the usb device list.  or it could ask you to insert your device
-  init();
-}
-
 DeviceSelectPage::DeviceSelectPage(std::shared_ptr<gondar::DevicePicker> picker_in,
                                    QWidget* parent)
     : WizardPage(parent) {
-  picker = picker_in;
+  if (!picker_in) {
+    picker = std::make_shared<gondar::DevicePicker>();
+  } else {
+    picker = picker_in;
+  }
   init();
 }
 
