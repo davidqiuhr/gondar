@@ -25,10 +25,10 @@ DeviceSelectPage::DeviceSelectPage(QWidget* parent)
   init();
 }
 
-DeviceSelectPage::DeviceSelectPage(gondar::DevicePicker* picker_in,
+DeviceSelectPage::DeviceSelectPage(std::shared_ptr<gondar::DevicePicker> picker_in,
                                    QWidget* parent)
     : WizardPage(parent) {
-  picker.reset(picker_in);
+  picker = picker_in;
   init();
 }
 

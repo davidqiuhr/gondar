@@ -66,8 +66,7 @@ void proceed(GondarWizard* wizard, int ms) {
 void Test::testDownloadFlow() {
   initResource();
   gondar::InitializeLogging();
-  auto testpicker = std::make_unique<MockDevicePicker>();
-  GondarWizard wizard(testpicker.get());
+  GondarWizard wizard(std::make_shared<MockDevicePicker>());
   wizard.show();
   QTest::qWait(1000);
   // 0->3

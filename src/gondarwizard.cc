@@ -30,7 +30,7 @@
 class GondarWizard::Private {
  public:
   Private();
-  Private(gondar::DevicePicker* picker_in);
+  Private(std::shared_ptr<gondar::DevicePicker> picker_in);
   gondar::UpdateCheck updateCheck;
   gondar::AboutDialog aboutDialog;
 
@@ -48,7 +48,7 @@ class GondarWizard::Private {
 GondarWizard::Private::Private() {
   deviceSelectPage.reset(new DeviceSelectPage());
 }
-GondarWizard::Private::Private(gondar::DevicePicker* picker_in) {
+GondarWizard::Private::Private(std::shared_ptr<gondar::DevicePicker> picker_in) {
   deviceSelectPage.reset(new DeviceSelectPage(picker_in));
 }
 
@@ -59,7 +59,7 @@ GondarWizard::GondarWizard(QWidget* parent)
   init();
 }
 
-GondarWizard::GondarWizard(gondar::DevicePicker* picker_in,
+GondarWizard::GondarWizard(std::shared_ptr<gondar::DevicePicker> picker_in,
                            QWidget* parent)
     : QWizard(parent),
       p_(new Private(picker_in)),

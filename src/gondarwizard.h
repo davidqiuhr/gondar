@@ -41,7 +41,7 @@ class GondarWizard : public QWizard {
 
  public:
   GondarWizard(QWidget* parent = 0);
-  GondarWizard(gondar::DevicePicker* picker_in,
+  GondarWizard(std::shared_ptr<gondar::DevicePicker> picker_in,
                QWidget* parent = 0);
 
   ~GondarWizard();
