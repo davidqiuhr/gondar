@@ -29,8 +29,6 @@
 
 class GondarWizard::Private {
  public:
-  Private();
-  Private(std::shared_ptr<gondar::DevicePicker> picker_in);
   gondar::UpdateCheck updateCheck;
   gondar::AboutDialog aboutDialog;
 
@@ -45,25 +43,27 @@ class GondarWizard::Private {
   QDateTime runTime;
 };
 
-GondarWizard::Private::Private() {
-  deviceSelectPage.reset(new DeviceSelectPage());
-}
-GondarWizard::Private::Private(std::shared_ptr<gondar::DevicePicker> picker_in) {
-  deviceSelectPage.reset(new DeviceSelectPage(picker_in));
+void GondarWizard::initPrivate(std::shared_ptr<gondar::DevicePicker> picker_in) {
+  p_.reset(new Private());
+  if (picker_in) {
+    p_->deviceSelectPage.reset(new DeviceSelectPage(picker_in));
+  } else {
+    p_->deviceSelectPage.reset(new DeviceSelectPage());
+  }
 }
 
 GondarWizard::GondarWizard(QWidget* parent)
     : QWizard(parent),
-      p_(new Private()),
       about_shortcut_(QKeySequence::HelpContents, this) {
+  initPrivate();
   init();
 }
 
 GondarWizard::GondarWizard(std::shared_ptr<gondar::DevicePicker> picker_in,
                            QWidget* parent)
     : QWizard(parent),
-      p_(new Private(picker_in)),
       about_shortcut_(QKeySequence::HelpContents, this) {
+  initPrivate(picker_in);
   init();
 }
 void GondarWizard::init() {
