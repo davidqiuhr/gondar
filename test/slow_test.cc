@@ -33,6 +33,10 @@ namespace gondar {
 
 namespace {
 
+/*
+  In the real device picker, we mandate the user select a button.
+  In this fake picker, we select the first valid button if none are selected.
+*/
 class MockDevicePicker : public gondar::DevicePicker {
  private:
   const DevicePicker::Button* selectedButton() const override {
