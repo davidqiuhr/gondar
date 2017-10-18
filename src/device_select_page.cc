@@ -18,13 +18,11 @@
 #include "gondarwizard.h"
 #include "log.h"
 
-DeviceSelectPage::DeviceSelectPage(std::shared_ptr<gondar::DevicePicker> picker_in,
+DeviceSelectPage::DeviceSelectPage(std::unique_ptr<gondar::DevicePicker> picker_in,
                                    QWidget* parent)
-    : WizardPage(parent) {
-  if (!picker_in) {
-    picker = std::make_shared<gondar::DevicePicker>();
-  } else {
-    picker = picker_in;
+    : WizardPage(parent), picker(std::move(picker_in)) {
+  if (!picker) {
+    picker = std::make_unique<gondar::DevicePicker>();
   }
   init();
 }

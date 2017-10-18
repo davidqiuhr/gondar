@@ -40,8 +40,7 @@ class GondarWizard : public QWizard {
   Q_OBJECT
 
  public:
-  GondarWizard(QWidget* parent = 0);
-  GondarWizard(std::shared_ptr<gondar::DevicePicker> picker_in,
+  GondarWizard(std::unique_ptr<gondar::DevicePicker> picker_in = nullptr,
                QWidget* parent = 0);
 
   ~GondarWizard();
@@ -81,7 +80,6 @@ class GondarWizard : public QWizard {
   void handleCustomButton(int buttonIndex);
 
  private:
-  void initPrivate(std::shared_ptr<gondar::DevicePicker> picker_in=nullptr);
   class Private;
   std::unique_ptr<Private> p_;
 
