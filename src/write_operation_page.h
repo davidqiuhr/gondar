@@ -18,6 +18,7 @@
 
 #include <QProgressBar>
 #include <QVBoxLayout>
+#include <QLabel>
 
 #include "device.h"
 #include "wizard_page.h"
@@ -38,6 +39,7 @@ class WriteOperationPage : public gondar::WizardPage {
   bool validatePage() override;
   void showProgress();
   int nextId() const override;
+  void showWhatsNext();
  public slots:
   void onDoneWriting();
 
@@ -50,6 +52,9 @@ class WriteOperationPage : public gondar::WizardPage {
   DiskWriteThread* diskWriteThread;
   QString image_path;
   DeviceGuy device;
+  QLabel whatsNext1;
+  QLabel whatsNext2;
+  QLabel whatsNext3;
 };
 
 #endif  // SRC_WRITE_OPERATION_PAGE_H_
