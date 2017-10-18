@@ -26,6 +26,7 @@ enum class Metric {
   UsbSuccess,
   DownloadAttempt,
   DownloadSuccess,
+  DownloadFailure,
   ChromeoverUse,
   BeeroverUse,
   SuccessDuration,
