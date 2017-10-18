@@ -47,6 +47,8 @@ std::string getMetricString(Metric metric) {
       return "download-attempt";
     case Metric::DownloadSuccess:
       return "download-success";
+    case Metric::DownloadFailure:
+      return "download-failure";
     case Metric::Error:
       return "error";
     case Metric::UsbAttempt:

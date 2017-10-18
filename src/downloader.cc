@@ -28,7 +28,7 @@
 #include "metric.h"
 
 DownloadManager::DownloadManager(QObject* parent)
-    : QObject(parent), downloadedCount(0), totalCount(0) {}
+    : QObject(parent), error(false), downloadedCount(0), totalCount(0) {}
 
 void DownloadManager::append(const QStringList& urlList) {
   foreach (QString url, urlList)
@@ -89,16 +89,17 @@ void DownloadManager::startNextDownload() {
 }
 
 void DownloadManager::downloadFinished() {
-  gondar::SendMetric(gondar::Metric::DownloadSuccess);
-  // progressBar.clear();
   output.close();
 
   if (currentDownload->error()) {
     // download failed
     LOG_ERROR << "download failed: " << currentDownload->errorString();
+    error = true;
+    gondar::SendMetric(gondar::Metric::DownloadFailure);
   } else {
     LOG_INFO << "download succeeded";
     ++downloadedCount;
+    gondar::SendMetric(gondar::Metric::DownloadSuccess);
   }
 
   currentDownload->deleteLater();
@@ -115,4 +116,8 @@ QNetworkReply* DownloadManager::getCurrentDownload() {
 
 QFileInfo DownloadManager::outputFileInfo() const {
   return QFileInfo(output.fileName());
+}
+
+bool DownloadManager::hasError() {
+  return error;
 }

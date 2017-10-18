@@ -71,6 +71,7 @@ class DownloadManager : public QObject {
   QNetworkReply* getCurrentDownload();
 
   QFileInfo outputFileInfo() const;
+  bool hasError();
 
  signals:
   void started();
@@ -90,6 +91,7 @@ class DownloadManager : public QObject {
   QTime downloadTime;
   // TextProgressBar progressBar;
 
+  bool error;
   int downloadedCount;
   int totalCount;
 };
