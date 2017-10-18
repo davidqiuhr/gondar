@@ -55,8 +55,7 @@ class MockDevicePicker : public gondar::DevicePicker {
 
 }  // namespace
 
-void proceed(GondarWizard* wizard, int ms = 500);
-void proceed(GondarWizard* wizard, int ms) {
+void proceed(GondarWizard* wizard, int ms = 500) {
   QTest::qWait(ms);
   QTest::mouseClick(wizard->button(QWizard::NextButton), Qt::LeftButton,
                     Qt::NoModifier, QPoint(), 0);
