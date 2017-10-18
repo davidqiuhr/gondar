@@ -28,7 +28,7 @@ class DeviceSelectPage : public gondar::WizardPage {
   Q_OBJECT
 
  public:
-  DeviceSelectPage(std::shared_ptr<gondar::DevicePicker> picker_in = 0, QWidget* parent = 0);
+  DeviceSelectPage(std::unique_ptr<gondar::DevicePicker> picker_in, QWidget* parent = 0);
   void init();
   int nextId() const override;
 
@@ -40,7 +40,7 @@ class DeviceSelectPage : public gondar::WizardPage {
  private:
   QVBoxLayout layout;
   QLabel drivesLabel;
-  std::shared_ptr<gondar::DevicePicker> picker;
+  std::unique_ptr<gondar::DevicePicker> picker;
 };
 
 #endif  // SRC_DEVICE_SELECT_PAGE_H_

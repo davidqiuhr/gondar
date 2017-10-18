@@ -29,11 +29,14 @@
 
 class GondarWizard::Private {
  public:
+  Private(std::unique_ptr<gondar::DevicePicker>&& picker)
+      : deviceSelectPage(std::move(picker)) {}
+
   gondar::UpdateCheck updateCheck;
   gondar::AboutDialog aboutDialog;
 
   AdminCheckPage adminCheckPage;
-  std::unique_ptr<DeviceSelectPage> deviceSelectPage;
+  DeviceSelectPage deviceSelectPage;
   ChromeoverLoginPage chromeoverLoginPage;
   SiteSelectPage siteSelectPage;
   ErrorPage errorPage;
@@ -43,27 +46,11 @@ class GondarWizard::Private {
   QDateTime runTime;
 };
 
-void GondarWizard::initPrivate(std::shared_ptr<gondar::DevicePicker> picker_in) {
-  p_.reset(new Private());
-  if (picker_in) {
-    p_->deviceSelectPage.reset(new DeviceSelectPage(picker_in));
-  } else {
-    p_->deviceSelectPage.reset(new DeviceSelectPage());
-  }
-}
-
-GondarWizard::GondarWizard(QWidget* parent)
-    : QWizard(parent),
-      about_shortcut_(QKeySequence::HelpContents, this) {
-  initPrivate();
-  init();
-}
-
-GondarWizard::GondarWizard(std::shared_ptr<gondar::DevicePicker> picker_in,
+GondarWizard::GondarWizard(std::unique_ptr<gondar::DevicePicker> picker_in,
                            QWidget* parent)
     : QWizard(parent),
+      p_(std::make_unique<Private>(std::move(picker_in))),
       about_shortcut_(QKeySequence::HelpContents, this) {
-  initPrivate(picker_in);
   init();
 }
 void GondarWizard::init() {
@@ -77,7 +64,7 @@ void GondarWizard::init() {
   setPage(Page_siteSelect, &p_->siteSelectPage);
   setPage(Page_imageSelect, &imageSelectPage);
   setPage(Page_usbInsert, &usbInsertPage);
-  setPage(Page_deviceSelect, p_->deviceSelectPage.get());
+  setPage(Page_deviceSelect, &p_->deviceSelectPage);
   setPage(Page_downloadProgress, &downloadProgressPage);
   setPage(Page_writeOperation, &writeOperationPage);
   setPage(Page_error, &p_->errorPage);
