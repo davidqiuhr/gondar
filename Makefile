@@ -105,6 +105,10 @@ print-config:
 test: build-gondar
 	${BUILD_DIR}/tests -platform offscreen
 
+# Run tests which take quite some time
+slowtest: build-gondar
+	${BUILD_DIR}/slowtests -platform offscreen
+
 
 update-submodules:
 # Skip submodule update if not in a git workspace

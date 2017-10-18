@@ -17,11 +17,13 @@
 #define SRC_DEVICE_PICKER_H_
 
 #include <QButtonGroup>
+#include <QRadioButton>
 #include <QVBoxLayout>
 #include <QWidget>
 
 #include "device.h"
 #include "option.h"
+#include "util.h"
 
 namespace gondar {
 
@@ -38,15 +40,24 @@ class DevicePicker : public QWidget {
  signals:
   void selectionChanged();
 
- private:
+ protected:
   class Button;
 
-  const Button* selectedButton() const;
+  virtual const Button* selectedButton() const;
 
   void onButtonClicked(QAbstractButton* button);
 
   QButtonGroup button_group_;
   QVBoxLayout layout_;
+};
+
+class DevicePicker::Button : public QRadioButton {
+ public:
+  Button(const DeviceGuy& device, QWidget* parent);
+  const DeviceGuy& device() const;
+
+ private:
+  DeviceGuy device_;
 };
 
 }  // namespace gondar

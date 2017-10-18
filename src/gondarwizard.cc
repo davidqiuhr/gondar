@@ -29,6 +29,9 @@
 
 class GondarWizard::Private {
  public:
+  Private(std::unique_ptr<gondar::DevicePicker>&& picker)
+      : deviceSelectPage(std::move(picker)) {}
+
   gondar::UpdateCheck updateCheck;
   gondar::AboutDialog aboutDialog;
 
@@ -43,10 +46,14 @@ class GondarWizard::Private {
   QDateTime runTime;
 };
 
-GondarWizard::GondarWizard(QWidget* parent)
+GondarWizard::GondarWizard(std::unique_ptr<gondar::DevicePicker> picker_in,
+                           QWidget* parent)
     : QWizard(parent),
-      p_(new Private()),
+      p_(std::make_unique<Private>(std::move(picker_in))),
       about_shortcut_(QKeySequence::HelpContents, this) {
+  init();
+}
+void GondarWizard::init() {
   // these pages are automatically cleaned up
   // new instances are made whenever navigation moves on to another page
   // according to qt docs
