@@ -75,7 +75,7 @@ void WriteOperationPage::showWhatsNext() {
   whatsNext.setObjectName("whatsNext");
   whatsNext.setText(
       "<p>You're ready to install CloudReady!  Head back to <a "
-      "href=\"https://guide.neverware.com/supported-devices\">the install "
+      "href=\"https://guide.neverware.com/install-cloudready\">the install "
       "guide</a> for help in how to use your USB installer.<br></p><p>Don't "
       "forget to check the 'Details' link for your devices on the <a "
       "href=\"https://guide.neverware.com/supported-devices\">certified models "
