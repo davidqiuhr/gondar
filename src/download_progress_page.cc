@@ -55,8 +55,10 @@ void DownloadProgressPage::markComplete() {
   download_finished = true;
   // now that the download is finished, let's unzip the build.
   if (manager.hasError()) {
-      wizard()->postError("An error has occurred downloading the latest image.  Please ensure you have a network connection.");
-      return;
+    wizard()->postError(
+        "An error has occurred downloading the latest image.  Please ensure "
+        "you have a network connection.");
+    return;
   }
   notifyUnzip();
   unzipThread = new UnzipThread(manager.outputFileInfo(), this);

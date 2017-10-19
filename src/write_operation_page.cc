@@ -64,6 +64,29 @@ void WriteOperationPage::showProgress() {
   progress.setValue(0);
 }
 
+void WriteOperationPage::showWhatsNext() {
+  setTitle("CloudReady USB created!");
+  setSubTitle("You may now either exit or create another USB.");
+  bolded.setObjectName("bolded");
+  bolded.setText("<br>What's next?<br>");
+  layout.addWidget(&bolded);
+
+  whatsNext.setObjectName("whatsNext");
+  whatsNext.setText(
+      "<p>You're ready to install CloudReady!  Head back to <a "
+      "href=\"https://guide.neverware.com/install-cloudready\">the install "
+      "guide</a> for help in how to use your USB installer.<br></p><p>Don't "
+      "forget to check the 'Details' link for your devices on the <a "
+      "href=\"https://guide.neverware.com/supported-devices\">certified models "
+      "list</a>.  There may be special install instructions or important notes "
+      "for each model.</p>");
+  whatsNext.setTextFormat(Qt::RichText);
+  whatsNext.setTextInteractionFlags(Qt::TextBrowserInteraction);
+  whatsNext.setOpenExternalLinks(true);
+  whatsNext.setWordWrap(true);
+  layout.addWidget(&whatsNext);
+}
+
 void WriteOperationPage::onDoneWriting() {
   switch (diskWriteThread->state()) {
     case DiskWriteThread::State::Initial:
@@ -86,8 +109,7 @@ void WriteOperationPage::onDoneWriting() {
       break;
   }
 
-  setTitle("CloudReady USB created!");
-  setSubTitle("You may now either exit or create another USB.");
+  showWhatsNext();
   qDebug() << "install call returned";
   writeFinished = true;
   progress.setRange(0, 100);

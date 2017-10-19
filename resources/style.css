@@ -11,6 +11,14 @@ ImageSelectPage QLabel {
     margin-bottom: 12px;
 }
 
+#bolded {
+    font-weight: bold;
+}
+
+#whatsNext {
+    padding-left: 10px;
+}
+
 * {
   font-size: 17px;
 }

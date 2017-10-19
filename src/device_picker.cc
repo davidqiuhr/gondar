@@ -30,7 +30,9 @@ DevicePicker::Button::Button(const DeviceGuy& device, QWidget* parent)
   }
 }
 
-const DeviceGuy& DevicePicker::Button::device() const { return device_; }
+const DeviceGuy& DevicePicker::Button::device() const {
+  return device_;
+}
 
 DevicePicker::DevicePicker() {
   setLayout(&layout_);
