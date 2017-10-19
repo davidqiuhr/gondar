@@ -52,9 +52,8 @@ class WriteOperationPage : public gondar::WizardPage {
   DiskWriteThread* diskWriteThread;
   QString image_path;
   DeviceGuy device;
-  QLabel whatsNext1;
-  QLabel whatsNext2;
-  QLabel whatsNext3;
+  QLabel bolded;
+  QLabel whatsNext;
 };
 
 #endif  // SRC_WRITE_OPERATION_PAGE_H_
