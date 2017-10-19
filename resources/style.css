@@ -11,11 +11,11 @@ ImageSelectPage QLabel {
     margin-bottom: 12px;
 }
 
-WriteOperationPage QLabel#bolded {
+#bolded {
     font-weight: bold;
 }
 
-WriteOperationPage QLabel#whatsNext {
+#whatsNext {
     padding-left: 10px;
 }
 
