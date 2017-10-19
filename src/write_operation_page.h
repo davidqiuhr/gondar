@@ -16,9 +16,9 @@
 #ifndef SRC_WRITE_OPERATION_PAGE_H_
 #define SRC_WRITE_OPERATION_PAGE_H_
 
+#include <QLabel>
 #include <QProgressBar>
 #include <QVBoxLayout>
-#include <QLabel>
 
 #include "device.h"
 #include "wizard_page.h"

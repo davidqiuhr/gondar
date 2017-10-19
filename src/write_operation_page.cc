@@ -71,15 +71,21 @@ void WriteOperationPage::showWhatsNext() {
   bolded.setText("<br>What's next?<br>");
   layout.addWidget(&bolded);
 
-  //TODO: update links
+  // TODO: update links
   whatsNext.setObjectName("whatsNext");
-  whatsNext.setText("<p>You're ready to install CloudReady!  Head back to <a href=\"https://guide.neverware.com/supported-devices\">the install guide</a> for help in how to use your USB installer.<br></p><p>Don't forget to check the 'Details' link for your devices on the <a href=\"https://guide.neverware.com/supported-devices\">certified models list</a>.  There may be special install instructions or important notes for each model.</p>");
+  whatsNext.setText(
+      "<p>You're ready to install CloudReady!  Head back to <a "
+      "href=\"https://guide.neverware.com/supported-devices\">the install "
+      "guide</a> for help in how to use your USB installer.<br></p><p>Don't "
+      "forget to check the 'Details' link for your devices on the <a "
+      "href=\"https://guide.neverware.com/supported-devices\">certified models "
+      "list</a>.  There may be special install instructions or important notes "
+      "for each model.</p>");
   whatsNext.setTextFormat(Qt::RichText);
   whatsNext.setTextInteractionFlags(Qt::TextBrowserInteraction);
   whatsNext.setOpenExternalLinks(true);
   whatsNext.setWordWrap(true);
   layout.addWidget(&whatsNext);
-
 }
 
 void WriteOperationPage::onDoneWriting() {
