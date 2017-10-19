@@ -71,7 +71,6 @@ void WriteOperationPage::showWhatsNext() {
   bolded.setText("<br>What's next?<br>");
   layout.addWidget(&bolded);
 
-  // TODO: update links
   whatsNext.setObjectName("whatsNext");
   whatsNext.setText(
       "<p>You're ready to install CloudReady!  Head back to <a "
