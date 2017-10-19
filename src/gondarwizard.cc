@@ -86,6 +86,9 @@ void GondarWizard::init() {
   p_->runTime = QDateTime::currentDateTime();
 
   p_->updateCheck.start(this);
+
+  // resize the window
+  resize(1024, 768);
 }
 
 GondarWizard::~GondarWizard() {}
