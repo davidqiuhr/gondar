@@ -43,6 +43,5 @@ int main(int argc, char* argv[]) {
 
   const auto ret = app.exec();
   LOG_INFO << "app.exec() returned " << ret;
-
   return ret;
 }

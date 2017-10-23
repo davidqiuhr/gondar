@@ -1,6 +1,6 @@
 FROM neverware/gondar-build-mxe:v3
 
-ENV TREAT_WARNINGS_AS_ERRORS=true
+ENV TREAT_WARNINGS_AS_ERRORS=false
 
 ADD CMakeLists.txt Makefile /opt/gondar/
 ADD gdisk /opt/gondar/gdisk
