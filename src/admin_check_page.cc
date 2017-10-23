@@ -41,6 +41,8 @@ AdminCheckPage::AdminCheckPage(QWidget* parent) : WizardPage(parent) {
 
 void AdminCheckPage::handleWarpTunnel() {
   LOG_WARNING << "horray!";
+  wizard()->isWarpTunnel = true;
+  wizard()->next();
 }
 
 void AdminCheckPage::initializePage() {
@@ -82,6 +84,9 @@ void AdminCheckPage::showIsNotAdmin() {
 }
 
 int AdminCheckPage::nextId() const {
+  if (wizard()->isWarpTunnel) {
+    return GondarWizard::Page_deviceSelect;
+  }
   if (gondar::isChromeover()) {
     return GondarWizard::Page_chromeoverLogin;
   } else {
