@@ -18,6 +18,7 @@
 #include "gondarwizard.h"
 #include "metric.h"
 #include "util.h"
+#include "log.h"
 
 // note that even though this is called the admin check page, it will in most
 // cases be a welcome page, unless the user is missing admin rights
@@ -36,6 +37,10 @@ AdminCheckPage::AdminCheckPage(QWidget* parent) : WizardPage(parent) {
   } else {
     gondar::SendMetric(gondar::Metric::BeeroverUse);
   }
+}
+
+void AdminCheckPage::handleWarpTunnel() {
+  LOG_WARNING << "horray!";
 }
 
 void AdminCheckPage::initializePage() {
@@ -62,8 +67,9 @@ void AdminCheckPage::showIsAdmin() {
       "<p>You will need:</p><ul><li>8GB or 16GB USB stick</li><li>20 minutes "
       "for USB installer creation</li></ul></p>");
   label.setWordWrap(true);
-  warpTunnel.setText(
-      "<p>Press this kewltext!</p>");
+  warpTunnel.setText("<a href=\"reformat\">Done with your USB installer?  Format it here.</a>");
+  warpTunnel.setTextFormat(Qt::RichText);
+  connect(&warpTunnel, &QLabel::linkActivated, this, &AdminCheckPage::handleWarpTunnel);
   emit completeChanged();
 }
 
@@ -82,3 +88,4 @@ int AdminCheckPage::nextId() const {
     return GondarWizard::Page_imageSelect;
   }
 }
+
