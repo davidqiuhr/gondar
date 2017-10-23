@@ -58,7 +58,7 @@ void AdminCheckPage::showIsAdmin() {
       "CloudReady on any computer.");
   label.setText(
       "<p>You will need:</p><ul><li>8GB or 16GB USB stick</li><li>20 minutes "
-      "for USB installer creation</li></ul>");
+      "for USB installer creation</li></ul></p>");
   label.setWordWrap(true);
   emit completeChanged();
 }
