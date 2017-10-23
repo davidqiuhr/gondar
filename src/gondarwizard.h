@@ -75,6 +75,7 @@ class GondarWizard : public QWizard {
     Page_writeOperation,
     Page_error
   };
+  bool isWarpTunnel;
 
  private slots:
   void handleCustomButton(int buttonIndex);
