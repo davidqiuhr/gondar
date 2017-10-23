@@ -30,7 +30,7 @@ DeviceSelectPage::DeviceSelectPage(
 
 void DeviceSelectPage::init() {
   setTitle("USB device selection");
-  setSubTitle("Choose your target device from the list of devices below.");
+  setSubTitle("Choose your target USB device from the list of devices below.");
   drivesLabel.setText("Select Drive:");
   layout.addWidget(&drivesLabel);
   layout.addWidget(picker.get());
