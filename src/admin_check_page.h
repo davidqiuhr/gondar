@@ -36,6 +36,7 @@ class AdminCheckPage : public gondar::WizardPage {
 
  private:
   QLabel label;
+  QLabel warpTunnel;
   bool is_admin;
   QVBoxLayout layout;
 };
