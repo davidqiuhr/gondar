@@ -2346,6 +2346,10 @@ bool Format(DeviceGuy* target_device) {
   uint64_t device_num = target_device->device_num;
   char* physical_path = GetPhysicalName(device_num);
   bool ret = formatShared(physical_path);
+  if (!ret) {
+      return ret;
+  }
+  ret = formatDrive(physical_path);
   safe_free(physical_path);
   return ret;
 }

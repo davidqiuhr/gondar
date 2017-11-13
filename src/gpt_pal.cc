@@ -48,3 +48,22 @@ bool clearMbrGpt(const char* physical_path) {
     return true;
   }
 }
+
+bool formatDrive(const char* physical_path) {
+  char* newPartInfo;
+  int newPartNum = 1;
+  uint64_t low = FindFirstInLargest();
+  Align(&low);
+  uint64_t high = FindLastInFree(low);
+  uint64_t startSector = IeeeToInt(GetString(newPartInfo, 2), sSize, low, high, low);
+  uint64_t endSector =
+      IeeeToInt(GetString(newPartInfo, 3), sSize, startSector, high, high);
+  if (CreatePartition(newPartNum, startSector, endSector)) {
+    saveData = 1;
+  } else {
+    cerr << "Could not create partition " << newPartNum + 1 << " from "
+         << startSector << " to " << endSector << "\n";
+    neverSaveData = 1;
+  }  // if/else
+  free(newPartInfo);
+}
