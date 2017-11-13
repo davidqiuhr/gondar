@@ -52,18 +52,13 @@ bool clearMbrGpt(const char* physical_path) {
 bool formatDrive(const char* physical_path) {
   char* newPartInfo;
   int newPartNum = 1;
-  uint64_t low = FindFirstInLargest();
-  Align(&low);
-  uint64_t high = FindLastInFree(low);
-  uint64_t startSector = IeeeToInt(GetString(newPartInfo, 2), sSize, low, high, low);
-  uint64_t endSector =
-      IeeeToInt(GetString(newPartInfo, 3), sSize, startSector, high, high);
-  if (CreatePartition(newPartNum, startSector, endSector)) {
-    saveData = 1;
-  } else {
-    cerr << "Could not create partition " << newPartNum + 1 << " from "
-         << startSector << " to " << endSector << "\n";
-    neverSaveData = 1;
-  }  // if/else
+  PalData gptdata;
+  gptdata.LoadPartitions(std::string(physical_path));
+  uint64_t low = gptdata.FindFirstInLargest();
+  gptdata.Align(&low);
+  uint64_t high = gptdata.FindLastInFree(low);
+  uint64_t startSector = low;
+  uint64_t endSector = high;
+  bool ret = gptdata.CreatePartition(newPartNum, startSector, endSector);
   free(newPartInfo);
 }
