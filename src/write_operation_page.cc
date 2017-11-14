@@ -49,7 +49,7 @@ bool WriteOperationPage::validatePage() {
 void WriteOperationPage::writeToDrive() {
   LOG_INFO << "Writing to drive...";
   // if we're in warp mode, we don't need any logic about an image file name
-  if (wizard()->isWarpTunnel) {
+  if (wizard()->isFormatOnly()) {
     // make a disk write thread in format mode
     diskWriteThread = new DiskWriteThread(&device, this);
     // TODO: send a metric about a clear drive attempt
@@ -79,7 +79,7 @@ void WriteOperationPage::showWhatsNext() {
   layout.addWidget(&bolded);
 
   whatsNext.setObjectName("whatsNext");
-  if (wizard()->isWarpTunnel) {
+  if (wizard()->isFormatOnly()) {
     whatsNext.setText(
         "<p>Your USB has been formatted to remove all CloudReady installer "
         "data."
@@ -131,7 +131,7 @@ void WriteOperationPage::onDoneWriting() {
   writeFinished = true;
   progress.setRange(0, 100);
   progress.setValue(100);
-  if (!wizard()->isWarpTunnel) {
+  if (!wizard()->isFormatOnly()) {
     wizard()->setMakeAnotherLayout();
   }
   // when a USB was successfully created, report time the run took

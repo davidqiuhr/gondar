@@ -38,8 +38,8 @@ AdminCheckPage::AdminCheckPage(QWidget* parent) : WizardPage(parent) {
   }
 }
 
-void AdminCheckPage::handleWarpTunnel() {
-  wizard()->isWarpTunnel = true;
+void AdminCheckPage::handleFormatOnly() {
+  wizard()->setFormatOnly(true);
   wizard()->next();
 }
 
@@ -72,7 +72,7 @@ void AdminCheckPage::showIsAdmin() {
       "here.</a>");
   warpTunnel.setTextFormat(Qt::RichText);
   connect(&warpTunnel, &QLabel::linkActivated, this,
-          &AdminCheckPage::handleWarpTunnel);
+          &AdminCheckPage::handleFormatOnly);
   emit completeChanged();
 }
 
@@ -85,7 +85,7 @@ void AdminCheckPage::showIsNotAdmin() {
 }
 
 int AdminCheckPage::nextId() const {
-  if (wizard()->isWarpTunnel) {
+  if (wizard()->isFormatOnly()) {
     return GondarWizard::Page_usbInsert;
   }
   if (gondar::isChromeover()) {

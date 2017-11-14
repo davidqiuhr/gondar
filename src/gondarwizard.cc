@@ -50,7 +50,8 @@ GondarWizard::GondarWizard(std::unique_ptr<gondar::DevicePicker> picker_in,
                            QWidget* parent)
     : QWizard(parent),
       p_(std::make_unique<Private>(std::move(picker_in))),
-      about_shortcut_(QKeySequence::HelpContents, this) {
+      about_shortcut_(QKeySequence::HelpContents, this),
+      formatOnly(false) {
   init();
 }
 
@@ -90,7 +91,6 @@ void GondarWizard::init() {
 
   // resize the window (width, height)
   resize(640, 480);
-  isWarpTunnel = false;
 }
 
 GondarWizard::~GondarWizard() {}

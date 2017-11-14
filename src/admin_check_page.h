@@ -27,7 +27,7 @@ class AdminCheckPage : public gondar::WizardPage {
  public:
   AdminCheckPage(QWidget* parent = 0);
   int nextId() const override;
-  void handleWarpTunnel();
+  void handleFormatOnly();
 
  protected:
   void initializePage() override;

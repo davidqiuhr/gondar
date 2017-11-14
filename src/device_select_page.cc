@@ -56,7 +56,7 @@ bool DeviceSelectPage::isComplete() const {
 }
 
 int DeviceSelectPage::nextId() const {
-  if (wizard()->isWarpTunnel) {
+  if (wizard()->isFormatOnly()) {
     return GondarWizard::Page_writeOperation;
   }
   if (wizard()->downloadProgressPage.isComplete()) {
