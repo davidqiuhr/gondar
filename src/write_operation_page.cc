@@ -52,11 +52,11 @@ void WriteOperationPage::writeToDrive() {
   if (wizard()->isWarpTunnel) {
     // make a disk write thread in format mode
     diskWriteThread = new DiskWriteThread(&device, this);
+    // TODO: send a metric about a clear drive attempt
   } else {
     image_path.clear();
     image_path.append(wizard()->downloadProgressPage.getImageFileName());
     diskWriteThread = new DiskWriteThread(&device, image_path, this);
-    // TODO: send a metric about a clear drive attempt
     gondar::SendMetric(gondar::Metric::UsbAttempt);
   }
   connect(diskWriteThread, &DiskWriteThread::finished, this,

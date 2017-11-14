@@ -71,13 +71,12 @@ bool makeEmptyPartition(const char* physical_path) {
   gptdata.ClearDisk();
   return true;
   
-  //int problems = gptdata.Verify();
+  int problems = gptdata.Verify();
   free(newPartInfo);
-  /*
+  // TODO: unclear if we care about problems in this regard
   if (problems > 0) {
     return true;
   } else {
     return false;
   }
-  */
 }
