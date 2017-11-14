@@ -2347,12 +2347,12 @@ bool Format(DeviceGuy* target_device) {
   char* physical_path = GetPhysicalName(device_num);
   bool ret = formatShared(physical_path);
   if (!ret) {
-      LOG_WARNING << "DID NOT GET PAST PART ONE";
-      return ret;
+    LOG_WARNING << "Error resetting gpt/mbr";
+    return ret;
   }
   ret = makeEmptyPartition(physical_path);
   if (!ret) {
-      LOG_WARNING << "DID NOT GET PAST PART TWO";
+    LOG_WARNING << "Error creating empty fat32 partition";
   }
   safe_free(physical_path);
   return ret;

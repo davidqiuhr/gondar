@@ -43,7 +43,7 @@ void PalData::ClearDisk() {
   uint64_t startSector = low;
   uint64_t endSector = high;
   CreatePartition(newPartNum, startSector, endSector);
-  partitions[0].SetType(0x0b00); // make it fat32
+  partitions[0].SetType(0x0b00);  // make it fat32
   // arg is 'quiet'
   SaveGPTData(true);
 }
@@ -70,7 +70,7 @@ bool makeEmptyPartition(const char* physical_path) {
   gptdata.LoadPartitions(std::string(physical_path));
   gptdata.ClearDisk();
   return true;
-  
+
   int problems = gptdata.Verify();
   free(newPartInfo);
   // TODO: unclear if we care about problems in this regard
