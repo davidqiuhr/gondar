@@ -35,17 +35,27 @@ WhichToUse PalData::UseWhichPartitions(void) {
   return use_new;
 }
 
+//TODO: rename
 void PalData::ClearDisk() {
-  int newPartNum = 1;
-  uint64_t low = FindFirstInLargest();
-  Align(&low);
-  uint64_t high = FindLastInFree(low);
-  uint64_t startSector = low;
-  uint64_t endSector = high;
+  int newPartNum = 0;
+  uint64_t startSector = FindFirstInLargest();
+  Align(&startSector);
+  uint64_t endSector = FindLastInFree(startSector);
+  MakeProtectiveMBR();
   CreatePartition(newPartNum, startSector, endSector);
-  partitions[0].SetType(0x0b00);  // make it fat32
+  // set partition type to FAT-32
+  if (!ChangePartType(newPartNum, GUIDData("EBD0A0A2-B9E5-4433-87C0-68B6B72699C7"))) {
+    printf("We couldn't change the partition type!\n");
+  } else {
+    printf("We change the partition type!\n");
+  }
   // arg is 'quiet'
-  SaveGPTData(true);
+  if (!SaveGPTData(true)) {
+    printf("Error Saving GPT Data!  Have a nice day!\n");
+  } else {
+    printf("Successfully Saved GPT Data!  Have a nice day!\n");
+  }
+  DisplayGPTData();
 }
 
 bool clearMbrGpt(const char* physical_path) {
@@ -62,18 +72,20 @@ bool clearMbrGpt(const char* physical_path) {
   } else {
     return true;
   }
+  return true;
 }
 
 bool makeEmptyPartition(const char* physical_path) {
   char* newPartInfo;
   PalData gptdata;
   gptdata.LoadPartitions(std::string(physical_path));
+  //gptdata.DestroyGPT();
+  //gptdata.DestroyMBR();
   gptdata.ClearDisk();
   return true;
 
   int problems = gptdata.Verify();
   free(newPartInfo);
-  // TODO: unclear if we care about problems in this regard
   if (problems > 0) {
     return true;
   } else {
