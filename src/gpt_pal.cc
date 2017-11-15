@@ -41,20 +41,18 @@ void PalData::ClearDisk() {
   uint64_t startSector = FindFirstInLargest();
   Align(&startSector);
   uint64_t endSector = FindLastInFree(startSector);
+  ClearGPTData();
   MakeProtectiveMBR();
   CreatePartition(newPartNum, startSector, endSector);
   // set partition type to FAT-32
   if (!ChangePartType(newPartNum, GUIDData("EBD0A0A2-B9E5-4433-87C0-68B6B72699C7"))) {
-    printf("We couldn't change the partition type!\n");
-  } else {
-    printf("We change the partition type!\n");
-  }
+    printf("Could not change the partition type!\n");
+  } 
   // arg is 'quiet'
   if (!SaveGPTData(true)) {
-    printf("Error Saving GPT Data!  Have a nice day!\n");
-  } else {
-    printf("Successfully Saved GPT Data!  Have a nice day!\n");
-  }
+    printf("Error Saving GPT Data\n");
+  } 
+  // we send information on the resultant format to the debug window
   DisplayGPTData();
 }
 
@@ -79,9 +77,11 @@ bool makeEmptyPartition(const char* physical_path) {
   char* newPartInfo;
   PalData gptdata;
   gptdata.LoadPartitions(std::string(physical_path));
+  //gptdata.ShowGPTState();
   //gptdata.DestroyGPT();
   //gptdata.DestroyMBR();
   gptdata.ClearDisk();
+  //gptdata.ShowGPTState();
   return true;
 
   int problems = gptdata.Verify();
