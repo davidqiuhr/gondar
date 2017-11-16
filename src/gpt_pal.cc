@@ -57,7 +57,6 @@ void PalData::ClearDisk() {
 }
 
 bool clearMbrGpt(const char* physical_path) {
-  /*
   std::string physical_path_str(physical_path);
   PalData gptdata;
   // set the physical path for this GPT object to act on
@@ -67,12 +66,12 @@ bool clearMbrGpt(const char* physical_path) {
   gptdata.SaveGPTData(quiet);
   int problems = gptdata.Verify();
   if (problems > 0) {
+    printf("%d problems with clearmbr found\n", problems);
     return false;
   } else {
+    printf("no problems with clearmbr found\n");
     return true;
   }
-  */
-  return true;
 }
 
 bool makeEmptyPartition(const char* physical_path) {
@@ -90,9 +89,9 @@ bool makeEmptyPartition(const char* physical_path) {
   free(newPartInfo);
   if (problems > 0) {
     printf("%d problems with reformat found\n", problems);
-    return true;
+    return false;
   } else {
     printf("No problems with reformat found\n");
-    return false;
+    return true;
   }
 }
