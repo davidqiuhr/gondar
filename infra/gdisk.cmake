@@ -12,6 +12,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+set(WIN32_CONSOLE ON CACHE BOOL "On Windows, show the console")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/gdisk)
 add_library(gdisk STATIC
