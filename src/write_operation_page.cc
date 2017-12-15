@@ -23,6 +23,24 @@
 WriteOperationPage::WriteOperationPage(QWidget* parent)
     : WizardPage(parent), device(0, std::string(), 0) {
   layout.addWidget(&progress);
+  bolded.setObjectName("bolded");
+  bolded.setText("<br>What's next?<br>");
+  layout.addWidget(&bolded);
+
+  whatsNext.setObjectName("whatsNext");
+  whatsNext.setText(
+      "<p>You're ready to install CloudReady!  Head back to <a "
+      "href=\"https://guide.neverware.com/install-cloudready\">the install "
+      "guide</a> for help in how to use your USB installer.<br></p><p>Don't "
+      "forget to check the 'Details' link for your devices on the <a "
+      "href=\"https://guide.neverware.com/supported-devices\">certified models "
+      "list</a>.  There may be special install instructions or important notes "
+      "for each model.</p>");
+  whatsNext.setTextFormat(Qt::RichText);
+  whatsNext.setTextInteractionFlags(Qt::TextBrowserInteraction);
+  whatsNext.setOpenExternalLinks(true);
+  whatsNext.setWordWrap(true);
+  layout.addWidget(&whatsNext);
   setLayout(&layout);
 }
 
@@ -34,6 +52,8 @@ void WriteOperationPage::initializePage() {
   // set the titles in initializePage for 'make another' flow
   setTitle("Creating your CloudReady USB installer");
   setSubTitle("This process may take up to 20 minutes.");
+  bolded.hide();
+  whatsNext.hide();
   writeFinished = false;
   writeToDrive();
 }
@@ -67,24 +87,8 @@ void WriteOperationPage::showProgress() {
 void WriteOperationPage::showWhatsNext() {
   setTitle("CloudReady USB created!");
   setSubTitle("You may now either exit or create another USB.");
-  bolded.setObjectName("bolded");
-  bolded.setText("<br>What's next?<br>");
-  layout.addWidget(&bolded);
-
-  whatsNext.setObjectName("whatsNext");
-  whatsNext.setText(
-      "<p>You're ready to install CloudReady!  Head back to <a "
-      "href=\"https://guide.neverware.com/install-cloudready\">the install "
-      "guide</a> for help in how to use your USB installer.<br></p><p>Don't "
-      "forget to check the 'Details' link for your devices on the <a "
-      "href=\"https://guide.neverware.com/supported-devices\">certified models "
-      "list</a>.  There may be special install instructions or important notes "
-      "for each model.</p>");
-  whatsNext.setTextFormat(Qt::RichText);
-  whatsNext.setTextInteractionFlags(Qt::TextBrowserInteraction);
-  whatsNext.setOpenExternalLinks(true);
-  whatsNext.setWordWrap(true);
-  layout.addWidget(&whatsNext);
+  bolded.show();
+  whatsNext.show();
 }
 
 void WriteOperationPage::onDoneWriting() {
