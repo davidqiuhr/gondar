@@ -79,8 +79,8 @@ bool makeEmptyPartition(const char* physical_path) {
   PalData gptdata;
   gptdata.LoadPartitions(std::string(physical_path));
   //gptdata.ShowGPTState();
-  //gptdata.DestroyGPT();
-  //gptdata.DestroyMBR();
+  gptdata.DestroyGPT();
+  gptdata.DestroyMBR();
   gptdata.ClearDisk();
   //gptdata.ShowGPTState();
   //return true;
