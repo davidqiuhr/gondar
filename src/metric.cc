@@ -150,8 +150,8 @@ void SendMetric(Metric metric, const std::string& value) {
   }
   json.insert("product", product);
   const auto siteId = GetSiteId();
-  // ignore uninitialized and beerover cases
-  if (! (siteId == 0 || !isChromeover())) {
+  // only show site when on beerover and site id has been initialized
+  if ((isChromeover() && siteId != 0) {
     json.insert("site", siteId);
   }
   QNetworkRequest request(url);
