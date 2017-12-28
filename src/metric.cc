@@ -116,7 +116,7 @@ void SetSiteId(int site_id) {
   HoldSiteId(site_id);
 }
 
-int GetSiteId() {
+static int GetSiteId() {
   return HoldSiteId(0);
 }
 
@@ -151,7 +151,7 @@ void SendMetric(Metric metric, const std::string& value) {
   json.insert("product", product);
   const auto siteId = GetSiteId();
   // only show site when on beerover and site id has been initialized
-  if ((isChromeover() && siteId != 0) {
+  if (isChromeover() && siteId != 0) {
     json.insert("site", siteId);
   }
   QNetworkRequest request(url);
