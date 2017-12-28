@@ -19,6 +19,7 @@
 
 #include "gondarsite.h"
 #include "gondarwizard.h"
+#include "metric.h"
 
 class SiteButton : public QRadioButton {
  public:
@@ -57,6 +58,8 @@ bool SiteSelectPage::validatePage() {
     return false;
   } else {
     const auto site = selected->site();
+    // metrics may now include site id
+    gondar::SetSiteId(site.getSiteId());
     QList<GondarImage> imageList = site.getImages();
     wizard()->imageSelectPage.addImages(imageList);
     return true;

@@ -33,6 +33,12 @@ enum class Metric {
   Error
 };
 
+// TODO: i want to set up some kind of statefulness here.  we should be able
+// to pass the metric land a site id, and it should just remember it and
+// include it from then on
+// WIP
+void SetSiteId(int site_id);
+
 void SendMetric(Metric metric, const std::string& value = "");
 
 }  // namespace gondar
