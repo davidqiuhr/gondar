@@ -33,6 +33,8 @@ enum class Metric {
   Error
 };
 
+void SetSiteId(int site_id);
+
 void SendMetric(Metric metric, const std::string& value = "");
 
 }  // namespace gondar
