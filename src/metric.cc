@@ -124,6 +124,13 @@ void SendMetric(Metric metric, const std::string& value) {
   if (!version.isEmpty()) {
     json.insert("version", version);
   }
+  QString product;
+  if (gondar::isChromeover()) {
+    product = "chromeover";
+  } else {
+    product = "beerover";
+  }
+  json.insert("product", product);
   QNetworkRequest request(url);
   request.setRawHeader(QByteArray("x-api-key"), api_key);
   request.setHeader(QNetworkRequest::ContentTypeHeader,
