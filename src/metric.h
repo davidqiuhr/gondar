@@ -17,9 +17,6 @@
 #define GONDAR_METRIC_H
 
 #include <string>
-#include <vector>
-
-#include "gondarsite.h"
 
 namespace gondar {
 
@@ -40,7 +37,7 @@ enum class Metric {
 // to pass the metric land a site id, and it should just remember it and
 // include it from then on
 // WIP
-void SetSiteId(const std::vector<GondarSite>& sites);
+void SetSiteId(int site_id);
 
 void SendMetric(Metric metric, const std::string& value = "");
 

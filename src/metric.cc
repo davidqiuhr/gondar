@@ -25,7 +25,6 @@
 #include <QUuid>
 
 #include "config.h"
-#include "gondarsite.h"
 #include "log.h"
 #include "util.h"
 
@@ -111,17 +110,8 @@ static int SetGetSiteId(int site_id_in) {
   return site_id;
 }
 
-void SetSiteId(const std::vector<GondarSite>& sites) {
-  int min_site_id = 1000000; // if we have more than one million sites and it
-                             // causes a bug, we will at least be very wealthy
-  for (GondarSite site : sites) {
-    if (site.getSiteId() < min_site_id) {
-      min_site_id = site.getSiteId();
-    }
-  }
-  if (min_site_id != 1000000) {
-    SetGetSiteId(min_site_id);
-  }
+void SetSiteId(int site_id) {
+  SetGetSiteId(site_id);
 }
 
 void SendMetric(Metric metric, const std::string& value) {
