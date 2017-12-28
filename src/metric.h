@@ -17,6 +17,9 @@
 #define GONDAR_METRIC_H
 
 #include <string>
+#include <vector>
+
+#include "gondarsite.h"
 
 namespace gondar {
 
@@ -32,6 +35,12 @@ enum class Metric {
   SuccessDuration,
   Error
 };
+
+// TODO: i want to set up some kind of statefulness here.  we should be able
+// to pass the metric land a site id, and it should just remember it and
+// include it from then on
+// WIP
+void SetSiteId(const std::vector<GondarSite>& sites);
 
 void SendMetric(Metric metric, const std::string& value = "");
 

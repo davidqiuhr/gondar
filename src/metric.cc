@@ -25,6 +25,7 @@
 #include <QUuid>
 
 #include "config.h"
+#include "gondarsite.h"
 #include "log.h"
 #include "util.h"
 
@@ -102,6 +103,27 @@ static QString getUuid() {
   return id;
 }
 
+static int SetGetSiteId(int site_id_in) {
+  static int site_id = 0;
+  if (site_id_in != 0) {
+    site_id = site_id_in;
+  }
+  return site_id;
+}
+
+void SetSiteId(const std::vector<GondarSite>& sites) {
+  int min_site_id = 1000000; // if we have more than one million sites and it
+                             // causes a bug, we will at least be very wealthy
+  for (GondarSite site : sites) {
+    if (site.getSiteId() < min_site_id) {
+      min_site_id = site.getSiteId();
+    }
+  }
+  if (min_site_id != 1000000) {
+    SetGetSiteId(min_site_id);
+  }
+}
+
 void SendMetric(Metric metric, const std::string& value) {
   const auto api_key = getMetricsApiKey();
   if (api_key.isEmpty()) {
@@ -131,6 +153,11 @@ void SendMetric(Metric metric, const std::string& value) {
     product = "beerover";
   }
   json.insert("product", product);
+  const auto siteId = SetGetSiteId(0);
+  // ignore beerover case
+  if (! (siteId == 0 || !isChromeover())) {
+    json.insert("site", siteId);
+  }
   QNetworkRequest request(url);
   request.setRawHeader(QByteArray("x-api-key"), api_key);
   request.setHeader(QNetworkRequest::ContentTypeHeader,

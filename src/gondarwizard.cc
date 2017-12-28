@@ -114,6 +114,7 @@ const std::vector<GondarSite>& GondarWizard::sites() const {
 
 void GondarWizard::setSites(const std::vector<GondarSite>& sites) {
   p_->sites = sites;
+  gondar::SetSiteId(sites);
 }
 
 // handle event when 'make another usb' button pressed
