@@ -154,7 +154,7 @@ void SendMetric(Metric metric, const std::string& value) {
   }
   json.insert("product", product);
   const auto siteId = SetGetSiteId(0);
-  // ignore beerover case
+  // ignore uninitialized and beerover cases
   if (! (siteId == 0 || !isChromeover())) {
     json.insert("site", siteId);
   }
