@@ -104,20 +104,16 @@ static QString getUuid() {
 
 // the metrics layer stores the site id to provide in later metrics
 // once it is available
-static int HoldSiteId(int site_id_in) {
+namespace {
   static int site_id = 0;
-  if (site_id_in != 0) {
-    site_id = site_id_in;
-  }
-  return site_id;
 }
 
-void SetSiteId(int site_id) {
-  HoldSiteId(site_id);
+void SetSiteId(int site_id_in) {
+  site_id = site_id_in;
 }
 
 static int GetSiteId() {
-  return HoldSiteId(0);
+  return site_id;
 }
 
 void SendMetric(Metric metric, const std::string& value) {
