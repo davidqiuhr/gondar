@@ -146,7 +146,7 @@ void SendMetric(Metric metric, const std::string& value) {
   }
   json.insert("product", product);
   const auto siteId = GetSiteId();
-  // only show site when on beerover and site id has been initialized
+  // only show site when on chromeover and site id has been initialized
   if (isChromeover() && siteId != 0) {
     json.insert("site", siteId);
   }
