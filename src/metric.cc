@@ -102,6 +102,20 @@ static QString getUuid() {
   return id;
 }
 
+// the metrics layer stores the site id to provide in later metrics
+// once it is available
+namespace {
+  static int site_id = 0;
+}
+
+void SetSiteId(int site_id_in) {
+  site_id = site_id_in;
+}
+
+static int GetSiteId() {
+  return site_id;
+}
+
 void SendMetric(Metric metric, const std::string& value) {
   const auto api_key = getMetricsApiKey();
   if (api_key.isEmpty()) {
@@ -131,6 +145,11 @@ void SendMetric(Metric metric, const std::string& value) {
     product = "beerover";
   }
   json.insert("product", product);
+  const auto siteId = GetSiteId();
+  // only show site when on chromeover and site id has been initialized
+  if (isChromeover() && siteId != 0) {
+    json.insert("site", siteId);
+  }
   QNetworkRequest request(url);
   request.setRawHeader(QByteArray("x-api-key"), api_key);
   request.setHeader(QNetworkRequest::ContentTypeHeader,
