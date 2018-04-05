@@ -3,7 +3,7 @@
 	url = https://github.com/nmoinvaz/minizip
 [submodule "plog"]
 	path = plog
-	url = git@github.com:SergiusTheBest/plog.git
+	url = https://github.com/SergiusTheBest/plog
 [submodule "gdisk"]
 	path = gdisk
 	url = https://github.com/neverware/gdisk
