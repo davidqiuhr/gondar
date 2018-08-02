@@ -4,8 +4,9 @@ RUN dnf install -y \
 	cmake \
 	gcc \
 	gcc-c++ \
+	make \
 	qt5-qtbase-devel \
-    which \
+	which \
 	zlib-devel
 
 ENV TREAT_WARNINGS_AS_ERRORS=true
