@@ -22,8 +22,16 @@
 #include "metric.h"
 #include "util.h"
 
+void sleep(int ms)
+{
+    struct timespec ts = { ms / 1000, (ms % 1000) * 1000 * 1000 };
+    nanosleep(&ts, NULL);
+}
+
 int main(int argc, char* argv[]) {
   // metric whistler
   gondar::SendMetric(gondar::Metric::Use);
+  // easier than bothering to make this actually async as it's just for testing
+  sleep(5000);
   return 0;
 }
