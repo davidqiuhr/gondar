@@ -29,6 +29,7 @@ void sleep(int ms)
 }
 
 int main(int argc, char* argv[]) {
+  gondar::InitializeLogging();
   // metric whistler
   gondar::SendMetric(gondar::Metric::Use);
   // easier than bothering to make this actually async as it's just for testing

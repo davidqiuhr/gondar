@@ -129,6 +129,7 @@ void SendMetric(Metric metric, const std::string& value) {
   QJsonObject json;
   QString id = getUuid();
   json["identifier"] = id;
+  LOG_WARNING << "UUID=" << id;
   json.insert("metric", QString::fromStdString(metricStr));
   if (!value.empty()) {
     // then we append the value to the metric
