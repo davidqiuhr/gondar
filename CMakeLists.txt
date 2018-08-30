@@ -110,6 +110,7 @@ add_library(app STATIC
   src/device_picker.cc
   src/device_select_page.cc
   src/diskwritethread.cc
+  src/dismissprompt.cc
   src/download_progress_page.cc
   src/downloader.cc
   src/error_page.cc

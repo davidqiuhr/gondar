@@ -60,4 +60,8 @@ files
 
 #define safe_strdup _strdup
 
+// from bled
+#define static_strcpy(dst, src) safe_strcpy(dst, sizeof(dst), src)
+#define static_sprintf(dst, ...) safe_sprintf(dst, sizeof(dst), __VA_ARGS__)
+
 #endif /* SHARED_H */
