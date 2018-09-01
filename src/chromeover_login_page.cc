@@ -95,7 +95,7 @@ void ChromeoverLoginPage::handleMeepoFinished() {
     wizard()->next();
   } else if (QString::compare(meepo_.no_sites_error, meepo_.error()) == 0) {
     finished = true;
-    wizard()->next();
+    wizard()->postError(meepo_.no_sites_error);
   } else {
     started = false;
     meanWordsLabel.setVisible(true);

@@ -173,6 +173,7 @@ void Meepo::handleSitesReply(QNetworkReply* reply) {
   // special handling for the zero sites case
   if (sites_remaining_ == 0) {
     fail(no_sites_error);
+    return;
   }
 
   for (const auto& site : sites_) {
