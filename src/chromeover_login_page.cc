@@ -95,7 +95,7 @@ void ChromeoverLoginPage::handleMeepoFinished() {
     wizard()->next();
   // If the user has no sites, proceed to the error screen with the
   // appropriate error
-  } else if (meepo_.no_sites_error.compare(meepo_.error()) == 0) {
+  } else if (meepo_.no_sites_error == meepo_.error()) {
     finished = true;
     wizard()->postError(meepo_.no_sites_error);
   // otherwise, assume login credentials are incorrect and prompt them to retry
