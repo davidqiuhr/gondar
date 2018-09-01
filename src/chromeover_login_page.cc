@@ -93,6 +93,9 @@ void ChromeoverLoginPage::handleMeepoFinished() {
     // TODO: let's make this a commit page so we don't have to worry about
     // the case of a user revisiting this segment for now
     wizard()->next();
+  } else if (QString::compare(meepo_.no_sites_error, meepo_.error()) == 0) {
+    finished = true;
+    wizard()->next();
   } else {
     started = false;
     meanWordsLabel.setVisible(true);
