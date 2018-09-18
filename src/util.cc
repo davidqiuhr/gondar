@@ -74,5 +74,4 @@ QJsonObject jsonFromReply(QNetworkReply* reply) {
 uint64_t getGigabyte() {
   return 1073741824LL;
 }
-
 }  // namespace gondar
