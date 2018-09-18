@@ -93,6 +93,12 @@ void ChromeoverLoginPage::handleMeepoFinished() {
     // TODO: let's make this a commit page so we don't have to worry about
     // the case of a user revisiting this segment for now
     wizard()->next();
+  // If the user has no sites, proceed to the error screen with the
+  // appropriate error
+  } else if (meepo_.no_sites_error == meepo_.error()) {
+    finished = true;
+    wizard()->postError(meepo_.no_sites_error);
+  // otherwise, assume login credentials are incorrect and prompt them to retry
   } else {
     started = false;
     meanWordsLabel.setVisible(true);
