@@ -8,7 +8,7 @@
 #include <commdlg.h>
 #include <richedit.h>
 
-#include <msapi_utf8.h>
+#include <msapi_utf8_2.h>
 
 /*
  * The following function calls are used to automatically detect and close the native
