@@ -8,7 +8,12 @@
 #include <commdlg.h>
 #include <richedit.h>
 
-#include <msapi_utf8_2.h>
+#include "msapi_utf8_2.h"
+
+void ClrFormatPromptHook(void);
+
+static HWINEVENTHOOK fp_weh = NULL;
+static char *fp_title_str = "Microsoft Windows", *fp_button_str = "Format disk";
 
 /*
  * The following function calls are used to automatically detect and close the native
@@ -48,7 +53,7 @@ static void CALLBACK FormatPromptHook(HWINEVENTHOOK hWinEventHook, DWORD Event, 
 				EnumChildWindows(hWnd, FormatPromptCallback, (LPARAM)&found);
 				if (found) {
 					SendMessage(hWnd, WM_COMMAND, (WPARAM)IDCANCEL, (LPARAM)0);
-					uprintf("Closed Windows format prompt");
+					printf("Closed Windows format prompt");
 				}
 			}
 		}
@@ -74,11 +79,11 @@ BOOL SetFormatPromptHook(void)
 		if (LoadStringU(mui_lib, 4125, title_str, sizeof(title_str)) > 0)
 			fp_title_str = title_str;
 		else
-			uprintf("Warning: Could not locate localized format prompt title string in '%s': %s", mui_path, WindowsErrorString());
+			printf("Warning: Could not locate localized format prompt title string in '%s'", mui_path);
 		if (LoadStringU(mui_lib, 4126, button_str, sizeof(button_str)) > 0)
 			fp_button_str = button_str;
 		else
-			uprintf("Warning: Could not locate localized format prompt button string in '%s': %s", mui_path, WindowsErrorString());
+			printf("Warning: Could not locate localized format prompt button string in '%s'", mui_path);
 		FreeLibrary(mui_lib);
 	}
 

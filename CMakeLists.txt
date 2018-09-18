@@ -126,7 +126,8 @@ add_library(app STATIC
   src/usb_insert_page.cc
   src/util.cc
   src/wizard_page.cc
-  src/write_operation_page.cc)
+  src/write_operation_page.cc
+  src/yank.cc)
 
 set_target_properties(app PROPERTIES AUTOMOC ON AUTORCC ON)
 target_compile_options(app PRIVATE ${EXTRA_WARNINGS})
