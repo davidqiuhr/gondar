@@ -10,10 +10,40 @@
 
 #include "msapi_utf8_2.h"
 
+#define safe_strcp(dst, dst_max, src, count) do {memcpy(dst, src, safe_min(count, dst_max)); \
+  ((char*)dst)[safe_min(count, dst_max)-1] = 0;} while(0)
+#define safe_strcpy(dst, dst_max, src) safe_strcp(dst, dst_max, src, safe_strlen(src)+1)
+#define static_strcpy(dst, src) safe_strcpy(dst, sizeof(dst), src)
+#define safe_sprintf(dst, count, ...) do {_snprintf(dst, count, __VA_ARGS__); (dst)[(count)-1] = 0; } while(0)
+#define static_sprintf(dst, ...) safe_sprintf(dst, sizeof(dst), __VA_ARGS__)
+#define safe_strcmp(str1, str2) strcmp(((str1==NULL)?"<NULL>":str1), ((str2==NULL)?"<NULL>":str2))
+
 void ClrFormatPromptHook(void);
 
 static HWINEVENTHOOK fp_weh = NULL;
 static char *fp_title_str = "Microsoft Windows", *fp_button_str = "Format disk";
+
+// this is used below
+//int MAX_PATH = 260; // according to https://docs.microsoft.com/en-us/windows/desktop/fileio/naming-a-file
+char system_dir[MAX_PATH];
+
+
+// from stdfn:
+char* GetCurrentMUI(void)
+{
+  static char mui_str[LOCALE_NAME_MAX_LENGTH];
+  wchar_t wmui_str[LOCALE_NAME_MAX_LENGTH];
+
+  if (LCIDToLocaleName(GetUserDefaultUILanguage(),
+      wmui_str, LOCALE_NAME_MAX_LENGTH, 0) > 0) {
+    wchar_to_utf8_no_alloc(wmui_str, mui_str, LOCALE_NAME_MAX_LENGTH);
+  } else {
+    static_strcpy(mui_str, "en-US");
+  }
+  return mui_str;
+}
+
+// end from stdfn
 
 /*
  * The following function calls are used to automatically detect and close the native
@@ -39,6 +69,7 @@ static BOOL CALLBACK FormatPromptCallback(HWND hWnd, LPARAM lParam)
 	return TRUE;
 }
 
+// i'll have to allow unused for now; i do not use this dwmsEventTime
 static void CALLBACK FormatPromptHook(HWINEVENTHOOK hWinEventHook, DWORD Event, HWND hWnd, LONG idObject, LONG idChild, DWORD dwEventThread, DWORD dwmsEventTime)
 {
 	char str[128];

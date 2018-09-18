@@ -1,8 +1,2 @@
-/opt/gondar/src/yank.cc:73:81: error: 'static_sprintf' was not declared in this scope
-  static_sprintf(mui_path, "%s\\%s\\shell32.dll.mui", system_dir, GetCurrentMUI());
-error: 'GetCurrentMUI' was not declared
-error: 'system_dir' was not declared
-error: no previous declaration for 'BOOL SetFormatPromptHook()' [-Werror=missing-declarations]
-error: 'safe_strcmp' was not declared
-ISO C++ forbids converting a string constant to 'char*' [-Werror=pedantic] static char *fp_title_str = "Microsoft Windows", *fp_button_str = "Format disk"
-error: invalid conversion from 'void*' to 'wchar_t*' [-fpermissive] wbuf = calloc(dwSize, sizeof(wchar_t));
+static_strcpy
+safe_strcmp
