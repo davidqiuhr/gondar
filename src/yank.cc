@@ -10,6 +10,11 @@
 
 #include "msapi_utf8_2.h"
 
+// from bled
+#define min(x, y) ((x) < (y) ? (x) : (y))
+
+#define safe_min(a, b) min((size_t)(a), (size_t)(b))
+#define safe_strlen(str) ((((char*)str)==NULL)?0:strlen(str))
 #define safe_strcp(dst, dst_max, src, count) do {memcpy(dst, src, safe_min(count, dst_max)); \
   ((char*)dst)[safe_min(count, dst_max)-1] = 0;} while(0)
 #define safe_strcpy(dst, dst_max, src) safe_strcp(dst, dst_max, src, safe_strlen(src)+1)
@@ -34,12 +39,16 @@ char* GetCurrentMUI(void)
   static char mui_str[LOCALE_NAME_MAX_LENGTH];
   wchar_t wmui_str[LOCALE_NAME_MAX_LENGTH];
 
+  //FIXME: get the localization magicks to work
+  /*
   if (LCIDToLocaleName(GetUserDefaultUILanguage(),
       wmui_str, LOCALE_NAME_MAX_LENGTH, 0) > 0) {
     wchar_to_utf8_no_alloc(wmui_str, mui_str, LOCALE_NAME_MAX_LENGTH);
   } else {
     static_strcpy(mui_str, "en-US");
   }
+  */
+  static_strcpy(mui_str, "en-US");
   return mui_str;
 }
 
