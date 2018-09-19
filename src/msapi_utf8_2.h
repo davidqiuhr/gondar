@@ -355,7 +355,7 @@ static __inline int GetWindowTextLengthU(HWND hWnd)
 	ret = GetWindowTextLengthW(hWnd);
 	err = GetLastError();
 	if (ret == 0) goto out;
-	wbuf = calloc(ret, sizeof(wchar_t));
+	wbuf = (wchar_t*)calloc(ret, sizeof(wchar_t));
 	err = GetLastError();
 	if (wbuf == NULL) {
 		err = ERROR_OUTOFMEMORY; ret = 0; goto out;
@@ -440,7 +440,7 @@ static __inline int ComboBox_GetLBTextU(HWND hCtrl, int index, char* lpString)
 static __inline DWORD CharUpperBuffU(char* lpString, DWORD len)
 {
 	DWORD ret;
-	wchar_t *wlpString = calloc(len, sizeof(wchar_t));
+	wchar_t *wlpString = (wchar_t*)calloc(len, sizeof(wchar_t));
 	if (wlpString == NULL)
 		return 0;
 	utf8_to_wchar_no_alloc(lpString, wlpString, len);
@@ -837,10 +837,10 @@ static __inline BOOL WINAPI GetOpenSaveFileNameU(LPOPENFILENAMEA lpofn, BOOL sav
 	}
 	wofn.nMaxCustFilter = lpofn->nMaxCustFilter;
 	wofn.nFilterIndex = lpofn->nFilterIndex;
-	wofn.lpstrFile = calloc(lpofn->nMaxFile, sizeof(wchar_t));
+	wofn.lpstrFile = (wchar_t*)calloc(lpofn->nMaxFile, sizeof(wchar_t));
 	utf8_to_wchar_no_alloc(lpofn->lpstrFile, wofn.lpstrFile, lpofn->nMaxFile);
 	wofn.nMaxFile = lpofn->nMaxFile;
-	wofn.lpstrFileTitle = calloc(lpofn->nMaxFileTitle, sizeof(wchar_t));
+	wofn.lpstrFileTitle = (wchar_t*)calloc(lpofn->nMaxFileTitle, sizeof(wchar_t));
 	utf8_to_wchar_no_alloc(lpofn->lpstrFileTitle, wofn.lpstrFileTitle, lpofn->nMaxFileTitle);
 	wofn.nMaxFileTitle = lpofn->nMaxFileTitle;
 	wofn.lpstrInitialDir = utf8_to_wchar(lpofn->lpstrInitialDir);
@@ -1009,7 +1009,7 @@ static __inline char* getenvU(const char* varname)
 	wchar_t* wbuf = NULL;
 	// _wgetenv() is *BROKEN* in MS compilers => use GetEnvironmentVariableW()
 	DWORD dwSize = GetEnvironmentVariableW(wvarname, wbuf, 0);
-	wbuf = calloc(dwSize, sizeof(wchar_t));
+	wbuf = (wchar_t*)calloc(dwSize, sizeof(wchar_t));
 	if (wbuf == NULL)
 		return NULL;
 	dwSize = GetEnvironmentVariableW(wvarname, wbuf, dwSize);

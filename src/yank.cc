@@ -26,7 +26,7 @@
 void ClrFormatPromptHook(void);
 
 static HWINEVENTHOOK fp_weh = NULL;
-static char *fp_title_str = "Microsoft Windows", *fp_button_str = "Format disk";
+static const char *fp_title_str = "Microsoft Windows", *fp_button_str = "Format disk";
 
 // this is used below
 //int MAX_PATH = 260; // according to https://docs.microsoft.com/en-us/windows/desktop/fileio/naming-a-file
