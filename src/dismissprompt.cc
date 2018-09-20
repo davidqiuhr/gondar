@@ -22,7 +22,6 @@ static HWINEVENTHOOK fp_weh = NULL;
 static const char *fp_title_str = "Microsoft Windows", *fp_button_str = "Format disk";
 
 // this is used below
-//int MAX_PATH = 260; // according to https://docs.microsoft.com/en-us/windows/desktop/fileio/naming-a-file
 char system_dir[MAX_PATH];
 
 
@@ -30,17 +29,6 @@ char system_dir[MAX_PATH];
 char* GetCurrentMUI(void)
 {
   static char mui_str[LOCALE_NAME_MAX_LENGTH];
-  wchar_t wmui_str[LOCALE_NAME_MAX_LENGTH];
-
-  //FIXME: get the localization magicks to work
-  /*
-  if (LCIDToLocaleName(GetUserDefaultUILanguage(),
-      wmui_str, LOCALE_NAME_MAX_LENGTH, 0) > 0) {
-    wchar_to_utf8_no_alloc(wmui_str, mui_str, LOCALE_NAME_MAX_LENGTH);
-  } else {
-    static_strcpy(mui_str, "en-US");
-  }
-  */
   static_strcpy(mui_str, "en-US");
   return mui_str;
 }
