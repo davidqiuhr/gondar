@@ -1,6 +1,8 @@
 
 #include "dismissprompt.h"
 
+char* GetCurrentMUI(void);
+
 // from bled
 #define min(x, y) ((x) < (y) ? (x) : (y))
 
