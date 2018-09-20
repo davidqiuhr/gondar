@@ -361,63 +361,7 @@ static __inline UINT GetDlgItemTextU(HWND hDlg, int nIDDlgItem, char* lpString, 
 	return ret;
 }
 
-static __inline BOOL SetDlgItemTextU(HWND hDlg, int nIDDlgItem, const char* lpString)
-{
-	BOOL ret = FALSE;
-	DWORD err = ERROR_INVALID_DATA;
-	wconvert(lpString);
-	ret = SetDlgItemTextW(hDlg, nIDDlgItem, wlpString);
-	err = GetLastError();
-	wfree(lpString);
-	SetLastError(err);
-	return ret;
-}
-
-static __inline BOOL InsertMenuU(HMENU hMenu, UINT uPosition, UINT uFlags, UINT_PTR uIDNewItem, const char* lpNewItem)
-{
-	BOOL ret = FALSE;
-	DWORD err = ERROR_INVALID_DATA;
-	wconvert(lpNewItem);
-	ret = InsertMenuW(hMenu, uPosition, uFlags, uIDNewItem, wlpNewItem);
-	err = GetLastError();
-	wfree(lpNewItem);
-	SetLastError(err);
-	return ret;
-}
-
-static __inline int ComboBox_GetLBTextU(HWND hCtrl, int index, char* lpString)
-{
-	int size;
-	DWORD err = ERROR_INVALID_DATA;
-	wchar_t* wlpString;
-	if (lpString == NULL)
-		return CB_ERR;
-	size = (int)SendMessageW(hCtrl, CB_GETLBTEXTLEN, (WPARAM)index, (LPARAM)0);
-	if (size < 0)
-		return size;
-	wlpString = (wchar_t*)calloc(size+1, sizeof(wchar_t));
-	size = (int)SendMessageW(hCtrl, CB_GETLBTEXT, (WPARAM)index, (LPARAM)wlpString);
-	err = GetLastError();
-	if (size > 0)
-		wchar_to_utf8_no_alloc(wlpString, lpString, size+1);
-	wfree(lpString);
-	SetLastError(err);
-	return size;
-}
-
-static __inline DWORD CharUpperBuffU(char* lpString, DWORD len)
-{
-	DWORD ret;
-	wchar_t *wlpString = (wchar_t*)calloc(len, sizeof(wchar_t));
-	if (wlpString == NULL)
-		return 0;
-	utf8_to_wchar_no_alloc(lpString, wlpString, len);
-	ret = CharUpperBuffW(wlpString, len);
-	wchar_to_utf8_no_alloc(wlpString, lpString, len);
-	free(wlpString);
-	return ret;
-}
-
+// needed
 static __inline HANDLE CreateFileU(const char* lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode,
 								   LPSECURITY_ATTRIBUTES lpSecurityAttributes, DWORD dwCreationDisposition,
 								   DWORD dwFlagsAndAttributes,  HANDLE hTemplateFile)
