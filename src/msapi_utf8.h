@@ -19,6 +19,10 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
+
+#ifndef SRC_MSAPI_UTF8_H_
+#define SRC_MSAPI_UTF8_H_
+
 #include <windows.h>
 #include <stdio.h>
 #include <shlobj.h>
@@ -1086,3 +1090,5 @@ static __inline BOOL GetVolumeInformationU(LPCSTR lpRootPathName, LPSTR lpVolume
 #ifdef __cplusplus
 }
 #endif
+
+#endif  // SRC_MSAPI_UTF8_H_
