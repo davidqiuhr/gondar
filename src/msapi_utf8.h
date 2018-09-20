@@ -969,25 +969,7 @@ static __inline int _stat64U(const char *path, struct __stat64 *buffer)
 	return ret;
 }
 
-// returned UTF-8 string must be freed
-static __inline char* getenvU(const char* varname)
-{
-	wconvert(varname);
-	char* ret = NULL;
-	wchar_t* wbuf = NULL;
-	// _wgetenv() is *BROKEN* in MS compilers => use GetEnvironmentVariableW()
-	DWORD dwSize = GetEnvironmentVariableW(wvarname, wbuf, 0);
-	wbuf = (wchar_t*)calloc(dwSize, sizeof(wchar_t));
-	if (wbuf == NULL)
-		return NULL;
-	dwSize = GetEnvironmentVariableW(wvarname, wbuf, dwSize);
-	if (dwSize != 0)
-		ret = wchar_to_utf8(wbuf);
-	free(wbuf);
-	wfree(varname);
-	return ret;
-}
-
+// needed
 // The following expects PropertyBuffer to contain a single Unicode string
 static __inline BOOL SetupDiGetDeviceRegistryPropertyU(HDEVINFO DeviceInfoSet, PSP_DEVINFO_DATA DeviceInfoData,
 	DWORD Property, PDWORD PropertyRegDataType, PBYTE PropertyBuffer, DWORD PropertyBufferSize, PDWORD RequiredSize)
@@ -1010,6 +992,7 @@ static __inline BOOL SetupDiGetDeviceRegistryPropertyU(HDEVINFO DeviceInfoSet, P
 	return ret;
 }
 
+// keep
 static __inline BOOL GetVolumeInformationU(LPCSTR lpRootPathName, LPSTR lpVolumeNameBuffer,
 	DWORD nVolumeNameSize, LPDWORD lpVolumeSerialNumber, LPDWORD lpMaximumComponentLength,
 	LPDWORD lpFileSystemFlags, LPSTR lpFileSystemNameBuffer, DWORD nFileSystemNameSize)
