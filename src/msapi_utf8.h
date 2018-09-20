@@ -24,7 +24,6 @@
 #include <shlobj.h>
 #include <setupapi.h>
 #include <io.h>
-#include <psapi.h>
 
 #pragma once
 #if defined(_MSC_VER)
