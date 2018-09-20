@@ -19,10 +19,12 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
+
+#ifndef WHATEVER_FILENAME_H
+#define WHATEVER_FILENAME_H
+
 #include <windows.h>
 #include <setupapi.h>
-
-#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -263,3 +265,5 @@ static __inline BOOL GetVolumeInformationU(LPCSTR lpRootPathName, LPSTR lpVolume
 #ifdef __cplusplus
 }
 #endif
+
+#endif /* WHATEVER_FILENAME_H */
