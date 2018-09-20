@@ -22,8 +22,6 @@
 #include <windows.h>
 #include <stdio.h>
 #include <shlobj.h>
-#include <ctype.h>
-#include <commdlg.h>
 #include <setupapi.h>
 #include <io.h>
 #include <sys/types.h>
