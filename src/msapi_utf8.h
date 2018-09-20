@@ -20,8 +20,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#ifndef WHATEVER_FILENAME_H
-#define WHATEVER_FILENAME_H
+#ifndef SRC_MSAPI_UTF8_H_
+#define SRC_MSAPI_UTF8_H_
 
 #include <windows.h>
 #include <setupapi.h>
@@ -266,4 +266,4 @@ static __inline BOOL GetVolumeInformationU(LPCSTR lpRootPathName, LPSTR lpVolume
 }
 #endif
 
-#endif /* WHATEVER_FILENAME_H */
+#endif /* SRC_MSAPI_UTF8_H_ */
