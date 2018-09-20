@@ -988,15 +988,6 @@ static __inline char* getenvU(const char* varname)
 	return ret;
 }
 
-static __inline int _mkdirU(const char* dirname)
-{
-	wconvert(dirname);
-	int ret;
-	ret = _wmkdir(wdirname);
-	wfree(dirname);
-	return ret;
-}
-
 // The following expects PropertyBuffer to contain a single Unicode string
 static __inline BOOL SetupDiGetDeviceRegistryPropertyU(HDEVINFO DeviceInfoSet, PSP_DEVINFO_DATA DeviceInfoData,
 	DWORD Property, PDWORD PropertyRegDataType, PBYTE PropertyBuffer, DWORD PropertyBufferSize, PDWORD RequiredSize)
