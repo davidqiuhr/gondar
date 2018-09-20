@@ -130,7 +130,7 @@ add_library(app STATIC
   src/write_operation_page.cc)
 
 set_target_properties(app PROPERTIES AUTOMOC ON AUTORCC ON)
-target_compile_options(app PRIVATE ${EXTRA_WARNINGS} -fpermissive)
+target_compile_options(app PRIVATE ${EXTRA_WARNINGS})
 target_include_directories(app SYSTEM PUBLIC minizip plog/include)
 target_include_directories(app PRIVATE ${CMAKE_BINARY_DIR}/src)
 target_link_libraries(app PUBLIC

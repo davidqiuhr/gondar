@@ -1,6 +1,6 @@
 
-#ifndef YANK_H_
-#define YANK_H_
+#ifndef DISMISSPROMPT_H_
+#define DISMISSPROMPT_H_
 
 #include <windows.h>
 #include <windowsx.h>
@@ -15,4 +15,4 @@
 
 BOOL SetFormatPromptHook(void);
 
-#endif /* YANK_H_ */
+#endif /* DISMISSPROMPT_H_ */
