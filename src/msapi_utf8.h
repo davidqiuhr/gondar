@@ -23,10 +23,6 @@
 #include <setupapi.h>
 
 #pragma once
-#if defined(_MSC_VER)
-// disable VS2012 Code Analysis warnings that are intentional
-#pragma warning(disable: 6387)	// Don't care about bad params
-#endif
 
 #ifdef __cplusplus
 extern "C" {
