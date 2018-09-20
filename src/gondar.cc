@@ -332,7 +332,6 @@ static __inline int32_t ReadRegistryKey32(HKEY root, const char* key) {
  * 2. The OS doesn't support UAC or UAC is off, and the process is being run by
  * a member of the admin group
  */
-// TODO(kendall): include whatever this includes
 bool IsCurrentProcessElevated() {
   BOOL r = false;
   DWORD size;
@@ -523,7 +522,6 @@ typedef struct {
  * get the frickin' device number for a drive? You have to use TWO different
  * methods to have a chance to get it!
  */
-// FIXME(kendall): is path really just for debugging?
 static int GetDriveNumber(HANDLE hDrive) {
   STORAGE_DEVICE_NUMBER_REDEF DeviceNumber;
   VOLUME_DISK_EXTENTS_REDEF DiskExtents;
@@ -1817,7 +1815,6 @@ static void GetDevices(DeviceGuyList* device_list) {
       if (drive_number < 0)
         continue;
 
-      // kendall: ok
       drive_index = drive_number + DRIVE_INDEX_MIN;
       // everything that comes after this is just a filter for drive_index
       // TODO(kendall): we can remove some of these filters or write our own
@@ -1889,7 +1886,7 @@ static void GetDevices(DeviceGuyList* device_list) {
       }
       // here we are.  the device has not been eliminated!  that is great!
       // if we don't already have a ret, make this our ret
-      printf("kendall: %lu qualified\n", drive_index);
+      printf("device %lu qualified\n", drive_index);
       uint64_t num_bytes = GetDriveSize(drive_index);
       device_list->emplace_back(DeviceGuy(drive_index, buffer, num_bytes));
     }
@@ -2184,7 +2181,6 @@ static bool WriteDrive(HANDLE hPhysicalDrive,
 
   // We poked the MBR and other stuff, so we need to rewind
   li.QuadPart = 0;
-  printf("kendall: before if check\n");
   // works when i return here
   // return true;
   if (!SetFilePointerEx(hPhysicalDrive, li, NULL, FILE_BEGIN))
@@ -2194,10 +2190,9 @@ static bool WriteDrive(HANDLE hPhysicalDrive,
 
   // the image won't be compressed
   printf(hSourceImage ? "Writing Image..." : "Zeroing drive...");
-  printf("kendall: we are writing the image now!\n");
   // Our buffer size must be a multiple of the sector size and *ALIGNED* to the
   // sector size
-  printf("kendall: sector size: %llu\n", sector_size);
+  printf("sector size: %llu\n", sector_size);
   if (sector_size < 512) {
     sector_size = 512;
   }
@@ -2310,16 +2305,16 @@ bool Install(DeviceGuy* target_device,
   safe_free(physical_path);
   if (phys_handle != INVALID_HANDLE_VALUE &&
       source_img != INVALID_HANDLE_VALUE) {
-    printf("handles are valid!\n");
+    printf("Handles are valid\n");
   }
   HANDLE hLogicalVolume = GetLogicalHandle(device_num, true, false, false);
   if (hLogicalVolume == INVALID_HANDLE_VALUE) {
-    printf("kendall: Could not lock volume\n");
+    printf("Could not lock volume\n");
   }
 
   UnmountVolume(hLogicalVolume);
   if (phys_handle == INVALID_HANDLE_VALUE) {
-    printf("kendall: physical handle invalid!\n");
+    printf("Physical handle invalid\n");
   }
 
   ret =
