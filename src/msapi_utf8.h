@@ -25,9 +25,6 @@
 #include <ctype.h>
 #include <commdlg.h>
 #include <setupapi.h>
-#include <direct.h>
-#include <share.h>
-#include <fcntl.h>
 #include <io.h>
 #include <sys/types.h>
 #include <sys/stat.h>
