@@ -60,7 +60,7 @@ static BOOL CALLBACK FormatPromptCallback(HWND hWnd, LPARAM lParam)
 }
 
 // i'll have to allow unused for now; i do not use this dwmsEventTime
-static void CALLBACK FormatPromptHook(HWINEVENTHOOK hWinEventHook, DWORD Event, HWND hWnd, LONG idObject, LONG idChild, DWORD dwEventThread, DWORD dwmsEventTime)
+static void CALLBACK FormatPromptHook(HWINEVENTHOOK, DWORD Event, HWND hWnd, LONG, LONG, DWORD, DWORD)
 {
 	char str[128];
 	BOOL found;
