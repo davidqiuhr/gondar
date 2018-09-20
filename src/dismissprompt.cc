@@ -9,10 +9,6 @@ void ClrFormatPromptHook(void);
 static HWINEVENTHOOK fp_weh = NULL;
 static const char *fp_title_str = "Microsoft Windows", *fp_button_str = "Format disk";
 
-// this is used below
-char system_dir[MAX_PATH];
-
-
 // from stdfn:
 char* GetCurrentMUI(void)
 {
@@ -74,6 +70,7 @@ BOOL SetFormatPromptHook(void)
 	HMODULE mui_lib;
 	char mui_path[MAX_PATH];
 	static char title_str[128], button_str[128];
+  char system_dir[MAX_PATH];
 
 	if (fp_weh != NULL)
 		return TRUE;	// No need to set again if active
