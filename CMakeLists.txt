@@ -110,6 +110,7 @@ add_library(app STATIC
   src/device_picker.cc
   src/device_select_page.cc
   src/diskwritethread.cc
+  src/dismissprompt.cc
   src/download_progress_page.cc
   src/downloader.cc
   src/error_page.cc
@@ -126,8 +127,7 @@ add_library(app STATIC
   src/usb_insert_page.cc
   src/util.cc
   src/wizard_page.cc
-  src/write_operation_page.cc
-  src/yank.cc)
+  src/write_operation_page.cc)
 
 set_target_properties(app PROPERTIES AUTOMOC ON AUTORCC ON)
 target_compile_options(app PRIVATE ${EXTRA_WARNINGS} -fpermissive)

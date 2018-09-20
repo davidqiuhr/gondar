@@ -17,11 +17,11 @@
 #include <QLibraryInfo>
 #include <QtPlugin>
 
+#include "dismissprompt.h"
 #include "gondarwizard.h"
 #include "log.h"
 #include "metric.h"
 #include "util.h"
-#include "yank.h"
 
 int main(int argc, char* argv[]) {
 #if defined(Q_OS_WIN)
@@ -33,6 +33,7 @@ int main(int argc, char* argv[]) {
   gondar::SendMetric(gondar::Metric::Use);
   QApplication app(argc, argv);
   app.setStyleSheet(gondar::readUtf8File(":/style.css"));
+  // dismiss Windows 'format disk' popups
   SetFormatPromptHook();
 
   GondarWizard wizard;

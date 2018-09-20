@@ -44,8 +44,6 @@
 #include "log.h"
 #include "shared.h"
 
-#include "yank.h"
-
 static ssize_t size_t_to_signed(const size_t value) {
   if (value <= SSIZE_MAX) {
     return (ssize_t)value;
