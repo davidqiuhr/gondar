@@ -21,7 +21,6 @@
  */
 #include <windows.h>
 #include <stdio.h>
-#include <shlobj.h>
 #include <setupapi.h>
 #include <io.h>
 
