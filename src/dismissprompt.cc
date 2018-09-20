@@ -1,20 +1,8 @@
 
 #include "dismissprompt.h"
+#include "shared.h"
 
 char* GetCurrentMUI(void);
-
-// from bled
-#define min(x, y) ((x) < (y) ? (x) : (y))
-
-#define safe_min(a, b) min((size_t)(a), (size_t)(b))
-#define safe_strlen(str) ((((char*)str)==NULL)?0:strlen(str))
-#define safe_strcp(dst, dst_max, src, count) do {memcpy(dst, src, safe_min(count, dst_max)); \
-  ((char*)dst)[safe_min(count, dst_max)-1] = 0;} while(0)
-#define safe_strcpy(dst, dst_max, src) safe_strcp(dst, dst_max, src, safe_strlen(src)+1)
-#define static_strcpy(dst, src) safe_strcpy(dst, sizeof(dst), src)
-#define safe_sprintf(dst, count, ...) do {_snprintf(dst, count, __VA_ARGS__); (dst)[(count)-1] = 0; } while(0)
-#define static_sprintf(dst, ...) safe_sprintf(dst, sizeof(dst), __VA_ARGS__)
-#define safe_strcmp(str1, str2) strcmp(((str1==NULL)?"<NULL>":str1), ((str2==NULL)?"<NULL>":str2))
 
 void ClrFormatPromptHook(void);
 
