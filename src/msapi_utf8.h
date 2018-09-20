@@ -22,7 +22,6 @@
 #include <windows.h>
 #include <stdio.h>
 #include <setupapi.h>
-#include <io.h>
 
 #pragma once
 #if defined(_MSC_VER)
