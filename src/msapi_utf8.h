@@ -345,38 +345,6 @@ static __inline BOOL SetWindowTextU(HWND hWnd, const char* lpString)
 	return ret;
 }
 
-static __inline int GetWindowTextLengthU(HWND hWnd)
-{
-	int ret = 0;
-	DWORD err = ERROR_INVALID_DATA;
-	wchar_t* wbuf = NULL;
-	char* buf = NULL;
-
-	ret = GetWindowTextLengthW(hWnd);
-	err = GetLastError();
-	if (ret == 0) goto out;
-	wbuf = (wchar_t*)calloc(ret, sizeof(wchar_t));
-	err = GetLastError();
-	if (wbuf == NULL) {
-		err = ERROR_OUTOFMEMORY; ret = 0; goto out;
-	}
-	ret = GetWindowTextW(hWnd, wbuf, ret);
-	err = GetLastError();
-	if (ret == 0) goto out;
-	buf = wchar_to_utf8(wbuf);
-	err = GetLastError();
-	if (buf == NULL) {
-		err = ERROR_OUTOFMEMORY; ret = 0; goto out;
-	}
-	ret = (int)strlen(buf) + 2;	// GetDlgItemText seems to add a character
-	err = GetLastError();
-out:
-	sfree(wbuf);
-	sfree(buf);
-	SetLastError(err);
-	return ret;
-}
-
 static __inline UINT GetDlgItemTextU(HWND hDlg, int nIDDlgItem, char* lpString, int nMaxCount)
 {
 	UINT ret = 0;
