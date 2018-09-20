@@ -24,8 +24,6 @@
 #include <shlobj.h>
 #include <ctype.h>
 #include <commdlg.h>
-#include <shellapi.h>
-#include <shlwapi.h>
 #include <setupapi.h>
 #include <direct.h>
 #include <share.h>
