@@ -1,4 +1,7 @@
 
+#include "yank.h"
+
+/*
 #include <windows.h>
 #include <windowsx.h>
 #include <stdlib.h>
@@ -9,6 +12,7 @@
 #include <richedit.h>
 
 #include "msapi_utf8_2.h"
+*/
 
 // from bled
 #define min(x, y) ((x) < (y) ? (x) : (y))
