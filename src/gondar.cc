@@ -1345,7 +1345,7 @@ bool enable_HDDs = false;
 bool right_to_left_mode = false;
 
 char app_dir[512];
-char system_dir[512];
+//char system_dir[512];
 // ^ new stuff for detecting devices
 
 DWORD FormatStatus;

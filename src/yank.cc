@@ -11,7 +11,7 @@
 #include <commdlg.h>
 #include <richedit.h>
 
-#include "msapi_utf8_2.h"
+#include "msapi_utf8.h"
 */
 
 // from bled
