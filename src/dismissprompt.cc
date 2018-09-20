@@ -9,15 +9,13 @@ void ClrFormatPromptHook(void);
 static HWINEVENTHOOK fp_weh = NULL;
 static const char *fp_title_str = "Microsoft Windows", *fp_button_str = "Format disk";
 
-// from stdfn:
+// this func from stdfn:
 char* GetCurrentMUI(void)
 {
   static char mui_str[LOCALE_NAME_MAX_LENGTH];
   static_strcpy(mui_str, "en-US");
   return mui_str;
 }
-
-// end from stdfn
 
 /*
  * The following function calls are used to automatically detect and close the native
