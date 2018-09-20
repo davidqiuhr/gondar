@@ -138,7 +138,6 @@ static __inline char* wchar_len_to_utf8(const wchar_t* wstr, int wlen)
 	return str;
 }
 
-// needed
 static __inline int LoadStringU(HINSTANCE hInstance, UINT uID, LPSTR lpBuffer, int nBufferMax)
 {
 	int ret;
@@ -160,7 +159,6 @@ static __inline int LoadStringU(HINSTANCE hInstance, UINT uID, LPSTR lpBuffer, i
 	return ret;
 }
 
-// needed
 static __inline HMODULE LoadLibraryU(LPCSTR lpFileName)
 {
 	HMODULE ret;
@@ -173,7 +171,6 @@ static __inline HMODULE LoadLibraryU(LPCSTR lpFileName)
 	return ret;
 }
 
-// needed
 static __inline int GetWindowTextU(HWND hWnd, char* lpString, int nMaxCount)
 {
 	int ret = 0;
@@ -190,7 +187,6 @@ static __inline int GetWindowTextU(HWND hWnd, char* lpString, int nMaxCount)
 	return ret;
 }
 
-// needed
 static __inline HANDLE CreateFileU(const char* lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode,
 								   LPSECURITY_ATTRIBUTES lpSecurityAttributes, DWORD dwCreationDisposition,
 								   DWORD dwFlagsAndAttributes,  HANDLE hTemplateFile)
@@ -206,7 +202,6 @@ static __inline HANDLE CreateFileU(const char* lpFileName, DWORD dwDesiredAccess
 	return ret;
 }
 
-// needed
 // The following expects PropertyBuffer to contain a single Unicode string
 static __inline BOOL SetupDiGetDeviceRegistryPropertyU(HDEVINFO DeviceInfoSet, PSP_DEVINFO_DATA DeviceInfoData,
 	DWORD Property, PDWORD PropertyRegDataType, PBYTE PropertyBuffer, DWORD PropertyBufferSize, PDWORD RequiredSize)
@@ -229,7 +224,6 @@ static __inline BOOL SetupDiGetDeviceRegistryPropertyU(HDEVINFO DeviceInfoSet, P
 	return ret;
 }
 
-// keep
 static __inline BOOL GetVolumeInformationU(LPCSTR lpRootPathName, LPSTR lpVolumeNameBuffer,
 	DWORD nVolumeNameSize, LPDWORD lpVolumeSerialNumber, LPDWORD lpMaximumComponentLength,
 	LPDWORD lpFileSystemFlags, LPSTR lpFileSystemNameBuffer, DWORD nFileSystemNameSize)
