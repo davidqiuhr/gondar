@@ -153,125 +153,7 @@ static __inline char* wchar_len_to_utf8(const wchar_t* wstr, int wlen)
 	return str;
 }
 
-static __inline DWORD FormatMessageU(DWORD dwFlags, LPCVOID lpSource, DWORD dwMessageId,
-									 DWORD dwLanguageId, char* lpBuffer, DWORD nSize, va_list *Arguments)
-{
-	DWORD ret = 0, err = ERROR_INVALID_DATA;
-	// coverity[returned_null]
-	walloc(lpBuffer, nSize);
-	ret = FormatMessageW(dwFlags, lpSource, dwMessageId, dwLanguageId, wlpBuffer, nSize, Arguments);
-	err = GetLastError();
-	if ((ret != 0) && ((ret = wchar_to_utf8_no_alloc(wlpBuffer, lpBuffer, nSize)) == 0)) {
-		err = GetLastError();
-		ret = 0;
-	}
-	wfree(lpBuffer);
-	SetLastError(err);
-	return ret;
-}
-
-// SendMessage, with LPARAM as UTF-8 string
-static __inline LRESULT SendMessageLU(HWND hWnd, UINT Msg, WPARAM wParam, const char* lParam)
-{
-	LRESULT ret = FALSE;
-	DWORD err = ERROR_INVALID_DATA;
-	wconvert(lParam);
-	ret = SendMessageW(hWnd, Msg, wParam, (LPARAM)wlParam);
-	err = GetLastError();
-	wfree(lParam);
-	SetLastError(err);
-	return ret;
-}
-
-static __inline int DrawTextExU(HDC hDC, LPCSTR lpchText, int nCount, LPRECT lpRect, UINT uFormat, LPDRAWTEXTPARAMS lpDTParams)
-{
-	int ret;
-	DWORD err = ERROR_INVALID_DATA;
-	wconvert(lpchText);
-	ret = DrawTextExW(hDC, wlpchText, nCount, lpRect, uFormat, lpDTParams);
-	err = GetLastError();
-	wfree(lpchText);
-	SetLastError(err);
-	return ret;
-}
-
-static __inline BOOL SHGetPathFromIDListU(LPCITEMIDLIST pidl, char* pszPath)
-{
-	BOOL ret = FALSE;
-	DWORD err = ERROR_INVALID_DATA;
-	// coverity[returned_null]
-	walloc(pszPath, MAX_PATH);
-	ret = SHGetPathFromIDListW(pidl, wpszPath);
-	err = GetLastError();
-	if ((ret) && (wchar_to_utf8_no_alloc(wpszPath, pszPath, MAX_PATH) == 0)) {
-		err = GetLastError();
-		ret = FALSE;
-	}
-	wfree(pszPath);
-	SetLastError(err);
-	return ret;
-}
-
-static __inline HWND CreateWindowU(char* lpClassName, char* lpWindowName,
-	DWORD dwStyle, int x, int y, int nWidth, int nHeight, HWND hWndParent,
-	HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam)
-{
-	HWND ret = NULL;
-	DWORD err = ERROR_INVALID_DATA;
-	wconvert(lpClassName);
-	wconvert(lpWindowName);
-	ret = CreateWindowW(wlpClassName, wlpWindowName, dwStyle, x, y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam);
-	err = GetLastError();
-	wfree(lpClassName);
-	wfree(lpWindowName);
-	SetLastError(err);
-	return ret;
-}
-
-static __inline HWND CreateWindowExU(DWORD dwExStyle, char* lpClassName, char* lpWindowName,
-	DWORD dwStyle, int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu,
-	HINSTANCE hInstance, LPVOID lpParam)
-{
-	HWND ret = NULL;
-	DWORD err = ERROR_INVALID_DATA;
-	wconvert(lpClassName);
-	wconvert(lpWindowName);
-	ret = CreateWindowExW(dwExStyle, wlpClassName, wlpWindowName, dwStyle, x, y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam);
-	err = GetLastError();
-	wfree(lpClassName);
-	wfree(lpWindowName);
-	SetLastError(err);
-	return ret;
-}
-
-static __inline int MessageBoxU(HWND hWnd, LPCSTR lpText, LPCSTR lpCaption, UINT uType)
-{
-	int ret;
-	DWORD err = ERROR_INVALID_DATA;
-	wconvert(lpText);
-	wconvert(lpCaption);
-	ret = MessageBoxW(hWnd, wlpText, wlpCaption, uType);
-	err = GetLastError();
-	wfree(lpText);
-	wfree(lpCaption);
-	SetLastError(err);
-	return ret;
-}
-
-static __inline int MessageBoxExU(HWND hWnd, LPCSTR lpText, LPCSTR lpCaption, UINT uType, WORD wLanguageId)
-{
-	int ret;
-	DWORD err = ERROR_INVALID_DATA;
-	wconvert(lpText);
-	wconvert(lpCaption);
-	ret = MessageBoxExW(hWnd, wlpText, wlpCaption, uType, wLanguageId);
-	err = GetLastError();
-	wfree(lpText);
-	wfree(lpCaption);
-	SetLastError(err);
-	return ret;
-}
-
+// needed
 static __inline int LoadStringU(HINSTANCE hInstance, UINT uID, LPSTR lpBuffer, int nBufferMax)
 {
 	int ret;
@@ -293,6 +175,7 @@ static __inline int LoadStringU(HINSTANCE hInstance, UINT uID, LPSTR lpBuffer, i
 	return ret;
 }
 
+// needed
 static __inline HMODULE LoadLibraryU(LPCSTR lpFileName)
 {
 	HMODULE ret;
@@ -305,18 +188,7 @@ static __inline HMODULE LoadLibraryU(LPCSTR lpFileName)
 	return ret;
 }
 
-static __inline int DrawTextU(HDC hDC, LPCSTR lpText, int nCount, LPRECT lpRect, UINT uFormat)
-{
-	int ret;
-	DWORD err = ERROR_INVALID_DATA;
-	wconvert(lpText);
-	ret = DrawTextW(hDC, wlpText, nCount, lpRect, uFormat);
-	err = GetLastError();
-	wfree(lpText);
-	SetLastError(err);
-	return ret;
-}
-
+// needed
 static __inline int GetWindowTextU(HWND hWnd, char* lpString, int nMaxCount)
 {
 	int ret = 0;
@@ -326,34 +198,6 @@ static __inline int GetWindowTextU(HWND hWnd, char* lpString, int nMaxCount)
 	ret = GetWindowTextW(hWnd, wlpString, nMaxCount);
 	err = GetLastError();
 	if ( (ret != 0) && ((ret = wchar_to_utf8_no_alloc(wlpString, lpString, nMaxCount)) == 0) ) {
-		err = GetLastError();
-	}
-	wfree(lpString);
-	SetLastError(err);
-	return ret;
-}
-
-static __inline BOOL SetWindowTextU(HWND hWnd, const char* lpString)
-{
-	BOOL ret = FALSE;
-	DWORD err = ERROR_INVALID_DATA;
-	wconvert(lpString);
-	ret = SetWindowTextW(hWnd, wlpString);
-	err = GetLastError();
-	wfree(lpString);
-	SetLastError(err);
-	return ret;
-}
-
-static __inline UINT GetDlgItemTextU(HWND hDlg, int nIDDlgItem, char* lpString, int nMaxCount)
-{
-	UINT ret = 0;
-	DWORD err = ERROR_INVALID_DATA;
-	// coverity[returned_null]
-	walloc(lpString, nMaxCount);
-	ret = GetDlgItemTextW(hDlg, nIDDlgItem, wlpString, nMaxCount);
-	err = GetLastError();
-	if ((ret != 0) && ((ret = wchar_to_utf8_no_alloc(wlpString, lpString, nMaxCount)) == 0)) {
 		err = GetLastError();
 	}
 	wfree(lpString);
