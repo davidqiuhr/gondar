@@ -45,8 +45,10 @@ void PalData::ClearDisk() {
   uint64_t high = FindLastInFree(low);
   //uint64_t startSector = low;
   //uint64_t endSector = high;
+  // first sector is correct; could just keep the above.
   uint64_t startSector = 2048;
-  uint64_t endSector = 30736384;
+  // this is what i get when i use gparted on this disk.
+  uint64_t endSector = 30734335;
   // start: 2048
   // end: 0
   // gparted says first sector: 0; last: 30736384
