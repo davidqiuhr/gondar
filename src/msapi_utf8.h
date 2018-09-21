@@ -181,7 +181,6 @@ static __inline HMODULE LoadLibraryU(LPCSTR lpFileName) {
 static __inline int GetWindowTextU(HWND hWnd, char* lpString, int nMaxCount) {
   int ret = 0;
   DWORD err = ERROR_INVALID_DATA;
-  // coverity[returned_null]
   walloc(lpString, nMaxCount);
   ret = GetWindowTextW(hWnd, wlpString, nMaxCount);
   err = GetLastError();
@@ -224,7 +223,6 @@ static __inline bool SetupDiGetDeviceRegistryPropertyU(
     PDWORD RequiredSize) {
   bool ret = false;
   DWORD err = ERROR_INVALID_DATA;
-  // coverity[returned_null]
   walloc(PropertyBuffer, PropertyBufferSize);
 
   ret = SetupDiGetDeviceRegistryPropertyW(
@@ -253,9 +251,7 @@ static __inline bool GetVolumeInformationU(LPCSTR lpRootPathName,
   bool ret = false;
   DWORD err = ERROR_INVALID_DATA;
   wconvert(lpRootPathName);
-  // coverity[returned_null]
   walloc(lpVolumeNameBuffer, nVolumeNameSize);
-  // coverity[returned_null]
   walloc(lpFileSystemNameBuffer, nFileSystemNameSize);
 
   ret = GetVolumeInformationW(wlpRootPathName, wlpVolumeNameBuffer,
