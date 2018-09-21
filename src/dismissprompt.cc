@@ -1,5 +1,14 @@
 
 #include "dismissprompt.h"
+
+#include <windowsx.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <shlobj.h>
+#include <commdlg.h>
+#include <richedit.h>
+
 #include "shared.h"
 
 char* GetCurrentMUI(void);
