@@ -56,17 +56,6 @@ extern "C" {
     sfree(_ms_wlvi.pszText);                                            \
   }
 
-// Never ever use isdigit() or isspace(), etc. on UTF-8 strings!
-// These calls take an int and char is signed so MS compilers will produce an
-// assert error on anything that's > 0x80
-#define isasciiU(c) isascii((unsigned char)(c))
-#define iscntrlU(c) iscntrl((unsigned char)(c))
-#define isdigitU(c) isdigit((unsigned char)(c))
-#define isspaceU(c) isspace((unsigned char)(c))
-#define isxdigitU(c) isxdigit((unsigned char)(c))
-// NB: other issomething() calls are not implemented as they may require
-// multibyte UTF-8 sequences to be converted
-
 #define sfree(p)        \
   do {                  \
     if (p != NULL) {    \
