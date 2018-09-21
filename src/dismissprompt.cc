@@ -56,7 +56,6 @@ static BOOL CALLBACK FormatPromptCallback(HWND hWnd, LPARAM lParam) {
   return TRUE;
 }
 
-// i'll have to allow unused for now; i do not use this dwmsEventTime
 static void CALLBACK FormatPromptHook(HWINEVENTHOOK,
                                       DWORD Event,
                                       HWND hWnd,
