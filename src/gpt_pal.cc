@@ -20,6 +20,9 @@
 #include "../gdisk/gpt.h"
 #include "../gdisk/parttypes.h"
 
+// FIXME: temp
+#include <stdio.h>
+
 class PalData : public GPTData {
  public:
   PalData();
@@ -42,6 +45,7 @@ void PalData::ClearDisk() {
   uint64_t high = FindLastInFree(low);
   uint64_t startSector = low;
   uint64_t endSector = high;
+  printf("start:%d\nend:%d\n", startSector, endSector);
   CreatePartition(newPartNum, startSector, endSector);
   partitions[0].SetType(0x0b00);  // make it fat32
   // arg is 'quiet'
@@ -65,7 +69,7 @@ bool clearMbrGpt(const char* physical_path) {
 }
 
 // FIXME: this should make a fat32 partition
-bool makeEmptyPartition(const char* physical_path)
+bool makeEmptyPartition(const char* physical_path) {
   char* newPartInfo;
   PalData gptdata;
   gptdata.LoadPartitions(std::string(physical_path));
