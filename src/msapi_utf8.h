@@ -155,7 +155,6 @@ static __inline int LoadStringU(HINSTANCE hInstance,
     SetLastError(ERROR_INVALID_PARAMETER);
     return 0;
   }
-  // coverity[returned_null]
   walloc(lpBuffer, nBufferMax);
   ret = LoadStringW(hInstance, uID, wlpBuffer, nBufferMax);
   err = GetLastError();
@@ -215,7 +214,7 @@ static __inline HANDLE CreateFileU(const char* lpFileName,
 }
 
 // The following expects PropertyBuffer to contain a single Unicode string
-static __inline BOOL SetupDiGetDeviceRegistryPropertyU(
+static __inline bool SetupDiGetDeviceRegistryPropertyU(
     HDEVINFO DeviceInfoSet,
     PSP_DEVINFO_DATA DeviceInfoData,
     DWORD Property,
@@ -236,14 +235,14 @@ static __inline BOOL SetupDiGetDeviceRegistryPropertyU(
       (wchar_to_utf8_no_alloc(wPropertyBuffer, (char*)(uintptr_t)PropertyBuffer,
                               PropertyBufferSize) == 0)) {
     err = GetLastError();
-    ret = FALSE;
+    ret = false;
   }
   wfree(PropertyBuffer);
   SetLastError(err);
   return ret;
 }
 
-static __inline BOOL GetVolumeInformationU(LPCSTR lpRootPathName,
+static __inline bool GetVolumeInformationU(LPCSTR lpRootPathName,
                                            LPSTR lpVolumeNameBuffer,
                                            DWORD nVolumeNameSize,
                                            LPDWORD lpVolumeSerialNumber,
