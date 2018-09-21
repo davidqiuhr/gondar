@@ -47,6 +47,8 @@ void PalData::ClearDisk() {
   //uint64_t endSector = high;
   // first sector is correct; could just keep the above.
   uint64_t startSector = 2048;
+  // i get that warning about 34 blocks.
+  startSector += 34;
   // this is what i get when i use gparted on this disk.
   uint64_t endSector = 30734335;
   // start: 2048
