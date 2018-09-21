@@ -234,7 +234,7 @@ static __inline BOOL SetupDiGetDeviceRegistryPropertyU(
     PBYTE PropertyBuffer,
     DWORD PropertyBufferSize,
     PDWORD RequiredSize) {
-  BOOL ret = FALSE;
+  bool ret = false;
   DWORD err = ERROR_INVALID_DATA;
   // coverity[returned_null]
   walloc(PropertyBuffer, PropertyBufferSize);
@@ -262,7 +262,7 @@ static __inline BOOL GetVolumeInformationU(LPCSTR lpRootPathName,
                                            LPDWORD lpFileSystemFlags,
                                            LPSTR lpFileSystemNameBuffer,
                                            DWORD nFileSystemNameSize) {
-  BOOL ret = FALSE;
+  bool ret = false;
   DWORD err = ERROR_INVALID_DATA;
   wconvert(lpRootPathName);
   // coverity[returned_null]
