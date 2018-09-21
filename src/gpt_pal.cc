@@ -64,7 +64,8 @@ bool clearMbrGpt(const char* physical_path) {
   }
 }
 
-bool makeEmptyPartition(const char* physical_path) {
+// FIXME: this should make a fat32 partition
+bool makeEmptyPartition(const char* physical_path)
   char* newPartInfo;
   PalData gptdata;
   gptdata.LoadPartitions(std::string(physical_path));
