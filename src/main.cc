@@ -17,7 +17,7 @@
 #include <QLibraryInfo>
 #include <QtPlugin>
 
-#ifdef _WIN32
+#if defined(Q_OS_WIN)
 #include "dismissprompt.h"
 #endif
 #include "gondarwizard.h"
@@ -28,6 +28,8 @@
 int main(int argc, char* argv[]) {
 #if defined(Q_OS_WIN)
   Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
+  // dismiss Windows 'format disk' popups
+  SetFormatPromptHook();
 #endif
   Q_INIT_RESOURCE(gondarwizard);
 
@@ -35,8 +37,6 @@ int main(int argc, char* argv[]) {
   gondar::SendMetric(gondar::Metric::Use);
   QApplication app(argc, argv);
   app.setStyleSheet(gondar::readUtf8File(":/style.css"));
-  // dismiss Windows 'format disk' popups
-  SetFormatPromptHook();
 
   GondarWizard wizard;
   wizard.show();
