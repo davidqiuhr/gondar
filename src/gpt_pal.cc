@@ -43,8 +43,14 @@ void PalData::ClearDisk() {
   uint64_t low = FindFirstInLargest();
   Align(&low);
   uint64_t high = FindLastInFree(low);
-  uint64_t startSector = low;
-  uint64_t endSector = high;
+  //uint64_t startSector = low;
+  //uint64_t endSector = high;
+  uint64_t startSector = 2048;
+  uint64_t endSector = 30736384;
+  // start: 2048
+  // end: 0
+  // gparted says first sector: 0; last: 30736384
+  // ^ but maybe that just means no partition/free space starts at 2048?
   printf("start:%d\nend:%d\n", startSector, endSector);
   CreatePartition(newPartNum, startSector, endSector);
   partitions[0].SetType(0x0b00);  // make it fat32
