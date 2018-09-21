@@ -272,7 +272,7 @@ static __inline bool GetVolumeInformationU(LPCSTR lpRootPathName,
                                  lpFileSystemNameBuffer,
                                  nFileSystemNameSize) == 0))) {
       err = GetLastError();
-      ret = FALSE;
+      ret = false;
     }
   }
   wfree(lpVolumeNameBuffer);
