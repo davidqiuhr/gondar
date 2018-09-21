@@ -105,7 +105,7 @@ static QString getUuid() {
 // the metrics layer stores the site id to provide in later metrics
 // once it is available
 namespace {
-  static int site_id = 0;
+static int site_id = 0;
 }
 
 void SetSiteId(int site_id_in) {
