@@ -17,7 +17,9 @@
 #include <QLibraryInfo>
 #include <QtPlugin>
 
+#ifdef _WIN32
 #include "dismissprompt.h"
+#endif
 #include "gondarwizard.h"
 #include "log.h"
 #include "metric.h"
