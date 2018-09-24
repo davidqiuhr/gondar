@@ -83,7 +83,6 @@ bool makeEmptyPartition(const char* physical_path) {
   PalData gptdata;
   gptdata.LoadPartitions(std::string(physical_path));
   gptdata.ClearDisk();
-  return true;
 
   int problems = gptdata.Verify();
   free(newPartInfo);
