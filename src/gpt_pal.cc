@@ -55,7 +55,8 @@ void PalData::ClearDisk() {
   // gparted says first sector: 0; last: 30736384
   // ^ but maybe that just means no partition/free space starts at 2048?
   printf("start:%d\nend:%d\n", startSector, endSector);
-  CreatePartition(newPartNum, startSector, endSector);
+  int ret = CreatePartition(newPartNum, startSector, endSector);
+  printf("create partition returned %d\n", ret);
   partitions[0].SetType(0x0b00);  // make it fat32
   // arg is 'quiet'
   SaveGPTData(true);
