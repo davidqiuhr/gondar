@@ -46,7 +46,8 @@ void PalData::ClearDisk() {
   //uint64_t startSector = low;
   //uint64_t endSector = high;
   // first sector is correct; could just keep the above.
-  uint64_t startSector = 2048;
+  //uint64_t startSector = 2048;
+  uint64_t startSector = 4096;
   // this is what i get when i use gparted on this disk.
   uint64_t endSector = 30000000;
   // start: 2048
