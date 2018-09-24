@@ -73,7 +73,8 @@ void DiskWriteThread::writeImage() {
 void DiskWriteThread::formatDrive() {
   LOG_INFO << "formatting disk";
   setState(State::Running);
-  if (!Format(&selected_drive)) {
+  //FIXME: does format return zero on success?
+  if (Format(&selected_drive)) {
     LOG_ERROR << "Install failed";
     setState(State::InstallFailed);
     return;

@@ -2346,7 +2346,8 @@ bool Format(DeviceGuy* target_device) {
     return ret;
   }
   ret = makeEmptyPartition(physical_path);
-  if (!ret) {
+  // if there were problems, return non-zero
+  if (ret) {
     LOG_WARNING << "Error creating empty fat32 partition";
   }
   safe_free(physical_path);

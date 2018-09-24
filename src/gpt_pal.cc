@@ -39,7 +39,10 @@ WhichToUse PalData::UseWhichPartitions(void) {
 }
 
 void PalData::ClearDisk() {
-  int newPartNum = 1;
+  //BlankPartitions();
+  //SaveGPTData(true);
+  DisplayGPTData();
+  int newPartNum = 0;
   uint64_t low = FindFirstInLargest();
   Align(&low);
   uint64_t high = FindLastInFree(low);
@@ -56,13 +59,18 @@ void PalData::ClearDisk() {
   // ^ but maybe that just means no partition/free space starts at 2048?
   printf("start:%d\nend:%d\n", startSector, endSector);
   int ret = CreatePartition(newPartNum, startSector, endSector);
+  // ^ returns a 1 (success)
   printf("create partition returned %d\n", ret);
   //partitions[0].SetType(0x0b00);  // make it fat32
   printf("part type before is %s\n", partitions[0].GetTypeName().c_str());
+  partitions[0].SetFirstLBA(startSector);
+  partitions[0].SetLastLBA(endSector);
   partitions[0].SetType(0x0b00);  // make it fat32
+  partitions[0].RandomizeUniqueGUID();
   printf("part type after is %s\n", partitions[0].GetTypeName().c_str());
   //printf("part type is %s\n", partitions[0].GetType().ShowAllTypes(0);
   // arg is 'quiet'
+  DisplayGPTData();
   SaveGPTData(true);
 }
 
