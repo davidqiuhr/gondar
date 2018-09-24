@@ -43,13 +43,13 @@ void PalData::ClearDisk() {
   uint64_t low = FindFirstInLargest();
   Align(&low);
   uint64_t high = FindLastInFree(low);
-  //uint64_t startSector = low;
-  //uint64_t endSector = high;
+  uint64_t startSector = low;
+  uint64_t endSector = high;
   // first sector is correct; could just keep the above.
   //uint64_t startSector = 2048;
-  uint64_t startSector = 4096;
+  //uint64_t startSector = 4096;
   // this is what i get when i use gparted on this disk.
-  uint64_t endSector = 30000000;
+  //uint64_t endSector = 30000000;
   // start: 2048
   // end: 0
   // gparted says first sector: 0; last: 30736384
@@ -89,8 +89,10 @@ bool makeEmptyPartition(const char* physical_path) {
   free(newPartInfo);
   // TODO: unclear if we care about problems in this regard
   if (problems > 0) {
+    printf("there were problems\n");
     return true;
   } else {
+    printf("there were no problems\n");
     return false;
   }
 }
