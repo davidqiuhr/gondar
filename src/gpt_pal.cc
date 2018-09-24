@@ -57,7 +57,11 @@ void PalData::ClearDisk() {
   printf("start:%d\nend:%d\n", startSector, endSector);
   int ret = CreatePartition(newPartNum, startSector, endSector);
   printf("create partition returned %d\n", ret);
+  //partitions[0].SetType(0x0b00);  // make it fat32
+  printf("part type before is %s\n", partitions[0].GetTypeName().c_str());
   partitions[0].SetType(0x0b00);  // make it fat32
+  printf("part type after is %s\n", partitions[0].GetTypeName().c_str());
+  //printf("part type is %s\n", partitions[0].GetType().ShowAllTypes(0);
   // arg is 'quiet'
   SaveGPTData(true);
 }
