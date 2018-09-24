@@ -66,10 +66,11 @@ bool clearMbrGpt(const char* physical_path) {
   PalData gptdata;
   // set the physical path for this GPT object to act on
   gptdata.LoadPartitions(std::string(physical_path));
-  int quiet = true;
+  int quiet = false;
   // attempt to fix any gpt/mbr problems by setting to a sane, empty state
   gptdata.SaveGPTData(quiet);
   int problems = gptdata.Verify();
+  printf("cleared mbr/gpt\n");
   if (problems > 0) {
     return false;
   } else {
