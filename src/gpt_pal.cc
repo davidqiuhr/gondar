@@ -102,11 +102,11 @@ bool makeEmptyPartition(const char* physical_path) {
   // make an unformatted partition with label for fat32
   gptdata.ClearDisk();
   // now make the volume
-  pfFormatEx(wVolumeName, DRIVE_REMOVABLE, &wFSType[index], wLabel,
+  //pfFormatEx(wVolumeName, DRIVE_REMOVABLE, &wFSType[index], wLabel,
   //  IsChecked(IDC_QUICK_FORMAT), ulClusterSize, FormatExCallback);
   // 0x0b is RemovableMedia according to https://msdn.microsoft.com/en-us/library/windows/desktop/aa365231(v=vs.85).aspx
   // TODO: lettuce use the actual value
-  pfFormatEx(physical_path, MEDIATYPE.RemovableMedia, L"FAT32", L"", /*quick*/true, /*clustersize*/512, kewlcallback)
+  pfFormatEx(physical_path, MEDIA_TYPE.RemovableMedia, L"FAT32", L"", /*quick*/true, /*clustersize*/512, kewlcallback);
   int problems = gptdata.Verify();
   free(newPartInfo);
   // TODO: unclear if we care about problems in this regard
