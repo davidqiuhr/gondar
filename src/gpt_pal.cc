@@ -53,8 +53,6 @@ static __inline HMODULE GetLibraryHandle(char* szLibraryName) {
 
 #define PF_INIT(proc, name)         if (pf##proc == NULL) pf##proc = \
   (proc##_t) GetProcAddress(GetLibraryHandle((char*)#name), #proc)
-#define PF_INIT_OR_OUT(proc, name)      do {PF_INIT(proc, name);         \
-  if (pf##proc == NULL) {printf("Unable to locate dll\n"); goto out;} } while(0)
 
 /* Callback command types (some errorcode were filled from HPUSBFW V2.2.3 and their
    designation from msdn.microsoft.com/en-us/library/windows/desktop/aa819439.aspx */
@@ -195,12 +193,14 @@ bool makeEmptyPartition(const char* physical_path) {
   // problems with tolower(). Make sure we restore the locale. For more details,
   // see http://comments.gmane.org/gmane.comp.gnu.mingw.user/39300
   char* locale = setlocale(LC_ALL, NULL);
-  PF_INIT_OR_OUT(FormatEx, Fmifs);
+  PF_INIT(FormatEx, Fmifs);
   //PF_INIT(EnableVolumeCompression, Fmifs);
   setlocale(LC_ALL, locale);
 
   // 0x0b is RemovableMedia according to https://msdn.microsoft.com/en-us/library/windows/desktop/aa365231(v=vs.85).aspx
-  pfFormatEx(physical_path, MEDIA_TYPE.RemovableMedia, L"FAT32", L"", /*quick*/true, /*clustersize*/512, kewlcallback);
+  //pfFormatEx(physical_path, MEDIA_TYPE.RemovableMedia, L"FAT32", L"", /*quick*/true, /*clustersize*/512, kewlcallback);
+  // TODO: physical_path needs to be wchar.
+  pfFormatEx(L"" + physical_path, 0x0b, L"FAT32", L"", /*quick*/true, /*clustersize*/512, kewlcallback);
 
   int problems = gptdata.Verify();
   free(newPartInfo);
