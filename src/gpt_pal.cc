@@ -15,6 +15,29 @@
 
 #include "gpt_pal.h"
 
+#include <inttypes.h>
+
+// wait what?  we're only opening one library.
+// TODO: simplify this to just open/close the single format lib we're using
+#define         MAX_LIBRARY_HANDLES 32
+extern HMODULE  OpenedLibrariesHandle[MAX_LIBRARY_HANDLES];
+extern uint16_t OpenedLibrariesHandleSize;
+#define         OPENED_LIBRARIES_VARS HMODULE OpenedLibrariesHandle[MAX_LIBRARY_HANDLES]; uint16_t OpenedLibrariesHandleSize = 0
+#define         CLOSE_OPENED_LIBRARIES while(OpenedLibrariesHandleSize > 0) FreeLibrary(OpenedLibrariesHandle[--OpenedLibrariesHandleSize])
+static __inline HMODULE GetLibraryHandle(char* szLibraryName) {
+  HMODULE h = NULL;
+  if ((h = GetModuleHandleA(szLibraryName)) == NULL) {
+    if (OpenedLibrariesHandleSize >= MAX_LIBRARY_HANDLES) {
+      uprintf("Error: MAX_LIBRARY_HANDLES is too small\n");
+    } else {
+      h = LoadLibraryA(szLibraryName);
+      if (h != NULL)
+        OpenedLibrariesHandle[OpenedLibrariesHandleSize++] = h;
+    }
+  }
+  return h;
+}
+
 #define PF_INIT(proc, name)         if (pf##proc == NULL) pf##proc = \
   (proc##_t) GetProcAddress(GetLibraryHandle(#name), #proc)
 #define PF_INIT_OR_OUT(proc, name)      do {PF_INIT(proc, name);         \
