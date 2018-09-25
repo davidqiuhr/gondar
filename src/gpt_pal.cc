@@ -66,6 +66,7 @@ void PalData::ClearDisk() {
   partitions[0].SetFirstLBA(startSector);
   partitions[0].SetLastLBA(endSector);
   partitions[0].SetType(0x0b00);  // make it fat32
+  // TODO: should i also mkfs?
   partitions[0].RandomizeUniqueGUID();
   printf("part type after is %s\n", partitions[0].GetTypeName().c_str());
   //printf("part type is %s\n", partitions[0].GetType().ShowAllTypes(0);
@@ -74,11 +75,19 @@ void PalData::ClearDisk() {
   SaveGPTData(true);
 }
 
+// FIXME: what does this function even do
+// right now running the format chain of events makes no changes to disk.
+
+// i think i frogot to actually clear the gpt
 bool clearMbrGpt(const char* physical_path) {
   std::string physical_path_str(physical_path);
   PalData gptdata;
   // set the physical path for this GPT object to act on
   gptdata.LoadPartitions(std::string(physical_path));
+  // TODO: actual work
+  int success = gptdata.ClearGPTData();
+  printf("clear success = %d\n", success);
+
   int quiet = true;
   // attempt to fix any gpt/mbr problems by setting to a sane, empty state
   gptdata.SaveGPTData(quiet);
@@ -96,8 +105,10 @@ bool makeEmptyPartition(const char* physical_path) {
   char* newPartInfo;
   PalData gptdata;
   gptdata.LoadPartitions(std::string(physical_path));
+  //int success = gptdata.ClearDisk();
   gptdata.ClearDisk();
-
+  //printf("cleared disk; success=%d\n", success);
+  gptdata.WriteProtectiveMBR();
   int problems = gptdata.Verify();
   free(newPartInfo);
   // TODO: unclear if we care about problems in this regard
