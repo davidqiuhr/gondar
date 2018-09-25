@@ -20,6 +20,8 @@
 #include "../gdisk/gpt.h"
 #include "../gdisk/parttypes.h"
 
+#include <winioctl.h>       // for MEDIA_TYPE
+
 // FIXME: temp
 #include <stdio.h>
 
@@ -38,55 +40,42 @@ WhichToUse PalData::UseWhichPartitions(void) {
   return use_new;
 }
 
+// somewhat strangely this also makes a big partition.
+// TODO: maybe rename?
 void PalData::ClearDisk() {
   //BlankPartitions();
   //SaveGPTData(true);
-  DisplayGPTData();
+  // ^ i don't think those are necessary.
+  // a cloudready install is like the worst case
+  // so if it worked before it should be fine now.
   int newPartNum = 0;
   uint64_t low = FindFirstInLargest();
   Align(&low);
   uint64_t high = FindLastInFree(low);
   uint64_t startSector = low;
   uint64_t endSector = high;
-  // first sector is correct; could just keep the above.
-  //uint64_t startSector = 2048;
-  //uint64_t startSector = 4096;
-  // this is what i get when i use gparted on this disk.
-  //uint64_t endSector = 30000000;
-  // start: 2048
-  // end: 0
-  // gparted says first sector: 0; last: 30736384
-  // ^ but maybe that just means no partition/free space starts at 2048?
   printf("start:%d\nend:%d\n", startSector, endSector);
   int ret = CreatePartition(newPartNum, startSector, endSector);
-  // ^ returns a 1 (success)
-  printf("create partition returned %d\n", ret);
-  //partitions[0].SetType(0x0b00);  // make it fat32
-  printf("part type before is %s\n", partitions[0].GetTypeName().c_str());
   partitions[0].SetFirstLBA(startSector);
   partitions[0].SetLastLBA(endSector);
   partitions[0].SetType(0x0b00);  // make it fat32
-  // TODO: should i also mkfs?
   partitions[0].RandomizeUniqueGUID();
-  printf("part type after is %s\n", partitions[0].GetTypeName().c_str());
-  //printf("part type is %s\n", partitions[0].GetType().ShowAllTypes(0);
-  // arg is 'quiet'
   DisplayGPTData();
+  // arg is 'quiet'
   SaveGPTData(true);
 }
 
-// FIXME: what does this function even do
-// right now running the format chain of events makes no changes to disk.
-
-// i think i frogot to actually clear the gpt
+// regardless this is the 'shared' logic
+// this looks good now.
 bool clearMbrGpt(const char* physical_path) {
   std::string physical_path_str(physical_path);
   PalData gptdata;
   // set the physical path for this GPT object to act on
   gptdata.LoadPartitions(std::string(physical_path));
-  // TODO: actual work
-  int success = gptdata.ClearGPTData();
-  printf("clear success = %d\n", success);
+  int success = gptdata.WriteProtectiveMBR();
+  printf("mbr clear success = %d\n", success);
+  success = gptdata.ClearGPTData();
+  printf("gpt clear success = %d\n", success);
 
   int quiet = true;
   // attempt to fix any gpt/mbr problems by setting to a sane, empty state
@@ -100,15 +89,24 @@ bool clearMbrGpt(const char* physical_path) {
   }
 }
 
+void kewlcallback() {
+  printf("made it to the callback!\n");
+}
+
 // FIXME: this should make a fat32 partition
+// right now it does not really do anything
 bool makeEmptyPartition(const char* physical_path) {
   char* newPartInfo;
   PalData gptdata;
   gptdata.LoadPartitions(std::string(physical_path));
-  //int success = gptdata.ClearDisk();
+  // make an unformatted partition with label for fat32
   gptdata.ClearDisk();
-  //printf("cleared disk; success=%d\n", success);
-  gptdata.WriteProtectiveMBR();
+  // now make the volume
+  pfFormatEx(wVolumeName, DRIVE_REMOVABLE, &wFSType[index], wLabel,
+  //  IsChecked(IDC_QUICK_FORMAT), ulClusterSize, FormatExCallback);
+  // 0x0b is RemovableMedia according to https://msdn.microsoft.com/en-us/library/windows/desktop/aa365231(v=vs.85).aspx
+  // TODO: lettuce use the actual value
+  pfFormatEx(physical_path, MEDIATYPE.RemovableMedia, L"FAT32", L"", /*quick*/true, /*clustersize*/512, kewlcallback)
   int problems = gptdata.Verify();
   free(newPartInfo);
   // TODO: unclear if we care about problems in this regard
