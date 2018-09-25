@@ -52,7 +52,7 @@ static __inline HMODULE GetLibraryHandle(char* szLibraryName) {
 }
 
 #define PF_INIT(proc, name)         if (pf##proc == NULL) pf##proc = \
-  (proc##_t) GetProcAddress(GetLibraryHandle(#name()), #proc)
+  (proc##_t) GetProcAddress(GetLibraryHandle(#name), #proc)
 #define PF_INIT_OR_OUT(proc, name)      do {PF_INIT(proc, name);         \
   if (pf##proc == NULL) {printf("Unable to locate dll\n"); goto out;} } while(0)
 
