@@ -15,7 +15,20 @@
 
 #include "gpt_pal.h"
 
+#include <windows.h>
 #include <inttypes.h>
+
+// We use gdisk to clean up the GPT such that Windows is happy writing to
+// the disk
+#include "../gdisk/gpt.h"
+#include "../gdisk/parttypes.h"
+
+#include <winioctl.h>       // for MEDIA_TYPE
+
+// FIXME: temp
+// maybe not temp anymore
+#include <stdio.h>
+
 
 // wait what?  we're only opening one library.
 // TODO: simplify this to just open/close the single format lib we're using
@@ -28,7 +41,7 @@ static __inline HMODULE GetLibraryHandle(char* szLibraryName) {
   HMODULE h = NULL;
   if ((h = GetModuleHandleA(szLibraryName)) == NULL) {
     if (OpenedLibrariesHandleSize >= MAX_LIBRARY_HANDLES) {
-      uprintf("Error: MAX_LIBRARY_HANDLES is too small\n");
+      printf("Error: MAX_LIBRARY_HANDLES is too small\n");
     } else {
       h = LoadLibraryA(szLibraryName);
       if (h != NULL)
@@ -39,20 +52,9 @@ static __inline HMODULE GetLibraryHandle(char* szLibraryName) {
 }
 
 #define PF_INIT(proc, name)         if (pf##proc == NULL) pf##proc = \
-  (proc##_t) GetProcAddress(GetLibraryHandle(#name), #proc)
+  (proc##_t) GetProcAddress(GetLibraryHandle(#name()), #proc)
 #define PF_INIT_OR_OUT(proc, name)      do {PF_INIT(proc, name);         \
-  if (pf##proc == NULL) {uprintf("Unable to locate %s() in %s.dll: %s\n",  \
-  #proc, #name, ""); goto out;} } while(0)
-
-// We use gdisk to clean up the GPT such that Windows is happy writing to
-// the disk
-#include "../gdisk/gpt.h"
-#include "../gdisk/parttypes.h"
-
-#include <winioctl.h>       // for MEDIA_TYPE
-
-// FIXME: temp
-#include <stdio.h>
+  if (pf##proc == NULL) {printf("Unable to locate dll\n"); goto out;} } while(0)
 
 /* Callback command types (some errorcode were filled from HPUSBFW V2.2.3 and their
    designation from msdn.microsoft.com/en-us/library/windows/desktop/aa819439.aspx */
