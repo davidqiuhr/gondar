@@ -52,7 +52,7 @@ static __inline HMODULE GetLibraryHandle(char* szLibraryName) {
 }
 
 #define PF_INIT(proc, name)         if (pf##proc == NULL) pf##proc = \
-  (proc##_t) GetProcAddress(GetLibraryHandle(#name), #proc)
+  (proc##_t) GetProcAddress(GetLibraryHandle((char*)#name), #proc)
 #define PF_INIT_OR_OUT(proc, name)      do {PF_INIT(proc, name);         \
   if (pf##proc == NULL) {printf("Unable to locate dll\n"); goto out;} } while(0)
 
@@ -196,7 +196,7 @@ bool makeEmptyPartition(const char* physical_path) {
   // see http://comments.gmane.org/gmane.comp.gnu.mingw.user/39300
   char* locale = setlocale(LC_ALL, NULL);
   PF_INIT_OR_OUT(FormatEx, Fmifs);
-  PF_INIT(EnableVolumeCompression, Fmifs);
+  //PF_INIT(EnableVolumeCompression, Fmifs);
   setlocale(LC_ALL, locale);
 
   // 0x0b is RemovableMedia according to https://msdn.microsoft.com/en-us/library/windows/desktop/aa365231(v=vs.85).aspx
