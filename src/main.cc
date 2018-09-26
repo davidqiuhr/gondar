@@ -38,7 +38,5 @@ int main(int argc, char* argv[]) {
 
   const auto ret = app.exec();
   LOG_INFO << "app.exec() returned " << ret;
-  // TODO: we can close the library closer to the format operation
-  //CLOSE_OPENED_LIBRARIES;
   return ret;
 }

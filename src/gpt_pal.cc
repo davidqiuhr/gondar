@@ -32,27 +32,15 @@
 
 // wait what?  we're only opening one library.
 // TODO: simplify this to just open/close the single format lib we're using
-#define         MAX_LIBRARY_HANDLES 32
-extern HMODULE  OpenedLibrariesHandle[MAX_LIBRARY_HANDLES];
-extern uint16_t OpenedLibrariesHandleSize;
-#define         OPENED_LIBRARIES_VARS HMODULE OpenedLibrariesHandle[MAX_LIBRARY_HANDLES]; uint16_t OpenedLibrariesHandleSize = 0
-#define         CLOSE_OPENED_LIBRARIES while(OpenedLibrariesHandleSize > 0) FreeLibrary(OpenedLibrariesHandle[--OpenedLibrariesHandleSize])
-static __inline HMODULE GetLibraryHandle(char* szLibraryName) {
-  HMODULE h = NULL;
-  if ((h = GetModuleHandleA(szLibraryName)) == NULL) {
-    if (OpenedLibrariesHandleSize >= MAX_LIBRARY_HANDLES) {
-      printf("Error: MAX_LIBRARY_HANDLES is too small\n");
-    } else {
-      h = LoadLibraryA(szLibraryName);
-      if (h != NULL)
-        OpenedLibrariesHandle[OpenedLibrariesHandleSize++] = h;
-    }
-  }
-  return h;
+HMODULE  OpenedLibraryHandle;
+#define CLOSE_LIBRARY FreeLibrary(OpenedLibraryHandle)
+static __inline HMODULE GetLibraryHandle() {
+  return OpenedLibraryHandle;
 }
 
+// TODO: further simplify
 #define PF_INIT(proc, name)         if (pf##proc == NULL) pf##proc = \
-  (proc##_t) GetProcAddress(GetLibraryHandle((char*)#name), #proc)
+  (proc##_t) GetProcAddress(GetLibraryHandle(), #proc)
 
 /* Callback command types (some errorcode were filled from HPUSBFW V2.2.3 and their
    designation from msdn.microsoft.com/en-us/library/windows/desktop/aa819439.aspx */
@@ -174,21 +162,20 @@ bool clearMbrGpt(const char* physical_path) {
   }
 }
 
-void kewlcallback() {
-  printf("made it to the callback!\n");
-}
-
 /*
  * FormatEx callback. Return FALSE to halt operations
  */
 static BOOLEAN __stdcall FormatExCallback(FILE_SYSTEM_CALLBACK_COMMAND Command, DWORD Action, PVOID pData)
 {
+  printf("made it to the callback!\n");
   switch(Command) {
   case FCC_PROGRESS:
     printf("progress case\n");
     break;
   case FCC_DONE:
     printf("done case\n");
+    // we don't need our library anymore
+    FreeLibrary(OpenedLibraryHandle);
     break;
   default:
     printf("some other case\n");
