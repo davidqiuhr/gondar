@@ -3,7 +3,7 @@
  * Compensating for what Microsoft should have done a long long time ago.
  * Also see http://utf8everywhere.org/
  *
- * Copyright © 2010-2015 Pete Batard <pete@akeo.ie>
+ * Copyright © 2010-2017 Pete Batard <pete@akeo.ie>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,6 +23,7 @@
 #ifndef SRC_MSAPI_UTF8_H_
 #define SRC_MSAPI_UTF8_H_
 
+#include <setupapi.h>
 #include <windows.h>
 
 #ifdef __cplusplus
@@ -94,6 +95,55 @@ static __inline wchar_t* utf8_to_wchar(const char* str) {
     return NULL;
   }
   return wstr;
+}
+
+static __inline int LoadStringU(HINSTANCE hInstance,
+                                UINT uID,
+                                LPSTR lpBuffer,
+                                int nBufferMax) {
+  int ret;
+  DWORD err = ERROR_INVALID_DATA;
+  if (nBufferMax == 0) {
+    // read-only pointer to resource mode is not supported
+    SetLastError(ERROR_INVALID_PARAMETER);
+    return 0;
+  }
+  walloc(lpBuffer, nBufferMax);
+  ret = LoadStringW(hInstance, uID, wlpBuffer, nBufferMax);
+  err = GetLastError();
+  if ((ret > 0) &&
+      ((ret = wchar_to_utf8_no_alloc(wlpBuffer, lpBuffer, nBufferMax)) == 0)) {
+    err = GetLastError();
+  }
+  wfree(lpBuffer);
+  SetLastError(err);
+  return ret;
+}
+
+static __inline HMODULE LoadLibraryU(LPCSTR lpFileName) {
+  HMODULE ret;
+  DWORD err = ERROR_INVALID_DATA;
+  wconvert(lpFileName);
+  ret = LoadLibraryW(wlpFileName);
+  err = GetLastError();
+  wfree(lpFileName);
+  SetLastError(err);
+  return ret;
+}
+
+static __inline int GetWindowTextU(HWND hWnd, char* lpString, int nMaxCount) {
+  int ret = 0;
+  DWORD err = ERROR_INVALID_DATA;
+  walloc(lpString, nMaxCount);
+  ret = GetWindowTextW(hWnd, wlpString, nMaxCount);
+  err = GetLastError();
+  if ((ret != 0) &&
+      ((ret = wchar_to_utf8_no_alloc(wlpString, lpString, nMaxCount)) == 0)) {
+    err = GetLastError();
+  }
+  wfree(lpString);
+  SetLastError(err);
+  return ret;
 }
 
 static __inline HANDLE CreateFileU(const char* lpFileName,
@@ -185,4 +235,4 @@ static __inline bool GetVolumeInformationU(LPCSTR lpRootPathName,
 }
 #endif
 
-#endif  // SRC_MSAPI_UTF8_H_
+#endif /* SRC_MSAPI_UTF8_H_ */

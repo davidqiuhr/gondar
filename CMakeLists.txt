@@ -160,7 +160,7 @@ if(WIN32)
 
   target_link_libraries(app PRIVATE setupapi)
   target_link_libraries(app PRIVATE gdisk)
-  target_sources(app PRIVATE src/gondar.cc)
+  target_sources(app PRIVATE src/gondar.cc src/dismissprompt.cc)
   target_sources(cloudready-usb-maker PRIVATE resources/gondar.rc)
 else()
   target_sources(app PRIVATE src/stubs.cc)

@@ -17,6 +17,9 @@
 #include <QLibraryInfo>
 #include <QtPlugin>
 
+#if defined(Q_OS_WIN)
+#include "dismissprompt.h"
+#endif
 #include "gondarwizard.h"
 #include "log.h"
 #include "metric.h"
@@ -25,6 +28,8 @@
 int main(int argc, char* argv[]) {
 #if defined(Q_OS_WIN)
   Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
+  // dismiss Windows 'format disk' popups
+  SetFormatPromptHook();
 #endif
   Q_INIT_RESOURCE(gondarwizard);
 
