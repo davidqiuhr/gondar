@@ -198,13 +198,13 @@ bool makeEmptyPartition(const char* physical_path) {
   setlocale(LC_ALL, locale);
 
   // 0x0b is RemovableMedia according to https://msdn.microsoft.com/en-us/library/windows/desktop/aa365231(v=vs.85).aspx
-  //pfFormatEx(physical_path, MEDIA_TYPE.RemovableMedia, L"FAT32", L"", /*quick*/true, /*clustersize*/512, kewlcallback);
   // TODO: physical_path needs to be wchar.
   // TODO: a real version of this please
   wchar_t wc[50];
   mbstowcs(&wc[0], physical_path, 50);
-  //pfFormatEx(wc, 0x0b, L"FAT32", L"", /*quick*/true, /*clustersize*/512, kewlcallback);
-  pfFormatEx(wc, MEDIA_TYPE.RemovableMedia, L"FAT32", L"", /*quick*/true, /*clustersize*/512, kewlcallback);
+  wchar_t* wcp = (wchar_t*)&wc;
+  // TODO: uncomment
+  //pfFormatEx(wcp, RemovableMedia, L"FAT32", L"", /*quick*/true, /*clustersize*/512, kewlcallback);
 
   int problems = gptdata.Verify();
   free(newPartInfo);
