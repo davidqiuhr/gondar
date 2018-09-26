@@ -44,14 +44,6 @@ extern "C" {
   GetWindowTextU(hCtrl, str, max_str)
 #define GetSaveFileNameU(p) GetOpenSaveFileNameU(p, TRUE)
 #define GetOpenFileNameU(p) GetOpenSaveFileNameU(p, FALSE)
-#define ListView_SetItemTextU(hwndLV, i, iSubItem_, pszText_)           \
-  {                                                                     \
-    LVITEMW _ms_wlvi;                                                   \
-    _ms_wlvi.iSubItem = iSubItem_;                                      \
-    _ms_wlvi.pszText = utf8_to_wchar(pszText_);                         \
-    SNDMSG((hwndLV), LVM_SETITEMTEXTW, (WPARAM)(i), (LPARAM)&_ms_wlvi); \
-    sfree(_ms_wlvi.pszText);                                            \
-  }
 
 #define sfree(p)        \
   do {                  \
