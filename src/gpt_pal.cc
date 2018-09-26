@@ -204,7 +204,7 @@ bool makeEmptyPartition(const char* physical_path) {
   mbstowcs(&wc[0], physical_path, 50);
   wchar_t* wcp = (wchar_t*)&wc;
   // TODO: uncomment
-  //pfFormatEx(wcp, RemovableMedia, L"FAT32", L"", /*quick*/true, /*clustersize*/512, kewlcallback);
+  pfFormatEx(wcp, RemovableMedia, L"FAT32", L"", /*quick*/true, /*clustersize*/512, kewlcallback);
 
   int problems = gptdata.Verify();
   free(newPartInfo);
