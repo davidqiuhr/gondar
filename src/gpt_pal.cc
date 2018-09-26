@@ -23,6 +23,9 @@
 #include "../gdisk/gpt.h"
 #include "../gdisk/parttypes.h"
 
+// makes sense to use actual logging
+//#include "log.h"
+
 #include <winioctl.h>       // for MEDIA_TYPE
 
 // FIXME: temp
@@ -33,7 +36,6 @@
 // wait what?  we're only opening one library.
 // TODO: simplify this to just open/close the single format lib we're using
 HMODULE  OpenedLibraryHandle;
-#define CLOSE_LIBRARY FreeLibrary(OpenedLibraryHandle)
 static __inline HMODULE GetLibraryHandle() {
   return OpenedLibraryHandle;
 }
@@ -127,8 +129,9 @@ void PalData::ClearDisk() {
   uint64_t high = FindLastInFree(low);
   uint64_t startSector = low;
   uint64_t endSector = high;
-  printf("start:%d\nend:%d\n", startSector, endSector);
-  int ret = CreatePartition(newPartNum, startSector, endSector);
+  //LOG(INFO) << "start: " << startSector << "end: " << endSector;
+  //int ret = CreatePartition(newPartNum, startSector, endSector);
+  CreatePartition(newPartNum, startSector, endSector);
   partitions[0].SetFirstLBA(startSector);
   partitions[0].SetLastLBA(endSector);
   partitions[0].SetType(0x0b00);  // make it fat32
@@ -145,16 +148,18 @@ bool clearMbrGpt(const char* physical_path) {
   PalData gptdata;
   // set the physical path for this GPT object to act on
   gptdata.LoadPartitions(std::string(physical_path));
-  int success = gptdata.WriteProtectiveMBR();
-  printf("mbr clear success = %d\n", success);
-  success = gptdata.ClearGPTData();
-  printf("gpt clear success = %d\n", success);
+  //int success = gptdata.WriteProtectiveMBR();
+  gptdata.WriteProtectiveMBR();
+  //LOG(INFO) << "mbr clear success = " << success;
+  //success = gptdata.ClearGPTData();
+  gptdata.ClearGPTData();
+  //LOG(INFO) << "gpt clear success = " << success;
 
   int quiet = true;
   // attempt to fix any gpt/mbr problems by setting to a sane, empty state
   gptdata.SaveGPTData(quiet);
   int problems = gptdata.Verify();
-  printf("cleared mbr/gpt\n");
+  //LOG(INFO) << "cleared mbr/gpt";
   if (problems > 0) {
     return false;
   } else {
@@ -165,29 +170,29 @@ bool clearMbrGpt(const char* physical_path) {
 /*
  * FormatEx callback. Return FALSE to halt operations
  */
-static BOOLEAN __stdcall FormatExCallback(FILE_SYSTEM_CALLBACK_COMMAND Command, DWORD Action, PVOID pData)
+static BOOLEAN __stdcall FormatExCallback(FILE_SYSTEM_CALLBACK_COMMAND Command, DWORD, PVOID)
 {
-  printf("made it to the callback!\n");
+  //LOG(INFO) << "made it to the callback!";
   switch(Command) {
   case FCC_PROGRESS:
-    printf("progress case\n");
+    //LOG(INFO) << "progress case";
     break;
   case FCC_DONE:
-    printf("done case\n");
+    //LOG(INFO) << "done case";
     // we don't need our library anymore
     FreeLibrary(OpenedLibraryHandle);
     break;
   default:
-    printf("some other case\n");
+    //LOG(INFO) << "some other case";
     break;
   }
+  return true;
 }
 
 
 // FIXME: this should make a fat32 partition
 // right now it does not really do anything
 bool makeEmptyPartition(const char* physical_path) {
-  char* newPartInfo;
   PalData gptdata;
   gptdata.LoadPartitions(std::string(physical_path));
   // make an unformatted partition with label for fat32
@@ -213,13 +218,12 @@ bool makeEmptyPartition(const char* physical_path) {
   pfFormatEx(wcp, RemovableMedia, L"FAT32", L"", /*quick*/true, /*clustersize*/512, FormatExCallback);
 
   int problems = gptdata.Verify();
-  free(newPartInfo);
   // TODO: unclear if we care about problems in this regard
   if (problems > 0) {
-    printf("there were problems\n");
+    //LOG(INFO) << "there was a problem";
     return true;
   } else {
-    printf("there were no problems\n");
+    //LOG(INFO) << "there were no problems";
     return false;
   }
 }
