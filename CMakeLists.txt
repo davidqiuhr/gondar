@@ -62,11 +62,11 @@ set(EXTRA_WARNINGS ${EXTRA_WARNINGS}
   -Wlogical-op
   -Wmissing-declarations
   -Wredundant-decls
-  #-Wshadow
+  -Wshadow
   -Wundef
   -Wunused-macros
-  #-Wwrite-strings)
-  )
+  -Wwrite-strings)
+
 # C++14 needed for std::experimental::optional. (C++17 is not
 # supported in the version of gcc used by MXE.)
 set(CMAKE_CXX_STANDARD 14)
