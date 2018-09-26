@@ -178,6 +178,25 @@ void kewlcallback() {
   printf("made it to the callback!\n");
 }
 
+/*
+ * FormatEx callback. Return FALSE to halt operations
+ */
+static BOOLEAN __stdcall FormatExCallback(FILE_SYSTEM_CALLBACK_COMMAND Command, DWORD Action, PVOID pData)
+{
+  switch(Command) {
+  case FCC_PROGRESS:
+    printf("progress case\n");
+    break;
+  case FCC_DONE:
+    printf("done case\n");
+    break;
+  default:
+    printf("some other case\n");
+    break;
+  }
+}
+
+
 // FIXME: this should make a fat32 partition
 // right now it does not really do anything
 bool makeEmptyPartition(const char* physical_path) {
@@ -204,7 +223,7 @@ bool makeEmptyPartition(const char* physical_path) {
   mbstowcs(&wc[0], physical_path, 50);
   wchar_t* wcp = (wchar_t*)&wc;
   // TODO: uncomment
-  pfFormatEx(wcp, RemovableMedia, L"FAT32", L"", /*quick*/true, /*clustersize*/512, kewlcallback);
+  pfFormatEx(wcp, RemovableMedia, L"FAT32", L"", /*quick*/true, /*clustersize*/512, FormatExCallback);
 
   int problems = gptdata.Verify();
   free(newPartInfo);
