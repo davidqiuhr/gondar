@@ -107,32 +107,6 @@ static __inline wchar_t* utf8_to_wchar(const char* str) {
   return wstr;
 }
 
-/*
-* Converts an non NUL-terminated UTF-16 string of length len to UTF8 (allocate
-* returned string)
-* Returns NULL on error
-*/
-static __inline char* wchar_len_to_utf8(const wchar_t* wstr, int wlen) {
-  int size = 0;
-  char* str = NULL;
-
-  // Find out the size we need to allocate for our converted string
-  size = WideCharToMultiByte(CP_UTF8, 0, wstr, wlen, NULL, 0, NULL, NULL);
-  if (size <= 1)  // An empty string would be size 1
-    return NULL;
-
-  if ((str = (char*)calloc(size, 1)) == NULL)
-    return NULL;
-
-  if (WideCharToMultiByte(CP_UTF8, 0, wstr, wlen, str, size, NULL, NULL) !=
-      size) {
-    sfree(str);
-    return NULL;
-  }
-
-  return str;
-}
-
 static __inline int LoadStringU(HINSTANCE hInstance,
                                 UINT uID,
                                 LPSTR lpBuffer,
