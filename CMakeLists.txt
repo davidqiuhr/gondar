@@ -50,7 +50,7 @@ set(EXTRA_WARNINGS ${EXTRA_WARNINGS}
     -Wstrict-null-sentinel
     -Wsuggest-override>
 
-  -pedantic
+  #-pedantic
   -Wall
   -Wextra
 
@@ -62,11 +62,11 @@ set(EXTRA_WARNINGS ${EXTRA_WARNINGS}
   -Wlogical-op
   -Wmissing-declarations
   -Wredundant-decls
-  -Wshadow
+  #-Wshadow
   -Wundef
   -Wunused-macros
-  -Wwrite-strings)
-
+  #-Wwrite-strings)
+  )
 # C++14 needed for std::experimental::optional. (C++17 is not
 # supported in the version of gcc used by MXE.)
 set(CMAKE_CXX_STANDARD 14)
@@ -161,7 +161,7 @@ if(WIN32)
 
   target_link_libraries(app PRIVATE setupapi)
   target_link_libraries(app PRIVATE gdisk)
-  target_sources(app PRIVATE src/gondar.cc)
+  target_sources(app PRIVATE src/gondar.cc src/gpt_pal.cc)
   target_sources(cloudready-usb-maker PRIVATE resources/gondar.rc)
 else()
   target_sources(app PRIVATE src/stubs.cc)

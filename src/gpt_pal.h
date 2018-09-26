@@ -16,6 +16,10 @@
 #ifndef GPT_PAL_H
 #define GPT_PAL_H
 
+// makes sense to use actual logging
+// FIXME: having trouble with this include
+//#include "log.h"
+
 // We use gdisk to clean up the GPT such that Windows is happy writing to
 // the disk
 

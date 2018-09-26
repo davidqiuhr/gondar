@@ -15,6 +15,7 @@
 
 #include "gpt_pal.h"
 
+
 #include <windows.h>
 #include <inttypes.h>
 
@@ -23,18 +24,9 @@
 #include "../gdisk/gpt.h"
 #include "../gdisk/parttypes.h"
 
-// makes sense to use actual logging
-//#include "log.h"
-
 #include <winioctl.h>       // for MEDIA_TYPE
 
-// FIXME: temp
-// maybe not temp anymore
-#include <stdio.h>
 
-
-// wait what?  we're only opening one library.
-// TODO: simplify this to just open/close the single format lib we're using
 HMODULE  OpenedLibraryHandle;
 static __inline HMODULE GetLibraryHandle() {
   return OpenedLibraryHandle;
