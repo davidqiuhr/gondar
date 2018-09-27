@@ -191,7 +191,7 @@ static BOOLEAN __stdcall FormatExCallback(FILE_SYSTEM_CALLBACK_COMMAND Command, 
 
 // FIXME: this should make a fat32 partition
 // right now it does not really do anything
-bool makeEmptyPartition(const char* physical_path) {
+bool makeEmptyPartition(const char* physical_path, const char* logical_path) {
   PalData gptdata;
   gptdata.LoadPartitions(std::string(physical_path));
   // make an unformatted partition with label for fat32
@@ -220,9 +220,10 @@ bool makeEmptyPartition(const char* physical_path) {
 
   // temporarily make this global
   //wchar_t wc[50];
-  mbstowcs(&wc[0], physical_path, 50);
+  mbstowcs(&wc[0], logical_path, 50);
   wchar_t* wcp = (wchar_t*)&wc;
   // TODO: uncomment
+  // FIXME: i need to use the logical name.  right now wcp is the physical name.
   pfFormatEx(wcp, RemovableMedia, L"FAT32", L"", /*quick*/true, /*clustersize*/512, FormatExCallback);
 
   int problems = gptdata.Verify();

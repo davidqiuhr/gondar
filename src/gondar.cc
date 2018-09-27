@@ -2340,12 +2340,14 @@ bool Install(DeviceGuy* target_device,
 bool Format(DeviceGuy* target_device) {
   uint64_t device_num = target_device->device_num;
   char* physical_path = GetPhysicalName(device_num);
+  // false because we do not want the trailing backslash
+  char* logical_path = GetLogicalName(device_num, false);
   bool ret = formatShared(physical_path);
   if (!ret) {
     // logging handled by formatShared already
     return ret;
   }
-  ret = makeEmptyPartition(physical_path);
+  ret = makeEmptyPartition(physical_path, logical_path);
   // if there were problems, return non-zero
   if (ret) {
     LOG_WARNING << "Error creating empty fat32 partition";
