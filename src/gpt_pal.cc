@@ -205,6 +205,8 @@ bool makeEmptyPartition(const char* physical_path) {
   char* locale = setlocale(LC_ALL, NULL);
   //PF_DECL(FormatEx);
   PF_INIT(FormatEx, Fmifs);
+  // at this point, FormatEx should not be null
+  printf("FormatEx = %u\n", pfFormatEx);
   //PF_INIT(EnableVolumeCompression, Fmifs);
   setlocale(LC_ALL, locale);
 
