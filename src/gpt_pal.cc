@@ -35,6 +35,8 @@ static __inline HMODULE GetLibraryHandle() {
   return OpenedLibraryHandle;
 }
 
+//#define PF_DECL(proc)           static proc##_t pf##proc = NULL
+
 // TODO: further simplify
 #define PF_INIT(proc, name)         if (pf##proc == NULL) pf##proc = \
   (proc##_t) GetProcAddress(GetLibraryHandle(), #proc)
@@ -94,6 +96,7 @@ typedef VOID (WINAPI *FormatEx_t)(
   ULONG                DesiredUnitAllocationSize,
   FILE_SYSTEM_CALLBACK Callback
 );
+FormatEx_t pfFormatEx = NULL;
 
 class PalData : public GPTData {
  public:
@@ -194,11 +197,13 @@ bool makeEmptyPartition(const char* physical_path) {
   gptdata.ClearDisk();
   // now make the volume
 
-  FormatEx_t pfFormatEx = NULL;
+  // TODO: make global?
+  //FormatEx_t pfFormatEx = NULL;
   // LoadLibrary("fmifs.dll") appears to changes the locale, which can lead to
   // problems with tolower(). Make sure we restore the locale. For more details,
   // see http://comments.gmane.org/gmane.comp.gnu.mingw.user/39300
   char* locale = setlocale(LC_ALL, NULL);
+  //PF_DECL(FormatEx);
   PF_INIT(FormatEx, Fmifs);
   //PF_INIT(EnableVolumeCompression, Fmifs);
   setlocale(LC_ALL, locale);
