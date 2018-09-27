@@ -229,7 +229,7 @@ bool makeEmptyPartition(const char* physical_path, const char* logical_path) {
   wchar_t* wcp = (wchar_t*)&wc;
   // TODO: uncomment
   // FIXME: i need to use the logical name.  right now wcp is the physical name.
-  pfFormatEx(wcp, RemovableMedia, L"FAT32", L"", /*quick*/true, /*clustersize*/512, FormatExCallback);
+  pfFormatEx(wcp, RemovableMedia, L"FAT32", L"", /*quick*/false, /*clustersize*/512, FormatExCallback);
 
   int problems = gptdata.Verify();
   // TODO: unclear if we care about problems in this regard
