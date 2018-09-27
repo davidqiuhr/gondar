@@ -28,6 +28,8 @@
 
 //#include "log.h"
 
+wchar_t wc[50];
+
 HMODULE  OpenedLibraryHandle;
 static __inline HMODULE GetLibraryHandle() {
   return OpenedLibraryHandle;
@@ -204,7 +206,9 @@ bool makeEmptyPartition(const char* physical_path) {
   // 0x0b is RemovableMedia according to https://msdn.microsoft.com/en-us/library/windows/desktop/aa365231(v=vs.85).aspx
   // TODO: physical_path needs to be wchar.
   // TODO: a real version of this please
-  wchar_t wc[50];
+
+  // temporarily make this global
+  //wchar_t wc[50];
   mbstowcs(&wc[0], physical_path, 50);
   wchar_t* wcp = (wchar_t*)&wc;
   // TODO: uncomment
