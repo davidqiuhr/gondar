@@ -170,6 +170,7 @@ bool clearMbrGpt(const char* physical_path) {
  */
 static BOOLEAN __stdcall FormatExCallback(FILE_SYSTEM_CALLBACK_COMMAND Command, DWORD, PVOID)
 {
+  printf("made it to the callback; command=%s\n", Command);
   //LOG(INFO) << "made it to the callback!";
   switch(Command) {
   case FCC_PROGRESS:
