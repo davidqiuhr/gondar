@@ -24,9 +24,11 @@
 #include "../gdisk/gpt.h"
 #include "../gdisk/parttypes.h"
 
+//#include "msapi_utf8.h"
+
 #include <winioctl.h>       // for MEDIA_TYPE
 
-//#include "log.h"
+#include "log.h"
 
 wchar_t wc[50];
 
@@ -193,7 +195,6 @@ static BOOLEAN __stdcall FormatExCallback(FILE_SYSTEM_CALLBACK_COMMAND Command, 
   return true;
 }
 
-
 // FIXME: this should make a fat32 partition
 // right now it does not really do anything
 bool makeEmptyPartition(const char* physical_path, const char* logical_path) {
@@ -225,12 +226,16 @@ bool makeEmptyPartition(const char* physical_path, const char* logical_path) {
 
   // temporarily make this global
   //wchar_t wc[50];
-  mbstowcs(&wc[0], logical_path, 50);
-  wchar_t* wcp = (wchar_t*)&wc;
+  //mbstowcs(&wc[0], logical_path, 50);
+  //wchar_t* wcp = (wchar_t*)&wc;
   // TODO: uncomment
   // FIXME: i need to use the logical name.  right now wcp is the physical name.
-  pfFormatEx(wcp, RemovableMedia, L"FAT32", L"", /*quick*/false, /*clustersize*/512, FormatExCallback);
+  //pfFormatEx(wcp, RemovableMedia, L"FAT32", L"", /*quick*/true, /*clustersize*/512, FormatExCallback);
 
+  // TODO: make sure the name i'm passing is this
+    //VolumeName = GetLogicalName(DriveIndex, TRUE, TRUE);
+  auto logical_two = utf8_to_wchar(logical_path);
+  pfFormatEx(logical_two, RemovableMedia, L"FAT32", L"", /*quick*/true, /*clustersize*/512, FormatExCallback);
   int problems = gptdata.Verify();
   // TODO: unclear if we care about problems in this regard
   if (problems > 0) {
