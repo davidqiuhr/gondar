@@ -170,19 +170,24 @@ bool clearMbrGpt(const char* physical_path) {
  */
 static BOOLEAN __stdcall FormatExCallback(FILE_SYSTEM_CALLBACK_COMMAND Command, DWORD, PVOID)
 {
-  printf("made it to the callback; command=%s\n", Command);
+  //printf("made it to the callback; command=%s\n", Command);
+  printf("made it to the callback\n");
   //LOG(INFO) << "made it to the callback!";
   switch(Command) {
   case FCC_PROGRESS:
+    printf("progress case\n");
     //LOG(INFO) << "progress case";
     break;
   case FCC_DONE:
+    printf("done case\n");
     //LOG(INFO) << "done case";
     // we don't need our library anymore
-    FreeLibrary(OpenedLibraryHandle);
+    // TODO: actually free it.
+    //FreeLibrary(OpenedLibraryHandle);
     break;
   default:
     //LOG(INFO) << "some other case";
+    printf("other case\n");
     break;
   }
   return true;
