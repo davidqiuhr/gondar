@@ -204,8 +204,11 @@ bool makeEmptyPartition(const char* physical_path) {
   // see http://comments.gmane.org/gmane.comp.gnu.mingw.user/39300
   char* locale = setlocale(LC_ALL, NULL);
   //PF_DECL(FormatEx);
-  PF_INIT(FormatEx, Fmifs);
+  //PF_INIT(FormatEx, Fmifs);
+  //pfFormatEx = (FormatEx_t) GetProcAddress(GetLibraryHandle("fmifs"), "FormatEx")
+  pfFormatEx = (FormatEx_t) GetProcAddress(LoadLibraryA("fmifs.dll"), "FormatEx");
   // at this point, FormatEx should not be null
+  // FIXME: it's null
   printf("FormatEx = %u\n", pfFormatEx);
   //PF_INIT(EnableVolumeCompression, Fmifs);
   setlocale(LC_ALL, locale);
