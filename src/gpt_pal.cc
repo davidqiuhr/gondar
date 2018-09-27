@@ -26,6 +26,7 @@
 
 #include <winioctl.h>       // for MEDIA_TYPE
 
+//#include "log.h"
 
 HMODULE  OpenedLibraryHandle;
 static __inline HMODULE GetLibraryHandle() {
