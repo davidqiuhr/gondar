@@ -76,7 +76,7 @@ FormatEx_t pfFormatEx = NULL;
 static BOOLEAN __stdcall FormatExCallback(FILE_SYSTEM_CALLBACK_COMMAND Command, DWORD, PVOID)
 {
   //printf("made it to the callback; command=%s\n", Command);
-  LOG_WARNING << "made it to the callback;
+  LOG_WARNING << "made it to the callback";
   //LOG(INFO) << "made it to the callback!";
   switch(Command) {
   case FCC_PROGRESS:
