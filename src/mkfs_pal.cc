@@ -124,6 +124,6 @@ void makeFilesystem(char* logical_path) {
 
   // TODO: make sure the name i'm passing is this
   wchar_t* logical_path_windows = utf8_to_wchar(logical_path);
-  pfFormatEx(logical_path_windows, RemovableMedia, L"FAT32", L"", /*quick*/true, /*clustersize*/512, FormatExCallback);
+  pfFormatEx(logical_path_windows, RemovableMedia, L"FAT32", L"", /*quick*/true, /*clustersize*/4096, FormatExCallback);
   LOG_WARNING << "sent request to make filesystem...";
 }
