@@ -85,8 +85,10 @@ static BOOLEAN __stdcall FormatExCallback(FILE_SYSTEM_CALLBACK_COMMAND Command, 
     break;
   case FCC_CLUSTER_SIZE_TOO_SMALL:
     LOG_WARNING << "cluster size too small";
+    break;
   case FCC_CLUSTER_SIZE_TOO_BIG:
     LOG_WARNING << "cluster size too big";
+    break;
   case FCC_DONE:
     LOG_WARNING << "done case";
     //LOG(INFO) << "done case";
@@ -96,8 +98,10 @@ static BOOLEAN __stdcall FormatExCallback(FILE_SYSTEM_CALLBACK_COMMAND Command, 
     break;
   case FCC_READ_ONLY_MODE:
     LOG_WARNING << "read-only mode";
+    break;
   case FCC_DEVICE_NOT_READY:
     LOG_WARNING << "device not ready";
+    break;
   default:
     //LOG(INFO) << "some other case";
     LOG_WARNING << "other case";
