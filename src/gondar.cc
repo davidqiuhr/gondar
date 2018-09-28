@@ -42,6 +42,7 @@
 #include "device.h"
 #include "gpt_pal.h"
 #include "log.h"
+#include "mkfs_pal.h"
 #include "shared.h"
 
 static ssize_t size_t_to_signed(const size_t value) {
