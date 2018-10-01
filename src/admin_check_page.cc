@@ -27,7 +27,7 @@ AdminCheckPage::AdminCheckPage(QWidget* parent) : WizardPage(parent) {
 
   layout.addWidget(&label);
   layout.addStretch();
-  layout.addWidget(&warpTunnel);
+  layout.addWidget(&formatLink);
   setLayout(&layout);
   // TODO: move isChromevoer() out of AdminCheckPage and call these metrics
   // from a more intuitive context
@@ -67,11 +67,11 @@ void AdminCheckPage::showIsAdmin() {
       "<p>You will need:</p><ul><li>8GB or 16GB USB stick</li><li>20 minutes "
       "for USB installer creation</li></ul></p>");
   label.setWordWrap(true);
-  warpTunnel.setText(
+  formatLink.setText(
       "<a href=\"reformat\">Done with your USB installer?  Format it "
       "here.</a>");
-  warpTunnel.setTextFormat(Qt::RichText);
-  connect(&warpTunnel, &QLabel::linkActivated, this,
+  formatLink.setTextFormat(Qt::RichText);
+  connect(&formatLink, &QLabel::linkActivated, this,
           &AdminCheckPage::handleFormatOnly);
   emit completeChanged();
 }

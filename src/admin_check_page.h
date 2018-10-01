@@ -38,7 +38,7 @@ class AdminCheckPage : public gondar::WizardPage {
  private:
   QLabel label;
   // offer the users a way to format their disk
-  QLabel warpTunnel;
+  QLabel formatLink;
   bool is_admin;
   QVBoxLayout layout;
 };
