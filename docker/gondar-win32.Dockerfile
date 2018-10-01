@@ -1,5 +1,6 @@
 FROM neverware/gondar-build-mxe:v3
 
+# TODO: revert once warnings are resolved
 ENV TREAT_WARNINGS_AS_ERRORS=false
 
 ADD CMakeLists.txt Makefile /opt/gondar/
