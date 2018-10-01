@@ -2353,7 +2353,6 @@ bool Format(DeviceGuy* target_device) {
   }
   safe_free(physical_path);
   char* logical_path = GetLogicalName(device_num, false);
-  // it works!
   makeFilesystem(logical_path);
   return ret;
 }
