@@ -25,15 +25,6 @@
 
 #include <setupapi.h>
 #include <windows.h>
-// TODO: necessary?
-#include <setupapi.h>
-#include <usbioctl.h>
-#include <versionhelpers.h>
-
-#include <inttypes.h>
-#include <stdio.h>
-#include <stdlib.h>
-// ?
 
 #ifdef __cplusplus
 extern "C" {
