@@ -87,7 +87,8 @@ static BOOLEAN __stdcall FormatExCallback(FILE_SYSTEM_CALLBACK_COMMAND Command, 
     break;
   case FCC_DONE:
     LOG_INFO << "finished formatting drive";
-    FreeLibrary(OpenedLibraryHandle);
+    // FIXME: when do i free the library safely?
+    //FreeLibrary(OpenedLibraryHandle);
     break;
   case FCC_READ_ONLY_MODE:
     LOG_WARNING << "read-only mode";
