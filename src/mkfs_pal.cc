@@ -115,8 +115,22 @@ void makeFilesystem(char* logical_path) {
   setlocale(LC_ALL, locale);
 
   wchar_t* logical_path_windows = utf8_to_wchar(logical_path);
+  //wchar_t* fat32 = L"FAT32";
+  std::wstring fat32 = L"FAT32";
+  //wchar_t* empty = L"";
+  std::wstring empty = L"";
+  wchar_t* fat32_2 = (wchar_t*)fat32.c_str();
+  wchar_t* empty_2 = (wchar_t*)empty.c_str();
   // use 4096 as cluster size as it is generally considered a sane default
   // see: https://superuser.com/questions/1286135/what-allocation-unit-size-to-use-when-formatting-a-usb-flash-drive-in-fat32/1287233
-  pfFormatEx(logical_path_windows, RemovableMedia, L"FAT32", L"", /*quick*/true, /*clustersize*/4096, FormatExCallback);
+  pfFormatEx(logical_path_windows,
+             RemovableMedia, // MEDIA_TYPE
+             //L"FAT32",
+             //L"",
+             fat32_2,
+             empty_2,
+             true, // quick format
+             4096, // cluster size
+             FormatExCallback);
   LOG_INFO << "sent request to make filesystem...";
 }
