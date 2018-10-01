@@ -22,6 +22,7 @@
 #endif
 #include "gondarwizard.h"
 #include "log.h"
+#include "mkfs_pal.h"
 #include "metric.h"
 #include "util.h"
 
@@ -43,5 +44,8 @@ int main(int argc, char* argv[]) {
 
   const auto ret = app.exec();
   LOG_INFO << "app.exec() returned " << ret;
+  // TODO: branch on if windows
+  deleteLibrary();
+  LOG_INFO << "Deleted library";
   return ret;
 }

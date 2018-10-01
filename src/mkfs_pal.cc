@@ -133,3 +133,7 @@ void makeFilesystem(char* logical_path) {
              FormatExCallback);
   LOG_INFO << "sent request to make filesystem...";
 }
+
+void deleteLibrary() {
+  FreeLibrary(OpenedLibraryHandle);
+}
