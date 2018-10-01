@@ -28,7 +28,7 @@ add_library(gdisk STATIC
   gdisk/mbrpart.cc
   gdisk/parttypes.cc
   gdisk/support.cc
-  src/gpt_pal.cc)
+  src/gpt.cc)
 
 target_compile_options(gdisk PRIVATE
   -D_FILE_OFFSET_BITS=64)

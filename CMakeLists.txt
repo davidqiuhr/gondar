@@ -162,8 +162,8 @@ if(WIN32)
   target_link_libraries(app PRIVATE gdisk)
   # disable shadow variable checking for this file as it imports gdisk headers
   # which contain a shadowing whoopsie
-  set_source_files_properties(src/gpt_pal.cc PROPERTIES COMPILE_FLAGS -Wno-shadow)
-  target_sources(app PRIVATE src/gondar.cc src/dismissprompt.cc src/gpt_pal.cc src/mkfs_pal.cc)
+  set_source_files_properties(src/gpt.cc PROPERTIES COMPILE_FLAGS -Wno-shadow)
+  target_sources(app PRIVATE src/gondar.cc src/dismissprompt.cc src/gpt.cc src/mkfs_pal.cc)
   target_sources(cloudready-usb-maker PRIVATE resources/gondar.rc)
 else()
   target_sources(app PRIVATE src/stubs.cc)
