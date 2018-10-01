@@ -2357,3 +2357,7 @@ bool Format(DeviceGuy* target_device) {
   makeFilesystem(logical_path);
   return ret;
 }
+
+void CleanUp() {
+  deleteLibrary();
+}

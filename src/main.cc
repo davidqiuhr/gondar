@@ -20,9 +20,9 @@
 #if defined(Q_OS_WIN)
 #include "dismissprompt.h"
 #endif
+#include "gondar.h"
 #include "gondarwizard.h"
 #include "log.h"
-#include "mkfs.h"
 #include "metric.h"
 #include "util.h"
 
@@ -44,8 +44,7 @@ int main(int argc, char* argv[]) {
 
   const auto ret = app.exec();
   LOG_INFO << "app.exec() returned " << ret;
-  // TODO: branch on if windows
-  deleteLibrary();
+  CleanUp();
   LOG_INFO << "Deleted library";
   return ret;
 }

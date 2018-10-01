@@ -43,3 +43,6 @@ bool Format(DeviceGuy* target_device) {
 bool IsCurrentProcessElevated() {
   return true;
 }
+
+void CleanUp() {
+}
