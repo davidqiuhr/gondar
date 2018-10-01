@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef GPT_PAL_H
-#define GPT_PAL_H
+#ifndef GPT_H
+#define GPT_H
 
 // We use gdisk to clean up the GPT such that Windows is happy writing to
 // the disk

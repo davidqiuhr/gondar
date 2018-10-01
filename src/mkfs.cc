@@ -1,5 +1,5 @@
 
-#include "mkfs_pal.h"
+#include "mkfs.h"
 
 #include <windows.h>
 #include <inttypes.h>

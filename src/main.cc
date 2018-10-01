@@ -22,7 +22,7 @@
 #endif
 #include "gondarwizard.h"
 #include "log.h"
-#include "mkfs_pal.h"
+#include "mkfs.h"
 #include "metric.h"
 #include "util.h"
 

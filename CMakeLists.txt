@@ -163,7 +163,7 @@ if(WIN32)
   # disable shadow variable checking for this file as it imports gdisk headers
   # which contain a shadowing whoopsie
   set_source_files_properties(src/gpt.cc PROPERTIES COMPILE_FLAGS -Wno-shadow)
-  target_sources(app PRIVATE src/gondar.cc src/dismissprompt.cc src/gpt.cc src/mkfs_pal.cc)
+  target_sources(app PRIVATE src/gondar.cc src/dismissprompt.cc src/gpt.cc src/mkfs.cc)
   target_sources(cloudready-usb-maker PRIVATE resources/gondar.rc)
 else()
   target_sources(app PRIVATE src/stubs.cc)

@@ -1,6 +1,6 @@
 
-#ifndef MKFS_PAL_H
-#define MKFS_PAL_H
+#ifndef MKFS_H
+#define MKFS_H
 
 void makeFilesystem(char* logical_path);
 void deleteLibrary();
