@@ -15,9 +15,8 @@
 
 #include "gpt.h"
 
-
-#include <windows.h>
 #include <inttypes.h>
+#include <windows.h>
 
 // We use gdisk to clean up the GPT such that Windows is happy writing to
 // the disk
@@ -70,7 +69,6 @@ bool clearMbrGpt(const char* physical_path) {
   // attempt to fix any gpt/mbr problems by setting to a sane, empty state
   gptdata.SaveGPTData(quiet);
   int problems = gptdata.Verify();
-  //LOG(INFO) << "cleared mbr/gpt";
   if (problems > 0) {
     return false;
   } else {

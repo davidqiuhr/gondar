@@ -44,5 +44,4 @@ bool IsCurrentProcessElevated() {
   return true;
 }
 
-void CleanUp() {
-}
+void CleanUp() {}

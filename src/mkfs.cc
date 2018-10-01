@@ -1,20 +1,22 @@
 
 #include "mkfs.h"
 
-#include <windows.h>
 #include <inttypes.h>
-#include <winioctl.h>       // for MEDIA_TYPE
+#include <windows.h>
+#include <winioctl.h>  // for MEDIA_TYPE
 
 #include "log.h"
 #include "msapi_utf8.h"
 
-HMODULE  OpenedLibraryHandle = NULL;
+HMODULE OpenedLibraryHandle = NULL;
 static __inline HMODULE GetLibraryHandle() {
   return OpenedLibraryHandle;
 }
 
-/* Callback command types (some errorcode were filled from HPUSBFW V2.2.3 and their
-   designation from msdn.microsoft.com/en-us/library/windows/desktop/aa819439.aspx */
+/* Callback command types (some errorcode were filled from HPUSBFW V2.2.3 and
+   their
+   designation from
+   msdn.microsoft.com/en-us/library/windows/desktop/aa819439.aspx */
 typedef enum {
   FCC_PROGRESS,
   FCC_DONE_WITH_STRUCTURE,
@@ -51,56 +53,53 @@ typedef enum {
   FCC_READ_ONLY_MODE,
 } FILE_SYSTEM_CALLBACK_COMMAND;
 
-typedef BOOLEAN (__stdcall *FILE_SYSTEM_CALLBACK)(
-  FILE_SYSTEM_CALLBACK_COMMAND Command,
-  ULONG                        Action,
-  PVOID                        pData
-);
+typedef BOOLEAN(__stdcall* FILE_SYSTEM_CALLBACK)(
+    FILE_SYSTEM_CALLBACK_COMMAND Command,
+    ULONG Action,
+    PVOID pData);
 
 /* Parameter names aligned to
    http://msdn.microsoft.com/en-us/library/windows/desktop/aa819439.aspx */
-typedef VOID (WINAPI *FormatEx_t)(
-  WCHAR*               DriveRoot,
-  MEDIA_TYPE           MediaType,   // See WinIoCtl.h
-  WCHAR*               FileSystemTypeName,
-  WCHAR*               Label,
-  BOOL                 QuickFormat,
-  ULONG                DesiredUnitAllocationSize,
-  FILE_SYSTEM_CALLBACK Callback
-);
+typedef VOID(WINAPI* FormatEx_t)(WCHAR* DriveRoot,
+                                 MEDIA_TYPE MediaType,  // See WinIoCtl.h
+                                 WCHAR* FileSystemTypeName,
+                                 WCHAR* Label,
+                                 BOOL QuickFormat,
+                                 ULONG DesiredUnitAllocationSize,
+                                 FILE_SYSTEM_CALLBACK Callback);
 FormatEx_t pfFormatEx = NULL;
 
 /*
  * FormatEx callback. Return FALSE to halt operations
  */
-static BOOLEAN __stdcall FormatExCallback(FILE_SYSTEM_CALLBACK_COMMAND Command, DWORD, PVOID)
-{
-  switch(Command) {
-  case FCC_PROGRESS:
-    LOG_INFO << "still formatting drive...";
-    break;
-  case FCC_CLUSTER_SIZE_TOO_SMALL:
-    LOG_WARNING << "cluster size too small";
-    break;
-  case FCC_CLUSTER_SIZE_TOO_BIG:
-    LOG_WARNING << "cluster size too big";
-    break;
-  case FCC_DONE:
-    LOG_INFO << "finished formatting drive";
-    break;
-  case FCC_READ_ONLY_MODE:
-    LOG_WARNING << "read-only mode";
-    break;
-  case FCC_DEVICE_NOT_READY:
-    LOG_WARNING << "device not ready";
-    break;
-  default:
-    LOG_WARNING << "unknown callback case";
-    break;
+static BOOLEAN __stdcall FormatExCallback(FILE_SYSTEM_CALLBACK_COMMAND Command,
+                                          DWORD,
+                                          PVOID) {
+  switch (Command) {
+    case FCC_PROGRESS:
+      LOG_INFO << "still formatting drive...";
+      break;
+    case FCC_CLUSTER_SIZE_TOO_SMALL:
+      LOG_WARNING << "cluster size too small";
+      break;
+    case FCC_CLUSTER_SIZE_TOO_BIG:
+      LOG_WARNING << "cluster size too big";
+      break;
+    case FCC_DONE:
+      LOG_INFO << "finished formatting drive";
+      break;
+    case FCC_READ_ONLY_MODE:
+      LOG_WARNING << "read-only mode";
+      break;
+    case FCC_DEVICE_NOT_READY:
+      LOG_WARNING << "device not ready";
+      break;
+    default:
+      LOG_WARNING << "unknown callback case";
+      break;
   }
   return true;
 }
-
 
 void makeFilesystem(char* logical_path) {
   LOG_WARNING << "making filesystem...";
@@ -108,7 +107,8 @@ void makeFilesystem(char* logical_path) {
   // problems with tolower(). Make sure we restore the locale. For more details,
   // see http://comments.gmane.org/gmane.comp.gnu.mingw.user/39300
   char* locale = setlocale(LC_ALL, NULL);
-  pfFormatEx = (FormatEx_t) GetProcAddress(LoadLibraryA("fmifs.dll"), "FormatEx");
+  pfFormatEx =
+      (FormatEx_t)GetProcAddress(LoadLibraryA("fmifs.dll"), "FormatEx");
   setlocale(LC_ALL, locale);
 
   wchar_t* logical_path_windows = utf8_to_wchar(logical_path);
@@ -118,15 +118,15 @@ void makeFilesystem(char* logical_path) {
   wchar_t* fat32 = (wchar_t*)fat32str.c_str();
   wchar_t* empty = (wchar_t*)emptystr.c_str();
   // use 4096 as cluster size as it is generally considered a sane default
-  // see: https://superuser.com/questions/1286135/what-allocation-unit-size-to-use-when-formatting-a-usb-flash-drive-in-fat32/1287233
+  // see:
+  // https://superuser.com/questions/1286135/what-allocation-unit-size-to-use-when-formatting-a-usb-flash-drive-in-fat32/1287233
   pfFormatEx(logical_path_windows,
-             RemovableMedia, // MEDIA_TYPE
-             //L"FAT32",
-             //L"",
-             fat32,
-             empty,
-             true, // quick format
-             4096, // cluster size
+             RemovableMedia,  // MEDIA_TYPE
+             // L"FAT32",
+             // L"",
+             fat32, empty,
+             true,  // quick format
+             4096,  // cluster size
              FormatExCallback);
   LOG_INFO << "sent request to make filesystem...";
 }
