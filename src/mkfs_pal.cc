@@ -88,6 +88,7 @@ static BOOLEAN __stdcall FormatExCallback(FILE_SYSTEM_CALLBACK_COMMAND Command, 
   case FCC_DONE:
     LOG_INFO << "finished formatting drive";
     // FIXME: when do i free the library safely?
+    // iirc rufus just frees the library at the end of program run
     //FreeLibrary(OpenedLibraryHandle);
     break;
   case FCC_READ_ONLY_MODE:

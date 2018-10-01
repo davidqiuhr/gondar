@@ -127,7 +127,6 @@ void WriteOperationPage::showWhatsNext() {
   whatsNext.show();
 }
 
-// fixme: where is the format-only guy supposed to go?
 void WriteOperationPage::onDoneWriting() {
   switch (diskWriteThread->state()) {
     case DiskWriteThread::State::Initial:
