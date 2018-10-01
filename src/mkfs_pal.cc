@@ -8,7 +8,7 @@
 #include "log.h"
 #include "msapi_utf8.h"
 
-HMODULE  OpenedLibraryHandle;
+HMODULE  OpenedLibraryHandle = NULL;
 static __inline HMODULE GetLibraryHandle() {
   return OpenedLibraryHandle;
 }
@@ -87,9 +87,6 @@ static BOOLEAN __stdcall FormatExCallback(FILE_SYSTEM_CALLBACK_COMMAND Command, 
     break;
   case FCC_DONE:
     LOG_INFO << "finished formatting drive";
-    // FIXME: when do i free the library safely?
-    // iirc rufus just frees the library at the end of program run
-    //FreeLibrary(OpenedLibraryHandle);
     break;
   case FCC_READ_ONLY_MODE:
     LOG_WARNING << "read-only mode";
@@ -135,5 +132,7 @@ void makeFilesystem(char* logical_path) {
 }
 
 void deleteLibrary() {
-  FreeLibrary(OpenedLibraryHandle);
+  if (OpenedLibraryHandle) {
+    FreeLibrary(OpenedLibraryHandle);
+  }
 }
