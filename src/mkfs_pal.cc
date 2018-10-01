@@ -107,7 +107,7 @@ static BOOLEAN __stdcall FormatExCallback(FILE_SYSTEM_CALLBACK_COMMAND Command, 
 
 void makeFilesystem(char* logical_path) {
   LOG_WARNING << "making filesystem...";
-  // LoadLibrary("fmifs.dll") appears to changes the locale, which can lead to
+  // LoadLibrary("fmifs.dll") appears to change the locale, which can lead to
   // problems with tolower(). Make sure we restore the locale. For more details,
   // see http://comments.gmane.org/gmane.comp.gnu.mingw.user/39300
   char* locale = setlocale(LC_ALL, NULL);
