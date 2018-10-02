@@ -68,14 +68,21 @@ bool WriteOperationPage::validatePage() {
 
 void WriteOperationPage::writeToDrive() {
   LOG_INFO << "Writing to drive...";
-  image_path.clear();
-  image_path.append(wizard()->downloadProgressPage.getImageFileName());
-  showProgress();
-  diskWriteThread = new DiskWriteThread(&device, image_path, this);
+  // if we're in format-only mode, we don't need logic about an image file name
+  if (wizard()->isFormatOnly()) {
+    // make a disk write thread in format mode
+    diskWriteThread = new DiskWriteThread(&device, this);
+    gondar::SendMetric(gondar::Metric::FormatAttempt);
+  } else {
+    image_path.clear();
+    image_path.append(wizard()->downloadProgressPage.getImageFileName());
+    diskWriteThread = new DiskWriteThread(&device, image_path, this);
+    gondar::SendMetric(gondar::Metric::UsbAttempt);
+  }
   connect(diskWriteThread, &DiskWriteThread::finished, this,
           &WriteOperationPage::onDoneWriting);
+  showProgress();
   LOG_INFO << "launching thread...";
-  gondar::SendMetric(gondar::Metric::UsbAttempt);
   diskWriteThread->start();
 }
 
@@ -87,6 +94,35 @@ void WriteOperationPage::showProgress() {
 void WriteOperationPage::showWhatsNext() {
   setTitle("CloudReady USB created!");
   setSubTitle("You may now either exit or create another USB.");
+  bolded.setObjectName("bolded");
+  bolded.setText("<br>What's next?<br>");
+  layout.addWidget(&bolded);
+
+  whatsNext.setObjectName("whatsNext");
+  if (wizard()->isFormatOnly()) {
+    whatsNext.setText(
+        "<p>Your USB has been formatted to remove all CloudReady installer "
+        "data."
+        "  You can now proceed to use it for file storage or other "
+        "purposes.</p>");
+  } else {
+    whatsNext.setText(
+        "<p>You're ready to install CloudReady!  Head back to <a "
+        "href=\"https://guide.neverware.com/install-cloudready\">the install "
+        "guide</a> for help in how to use your USB installer.<br></p><p>Don't "
+        "forget to check the 'Details' link for your devices on the <a "
+        "href=\"https://guide.neverware.com/supported-devices\">certified "
+        "models "
+        "list</a>.  There may be special install instructions or important "
+        "notes "
+        "for each model.</p>");
+  }
+  whatsNext.setTextFormat(Qt::RichText);
+  whatsNext.setTextInteractionFlags(Qt::TextBrowserInteraction);
+  whatsNext.setOpenExternalLinks(true);
+  whatsNext.setWordWrap(true);
+  layout.addWidget(&whatsNext);
+
   bolded.show();
   whatsNext.show();
 }
@@ -108,8 +144,7 @@ void WriteOperationPage::onDoneWriting() {
       return;
 
     case DiskWriteThread::State::Success:
-      // Hooray!
-      gondar::SendMetric(gondar::Metric::UsbSuccess);
+      // on success, break out to normal onDoneWriting logic
       break;
   }
 
@@ -118,10 +153,15 @@ void WriteOperationPage::onDoneWriting() {
   writeFinished = true;
   progress.setRange(0, 100);
   progress.setValue(100);
-  wizard()->setMakeAnotherLayout();
-  // when a USB was successfully created, report time the run took
-  gondar::SendMetric(gondar::Metric::SuccessDuration,
-                     QString::number(wizard()->getRunTime()).toStdString());
+  if (wizard()->isFormatOnly()) {
+    gondar::SendMetric(gondar::Metric::FormatSuccess);
+  } else {
+    wizard()->setMakeAnotherLayout();
+    gondar::SendMetric(gondar::Metric::UsbSuccess);
+    // when a USB was successfully created, report time the run took
+    gondar::SendMetric(gondar::Metric::SuccessDuration,
+                       QString::number(wizard()->getRunTime()).toStdString());
+  }
   emit completeChanged();
 }
 

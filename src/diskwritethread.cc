@@ -30,6 +30,10 @@ static int64_t getFileSize(QString& path) {
   return file.size();
 }
 
+DiskWriteThread::DiskWriteThread(DeviceGuy* drive_in, QObject* parent)
+    : QThread(parent), selected_drive(*drive_in) {
+}
+
 DiskWriteThread::DiskWriteThread(DeviceGuy* drive_in,
                                  const QString& image_path_in,
                                  QObject* parent)
@@ -44,7 +48,7 @@ DiskWriteThread::State DiskWriteThread::state() const {
   return state_;
 }
 
-void DiskWriteThread::run() {
+void DiskWriteThread::writeImage() {
   LOG_INFO << "writing " << image_path << " to disk";
   setState(State::Running);
 
@@ -63,6 +67,27 @@ void DiskWriteThread::run() {
 
   LOG_INFO << "Install succeeded";
   setState(State::Success);
+}
+
+void DiskWriteThread::formatDrive() {
+  LOG_INFO << "formatting disk";
+  setState(State::Running);
+  // false = failure
+  if (!Format(&selected_drive)) {
+    LOG_ERROR << "Install failed";
+    setState(State::InstallFailed);
+    return;
+  }
+
+  LOG_INFO << "Format succeeded";
+  setState(State::Success);
+}
+void DiskWriteThread::run() {
+  if (image_path.isEmpty()) {
+    formatDrive();
+  } else {
+    writeImage();
+  }
 }
 
 void DiskWriteThread::setState(const State state) {

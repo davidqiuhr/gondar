@@ -42,6 +42,7 @@
 #include "device.h"
 #include "gpt_pal.h"
 #include "log.h"
+#include "mkfs.h"
 #include "shared.h"
 
 static ssize_t size_t_to_signed(const size_t value) {
@@ -2278,6 +2279,18 @@ DeviceGuyList GetDeviceList() {
   return device_list;
 }
 
+static bool formatShared(char* physical_path) {
+  LOG_INFO << "using physical_path=" << physical_path;
+  bool success = clearMbrGpt(physical_path);
+  if (!success) {
+    LOG_WARNING << "error clearing mbr/gpt";
+    // The operation is unlikely to succeed if there was an error cleaning gpt
+    return false;
+  }
+  LOG_INFO << "success clearing mbr/gpt";
+  return true;
+}
+
 bool Install(DeviceGuy* target_device,
              const char* image_path,
              int64_t image_size) {
@@ -2286,13 +2299,10 @@ bool Install(DeviceGuy* target_device,
   uint64_t drive_size = GetDriveSize(device_num);
   // FIXME: this is a leak
   char* physical_path = GetPhysicalName(device_num);
-  LOG_INFO << "using physical_path=" << physical_path;
-  if (!clearMbrGpt(physical_path)) {
-    LOG_WARNING << "error clearing mbr/gpt";
-    // The operation is unlikely to succeed if there was an error cleaning gpt
+  if (!formatShared(physical_path)) {
+    // pass up the failure
     return false;
   }
-  LOG_INFO << "success clearing mbr/gpt";
   HANDLE phys_handle = GetHandle(physical_path, true, true, false);
   // HANDLE phys_handle = GetHandle(physical_path, true, true, true);
   // ^ i have not noticed any difference in behavior whether we share or not
@@ -2326,4 +2336,28 @@ bool Install(DeviceGuy* target_device,
   safe_closehandle(source_img);
 
   return ret;
+}
+
+bool Format(DeviceGuy* target_device) {
+  uint64_t device_num = target_device->device_num;
+  char* physical_path = GetPhysicalName(device_num);
+  bool ret = formatShared(physical_path);
+  if (!ret) {
+    // logging handled by formatShared already
+    return ret;
+  }
+  ret = makeEmptyPartition(physical_path);
+  // if there were problems, return false
+  if (!ret) {
+    LOG_WARNING << "Error creating empty fat32 partition";
+  }
+  safe_free(physical_path);
+  char* logical_path = GetLogicalName(device_num, false);
+  makeFilesystem(logical_path);
+  return ret;
+}
+
+void CleanUp() {
+  deleteLibrary();
+  LOG_INFO << "Deleted formatting library";
 }
