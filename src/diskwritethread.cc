@@ -83,7 +83,7 @@ void DiskWriteThread::formatDrive() {
   setState(State::Success);
 }
 void DiskWriteThread::run() {
-  if (image_path == nullptr) {
+  if (image_path.isEmpty()) {
     formatDrive();
   } else {
     writeImage();
