@@ -189,6 +189,7 @@ typedef CHAR* DEVINSTID_A;
 HMODULE OpenedLibrariesHandle[MAX_LIBRARY_HANDLES];
 uint16_t OpenedLibrariesHandleSize;
 
+// TODO: use in mkfs
 static __inline HMODULE GetLibraryHandle(const char* szLibraryName) {
   HMODULE h = NULL;
   if ((h = GetModuleHandleA(szLibraryName)) == NULL) {
