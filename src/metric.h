@@ -21,16 +21,18 @@
 namespace gondar {
 
 enum class Metric {
-  Use,
+  BeeroverUse,
+  ChromeoverUse,
+  DownloadAttempt,
+  DownloadFailure,
+  DownloadSuccess,
+  Error,
+  FormatAttempt,
+  FormatSuccess,
+  SuccessDuration,
   UsbAttempt,
   UsbSuccess,
-  DownloadAttempt,
-  DownloadSuccess,
-  DownloadFailure,
-  ChromeoverUse,
-  BeeroverUse,
-  SuccessDuration,
-  Error
+  Use,
 };
 
 void SetSiteId(int site_id);
