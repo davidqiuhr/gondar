@@ -44,7 +44,6 @@ int main(int argc, char* argv[]) {
 
   const auto ret = app.exec();
   LOG_INFO << "app.exec() returned " << ret;
-  CleanUp();
-  LOG_INFO << "Deleted library";
+  // TODO: clean up libraries?
   return ret;
 }

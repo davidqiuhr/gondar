@@ -22,9 +22,6 @@
 #include "log.h"
 #include "msapi_utf8.h"
 
-// TODO: delete
-HMODULE OpenedLibraryHandle = NULL;
-
 /* Callback command types (some errorcode were filled from HPUSBFW V2.2.3 and
    their
    designation from
@@ -141,11 +138,4 @@ void makeFilesystem(char* logical_path) {
              4096,  // cluster size
              FormatExCallback);
   LOG_INFO << "sent request to make filesystem...";
-}
-
-// TODO: clean up all opened libs instead of this one which is just null
-void deleteLibrary() {
-  if (OpenedLibraryHandle) {
-    FreeLibrary(OpenedLibraryHandle);
-  }
 }

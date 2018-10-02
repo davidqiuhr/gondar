@@ -27,6 +27,5 @@ bool Install(DeviceGuy* target_device,
              int64_t image_size);
 bool Format(DeviceGuy* target_device);
 bool IsCurrentProcessElevated();
-void CleanUp();
 
 #endif
