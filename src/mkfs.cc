@@ -23,9 +23,6 @@
 #include "msapi_utf8.h"
 
 HMODULE OpenedLibraryHandle = NULL;
-static __inline HMODULE GetLibraryHandle() {
-  return OpenedLibraryHandle;
-}
 
 /* Callback command types (some errorcode were filled from HPUSBFW V2.2.3 and
    their
