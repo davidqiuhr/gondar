@@ -2297,6 +2297,7 @@ bool Install(DeviceGuy* target_device,
   uint64_t device_num = target_device->device_num;
   uint64_t sector_size = GetSectorSize(device_num);
   uint64_t drive_size = GetDriveSize(device_num);
+  // FIXME: this is a leak
   char* physical_path = GetPhysicalName(device_num);
   if (!formatShared(physical_path)) {
     // pass up the failure
