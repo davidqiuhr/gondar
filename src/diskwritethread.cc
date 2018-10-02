@@ -72,8 +72,8 @@ void DiskWriteThread::writeImage() {
 void DiskWriteThread::formatDrive() {
   LOG_INFO << "formatting disk";
   setState(State::Running);
-  // non-zero is failure
-  if (Format(&selected_drive)) {
+  // false = failure
+  if (!Format(&selected_drive)) {
     LOG_ERROR << "Install failed";
     setState(State::InstallFailed);
     return;

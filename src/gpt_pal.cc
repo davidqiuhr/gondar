@@ -84,8 +84,8 @@ bool makeEmptyPartition(const char* physical_path) {
   int problems = gptdata.Verify();
   // logging handled by caller
   if (problems > 0) {
-    return true;
-  } else {
     return false;
+  } else {
+    return true;
   }
 }
