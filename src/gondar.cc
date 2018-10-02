@@ -40,7 +40,7 @@
 
 // gondar-level includes
 #include "device.h"
-#include "gpt.h"
+#include "gpt_pal.h"
 #include "log.h"
 #include "mkfs.h"
 #include "shared.h"
