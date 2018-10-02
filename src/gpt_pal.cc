@@ -55,8 +55,7 @@ void PalData::ClearDisk() {
   SaveGPTData(true);
 }
 
-// regardless this is the 'shared' logic
-// this looks good now.
+// shared logic between writing cloudready usb and formatting disk
 bool clearMbrGpt(const char* physical_path) {
   std::string physical_path_str(physical_path);
   PalData gptdata;
