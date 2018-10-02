@@ -189,7 +189,6 @@ typedef CHAR* DEVINSTID_A;
 HMODULE OpenedLibrariesHandle[MAX_LIBRARY_HANDLES];
 uint16_t OpenedLibrariesHandleSize;
 
-// TODO: use in mkfs
 static __inline HMODULE GetLibraryHandle(const char* szLibraryName) {
   HMODULE h = NULL;
   if ((h = GetModuleHandleA(szLibraryName)) == NULL) {
@@ -2360,4 +2359,5 @@ bool Format(DeviceGuy* target_device) {
 
 void CleanUp() {
   deleteLibrary();
+  LOG_INFO << "Deleted formatting library";
 }
