@@ -51,6 +51,10 @@ std::string getMetricString(Metric metric) {
       return "download-failure";
     case Metric::Error:
       return "error";
+    case Metric::FormatAttempt:
+      return "format-attempt";
+    case Metric::FormatSuccess:
+      return "format-success";
     case Metric::UsbAttempt:
       return "usb-attempt";
     case Metric::UsbSuccess:

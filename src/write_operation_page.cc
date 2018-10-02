@@ -72,7 +72,7 @@ void WriteOperationPage::writeToDrive() {
   if (wizard()->isFormatOnly()) {
     // make a disk write thread in format mode
     diskWriteThread = new DiskWriteThread(&device, this);
-    // TODO: send a metric about a clear drive attempt
+    gondar::SendMetric(gondar::Metric::FormatAttempt);
   } else {
     image_path.clear();
     image_path.append(wizard()->downloadProgressPage.getImageFileName());
@@ -144,8 +144,7 @@ void WriteOperationPage::onDoneWriting() {
       return;
 
     case DiskWriteThread::State::Success:
-      // Hooray!
-      gondar::SendMetric(gondar::Metric::UsbSuccess);
+      // TODO: consider reworking this case; currently we just fall through
       break;
   }
 
@@ -154,12 +153,15 @@ void WriteOperationPage::onDoneWriting() {
   writeFinished = true;
   progress.setRange(0, 100);
   progress.setValue(100);
-  if (!wizard()->isFormatOnly()) {
+  if (wizard()->isFormatOnly()) {
+    gondar::SendMetric(gondar::Metric::FormatSuccess);
+  } else {
     wizard()->setMakeAnotherLayout();
+    gondar::SendMetric(gondar::Metric::UsbSuccess);
+    // when a USB was successfully created, report time the run took
+    gondar::SendMetric(gondar::Metric::SuccessDuration,
+                       QString::number(wizard()->getRunTime()).toStdString());
   }
-  // when a USB was successfully created, report time the run took
-  gondar::SendMetric(gondar::Metric::SuccessDuration,
-                     QString::number(wizard()->getRunTime()).toStdString());
   emit completeChanged();
 }
 
