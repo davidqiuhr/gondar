@@ -144,7 +144,7 @@ void WriteOperationPage::onDoneWriting() {
       return;
 
     case DiskWriteThread::State::Success:
-      // TODO: consider reworking this case; currently we just fall through 
+      // TODO: consider reworking this case; currently we just fall through
       break;
   }
 
@@ -155,8 +155,7 @@ void WriteOperationPage::onDoneWriting() {
   progress.setValue(100);
   if (wizard()->isFormatOnly()) {
     gondar::SendMetric(gondar::Metric::FormatSuccess);
-  }
-  else {
+  } else {
     wizard()->setMakeAnotherLayout();
     gondar::SendMetric(gondar::Metric::UsbSuccess);
     // when a USB was successfully created, report time the run took
