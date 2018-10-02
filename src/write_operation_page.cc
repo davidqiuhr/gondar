@@ -68,7 +68,7 @@ bool WriteOperationPage::validatePage() {
 
 void WriteOperationPage::writeToDrive() {
   LOG_INFO << "Writing to drive...";
-  // if we're in warp mode, we don't need any logic about an image file name
+  // if we're in format-only mode, we don't need logic about an image file name
   if (wizard()->isFormatOnly()) {
     // make a disk write thread in format mode
     diskWriteThread = new DiskWriteThread(&device, this);
