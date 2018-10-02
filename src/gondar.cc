@@ -2340,7 +2340,6 @@ bool Install(DeviceGuy* target_device,
 bool Format(DeviceGuy* target_device) {
   uint64_t device_num = target_device->device_num;
   char* physical_path = GetPhysicalName(device_num);
-  // false because we do not want the trailing backslash
   bool ret = formatShared(physical_path);
   if (!ret) {
     // logging handled by formatShared already
