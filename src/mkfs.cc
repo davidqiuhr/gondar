@@ -22,7 +22,7 @@
 #include "log.h"
 #include "msapi_utf8.h"
 
-HMODULE OpenedLibraryHandle = NULL;
+HMODULE mkfsLibHandle = NULL;
 
 /* Callback command types (some errorcode were filled from HPUSBFW V2.2.3 and
    their
@@ -118,9 +118,9 @@ void makeFilesystem(char* logical_path) {
   // problems with tolower(). Make sure we restore the locale. For more details,
   // see http://comments.gmane.org/gmane.comp.gnu.mingw.user/39300
   char* locale = setlocale(LC_ALL, NULL);
-  OpenedLibraryHandle = LoadLibraryA("fmifs.dll");
+  mkfsLibHandle = LoadLibraryA("fmifs.dll");
   pfFormatEx =
-      (FormatEx_t)GetProcAddress(OpenedLibraryHandle, "FormatEx");
+      (FormatEx_t)GetProcAddress(mkfsLibHandle, "FormatEx");
   setlocale(LC_ALL, locale);
 
   wchar_t* logical_path_windows = utf8_to_wchar(logical_path);
@@ -145,7 +145,7 @@ void makeFilesystem(char* logical_path) {
 
 // TODO: clean up all opened libs instead of this one which is just null
 void deleteLibrary() {
-  if (OpenedLibraryHandle) {
-    FreeLibrary(OpenedLibraryHandle);
+  if (mkfsLibHandle) {
+    FreeLibrary(mkfsLibHandle);
   }
 }
