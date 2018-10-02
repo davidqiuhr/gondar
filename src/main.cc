@@ -20,6 +20,7 @@
 #if defined(Q_OS_WIN)
 #include "dismissprompt.h"
 #endif
+#include "gondar.h"
 #include "gondarwizard.h"
 #include "log.h"
 #include "metric.h"
@@ -43,6 +44,6 @@ int main(int argc, char* argv[]) {
 
   const auto ret = app.exec();
   LOG_INFO << "app.exec() returned " << ret;
-
+  CleanUp();
   return ret;
 }

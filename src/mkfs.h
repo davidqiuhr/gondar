@@ -1,4 +1,4 @@
-// Copyright 2017 Neverware
+// Copyright 2018 Neverware
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,32 +13,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef GONDAR_METRIC_H
-#define GONDAR_METRIC_H
+#ifndef MKFS_H
+#define MKFS_H
 
-#include <string>
+void makeFilesystem(char* logical_path);
+void deleteLibrary();
 
-namespace gondar {
-
-enum class Metric {
-  BeeroverUse,
-  ChromeoverUse,
-  DownloadAttempt,
-  DownloadFailure,
-  DownloadSuccess,
-  Error,
-  FormatAttempt,
-  FormatSuccess,
-  SuccessDuration,
-  UsbAttempt,
-  UsbSuccess,
-  Use,
-};
-
-void SetSiteId(int site_id);
-
-void SendMetric(Metric metric, const std::string& value = "");
-
-}  // namespace gondar
-
-#endif /* GONDAR_METRIC_H */
+#endif
