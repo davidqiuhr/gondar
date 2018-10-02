@@ -144,7 +144,7 @@ void WriteOperationPage::onDoneWriting() {
       return;
 
     case DiskWriteThread::State::Success:
-      // TODO: consider reworking this case; currently we just fall through
+      // on success, break out to normal onDoneWriting logic
       break;
   }
 
