@@ -125,7 +125,7 @@ void makeFilesystem(char* logical_path) {
   wchar_t* logical_path_windows = utf8_to_wchar(logical_path);
   std::wstring fat32str = L"FAT32";
   std::wstring emptystr = L"";
-  // TODO: is it ok to cast from const wchar * to wchar *?
+  // note this is casting from const wchar* to wchar*
   wchar_t* fat32 = (wchar_t*)fat32str.c_str();
   wchar_t* empty = (wchar_t*)emptystr.c_str();
   // use 4096 as cluster size as it is generally considered a sane default
