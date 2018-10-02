@@ -189,7 +189,6 @@ typedef CHAR* DEVINSTID_A;
 HMODULE OpenedLibrariesHandle[MAX_LIBRARY_HANDLES];
 uint16_t OpenedLibrariesHandleSize;
 
-// TODO: use in mkfs?  could then use rufus's cleanup implementation as well
 static __inline HMODULE GetLibraryHandle(const char* szLibraryName) {
   HMODULE h = NULL;
   if ((h = GetModuleHandleA(szLibraryName)) == NULL) {
@@ -2356,4 +2355,9 @@ bool Format(DeviceGuy* target_device) {
   char* logical_path = GetLogicalName(device_num, false);
   makeFilesystem(logical_path);
   return ret;
+}
+
+void CleanUp() {
+  deleteLibrary();
+  LOG_INFO << "Deleted formatting library";
 }

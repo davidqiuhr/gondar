@@ -22,6 +22,8 @@
 #include "log.h"
 #include "msapi_utf8.h"
 
+HMODULE mkfsLibHandle = NULL;
+
 /* Callback command types (some errorcode were filled from HPUSBFW V2.2.3 and
    their
    designation from
@@ -116,8 +118,9 @@ void makeFilesystem(char* logical_path) {
   // problems with tolower(). Make sure we restore the locale. For more details,
   // see http://comments.gmane.org/gmane.comp.gnu.mingw.user/39300
   char* locale = setlocale(LC_ALL, NULL);
+  mkfsLibHandle = LoadLibraryA("fmifs.dll");
   pfFormatEx =
-      (FormatEx_t)GetProcAddress(LoadLibraryA("fmifs.dll"), "FormatEx");
+      (FormatEx_t)GetProcAddress(mkfsLibHandle, "FormatEx");
   setlocale(LC_ALL, locale);
 
   wchar_t* logical_path_windows = utf8_to_wchar(logical_path);
@@ -138,4 +141,11 @@ void makeFilesystem(char* logical_path) {
              4096,  // cluster size
              FormatExCallback);
   LOG_INFO << "sent request to make filesystem...";
+}
+
+// TODO: also clean up the lib opened by gondar.cc
+void deleteLibrary() {
+  if (mkfsLibHandle) {
+    FreeLibrary(mkfsLibHandle);
+  }
 }
