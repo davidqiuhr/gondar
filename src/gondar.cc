@@ -189,7 +189,7 @@ typedef CHAR* DEVINSTID_A;
 HMODULE OpenedLibrariesHandle[MAX_LIBRARY_HANDLES];
 uint16_t OpenedLibrariesHandleSize;
 
-// TODO: use in mkfs
+// TODO: use in mkfs?  could then use rufus's cleanup implementation as well
 static __inline HMODULE GetLibraryHandle(const char* szLibraryName) {
   HMODULE h = NULL;
   if ((h = GetModuleHandleA(szLibraryName)) == NULL) {
