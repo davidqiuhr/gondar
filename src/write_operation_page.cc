@@ -50,8 +50,13 @@ void WriteOperationPage::setDevice(const DeviceGuy& device_in) {
 
 void WriteOperationPage::initializePage() {
   // set the titles in initializePage for 'make another' flow
-  setTitle("Creating your CloudReady USB installer");
-  setSubTitle("This process may take up to 20 minutes.");
+  if (wizard()->isFormatOnly()) {
+    setTitle("Formatting your USB");
+    setSubTitle("This process should only take a moment.");
+  } else {
+    setTitle("Creating your CloudReady USB installer");
+    setSubTitle("This process may take up to 20 minutes.");
+  }
   bolded.hide();
   whatsNext.hide();
   writeFinished = false;
