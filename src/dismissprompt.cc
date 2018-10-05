@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+// needed for LCIDToLocaleName?
+#include <windows.h>
 #include <windowsx.h>
 
 #include "shared.h"
@@ -22,7 +24,16 @@ static const char *fp_title_str = "Microsoft Windows",
 // this func from stdfn:
 char* GetCurrentMUI(void) {
   static char mui_str[LOCALE_NAME_MAX_LENGTH];
-  static_strcpy(mui_str, "en-US");
+  wchar_t wmui_str[LOCALE_NAME_MAX_LENGTH];
+
+  //FIXME: get the localization magicks to work
+  if (LCIDToLocaleName(GetUserDefaultUILanguage(),
+      wmui_str, LOCALE_NAME_MAX_LENGTH, 0) > 0) {
+    wchar_to_utf8_no_alloc(wmui_str, mui_str, LOCALE_NAME_MAX_LENGTH);
+  } else {
+    static_strcpy(mui_str, "en-US");
+  }
+  //static_strcpy(mui_str, "en-US");
   return mui_str;
 }
 
