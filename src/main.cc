@@ -29,13 +29,15 @@
 int main(int argc, char* argv[]) {
 #if defined(Q_OS_WIN)
   Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
-  // dismiss Windows 'format disk' popups
-  SetFormatPromptHook();
 #endif
   Q_INIT_RESOURCE(gondarwizard);
-
   gondar::InitializeLogging();
   gondar::SendMetric(gondar::Metric::Use);
+#if defined(Q_OS_WIN)
+  // dismiss Windows 'format disk' popups
+  // placed here to enable logging for this step
+  SetFormatPromptHook();
+#endif
   QApplication app(argc, argv);
   app.setStyleSheet(gondar::readUtf8File(":/style.css"));
 
