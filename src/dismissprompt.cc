@@ -27,7 +27,7 @@ char* GetCurrentMUI(void) {
   QLocale locale;
   QByteArray localeBytes = locale.uiLanguages()[0].toUtf8();
   const char* locale_c_str = localeBytes.data();
-  LOG_WARNING << "searching for format prompts in language (utf8): " << locale_c_str;
+  LOG_INFO << "searching for format prompts in language (utf8): " << locale_c_str;
   static_strcpy(mui_str, locale_c_str);
   return mui_str;
 }
