@@ -7,8 +7,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-// needed for LCIDToLocaleName?
-#include <windows.h>
 #include <windowsx.h>
 
 // try using qt-based locale goodies
@@ -33,7 +31,6 @@ char* GetCurrentMUI(void) {
   LOG_WARNING << "default language is: " << GetUserDefaultUILanguage();
   QLocale locale;
   LOG_WARNING << "preferred lang is: " << locale.uiLanguages()[0];
-  //FIXME: get the localization magicks to work
   /*
   if (LCIDToLocaleName(GetUserDefaultUILanguage(),
       wmui_str, LOCALE_NAME_MAX_LENGTH, 0) > 0) {
@@ -42,7 +39,8 @@ char* GetCurrentMUI(void) {
     static_strcpy(mui_str, "en-US");
   }
   */
-  static_strcpy(mui_str, "en-US");
+  //static_strcpy(mui_str, "en-US");
+  static_strcpy(mui_str, locale.uiLanguages()[0].c_str());
   return mui_str;
 }
 
