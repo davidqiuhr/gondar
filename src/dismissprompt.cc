@@ -28,6 +28,7 @@ char* GetCurrentMUI(void) {
   static char mui_str[LOCALE_NAME_MAX_LENGTH];
   LOG_WARNING << "default language is: " << GetUserDefaultUILanguage();
   QLocale locale;
+  LOG_WARNING << "or... " << locale.languageToString(locale.language());
   LOG_WARNING << "preferred lang is: " << locale.uiLanguages()[0];
   const char* locale_c_str = locale.uiLanguages()[0].toLatin1().data();
   LOG_WARNING << "using locale " << locale_c_str;
