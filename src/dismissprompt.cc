@@ -23,25 +23,14 @@ static HWINEVENTHOOK fp_weh = NULL;
 static const char *fp_title_str = "Microsoft Windows",
                   *fp_button_str = "Format disk";
 
-// this func from stdfn:
+// this func from stdfn, but reimplemented using Qt
 char* GetCurrentMUI(void) {
   static char mui_str[LOCALE_NAME_MAX_LENGTH];
-  //wchar_t wmui_str[LOCALE_NAME_MAX_LENGTH];
-
   LOG_WARNING << "default language is: " << GetUserDefaultUILanguage();
   QLocale locale;
   LOG_WARNING << "preferred lang is: " << locale.uiLanguages()[0];
-  /*
-  if (LCIDToLocaleName(GetUserDefaultUILanguage(),
-      wmui_str, LOCALE_NAME_MAX_LENGTH, 0) > 0) {
-    wchar_to_utf8_no_alloc(wmui_str, mui_str, LOCALE_NAME_MAX_LENGTH);
-  } else {
-    static_strcpy(mui_str, "en-US");
-  }
-  */
-  //static_strcpy(mui_str, "en-US");
-  //static_strcpy(mui_str, locale.uiLanguages()[0].c_str());
   const char* locale_c_str = locale.uiLanguages()[0].toLatin1().data();
+  LOG_WARNING << "using locale " << locale_c_str;
   static_strcpy(mui_str, locale_c_str);
   return mui_str;
 }
