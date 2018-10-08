@@ -25,8 +25,9 @@ static const char *fp_title_str = "Microsoft Windows",
 char* GetCurrentMUI(void) {
   static char mui_str[LOCALE_NAME_MAX_LENGTH];
   QLocale locale;
-  const char* locale_c_str = locale.uiLanguages()[0].toUtf8().data();
-  LOG_WARNING << "searching for format prompts in language: " << locale_c_str;
+  QByteArray localeBytes = locale.uiLanguages()[0].toUtf8();
+  const char* locale_c_str = localeBytes.data();
+  LOG_WARNING << "searching for format prompts in language (utf8): " << locale_c_str;
   static_strcpy(mui_str, locale_c_str);
   return mui_str;
 }
