@@ -40,7 +40,9 @@ char* GetCurrentMUI(void) {
   }
   */
   //static_strcpy(mui_str, "en-US");
-  static_strcpy(mui_str, locale.uiLanguages()[0].c_str());
+  //static_strcpy(mui_str, locale.uiLanguages()[0].c_str());
+  const char* locale_c_str = locale.uiLanguages()[0].toLatin1().data();
+  static_strcpy(mui_str, locale_c_str);
   return mui_str;
 }
 
