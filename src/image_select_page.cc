@@ -37,12 +37,8 @@ ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
   // we use these buttons for beerover only now
   if (!gondar::isChromeover()) {
     thirtyTwo.setText("32-bit");
-    thirtyTwoDetails.setText(
-      "<a href=\"https://guide.neverware.com/supported-devices\">Only intended "
-      "for certified models marked '32-bit Only'</a>");
-    thirtyTwoDetails.setTextFormat(Qt::RichText);
-    thirtyTwoDetails.setTextInteractionFlags(Qt::TextBrowserInteraction);
-    thirtyTwoDetails.setOpenExternalLinks(true);
+    thirtyTwoConfirm.setText("uh");
+    thirtyTwoConfirm.setChecked(false);
     sixtyFourDetails.setText("Suitable for most computers made after 2007");
     sixtyFour.setText("64-bit (recommended)");
     sixtyFour.setChecked(true);
@@ -51,7 +47,7 @@ ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
     layout.addWidget(&sixtyFour);
     layout.addWidget(&sixtyFourDetails);
     layout.addWidget(&thirtyTwo);
-    layout.addWidget(&thirtyTwoDetails);
+    layout.addWidget(&thirtyTwoConfirm);
   }
 
   setLayout(&layout);
@@ -99,7 +95,7 @@ void ImageSelectPage::addImage(GondarImage image) {
   bitnessButtons.addButton(newButton);
   layout.addWidget(newButton);
   if (image.is32Bit()) {
-    layout.addWidget(&thirtyTwoDetails);
+    layout.addWidget(&thirtyTwoConfirm);
   }
 }
 
