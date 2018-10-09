@@ -73,6 +73,15 @@ bool ImageSelectPage::validatePage() {
   if (hasError) {
     return true;
   }
+  // TODO: if they chose 32-bit then let's yell at them
+  if (bitnessButtons.checkedButton() == qobject_cast<QAbstractButton*>(&thirtyTwo)) {
+    switch(QMessageBox::question(this, "Confirmation", "32-bit images will not work on 64-bit machines.  Are you sure?", QMessageBox::No | QMessageBox::Yes)) {
+      case QMessageBox::Yes:
+        return true;
+      case QMessageBox::No:
+        return false;
+    }
+  }
   // currently this is only a concern in the chromeover case, but we would
   // be equally worried were this true in either case
   if (!bitnessButtons.checkedButton()) {
