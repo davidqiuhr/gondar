@@ -15,8 +15,8 @@
 
 #include "image_select_page.h"
 
+#include <QPushButton>
 #include "gondarimage.h"
-
 #include "gondarwizard.h"
 #include "log.h"
 #include "util.h"
@@ -76,16 +76,19 @@ bool ImageSelectPage::validatePage() {
   }
   if (bitnessButtons.checkedButton() ==
       qobject_cast<QAbstractButton*>(&thirtyTwo)) {
-    switch (QMessageBox::question(
-        this, "CloudReady",
-        "32-bit CloudReady is not supported on 64-bit machines. Use 32-bit "
-        "CloudReady only on hardware that requires it.  Continue?",
-        QMessageBox::No | QMessageBox::Yes)) {
-      case QMessageBox::Yes:
-        return true;
-      case QMessageBox::No:
-      default:
-        return false;
+    QMessageBox confirmBox;
+    confirmBox.setIcon(QMessageBox::Question);
+    confirmBox.setWindowTitle("CloudReady");
+    confirmBox.setText("32-bit CloudReady is not supported on 64-bit machines. Use 32-bit CloudReady only on hardware that requires it.");
+    QPushButton *backButton = confirmBox.addButton(QMessageBox::Abort);
+    QPushButton *continueButton = confirmBox.addButton("Continue", QMessageBox::ActionRole);
+    confirmBox.setDefaultButton(backButton);
+    confirmBox.exec();
+    if (confirmBox.clickedButton() == qobject_cast<QAbstractButton*>(continueButton)) {
+      return true;
+
+    } else {
+      return false;
     }
   }
   // currently this is only a concern in the chromeover case, but we would
