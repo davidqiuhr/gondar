@@ -85,8 +85,8 @@ bool ImageSelectPage::validatePage() {
     QPushButton* backButton =
         confirmBox.addButton("Back", QMessageBox::RejectRole);
     QPushButton* continueButton =
-        confirmBox.addButton("Continue", QMessageBox::ActionRole);
-    confirmBox.setDefaultButton(backButton);
+        confirmBox.addButton("Use 32-bit", QMessageBox::ActionRole);
+    confirmBox.setDefaultButton(continueButton);
     confirmBox.exec();
     if (confirmBox.clickedButton() ==
         qobject_cast<QAbstractButton*>(continueButton)) {
