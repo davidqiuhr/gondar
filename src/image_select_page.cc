@@ -74,10 +74,11 @@ bool ImageSelectPage::validatePage() {
     return true;
   }
   if (bitnessButtons.checkedButton() == qobject_cast<QAbstractButton*>(&thirtyTwo)) {
-    switch(QMessageBox::question(this, "Confirmation", "32-bit images will not work on 64-bit machines.  Are you sure?", QMessageBox::No | QMessageBox::Yes)) {
+    switch(QMessageBox::question(this, "CloudReady", "32-bit CloudReady is not supported on 64-bit machines. Use 32-bit CloudReady only on hardware that requires it.  Continue?", QMessageBox::No | QMessageBox::Yes)) {
       case QMessageBox::Yes:
         return true;
       case QMessageBox::No:
+      default:
         return false;
     }
   }
