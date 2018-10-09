@@ -119,8 +119,7 @@ void makeFilesystem(char* logical_path) {
   // see http://comments.gmane.org/gmane.comp.gnu.mingw.user/39300
   char* locale = setlocale(LC_ALL, NULL);
   mkfsLibHandle = LoadLibraryA("fmifs.dll");
-  pfFormatEx =
-      (FormatEx_t)GetProcAddress(mkfsLibHandle, "FormatEx");
+  pfFormatEx = (FormatEx_t)GetProcAddress(mkfsLibHandle, "FormatEx");
   setlocale(LC_ALL, locale);
 
   wchar_t* logical_path_windows = utf8_to_wchar(logical_path);

@@ -28,6 +28,6 @@ class Test : public QObject {
  private slots:
   void testDevicePicker();
 };
-}
+}  // namespace gondar
 
 #endif  // TEST_TEST_H_

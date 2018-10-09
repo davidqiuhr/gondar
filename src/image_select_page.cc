@@ -34,15 +34,16 @@ ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
   setTitle("Which version of CloudReady do you need?");
   setSubTitle(" ");
 
-  thirtyTwo.setText("32-bit");
-  thirtyTwoDetails.setText(
-      "<a href=\"https://guide.neverware.com/supported-devices\">Only intended "
-      "for certified models marked '32-bit Only'</a>");
-  thirtyTwoDetails.setTextFormat(Qt::RichText);
-  thirtyTwoDetails.setTextInteractionFlags(Qt::TextBrowserInteraction);
-  thirtyTwoDetails.setOpenExternalLinks(true);
   // we use these buttons for beerover only now
   if (!gondar::isChromeover()) {
+    thirtyTwo.setText("32-bit");
+    thirtyTwoDetails.setText(
+        "<a href=\"https://guide.neverware.com/supported-devices\">Only "
+        "intended "
+        "for certified models marked '32-bit Only'</a>");
+    thirtyTwoDetails.setTextFormat(Qt::RichText);
+    thirtyTwoDetails.setTextInteractionFlags(Qt::TextBrowserInteraction);
+    thirtyTwoDetails.setOpenExternalLinks(true);
     sixtyFourDetails.setText("Suitable for most computers made after 2007");
     sixtyFour.setText("64-bit (recommended)");
     sixtyFour.setChecked(true);
