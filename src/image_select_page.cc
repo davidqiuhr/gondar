@@ -73,6 +73,10 @@ bool ImageSelectPage::validatePage() {
   if (hasError) {
     return true;
   }
+  // TODO: if they chose 32-bit then let's yell at them
+  if (bitnessButtons.checkedButton() == qobject_cast<QAbstractButton*>(&thirtyTwo)) {
+    LOG_WARNING << "send popup";
+  }
   // currently this is only a concern in the chromeover case, but we would
   // be equally worried were this true in either case
   if (!bitnessButtons.checkedButton()) {
