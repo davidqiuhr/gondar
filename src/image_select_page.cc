@@ -80,7 +80,7 @@ bool ImageSelectPage::validatePage() {
     confirmBox.setIcon(QMessageBox::Question);
     confirmBox.setWindowTitle("CloudReady");
     confirmBox.setText("32-bit CloudReady is not supported on 64-bit machines. Use 32-bit CloudReady only on hardware that requires it.");
-    QPushButton *backButton = confirmBox.addButton(QMessageBox::Abort);
+    QPushButton *backButton = confirmBox.addButton("Back", QMessageBox::RejectRole);
     QPushButton *continueButton = confirmBox.addButton("Continue", QMessageBox::ActionRole);
     confirmBox.setDefaultButton(backButton);
     confirmBox.exec();
