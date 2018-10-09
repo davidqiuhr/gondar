@@ -76,7 +76,7 @@ QByteArray getMetricsApiKey() {
   return QByteArray();
 #endif
 }
-}
+}  // namespace
 
 static QString getUuid() {
   static QString id;
@@ -162,4 +162,4 @@ void SendMetric(Metric metric, const std::string& value) {
   QString strJson(doc.toJson(QJsonDocument::Compact));
   manager->post(request, QByteArray(strJson.toUtf8()));
 }
-}
+}  // namespace gondar
