@@ -27,4 +27,4 @@ GondarWizard* WizardPage::wizard() const {
   Q_ASSERT(gee_wiz);
   return gee_wiz;
 }
-}
+}  // namespace gondar

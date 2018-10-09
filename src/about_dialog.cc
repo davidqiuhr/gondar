@@ -48,4 +48,4 @@ AboutDialog::AboutDialog() {
   setMinimumWidth(500);
   setWindowTitle(tr("CloudReady USB Maker"));
 }
-}
+}  // namespace gondar

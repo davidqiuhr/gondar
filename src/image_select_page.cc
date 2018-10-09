@@ -38,8 +38,9 @@ ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
   if (!gondar::isChromeover()) {
     thirtyTwo.setText("32-bit");
     thirtyTwoDetails.setText(
-      "<a href=\"https://guide.neverware.com/supported-devices\">Only intended "
-      "for certified models marked '32-bit Only'</a>");
+        "<a href=\"https://guide.neverware.com/supported-devices\">Only "
+        "intended "
+        "for certified models marked '32-bit Only'</a>");
     thirtyTwoDetails.setTextFormat(Qt::RichText);
     thirtyTwoDetails.setTextInteractionFlags(Qt::TextBrowserInteraction);
     thirtyTwoDetails.setOpenExternalLinks(true);

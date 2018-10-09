@@ -2,13 +2,13 @@
 #include "dismissprompt.h"
 
 #include <commdlg.h>
-#include <QLocale>
 #include <richedit.h>
 #include <shlobj.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <windowsx.h>
+#include <QLocale>
 
 #include "log.h"
 #include "shared.h"
@@ -27,7 +27,8 @@ char* GetCurrentMUI(void) {
   QLocale locale;
   QByteArray localeBytes = locale.uiLanguages()[0].toUtf8();
   const char* locale_c_str = localeBytes.data();
-  LOG_INFO << "searching for format prompts in language (utf8): " << locale_c_str;
+  LOG_INFO << "searching for format prompts in language (utf8): "
+           << locale_c_str;
   static_strcpy(mui_str, locale_c_str);
   return mui_str;
 }
