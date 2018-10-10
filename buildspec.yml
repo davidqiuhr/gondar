@@ -5,7 +5,8 @@ phases:
     commands:
       - echo Build started on `date`
       - cat src/main.cc
-      - make -C /opt/gondar build-gondar test
+      - pwd
+      - make test
   post_build:
     commands:
       - echo Build completed on `date`
