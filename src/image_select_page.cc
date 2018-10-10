@@ -84,7 +84,8 @@ bool ImageSelectPage::validatePage() {
         "CloudReady only on hardware that requires it.");
     // counter-intuitive that RejectRole be to go forward, but the roles
     // really just determine button order and are not used for later logic
-    QPushButton* backButton = confirmBox.addButton("Back", QMessageBox::ActionRole);
+    QPushButton* backButton =
+        confirmBox.addButton("Back", QMessageBox::ActionRole);
     QPushButton* continueButton =
         confirmBox.addButton("Use 32-bit", QMessageBox::RejectRole);
     confirmBox.setEscapeButton(backButton);
