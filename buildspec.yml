@@ -4,7 +4,7 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - sudo docker build --file gondar-linux.Dockerfile .
+      - docker build --file gondar-linux.Dockerfile .
   post_build:
     commands:
       - echo Build completed on `date`
