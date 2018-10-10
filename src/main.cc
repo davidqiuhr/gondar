@@ -40,6 +40,7 @@ int main(int argc, char* argv[]) {
 #endif
   QApplication app(argc, argv);
   app.setStyleSheet(gondar::readUtf8File(":/style.css"));
+  doesnotcompile
 
   GondarWizard wizard;
   wizard.show();
