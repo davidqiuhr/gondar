@@ -10,4 +10,4 @@ phases:
       - echo Build completed on `date`
 artifacts:
   files:
-      - package/build/cloudready-usb-maker.exe
+      - build/cloudready-usb-maker.exe
