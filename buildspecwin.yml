@@ -8,3 +8,7 @@ phases:
   post_build:
     commands:
       - echo Build completed on `date`
+artifacts:
+  files:
+      - build/cloudready-usb-maker.exe
+  discard-paths: yes
