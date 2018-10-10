@@ -6,7 +6,7 @@ phases:
       - echo Build started on `date`
       - cat src/main.cc
       - pwd
-      - mkdir .git
+      - rm -rf .git
       - make build-gondar test
   post_build:
     commands:
