@@ -83,7 +83,7 @@ bool ImageSelectPage::validatePage() {
     confirmBox.setText(
         "32-bit CloudReady is not supported on 64-bit machines. Use 32-bit "
         "CloudReady only on hardware that requires it.");
-    // counter-intuitive that RejectRole be to go forward, but the roles
+    // counter-intuitive that RejectRole maps to forward, but the roles
     // really just determine button order and are not used for later logic
     QPushButton* backButton =
         confirmBox.addButton("Back", QMessageBox::ActionRole);
