@@ -15,6 +15,7 @@
 
 #include "image_select_page.h"
 
+#include <QMessageBox>
 #include <QPushButton>
 #include "gondarimage.h"
 #include "gondarwizard.h"

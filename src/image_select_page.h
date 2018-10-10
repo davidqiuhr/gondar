@@ -18,7 +18,6 @@
 
 #include <QButtonGroup>
 #include <QLabel>
-#include <QMessageBox>
 #include <QRadioButton>
 #include <QUrl>
 #include <QVBoxLayout>
