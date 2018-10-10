@@ -79,7 +79,7 @@ bool ImageSelectPage::validatePage() {
       qobject_cast<QAbstractButton*>(&thirtyTwo)) {
     QMessageBox confirmBox;
     confirmBox.setIcon(QMessageBox::Question);
-    confirmBox.setWindowTitle("CloudReady");
+    confirmBox.setWindowTitle("CloudReady USB Maker");
     confirmBox.setText(
         "32-bit CloudReady is not supported on 64-bit machines. Use 32-bit "
         "CloudReady only on hardware that requires it.");
