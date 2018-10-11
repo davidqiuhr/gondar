@@ -7,7 +7,7 @@ phases:
       - echo pwd
       - ls docker
       - cat Makefile
-      - docker build -t docker/gondar-linux.Dockerfile
+      - docker build -t docker/gondar-linux.Dockerfile .
   post_build:
     commands:
       - echo Build completed on `date`
