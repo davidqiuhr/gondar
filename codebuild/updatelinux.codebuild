@@ -4,10 +4,8 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - echo pwd
-      - ls docker
-      - cat Makefile
-      - docker build --file docker/gondar-linux.dockerfile .
+      - git submodule update --init
+      - docker build --file docker/gondar-linux.Dockerfile .
   post_build:
     commands:
       - echo Build completed on `date`
