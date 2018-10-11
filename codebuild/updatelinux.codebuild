@@ -1,0 +1,10 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - echo Build started on `date`
+      - docker build -t docker/gondar-linux.Dockerfile
+  post_build:
+    commands:
+      - echo Build completed on `date`
