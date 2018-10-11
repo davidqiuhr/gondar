@@ -1,0 +1,11 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - echo Build started on `date`
+      - git submodule update --init
+      - docker build -t gondar-win --file docker/gondar-win32.Dockerfile .
+  post_build:
+    commands:
+      - echo Build completed on `date`
