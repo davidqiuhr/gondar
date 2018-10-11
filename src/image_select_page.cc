@@ -15,8 +15,9 @@
 
 #include "image_select_page.h"
 
+#include <QMessageBox>
+#include <QPushButton>
 #include "gondarimage.h"
-
 #include "gondarwizard.h"
 #include "log.h"
 #include "util.h"
@@ -73,6 +74,31 @@ bool ImageSelectPage::validatePage() {
   // screen
   if (hasError) {
     return true;
+  }
+  if (bitnessButtons.checkedButton() ==
+      qobject_cast<QAbstractButton*>(&thirtyTwo)) {
+    QMessageBox confirmBox;
+    confirmBox.setIcon(QMessageBox::Question);
+    confirmBox.setWindowTitle("CloudReady USB Maker");
+    confirmBox.setText(
+        "32-bit CloudReady is not supported on 64-bit machines. Use 32-bit "
+        "CloudReady only on hardware that requires it.");
+    // counter-intuitive that RejectRole maps to forward, but the roles
+    // really just determine button order and are not used for later logic
+    QPushButton* backButton =
+        confirmBox.addButton("Back", QMessageBox::ActionRole);
+    QPushButton* continueButton =
+        confirmBox.addButton("Use 32-bit", QMessageBox::RejectRole);
+    confirmBox.setEscapeButton(backButton);
+    confirmBox.setDefaultButton(continueButton);
+    confirmBox.exec();
+    if (confirmBox.clickedButton() ==
+        qobject_cast<QAbstractButton*>(continueButton)) {
+      return true;
+
+    } else {
+      return false;
+    }
   }
   // currently this is only a concern in the chromeover case, but we would
   // be equally worried were this true in either case

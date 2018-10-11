@@ -58,15 +58,37 @@ typedef struct {
  * '#' means any number in [0-9]
  */
 static str_score_t str_score[] = {
-    {"IC#", 10},      {"ST#", 10},       {"MX#", 10},        {"WDC", 10},
-    {"IBM", 10},      {"STM#", 10},      {"HDS#", 10},  // These Hitachi drives
-                                                        // are a PITA
-    {"HDP#", 10},     {"HDT#", 10},      {"HTE#", 10},       {"HTS#", 10},
-    {"HUA#", 10},     {"APPLE", 10},     {"INTEL", 10},      {"MAXTOR", 10},
-    {"HITACHI", 10},  {"SEAGATE", 10},   {"SAMSUNG", 5},     {"FUJITSU", 10},
-    {"TOSHIBA", 5},   {"QUANTUM", 10},   {"EXCELSTOR", 10},  {"CORSAIR", -15},
-    {"KINGMAX", -15}, {"KINGSTON", -15}, {"LEXAR", -15},     {"MUSHKIN", -15},
-    {"PNY", -15},     {"SANDISK", -15},  {"TRANSCEND", -15},
+    {"IC#", 10},
+    {"ST#", 10},
+    {"MX#", 10},
+    {"WDC", 10},
+    {"IBM", 10},
+    {"STM#", 10},
+    {"HDS#", 10},  // These Hitachi drives
+                   // are a PITA
+    {"HDP#", 10},
+    {"HDT#", 10},
+    {"HTE#", 10},
+    {"HTS#", 10},
+    {"HUA#", 10},
+    {"APPLE", 10},
+    {"INTEL", 10},
+    {"MAXTOR", 10},
+    {"HITACHI", 10},
+    {"SEAGATE", 10},
+    {"SAMSUNG", 5},
+    {"FUJITSU", 10},
+    {"TOSHIBA", 5},
+    {"QUANTUM", 10},
+    {"EXCELSTOR", 10},
+    {"CORSAIR", -15},
+    {"KINGMAX", -15},
+    {"KINGSTON", -15},
+    {"LEXAR", -15},
+    {"MUSHKIN", -15},
+    {"PNY", -15},
+    {"SANDISK", -15},
+    {"TRANSCEND", -15},
 };
 
 static str_score_t str_adjust[] = {{"Gadget", -10}, {"Flash", -10}};
