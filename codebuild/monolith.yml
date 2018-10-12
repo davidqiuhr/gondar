@@ -10,7 +10,7 @@ phases:
       - echo Build started on `date`
       - echo `which python`
       - git submodule update --init
-      - docker build -t gondar-win --file docker/gondar-win32.Dockerfile .
+      - python package.py
   post_build:
     commands:
       - echo Build completed on `date`
