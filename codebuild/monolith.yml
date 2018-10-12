@@ -1,0 +1,15 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in
+      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+  build:
+    commands:
+      - echo Build started on `date`
+      - git submodule update --init
+      - docker build -t gondar-win --file docker/gondar-win32.Dockerfile .
+  post_build:
+    commands:
+      - echo Build completed on `date`
