@@ -14,5 +14,5 @@ phases:
       - echo Build completed on `date`
 artifacts:
   files:
-      - build/cloudready-usb-maker.exe
+      - package/build/cloudready-usb-maker.exe
   discard-paths: yes
