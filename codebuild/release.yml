@@ -8,7 +8,7 @@ phases:
     commands:
       - echo Build started on `date`
       - git submodule update --init
-      - make jenkins
+      - make jenkins PACKAGE_FLAGS="--release --apikey $METRICS_API" RELEASE=true
   post_build:
     commands:
       - echo Build completed on `date`
