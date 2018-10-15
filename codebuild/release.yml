@@ -3,8 +3,7 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - export KEWLTEST=$(aws ssm get-parameters --region us-east-1 --names gondar.codebuild.testguy --with-decryption --query Parameters[0].Value)
-      - echo kewltest is $KEWLTEST
+      - export METRICS_API=$(aws ssm get-parameters --region us-east-1 --names gondar.codebuild.metricsapi --with-decryption --query Parameters[0].Value)
   build:
     commands:
       - echo Build started on `date`
