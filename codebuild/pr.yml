@@ -1,0 +1,12 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - echo Build started on `date`
+      - git submodule update --init
+      - CHROMEOVER=false make jenkins
+      - CHROMEOVER=true make jenkins
+  post_build:
+    commands:
+      - echo Build completed on `date`
