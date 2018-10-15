@@ -8,7 +8,7 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - make build-gondar
+      - python package.py
   post_build:
     commands:
       - echo Build completed on `date`
