@@ -8,7 +8,6 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - echo `which python`
       - git submodule update --init
       - make jenkins PACKAGE_FLAGS="--chromeover"
   post_build:
