@@ -1,0 +1,18 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - export METRICS_API=$(aws ssm get-parameters --region us-east-1 --names gondar.codebuild.metricsapi --with-decryption --query Parameters[0].Value)
+  build:
+    commands:
+      - echo Build started on `date`
+      - git submodule update --init
+      - make jenkins PACKAGE_FLAGS="--chromeover --release --apikey $METRICS_API" RELEASE=true
+  post_build:
+    commands:
+      - echo Build completed on `date`
+artifacts:
+  files:
+      - package/build/cloudready-usb-maker.exe
+  discard-paths: yes
