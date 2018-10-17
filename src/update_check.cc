@@ -86,4 +86,4 @@ void UpdateCheck::showMessage(const QString& latestVersionString) {
     QDesktopServices::openUrl(downloadUrl);
   }
 }
-}
+}  // namespace gondar

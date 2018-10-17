@@ -15,8 +15,9 @@
 
 #include "image_select_page.h"
 
+#include <QMessageBox>
+#include <QPushButton>
 #include "gondarimage.h"
-
 #include "gondarwizard.h"
 #include "log.h"
 #include "util.h"
@@ -34,15 +35,16 @@ ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
   setTitle("Which version of CloudReady do you need?");
   setSubTitle(" ");
 
-  thirtyTwo.setText("32-bit");
-  thirtyTwoDetails.setText(
-      "<a href=\"https://guide.neverware.com/supported-devices\">Only intended "
-      "for certified models marked '32-bit Only'</a>");
-  thirtyTwoDetails.setTextFormat(Qt::RichText);
-  thirtyTwoDetails.setTextInteractionFlags(Qt::TextBrowserInteraction);
-  thirtyTwoDetails.setOpenExternalLinks(true);
   // we use these buttons for beerover only now
   if (!gondar::isChromeover()) {
+    thirtyTwo.setText("32-bit");
+    thirtyTwoDetails.setText(
+        "<a href=\"https://guide.neverware.com/supported-devices\">Only "
+        "intended "
+        "for certified models marked '32-bit Only'</a>");
+    thirtyTwoDetails.setTextFormat(Qt::RichText);
+    thirtyTwoDetails.setTextInteractionFlags(Qt::TextBrowserInteraction);
+    thirtyTwoDetails.setOpenExternalLinks(true);
     sixtyFourDetails.setText("Suitable for most computers made after 2007");
     sixtyFour.setText("64-bit (recommended)");
     sixtyFour.setChecked(true);
@@ -72,6 +74,31 @@ bool ImageSelectPage::validatePage() {
   // screen
   if (hasError) {
     return true;
+  }
+  if (bitnessButtons.checkedButton() ==
+      qobject_cast<QAbstractButton*>(&thirtyTwo)) {
+    QMessageBox confirmBox;
+    confirmBox.setIcon(QMessageBox::Question);
+    confirmBox.setWindowTitle("CloudReady USB Maker");
+    confirmBox.setText(
+        "32-bit CloudReady is not supported on 64-bit machines. Use 32-bit "
+        "CloudReady only on hardware that requires it.");
+    // counter-intuitive that RejectRole maps to forward, but the roles
+    // really just determine button order and are not used for later logic
+    QPushButton* backButton =
+        confirmBox.addButton("Back", QMessageBox::ActionRole);
+    QPushButton* continueButton =
+        confirmBox.addButton("Use 32-bit", QMessageBox::RejectRole);
+    confirmBox.setEscapeButton(backButton);
+    confirmBox.setDefaultButton(continueButton);
+    confirmBox.exec();
+    if (confirmBox.clickedButton() ==
+        qobject_cast<QAbstractButton*>(continueButton)) {
+      return true;
+
+    } else {
+      return false;
+    }
   }
   // currently this is only a concern in the chromeover case, but we would
   // be equally worried were this true in either case

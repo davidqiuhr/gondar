@@ -8,7 +8,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <windowsx.h>
+#include <QLocale>
 
+#include "log.h"
 #include "shared.h"
 
 char* GetCurrentMUI(void);
@@ -19,10 +21,15 @@ static HWINEVENTHOOK fp_weh = NULL;
 static const char *fp_title_str = "Microsoft Windows",
                   *fp_button_str = "Format disk";
 
-// this func from stdfn:
+// this func from stdfn, but reimplemented using Qt
 char* GetCurrentMUI(void) {
   static char mui_str[LOCALE_NAME_MAX_LENGTH];
-  static_strcpy(mui_str, "en-US");
+  QLocale locale;
+  QByteArray localeBytes = locale.uiLanguages()[0].toUtf8();
+  const char* locale_c_str = localeBytes.data();
+  LOG_INFO << "searching for format prompts in language (utf8): "
+           << locale_c_str;
+  static_strcpy(mui_str, locale_c_str);
   return mui_str;
 }
 

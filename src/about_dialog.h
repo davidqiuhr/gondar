@@ -37,6 +37,6 @@ class AboutDialog : public QDialog {
   QTextBrowser license_text_browser_;
   QPushButton close_button_;
 };
-}
+}  // namespace gondar
 
 #endif  // SRC_ABOUT_DIALOG_H_

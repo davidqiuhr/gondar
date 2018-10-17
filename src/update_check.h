@@ -35,6 +35,6 @@ class UpdateCheck : public QObject {
   // Parent widget for the "update-now" dialog
   QWidget* parent_ = nullptr;
 };
-}
+}  // namespace gondar
 
 #endif  // SRC_UPDATE_CHECK_H_

@@ -37,6 +37,6 @@ class WizardPage : public QWizardPage {
 
   GondarWizard* wizard() const;
 };
-}
+}  // namespace gondar
 
 #endif  // SRC_WIZARD_PAGE_H_

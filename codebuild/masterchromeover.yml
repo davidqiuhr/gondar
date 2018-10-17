@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in
+      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+  build:
+    commands:
+      - echo Build started on `date`
+      - git submodule update --init
+      - make jenkins PACKAGE_FLAGS="--chromeover"
+  post_build:
+    commands:
+      - echo Build completed on `date`
+artifacts:
+  files:
+      - package/build/cloudready-usb-maker.exe
+  discard-paths: yes
