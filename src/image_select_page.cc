@@ -75,8 +75,12 @@ bool ImageSelectPage::validatePage() {
   if (hasError) {
     return true;
   }
-  if (bitnessButtons.checkedButton() ==
-      qobject_cast<QAbstractButton*>(&thirtyTwo)) {
+  if (
+      // beerover case
+      bitnessButtons.checkedButton() ==
+        qobject_cast<QAbstractButton*>(&thirtyTwo) ||
+      // chromeover case
+      (bitnessButtons.checkedButton()->text().contains("32"))) {
     QMessageBox confirmBox;
     confirmBox.setIcon(QMessageBox::Question);
     confirmBox.setWindowTitle("CloudReady USB Maker");
