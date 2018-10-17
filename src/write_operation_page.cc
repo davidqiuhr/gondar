@@ -97,20 +97,22 @@ void WriteOperationPage::showProgress() {
 }
 
 void WriteOperationPage::showWhatsNext() {
-  setTitle("CloudReady USB created!");
-  setSubTitle("You may now either exit or create another USB.");
   bolded.setObjectName("bolded");
   bolded.setText("<br>What's next?<br>");
   layout.addWidget(&bolded);
 
   whatsNext.setObjectName("whatsNext");
   if (wizard()->isFormatOnly()) {
+    setTitle("USB has been formatted!");
+    setSubTitle("You may now use this USB for file storage.");
     whatsNext.setText(
         "<p>Your USB has been formatted to remove all CloudReady installer "
         "data."
         "  You can now proceed to use it for file storage or other "
         "purposes.</p>");
   } else {
+    setTitle("CloudReady USB created!");
+    setSubTitle("You may now either exit or create another USB.");
     whatsNext.setText(
         "<p>You're ready to install CloudReady!  Head back to <a "
         "href=\"https://guide.neverware.com/install-cloudready\">the install "
