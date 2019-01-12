@@ -16,6 +16,7 @@
 #include <QApplication>
 #include <QLibraryInfo>
 #include <QtPlugin>
+#include <QtWebView/QtWebView>
 
 #if defined(Q_OS_WIN)
 #include "dismissprompt.h"
@@ -31,6 +32,7 @@ int main(int argc, char* argv[]) {
   Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
 #endif
   Q_INIT_RESOURCE(gondarwizard);
+  QtWebView::initialize();
   gondar::InitializeLogging();
   gondar::SendMetric(gondar::Metric::Use);
 #if defined(Q_OS_WIN)

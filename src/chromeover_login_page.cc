@@ -15,6 +15,8 @@
 
 #include "chromeover_login_page.h"
 
+#include <QtWebView/QtWebView>
+
 #include "gondarsite.h"
 #include "gondarwizard.h"
 #include "log.h"
@@ -50,6 +52,19 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
   finished = false;
   // don't allow another launch of server interaction while another is running
   started = false;
+  QQmlApplicationEngine engine;
+  QQmlContext *context = engine.rootContext();
+  context->setContextProperty(QStringLiteral("initialUrl"), QUrl(QstringLiteral("https://neverware.com")));
+  QRect geometry = QGuiApplication::primaryScreen()->availableGeometry();
+  // for now assume not fullscreen
+  const QSize size = geometry.size() * 4 / 5;
+  const QSize offset = (geometry.size() - size) / 2;
+  const QPoint pos = geometry.topLeft() + QPoint(offset.width(), offset.height());
+  geometry = QRect(pos, size);
+  context->setContextProperty(QStringLiteral("initialX"), geometry.x());
+  context->setContextProperty(QStringLiteral("initialY"), geometry.y());
+  context->setContextProperty(QStringLiteral("initialWidth"), geometry.width());
+  context->setContextProperty(QStringLiteral("initialHeight"), geometry.height());
 
   connect(&meepo_, &gondar::Meepo::finished, this,
           &ChromeoverLoginPage::handleMeepoFinished);

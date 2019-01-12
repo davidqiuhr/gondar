@@ -20,6 +20,7 @@ function(fix_qt_static_link target)
 
   pkg_check_modules(network_extra REQUIRED Qt5Network)
   pkg_check_modules(widgets_extra REQUIRED Qt5Widgets)
+  pkg_check_modules(widgets_extra REQUIRED Qt5WebView)
   pkg_check_modules(freetype_extra REQUIRED freetype2)
 
   target_link_libraries(${target} PUBLIC

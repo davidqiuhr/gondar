@@ -87,7 +87,7 @@ add_definitions(-D__USE_MINGW_ANSI_STDIO=1)
 add_subdirectory(minizip)
 
 # Required Qt components
-find_package(Qt5 COMPONENTS Network Test Widgets REQUIRED)
+find_package(Qt5 COMPONENTS Network Test Widgets WebView REQUIRED)
 
 # Static lib with convenience functions that make unzipping easier
 add_library(minizip_extra STATIC minizip/minishared.c minizip/miniunz.c)
