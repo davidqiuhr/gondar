@@ -32,7 +32,7 @@ RUN git clone https://github.com/mxe/mxe /opt/mxe
 WORKDIR /opt/mxe
 
 # Check out a specific MXE revision to ensure reproducible builds
-RUN git checkout 43214bf7e886bd310965f854dd3a37b64c685bfa
+RUN git checkout v2.23
 
 # Download and build each root package separately to (hopefully) limit
 # rebuild time with future modifications
