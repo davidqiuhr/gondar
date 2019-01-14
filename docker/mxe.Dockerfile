@@ -28,6 +28,10 @@ RUN dnf install -y \
 	xz-static \
 	zip
 
+run useradd -ms /bin/bash kewluser
+user kewluser
+workdir /home/kewluser
+
 RUN git clone https://github.com/mxe/mxe /opt/mxe
 WORKDIR /opt/mxe
 
