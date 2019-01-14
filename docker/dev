@@ -1,0 +1,4 @@
+#! /bin/bash
+sudo docker rm newmxebox 2&> /dev/null
+# for an interactive shell.  copy artifacts or goodies out to ~/attic to preserve
+sudo docker run -it --name newmxebox newmxe:latest /bin/bash
