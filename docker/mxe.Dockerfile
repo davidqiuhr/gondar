@@ -1,32 +1,31 @@
 FROM fedora:25
 
 RUN dnf install -y \
-	automake \
-	automake \
-	bison \
-	bzip2 \
-	cmake \
-	flex \
-	gcc \
-	gcc-c++ \
-	gdk-pixbuf2 \
-	gdk-pixbuf2-devel \
-	gettext \
-	git \
-	gperf \
-	intltool \
-	kernel-devel \
-	libtool \
-	make \
-	p7zip \
-	patch \
-	python \
-	ruby \
-	scons \
-	wget \
-	which \
-	xz-static \
-	zip
+    automake \
+    bison \
+    bzip2 \
+    cmake \
+    flex \
+    gcc \
+    gcc-c++ \
+    gdk-pixbuf2 \
+    gdk-pixbuf2-devel \
+    gettext \
+    git \
+    gperf \
+    intltool \
+    kernel-devel \
+    libtool \
+    make \
+    p7zip \
+    patch \
+    python \
+    ruby \
+    scons \
+    wget \
+    which \
+    xz-static \
+    zip
 
 RUN git clone https://github.com/mxe/mxe /opt/mxe
 WORKDIR /opt/mxe
