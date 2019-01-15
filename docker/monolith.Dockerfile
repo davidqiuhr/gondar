@@ -33,7 +33,7 @@ RUN dnf install -y \
 # this looks bad, because i intermix useradd with my file adds, but it works
 run useradd -ms /bin/bash kewluser
 ADD CMakeLists.txt Makefile /home/kewluser/gondar/
-ADD gdisk /home/kewluser/gdisk
+ADD gdisk /home/kewluser/gondar/gdisk
 ADD infra /home/kewluser/gondar/infra
 ADD minizip /home/kewluser/gondar/minizip
 ADD plog /home/kewluser/gondar/plog
@@ -43,6 +43,7 @@ ADD test /home/kewluser/gondar/test
 RUN mkdir -p /home/kewluser/gondar/build ; chown -R kewluser:kewluser /home/kewluser/gondar
 user kewluser
 workdir /home/kewluser
+
 RUN git clone https://github.com/mxe/mxe
 WORKDIR /home/kewluser/mxe
 RUN git checkout 8285eb550400c4987e8ca202b6c4a80eb8658ed9
