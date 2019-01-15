@@ -30,14 +30,23 @@ RUN dnf install -y \
 	xz-static \
 	zip
 
-#RUN mkdir -p /home/kewluser/build ; chrown -R kewluser:kewluser /home/kewluser/build
-
+# this looks bad, because i intermix useradd with my file adds, but it works
 run useradd -ms /bin/bash kewluser
+ADD CMakeLists.txt Makefile /home/kewluser/gondar/
+ADD gdisk /home/kewluser/gdisk
+ADD infra /home/kewluser/gondar/infra
+ADD minizip /home/kewluser/gondar/minizip
+ADD plog /home/kewluser/gondar/plog
+ADD resources /home/kewluser/gondar/resources
+ADD src /home/kewluser/gondar/src
+ADD test /home/kewluser/gondar/test
+RUN mkdir -p /home/kewluser/gondar/build ; chown -R kewluser:kewluser /home/kewluser/gondar
 user kewluser
 workdir /home/kewluser
-
 RUN git clone https://github.com/mxe/mxe
 WORKDIR /home/kewluser/mxe
+
+# end adding and permissioning
 
 # Check out a specific MXE revision to ensure reproducible builds
 #RUN git checkout 43214bf7e886bd310965f854dd3a37b64c685bfa
@@ -64,19 +73,11 @@ ENV CMAKE=i686-w64-mingw32.static-cmake
 ENV TREAT_WARNINGS_AS_ERRORS=true
 
 WORKDIR /home/kewluser/gondar
-ADD CMakeLists.txt Makefile /home/kewluser/gondar/
-ADD gdisk /home/kewluser/gdisk
-ADD infra /home/kewluser/gondar/infra
-ADD minizip /home/kewluser/gondar/minizip
-ADD plog /home/kewluser/gondar/plog
-ADD resources /home/kewluser/gondar/resources
-ADD src /home/kewluser/gondar/src
-ADD test /home/kewluser/gondar/test
 #RUN chown kewluser:kewluser /home/kewluser/build
 
 ARG RELEASE=false
 ARG CHROMEOVER=false
 ARG METRICS_API_KEY=""
-#RUN make -C /home/kewluser/gondar build-gondar
+RUN make -C /home/kewluser/gondar build-gondar
 
-RUN mkdir -p /home/kewluser/gondar/kewldir
+#RUN mkdir -p /home/kewluser/gondar/kewldir
