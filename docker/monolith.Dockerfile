@@ -1,34 +1,34 @@
 FROM fedora:25
 
 RUN dnf install -y \
-	automake \
-	automake \
-	bison \
-	bzip2 \
-	cmake \
-	flex \
-	gcc \
-	gcc-c++ \
-	gdk-pixbuf2 \
-	gdk-pixbuf2-devel \
-	gettext \
-	git \
-	gperf \
-	intltool \
-	kernel-devel \
-	libtool \
+    automake \
+    automake \
+    bison \
+    bzip2 \
+    cmake \
+    flex \
+    gcc \
+    gcc-c++ \
+    gdk-pixbuf2 \
+    gdk-pixbuf2-devel \
+    gettext \
+    git \
+    gperf \
+    intltool \
+    kernel-devel \
+    libtool \
     lzip \
-	make \
+    make \
     openssl-devel \
-	p7zip \
-	patch \
-	python \
-	ruby \
-	scons \
-	wget \
-	which \
-	xz-static \
-	zip
+    p7zip \
+    patch \
+    python \
+    ruby \
+    scons \
+    wget \
+    which \
+    xz-static \
+    zip
 
 # this looks bad, because i intermix useradd with my file adds, but it works
 run useradd -ms /bin/bash kewluser
