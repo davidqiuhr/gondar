@@ -1,34 +1,32 @@
 FROM fedora:25
 
 RUN dnf install -y \
-	automake \
-	automake \
-	bison \
-	bzip2 \
-	cmake \
-	flex \
-	gcc \
-	gcc-c++ \
-	gdk-pixbuf2 \
-	gdk-pixbuf2-devel \
-	gettext \
-	git \
-	gperf \
-	intltool \
-	kernel-devel \
-	libtool \
+    automake \
+    bison \
+    bzip2 \
+    cmake \
+    flex \
+    gcc \
+    gcc-c++ \
+    gdk-pixbuf2 \
+    gdk-pixbuf2-devel \
+    gettext \
+    git \
+    gperf \
+    intltool \
+    kernel-devel \
+    libtool \
     lzip \
-	make \
-    openssl-devel \
-	p7zip \
-	patch \
-	python \
-	ruby \
-	scons \
-	wget \
-	which \
-	xz-static \
-	zip
+    make \
+    p7zip \
+    patch \
+    python \
+    ruby \
+    scons \
+    wget \
+    which \
+    xz-static \
+    zip
 
 run useradd -ms /bin/bash kewluser
 user kewluser
