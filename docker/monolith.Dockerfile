@@ -45,6 +45,7 @@ user kewluser
 workdir /home/kewluser
 RUN git clone https://github.com/mxe/mxe
 WORKDIR /home/kewluser/mxe
+RUN git checkout 8285eb550400c4987e8ca202b6c4a80eb8658ed9
 
 # end adding and permissioning
 
