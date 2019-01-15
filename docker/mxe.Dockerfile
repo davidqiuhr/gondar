@@ -16,7 +16,9 @@ RUN dnf install -y \
     intltool \
     kernel-devel \
     libtool \
+    lzip \
     make \
+    openssl-devel \
     p7zip \
     patch \
     python \
@@ -31,7 +33,7 @@ RUN git clone https://github.com/mxe/mxe /opt/mxe
 WORKDIR /opt/mxe
 
 # Check out a specific MXE revision to ensure reproducible builds
-RUN git checkout 43214bf7e886bd310965f854dd3a37b64c685bfa
+RUN git checkout 8285eb550400c4987e8ca202b6c4a80eb8658ed9
 
 # Download and build each root package separately to (hopefully) limit
 # rebuild time with future modifications
