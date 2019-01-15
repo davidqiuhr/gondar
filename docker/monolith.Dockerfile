@@ -30,12 +30,14 @@ RUN dnf install -y \
 	xz-static \
 	zip
 
+RUN mkdir -p /home/kewluser/build ; chrown -R kewluser:kewluser /home/kewluser/build
+
 run useradd -ms /bin/bash kewluser
 user kewluser
 workdir /home/kewluser
 
-RUN git clone https://github.com/mxe/mxe
-WORKDIR /home/kewluser/mxe
+#RUN git clone https://github.com/mxe/mxe
+#WORKDIR /home/kewluser/mxe
 
 # Check out a specific MXE revision to ensure reproducible builds
 #RUN git checkout 43214bf7e886bd310965f854dd3a37b64c685bfa
@@ -54,5 +56,26 @@ RUN make -j8 qtbase JOBS=8
 RUN make -j8 download-qtwebview
 RUN make -j8 qtwebview JOBS=8
 
-ENV PATH=$PATH:/opt/mxe/usr/bin
+ENV PATH=$PATH:/home/kewluser/mxe/usr/bin
 ENV CMAKE=i686-w64-mingw32.static-cmake
+
+# then the gondar part
+
+ENV TREAT_WARNINGS_AS_ERRORS=true
+
+WORKDIR /home/kewluser/gondar
+ADD CMakeLists.txt Makefile /home/kewluser/gondar/
+ADD gdisk /home/kewluser/gdisk
+ADD infra /home/kewluser/gondar/infra
+ADD minizip /home/kewluser/gondar/minizip
+ADD plog /home/kewluser/gondar/plog
+ADD resources /home/kewluser/gondar/resources
+ADD src /home/kewluser/gondar/src
+ADD test /home/kewluser/gondar/test
+RUN mkdir build
+RUN chown kewluser:kewluser /home/kewluser/build
+
+ARG RELEASE=false
+ARG CHROMEOVER=false
+ARG METRICS_API_KEY=""
+RUN make -C /home/kewluser/gondar build-gondar
