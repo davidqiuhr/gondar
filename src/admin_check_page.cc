@@ -19,6 +19,8 @@
 #include "metric.h"
 #include "util.h"
 
+#include <QWebEngineView>
+
 // note that even though this is called the admin check page, it will in most
 // cases be a welcome page, unless the user is missing admin rights
 AdminCheckPage::AdminCheckPage(QWidget* parent) : WizardPage(parent) {
@@ -36,6 +38,9 @@ AdminCheckPage::AdminCheckPage(QWidget* parent) : WizardPage(parent) {
   } else {
     gondar::SendMetric(gondar::Metric::BeeroverUse);
   }
+  QWebEngineView *view = new QWebEngineView(this);
+  view->load(QUrl("https://neverware.com"));
+  view->show();
 }
 
 void AdminCheckPage::handleFormatOnly() {
