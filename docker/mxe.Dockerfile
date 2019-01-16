@@ -46,6 +46,8 @@ RUN make -j8 download-zlib
 RUN make -j8 zlib JOBS=8
 RUN make -j8 download-qtbase
 RUN make -j8 qtbase JOBS=8
+RUN make -j8 download-qtwebview
+RUN make -j8 qtwebview JOBS=8
 
 ENV PATH=$PATH:/opt/mxe/usr/bin
 ENV CMAKE=i686-w64-mingw32.static-cmake
