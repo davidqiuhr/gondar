@@ -1,4 +1,4 @@
-FROM neverware/gondar-build-mxe:v3
+FROM neverware/gondar-build-mxe:webview
 
 ENV TREAT_WARNINGS_AS_ERRORS=true
 
