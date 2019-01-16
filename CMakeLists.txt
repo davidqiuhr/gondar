@@ -87,7 +87,7 @@ add_definitions(-D__USE_MINGW_ANSI_STDIO=1)
 add_subdirectory(minizip)
 
 # Required Qt components
-find_package(Qt5 COMPONENTS Network Test Widgets REQUIRED)
+find_package(Qt5 COMPONENTS Network Test Widgets WebView REQUIRED)
 
 # Static lib with convenience functions that make unzipping easier
 add_library(minizip_extra STATIC minizip/minishared.c minizip/miniunz.c)
@@ -133,7 +133,7 @@ target_compile_options(app PRIVATE ${EXTRA_WARNINGS})
 target_include_directories(app SYSTEM PUBLIC minizip plog/include)
 target_include_directories(app PRIVATE ${CMAKE_BINARY_DIR}/src)
 target_link_libraries(app PUBLIC
-  Qt5::Network Qt5::Widgets minizip minizip_extra)
+  Qt5::Network Qt5::Widgets Qt5::WebView minizip minizip_extra)
 
 # Gondar application
 add_executable(cloudready-usb-maker src/main.cc)
