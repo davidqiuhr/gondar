@@ -21,8 +21,12 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QLineEdit>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QString>
 
 #include "meepo.h"
+#include "oauth_server.h"
 #include "wizard_page.h"
 
 class ChromeoverLoginPage : public gondar::WizardPage {
@@ -47,8 +51,21 @@ class ChromeoverLoginPage : public gondar::WizardPage {
   QLabel passwordLineEditLabel;
   QLabel meanWordsLabel;
   QLabel forgotLabel;
+  QLabel googleLabel;
   bool finished;
   bool started;
+  OauthServer localServer;
+  QNetworkAccessManager manager;
+  QString client_id;
+  QString state;
+  QString client_secret;
+  QString redirect_uri;
+  QString code_verifier;
+ private slots:
+  void handleGoogleSigninError(QString error);
+  void handleGoogleSigninPart1();
+  void handleGoogleSigninPart2(QString state_in, QString code);
+  void handleGoogleSigninPart3(QNetworkReply* reply);
 };
 
 #endif  // SRC_CHROMEOVER_LOGIN_PAGE_H_

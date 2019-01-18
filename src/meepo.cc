@@ -19,6 +19,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QNetworkRequest>
+#include <QString>
 #include <QUrl>
 #include <QUrlQuery>
 
@@ -30,6 +31,7 @@
 namespace {
 
 const char path_auth[] = "/auth";
+const char path_google_auth[] = "/google-auth";
 const char path_sites[] = "/sites";
 const char path_downloads[] = "/downloads";
 
@@ -68,6 +70,13 @@ int siteIdFromUrl(const QUrl& url) {
 
 QNetworkRequest createAuthRequest() {
   auto url = createUrl(path_auth);
+  QNetworkRequest request(url);
+  request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+  return request;
+}
+
+QNetworkRequest createGoogleAuthRequest() {
+  auto url = createUrl(path_google_auth);
   QNetworkRequest request(url);
   request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
   return request;
@@ -117,15 +126,23 @@ Meepo::Meepo() {
           &Meepo::dispatchReply);
 }
 
-void Meepo::start(const QAuthenticator& auth) {
-  LOG_INFO << "starting meepo flow";
-
+void Meepo::clear() {
   api_token_.clear();
   sites_.clear();
   error_.clear();
   sites_remaining_ = 0;
+}
 
+void Meepo::start(const QAuthenticator& auth) {
+  LOG_INFO << "starting meepo flow";
+  clear();
   requestAuth(auth);
+}
+
+void Meepo::startGoogle(QString id_token) {
+  LOG_INFO << "starting meepo flow with google";
+  clear();
+  requestGoogleAuth(id_token);
 }
 
 QString Meepo::error() const {
@@ -142,6 +159,16 @@ void Meepo::requestAuth(const QAuthenticator& auth) {
   json["password"] = auth.password();
   QJsonDocument doc(json);
   auto request = createAuthRequest();
+  LOG_INFO << "POST " << request.url().toString();
+  network_manager_.post(request, doc.toJson(QJsonDocument::Compact));
+}
+
+void Meepo::requestGoogleAuth(QString id_token) {
+  QJsonObject json;
+  json["id_token"] = id_token;
+  LOG_WARNING << "id_token =" << id_token;
+  QJsonDocument doc(json);
+  auto request = createGoogleAuthRequest();
   LOG_INFO << "POST " << request.url().toString();
   network_manager_.post(request, doc.toJson(QJsonDocument::Compact));
 }
@@ -235,7 +262,10 @@ void Meepo::dispatchReply(QNetworkReply* reply) {
     // TODO(nicholasbishop): move the error handling into each of the
     // three handlers below so that errors can be more specific
     fail("network error");
+    // FIXME: use the constants at top of file instead
   } else if (url.path().endsWith("/auth")) {
+    handleAuthReply(reply);
+  } else if (url.path().endsWith("/google-auth")) {
     handleAuthReply(reply);
   } else if (url.path().endsWith("/sites")) {
     handleSitesReply(reply);

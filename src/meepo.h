@@ -19,6 +19,7 @@
 #include <QAuthenticator>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QString>
 
 #include "gondarsite.h"
 
@@ -37,6 +38,7 @@ class Meepo : public QObject {
   // sites. Call this method to initiate that flow, and await the
   // finished() signal to get the results (including errors).
   void start(const QAuthenticator& auth);
+  void startGoogle(QString id_token);
 
   QString error() const;
   Sites sites() const;
@@ -47,6 +49,7 @@ class Meepo : public QObject {
 
  private:
   void requestAuth(const QAuthenticator& auth);
+  void requestGoogleAuth(QString);
   void handleAuthReply(QNetworkReply* reply);
 
   void requestSites();
@@ -57,6 +60,9 @@ class Meepo : public QObject {
 
   void dispatchReply(QNetworkReply* reply);
   void fail(const QString& error);
+
+  // used by requestAuth() and requestGoogleAuth()
+  void clear();
 
   GondarSite* siteFromSiteId(const int site_id);
 

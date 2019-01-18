@@ -24,6 +24,49 @@
 
 namespace gondar {
 
+// get the google sign in client id
+// see https://console.developers.google.com
+QByteArray getGoogleSignInId() {
+#ifdef GOOGLE_SIGN_IN_CLIENT
+  return QByteArray(GOOGLE_SIGN_IN_CLIENT);
+#else
+  return QByteArray();
+#endif
+}
+
+// get the google sign in client secret
+QByteArray getGoogleSignInSecret() {
+#ifdef GOOGLE_SIGN_IN_SECRET
+  return QByteArray(GOOGLE_SIGN_IN_SECRET);
+#else
+  return QByteArray();
+#endif
+}
+
+// FIXME: currently using running system time as seed for random generator
+// seed our random number generator if it has not yet been seeded
+void maybeInitRand() {
+  static bool run = false;
+  if (!run) {
+    std::srand(std::time(nullptr));
+    run = true;
+  }
+}
+
+// get the port the local google sign in server will run on
+int getPort() {
+  static int port = 0;
+  if (port == 0) {
+    // generate a new port
+    maybeInitRand();
+    int MAX_PORT = 5000;
+    int MIN_PORT = 4000;
+    port = MIN_PORT + std::rand() % (MAX_PORT - MIN_PORT);
+    LOG_INFO << "server running on port " << port;
+  }
+  return port;
+}
+
 QString readUtf8File(const QString& filepath) {
   LOG_INFO << "opening " << filepath << " for reading";
   QFile file(filepath);
