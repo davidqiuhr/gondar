@@ -28,7 +28,6 @@ UsbInsertPage::UsbInsertPage(QWidget* parent) : WizardPage(parent) {
 
   label.setText(
       "Sandisk devices are not recommended.  "
-      "USB drives with more than 16Gb of space are not recommended.  "
       "The next screen will become available once a valid "
       "USB drive is inserted.");
   label.setWordWrap(true);
