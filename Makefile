@@ -87,6 +87,10 @@ jenkins-win32:
 	python package.py ${PACKAGE_FLAGS}
 
 
+lint:
+	CPPLINT=${CPPLINT} infra/lint.py
+
+
 print-config:
 	@echo "Build config {"
 	@echo "  BUILD_DIR: ${BUILD_DIR}"
