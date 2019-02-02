@@ -27,8 +27,9 @@ def main():
     """Run clang-format to do in-place cleanups on source files."""
     bin_path = shared.get_exe(['cpplint.py', 'cpplint'], 'CPPLINT')
     sources = shared.get_source_paths()
+    options = ['--filter=-build/include,-whitespace/indent']
     if bin_path is not None:
-        cmd = [bin_path] + sources
+        cmd = [bin_path] + options + sources
         print(' '.join(cmd))
         try:
             subprocess.check_call(cmd)
