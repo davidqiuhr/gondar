@@ -33,6 +33,8 @@ def main():
         try:
             subprocess.check_call(cmd)
         except subprocess.CalledProcessError:
+            # TODO: eventually raise this once it is integrated into PR builder
+            # For now there are quite a few errors
             print('Errors found')
 
 
