@@ -24,7 +24,7 @@
 
 class DownloadButton : public QRadioButton {
  public:
-  DownloadButton(QUrl& url_in) : url(url_in) {}
+  explicit DownloadButton(QUrl& url_in) : url(url_in) {}
   QUrl getUrl() const { return url; }
 
  private:
@@ -164,7 +164,7 @@ QUrl ImageSelectPage::getUrl() {
     } else if (selected == &sixtyFour) {
       return newestImageUrl.get64Url();
     } else {
-      // TODO: decide what this behavior should be
+      // TODO(kendall): decide what this behavior should be
       return newestImageUrl.get64Url();
     }
   }

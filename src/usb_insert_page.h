@@ -26,7 +26,7 @@ class UsbInsertPage : public gondar::WizardPage {
   Q_OBJECT
 
  public:
-  UsbInsertPage(QWidget* parent = 0);
+  explicit UsbInsertPage(QWidget* parent = 0);
 
   const DeviceGuyList& devices() const;
 

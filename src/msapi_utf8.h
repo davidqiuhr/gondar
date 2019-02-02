@@ -35,16 +35,18 @@ extern "C" {
 #define utf8_to_wchar_no_alloc(src, wdest, wdest_size) \
   MultiByteToWideChar(CP_UTF8, 0, src, -1, wdest, wdest_size)
 
-#define sfree(p)        \
-  do {                  \
-    if (p != NULL) {    \
-      free((void*)(p)); \
-      p = NULL;         \
-    }                   \
+#define sfree(p)                        \
+  do {                                  \
+    if (p != NULL) {                    \
+      free(reinterpret_cast<void*>(p)); \
+      p = NULL;                         \
+    }                                   \
   } while (0)
 #define wconvert(p) wchar_t* w##p = utf8_to_wchar(p)
-#define walloc(p, size) \
-  wchar_t* w##p = (p == NULL) ? NULL : (wchar_t*)calloc(size, sizeof(wchar_t))
+#define walloc(p, size)                                    \
+  wchar_t* w##p = (p == NULL) ? NULL                       \
+                              : reinterpret_cast<wchar_t*> \
+                                    calloc(size, sizeof(wchar_t))
 #define wfree(p) sfree(w##p)
 
 /*
@@ -60,7 +62,7 @@ static __inline char* wchar_to_utf8(const wchar_t* wstr) {
   if (size <= 1)  // An empty string would be size 1
     return NULL;
 
-  if ((str = (char*)calloc(size, 1)) == NULL)
+  if ((str = reinterpret_cast<char*> calloc(size, 1)) == NULL)
     return NULL;
 
   if (wchar_to_utf8_no_alloc(wstr, str, size) != size) {
@@ -87,7 +89,7 @@ static __inline wchar_t* utf8_to_wchar(const char* str) {
   if (size <= 1)  // An empty string would be size 1
     return NULL;
 
-  if ((wstr = (wchar_t*)calloc(size, sizeof(wchar_t))) == NULL)
+  if ((wstr = reinterpret_cast<wchar_t*> calloc(size, sizeof(wchar_t))) == NULL)
     return NULL;
 
   if (utf8_to_wchar_no_alloc(str, wstr, size) != size) {
@@ -183,7 +185,9 @@ static __inline bool SetupDiGetDeviceRegistryPropertyU(
       (PBYTE)wPropertyBuffer, PropertyBufferSize, RequiredSize);
   err = GetLastError();
   if ((ret != 0) &&
-      (wchar_to_utf8_no_alloc(wPropertyBuffer, (char*)(uintptr_t)PropertyBuffer,
+      (wchar_to_utf8_no_alloc(wPropertyBuffer,
+                              // TODO(kendall): is this getting double-casted?
+                              reinterpret_cast<char*>(uintptr_t) PropertyBuffer,
                               PropertyBufferSize) == 0)) {
     err = GetLastError();
     ret = false;
@@ -235,4 +239,4 @@ static __inline bool GetVolumeInformationU(LPCSTR lpRootPathName,
 }
 #endif
 
-#endif /* SRC_MSAPI_UTF8_H_ */
+#endif  // SRC_MSAPI_UTF8_H_

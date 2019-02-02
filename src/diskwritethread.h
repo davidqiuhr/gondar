@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef DISKWRITE_THREAD_H
-#define DISKWRITE_THREAD_H
+#ifndef SRC_DISKWRITETHREAD_H_
+#define SRC_DISKWRITETHREAD_H_
 
 #include <QMutex>
 #include <QString>
@@ -24,9 +24,10 @@
 
 class DiskWriteThread : public QThread {
   Q_OBJECT
+
  public:
   // a constructor used to reformat the disk.  it requires no image path string
-  DiskWriteThread(DeviceGuy* drive_in, QObject* parent = 0);
+  explicit DiskWriteThread(DeviceGuy* drive_in, QObject* parent = 0);
   // a constructor used to write the specified image to disk
   DiskWriteThread(DeviceGuy* drive_in,
                   const QString& image_path_in,
@@ -57,4 +58,4 @@ class DiskWriteThread : public QThread {
   QString image_path;
 };
 
-#endif /* DISKWRITE_THREAD_H */
+#endif  // SRC_DISKWRITETHREAD_H_

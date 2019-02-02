@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef GONDARSITE_H
-#define GONDARSITE_H
+#ifndef SRC_GONDARSITE_H_
+#define SRC_GONDARSITE_H_
 
 #include <QString>
 #include <QUrl>
@@ -37,4 +37,4 @@ class GondarSite {
   QUrl url64;
 };
 
-#endif /* GONDARSITE_H */
+#endif  // SRC_GONDARSITE_H_

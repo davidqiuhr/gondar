@@ -23,7 +23,7 @@
 
 class SiteButton : public QRadioButton {
  public:
-  SiteButton(const GondarSite& site) : site_(site) {
+  explicit SiteButton(const GondarSite& site) : site_(site) {
     setText(site.getSiteName());
   }
 

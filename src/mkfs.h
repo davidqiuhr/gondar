@@ -13,10 +13,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef MKFS_H
-#define MKFS_H
+#ifndef SRC_MKFS_H_
+#define SRC_MKFS_H_
 
 void makeFilesystem(char* logical_path);
 void deleteLibrary();
 
-#endif
+#endif  // SRC_MKFS_H_

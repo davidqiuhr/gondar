@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef GONDAR_METRIC_H
-#define GONDAR_METRIC_H
+#ifndef SRC_METRIC_H_
+#define SRC_METRIC_H_
 
 #include <string>
 
@@ -41,4 +41,4 @@ void SendMetric(Metric metric, const std::string& value = "");
 
 }  // namespace gondar
 
-#endif /* GONDAR_METRIC_H */
+#endif  // SRC_METRIC_H_

@@ -26,7 +26,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#pragma once
+#ifndef SRC_HDD_VS_UFD_H_
+#define SRC_HDD_VS_UFD_H_
 
 #include <stdint.h>
 
@@ -286,3 +287,5 @@ static vidpid_score_t vidpid_score[] = {
     // More Innostor
     {0x1f75, 0x0917, -10},  // Intenso Speed Line USB Device
 };
+
+#endif  // SRC_HDD_VS_UFD_H_

@@ -25,8 +25,8 @@ gondar.h
 However, I've included it in anticipation of utility function shared between
 files
 */
-#ifndef SHARED_H
-#define SHARED_H
+#ifndef SRC_SHARED_H_
+#define SRC_SHARED_H_
 
 #include <algorithm>
 #include <cstdint>
@@ -37,7 +37,8 @@ files
     (dst)[(count)-1] = 0;               \
   } while (0)
 #define static_sprintf(dst, ...) safe_sprintf(dst, sizeof(dst), __VA_ARGS__)
-#define safe_strlen(str) ((((char*)str) == NULL) ? 0 : strlen(str))
+#define safe_strlen(str) \
+  (((reinterpret_cast<char*> str) == NULL) ? 0 : strlen(str))
 #define safe_strcmp(str1, str2) \
   strcmp(((str1 == NULL) ? "<NULL>" : str1), ((str2 == NULL) ? "<NULL>" : str2))
 #define safe_stricmp(str1, str2)               \
@@ -45,10 +46,10 @@ files
            ((str2 == NULL) ? "<NULL>" : str2))
 #define safe_strcpy(dst, dst_max, src) \
   safe_strcp(dst, dst_max, src, safe_strlen(src) + 1)
-#define safe_strcp(dst, dst_max, src, count)        \
-  do {                                              \
-    memcpy(dst, src, safe_min(count, dst_max));     \
-    ((char*)dst)[safe_min(count, dst_max) - 1] = 0; \
+#define safe_strcp(dst, dst_max, src, count)                         \
+  do {                                                               \
+    memcpy(dst, src, safe_min(count, dst_max));                      \
+    (reinterpret_cast<char*> dst)[safe_min(count, dst_max) - 1] = 0; \
   } while (0)
 #define safe_strstr(str1, str2) \
   strstr(((str1 == NULL) ? "<NULL>" : str1), ((str2 == NULL) ? "<NULL>" : str2))
@@ -64,4 +65,4 @@ files
 #define static_strcpy(dst, src) safe_strcpy(dst, sizeof(dst), src)
 #define static_sprintf(dst, ...) safe_sprintf(dst, sizeof(dst), __VA_ARGS__)
 
-#endif /* SHARED_H */
+#endif  // SRC_SHARED_H_

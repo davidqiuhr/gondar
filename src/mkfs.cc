@@ -126,8 +126,8 @@ void makeFilesystem(char* logical_path) {
   std::wstring fat32str = L"FAT32";
   std::wstring emptystr = L"";
   // note this is casting from const wchar* to wchar*
-  wchar_t* fat32 = (wchar_t*)fat32str.c_str();
-  wchar_t* empty = (wchar_t*)emptystr.c_str();
+  wchar_t* fat32 = reinterpret_cast<wchar_t*> fat32str.c_str();
+  wchar_t* empty = reinterpret_cast<wchar_t*> emptystr.c_str();
   // use 4096 as cluster size as it is generally considered a sane default
   // see:
   // https://superuser.com/questions/1286135/what-allocation-unit-size-to-use-when-formatting-a-usb-flash-drive-in-fat32/1287233
@@ -142,7 +142,7 @@ void makeFilesystem(char* logical_path) {
   LOG_INFO << "sent request to make filesystem...";
 }
 
-// TODO: also clean up the lib opened by gondar.cc
+// TODO(kendall): also clean up the lib opened by gondar.cc
 void deleteLibrary() {
   if (mkfsLibHandle) {
     FreeLibrary(mkfsLibHandle);

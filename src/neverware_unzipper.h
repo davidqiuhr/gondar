@@ -13,11 +13,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef NEVERWARE_UNZIPPER_H
-#define NEVERWARE_UNZIPPER_H
+#ifndef SRC_NEVERWARE_UNZIPPER_H_
+#define SRC_NEVERWARE_UNZIPPER_H_
 
 #include <QFileInfo>
 
 QFileInfo neverware_unzip(const QFileInfo& input_file);
 
-#endif /* NEVERWARE_UNZIPPER_H */
+#endif  // SRC_NEVERWARE_UNZIPPER_H_

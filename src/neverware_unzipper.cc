@@ -61,7 +61,7 @@ class ScopedWorkingDirectory {
 
 class ZipError : std::runtime_error {
  public:
-  ZipError(const std::string& what) : std::runtime_error(what) {}
+  explicit ZipError(const std::string& what) : std::runtime_error(what) {}
 };
 
 class ZipFile {

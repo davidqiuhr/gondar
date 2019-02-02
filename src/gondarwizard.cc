@@ -29,7 +29,7 @@
 
 class GondarWizard::Private {
  public:
-  Private(std::unique_ptr<gondar::DevicePicker>&& picker)
+  explicit Private(std::unique_ptr<gondar::DevicePicker>&& picker)
       : deviceSelectPage(std::move(picker)) {}
 
   gondar::UpdateCheck updateCheck;
@@ -151,7 +151,7 @@ void GondarWizard::postError(const QString& error) {
 void GondarWizard::catchError(const QString& error) {
   LOG_ERROR << "displaying error: " << error;
   p_->errorPage.setErrorString(error);
-  // TODO: sanitize error string?
+  // TODO(kendall): sanitize error string?
   gondar::SendMetric(gondar::Metric::Error, error.toStdString());
   next();
 }

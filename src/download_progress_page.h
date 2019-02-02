@@ -27,7 +27,7 @@ class DownloadProgressPage : public gondar::WizardPage {
   Q_OBJECT
 
  public:
-  DownloadProgressPage(QWidget* parent = 0);
+  explicit DownloadProgressPage(QWidget* parent = 0);
   bool isComplete() const override;
   const QString& getImageFileName();
 
