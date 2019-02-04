@@ -73,7 +73,7 @@ char* GetCurrentMUI(void) {
  */
 static BOOL CALLBACK FormatPromptCallback(HWND hWnd, LPARAM lParam) {
   char str[128];
-  BOOL* found = reinterpret_cast<BOOL*> lParam;
+  BOOL* found = (BOOL*)lParam;
 
   if (GetWindowTextU(hWnd, str, sizeof(str)) == 0)
     return TRUE;

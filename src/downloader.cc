@@ -31,7 +31,7 @@ DownloadManager::DownloadManager(QObject* parent)
     : QObject(parent), error(false), downloadedCount(0), totalCount(0) {}
 
 void DownloadManager::append(const QStringList& urlList) {
-  foreach(QString url, urlList)
+  foreach (QString url, urlList)
     append(QUrl::fromEncoded(url.toLocal8Bit()));
 
   if (downloadQueue.isEmpty())
