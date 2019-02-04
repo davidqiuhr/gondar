@@ -28,8 +28,7 @@ def main():
     bin_path = shared.get_exe(['cpplint.py', 'cpplint'], 'CPPLINT')
     sources = shared.get_source_paths()
     options = [
-        '--filter=-build/include,-whitespace/indent,' \
-        '-readability/casting,-whitespace/parens'
+        '--filter=-build/include,-whitespace/indent,-readability/casting'
     ]
     if bin_path is not None:
         cmd = [bin_path] + options + sources
