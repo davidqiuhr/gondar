@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef LOG_H
-#define LOG_H
+#ifndef SRC_LOG_H_
+#define SRC_LOG_H_
 
 // Qt headers first to ensure that the plog internal ifdefs enable Qt
 // support
@@ -36,4 +36,4 @@ void InitializeLogging();
 
 }  // namespace gondar
 
-#endif
+#endif  // SRC_LOG_H_

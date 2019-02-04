@@ -16,8 +16,8 @@
 /*
 A linkedlist of device info passed between the C and C++ layer
 */
-#ifndef DEVICE_H
-#define DEVICE_H
+#ifndef SRC_DEVICE_H_
+#define SRC_DEVICE_H_
 
 #include <cstdint>
 #include <string>
@@ -39,4 +39,4 @@ class DeviceGuy {
 
 typedef std::vector<DeviceGuy> DeviceGuyList;
 
-#endif /* DEVICE_H */
+#endif  // SRC_DEVICE_H_

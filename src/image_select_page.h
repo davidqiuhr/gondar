@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef IMAGE_SELECT_PAGE_H
-#define IMAGE_SELECT_PAGE_H
+#ifndef SRC_IMAGE_SELECT_PAGE_H_
+#define SRC_IMAGE_SELECT_PAGE_H_
 
 #include <QButtonGroup>
 #include <QLabel>
@@ -32,7 +32,7 @@ class ImageSelectPage : public gondar::WizardPage {
   Q_OBJECT
 
  public:
-  ImageSelectPage(QWidget* parent = 0);
+  explicit ImageSelectPage(QWidget* parent = 0);
   QUrl getUrl() const;
   int nextId() const override;
   void addImage(GondarImage image);
@@ -55,4 +55,4 @@ class ImageSelectPage : public gondar::WizardPage {
   bool hasError;
 };
 
-#endif
+#endif  // SRC_IMAGE_SELECT_PAGE_H_

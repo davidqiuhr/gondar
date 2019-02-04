@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef NEWEST_IMAGE_URL_H
-#define NEWEST_IMAGE_URL_H
+#ifndef SRC_NEWEST_IMAGE_URL_H_
+#define SRC_NEWEST_IMAGE_URL_H_
 
 #include <QNetworkReply>
 #include <QUrl>
@@ -41,4 +41,4 @@ class NewestImageUrl : public QObject {
   QUrl sixtyFourUrl;
 };
 
-#endif
+#endif  // SRC_NEWEST_IMAGE_URL_H_

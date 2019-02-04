@@ -49,8 +49,8 @@
 **
 ****************************************************************************/
 
-#ifndef DOWNLOADER_H
-#define DOWNLOADER_H
+#ifndef SRC_DOWNLOADER_H_
+#define SRC_DOWNLOADER_H_
 
 #include <QFile>
 #include <QFileInfo>
@@ -62,8 +62,9 @@
 
 class DownloadManager : public QObject {
   Q_OBJECT
+
  public:
-  DownloadManager(QObject* parent = 0);
+  explicit DownloadManager(QObject* parent = 0);
 
   void append(const QUrl& url);
   void append(const QStringList& urlList);
@@ -79,7 +80,6 @@ class DownloadManager : public QObject {
 
  private slots:
   void startNextDownload();
-  // void downloadProgress(qint64 bytesReceived, qint64 bytesTotal);
   void downloadFinished();
   void downloadReadyRead();
 
@@ -89,11 +89,10 @@ class DownloadManager : public QObject {
   QNetworkReply* currentDownload;
   QFile output;
   QTime downloadTime;
-  // TextProgressBar progressBar;
 
   bool error;
   int downloadedCount;
   int totalCount;
 };
 
-#endif /* DOWNLOADER_H */
+#endif  // SRC_DOWNLOADER_H_

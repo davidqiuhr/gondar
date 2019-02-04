@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TEST_TEST_H_
-#define TEST_TEST_H_
+#ifndef TEST_SLOW_TEST_H_
+#define TEST_SLOW_TEST_H_
 
 #include <QObject>
 
@@ -30,4 +30,4 @@ class Test : public QObject {
 };
 }  // namespace gondar
 
-#endif  // TEST_TEST_H_
+#endif  // TEST_SLOW_TEST_H_

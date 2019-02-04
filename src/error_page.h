@@ -25,7 +25,7 @@ class ErrorPage : public gondar::WizardPage {
   Q_OBJECT
 
  public:
-  ErrorPage(QWidget* parent = 0);
+  explicit ErrorPage(QWidget* parent = 0);
   void setErrorString(const QString& errorString);
   bool errorEmpty() const;
 

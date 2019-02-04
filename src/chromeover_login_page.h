@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef CHROMEOVER_LOGIN_PAGE_H
-#define CHROMEOVER_LOGIN_PAGE_H
+#ifndef SRC_CHROMEOVER_LOGIN_PAGE_H_
+#define SRC_CHROMEOVER_LOGIN_PAGE_H_
 
 #include <vector>
 
@@ -29,7 +29,7 @@ class ChromeoverLoginPage : public gondar::WizardPage {
   Q_OBJECT
 
  public:
-  ChromeoverLoginPage(QWidget* parent = 0);
+  explicit ChromeoverLoginPage(QWidget* parent = 0);
   int nextId() const override;
 
  protected:
@@ -51,4 +51,4 @@ class ChromeoverLoginPage : public gondar::WizardPage {
   bool started;
 };
 
-#endif
+#endif  // SRC_CHROMEOVER_LOGIN_PAGE_H_

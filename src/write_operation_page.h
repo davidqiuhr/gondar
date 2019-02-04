@@ -29,7 +29,7 @@ class WriteOperationPage : public gondar::WizardPage {
   Q_OBJECT
 
  public:
-  WriteOperationPage(QWidget* parent = 0);
+  explicit WriteOperationPage(QWidget* parent = 0);
 
   void setDevice(const DeviceGuy& device);
 

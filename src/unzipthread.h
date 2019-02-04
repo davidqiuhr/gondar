@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef UNZIP_THREAD_H
-#define UNZIP_THREAD_H
+#ifndef SRC_UNZIPTHREAD_H_
+#define SRC_UNZIPTHREAD_H_
 
 #include <QFileInfo>
 #include <QThread>
@@ -22,7 +22,7 @@
 class UnzipThread : public QThread {
   Q_OBJECT
  public:
-  UnzipThread(const QFileInfo& inputFile, QObject* parent = 0);
+  explicit UnzipThread(const QFileInfo& inputFile, QObject* parent = 0);
   ~UnzipThread();
   const QString& getFileName() const;
 
@@ -34,4 +34,4 @@ class UnzipThread : public QThread {
   QString filename;
 };
 
-#endif /* UNZIP_THREAD_H */
+#endif  // SRC_UNZIPTHREAD_H_

@@ -235,4 +235,4 @@ static __inline bool GetVolumeInformationU(LPCSTR lpRootPathName,
 }
 #endif
 
-#endif /* SRC_MSAPI_UTF8_H_ */
+#endif  // SRC_MSAPI_UTF8_H_

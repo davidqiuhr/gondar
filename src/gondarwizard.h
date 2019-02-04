@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef GONDARWIZARD_H
-#define GONDARWIZARD_H
+#ifndef SRC_GONDARWIZARD_H_
+#define SRC_GONDARWIZARD_H_
 
 #include <memory>
 #include <vector>
@@ -95,4 +95,4 @@ class GondarWizard : public QWizard {
   bool formatOnly;
 };
 
-#endif /* GONDARWIZARD */
+#endif  // SRC_GONDARWIZARD_H_

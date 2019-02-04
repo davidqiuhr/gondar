@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SITE_SELECT_PAGE_H
-#define SITE_SELECT_PAGE_H
+#ifndef SRC_SITE_SELECT_PAGE_H_
+#define SRC_SITE_SELECT_PAGE_H_
 
 #include <QButtonGroup>
 #include <QLabel>
@@ -27,7 +27,7 @@ class SiteSelectPage : public gondar::WizardPage {
   Q_OBJECT
 
  public:
-  SiteSelectPage(QWidget* parent = 0);
+  explicit SiteSelectPage(QWidget* parent = 0);
 
  protected:
   void initializePage() override;
@@ -38,4 +38,4 @@ class SiteSelectPage : public gondar::WizardPage {
   QVBoxLayout layout;
 };
 
-#endif
+#endif  // SRC_SITE_SELECT_PAGE_H_

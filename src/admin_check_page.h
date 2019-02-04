@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef ADMIN_CHECK_PAGE_H
-#define ADMIN_CHECK_PAGE_H
+#ifndef SRC_ADMIN_CHECK_PAGE_H_
+#define SRC_ADMIN_CHECK_PAGE_H_
 
 #include <QLabel>
 #include <QVBoxLayout>
@@ -25,7 +25,7 @@ class AdminCheckPage : public gondar::WizardPage {
   Q_OBJECT
 
  public:
-  AdminCheckPage(QWidget* parent = 0);
+  explicit AdminCheckPage(QWidget* parent = 0);
   int nextId() const override;
   void handleFormatOnly();
 
@@ -43,4 +43,4 @@ class AdminCheckPage : public gondar::WizardPage {
   QVBoxLayout layout;
 };
 
-#endif
+#endif  // SRC_ADMIN_CHECK_PAGE_H_

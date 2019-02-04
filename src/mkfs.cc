@@ -142,7 +142,7 @@ void makeFilesystem(char* logical_path) {
   LOG_INFO << "sent request to make filesystem...";
 }
 
-// TODO: also clean up the lib opened by gondar.cc
+// TODO(kendall): also clean up the lib opened by gondar.cc
 void deleteLibrary() {
   if (mkfsLibHandle) {
     FreeLibrary(mkfsLibHandle);

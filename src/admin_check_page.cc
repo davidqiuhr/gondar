@@ -29,8 +29,8 @@ AdminCheckPage::AdminCheckPage(QWidget* parent) : WizardPage(parent) {
   layout.addStretch();
   layout.addWidget(&formatLink);
   setLayout(&layout);
-  // TODO: move isChromevoer() out of AdminCheckPage and call these metrics
-  // from a more intuitive context
+  // TODO(kendall): move isChromeover() out of AdminCheckPage and call these
+  // metrics from a more intuitive context
   if (gondar::isChromeover()) {
     gondar::SendMetric(gondar::Metric::ChromeoverUse);
   } else {

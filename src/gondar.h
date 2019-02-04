@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef GONDAR_H
-#define GONDAR_H
+#ifndef SRC_GONDAR_H_
+#define SRC_GONDAR_H_
 
 #include "device.h"
 #include "shared.h"
@@ -29,4 +29,4 @@ bool Format(DeviceGuy* target_device);
 bool IsCurrentProcessElevated();
 void CleanUp();
 
-#endif
+#endif  // SRC_GONDAR_H_

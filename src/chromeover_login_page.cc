@@ -90,8 +90,8 @@ void ChromeoverLoginPage::handleMeepoFinished() {
     // next while processing.  this will make validatePage pass and immediately
     // move the user on to the next screen
     finished = true;
-    // TODO: let's make this a commit page so we don't have to worry about
-    // the case of a user revisiting this segment for now
+    // TODO(kendall): let's make this a commit page so we don't have to worry
+    // about the case of a user revisiting this segment for now
     wizard()->next();
     // If the user has no sites, proceed to the error screen with the
     // appropriate error

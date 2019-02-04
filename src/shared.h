@@ -25,8 +25,8 @@ gondar.h
 However, I've included it in anticipation of utility function shared between
 files
 */
-#ifndef SHARED_H
-#define SHARED_H
+#ifndef SRC_SHARED_H_
+#define SRC_SHARED_H_
 
 #include <algorithm>
 #include <cstdint>
@@ -64,4 +64,4 @@ files
 #define static_strcpy(dst, src) safe_strcpy(dst, sizeof(dst), src)
 #define static_sprintf(dst, ...) safe_sprintf(dst, sizeof(dst), __VA_ARGS__)
 
-#endif /* SHARED_H */
+#endif  // SRC_SHARED_H_

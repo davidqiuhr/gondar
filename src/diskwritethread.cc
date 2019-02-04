@@ -22,7 +22,7 @@
 #include "log.h"
 #include "metric.h"
 
-static int64_t getFileSize(QString& path) {
+static int64_t getFileSize(const QString& path) {
   QFile file(path);
   if (!file.exists()) {
     return -1;
