@@ -59,10 +59,10 @@ def get_source_paths():
 
 
 def get_exe(exenames, env_var):
-    """Get the appropriate clang-format executable.
+    """Get the appropriate executable (such as clang-format or cpplint).
 
-    First the environment variable CLANG_FORMAT is checked. If not set
-    or empty, "clang-format-4.0" and then "clang-format" are tried.
+    First the environment variable is checked. If not set
+    or empty, exenames are tried.
     """
     env_var = os.environ.get(env_var, '')
     if env_var:
