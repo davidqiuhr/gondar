@@ -183,8 +183,7 @@ static __inline bool SetupDiGetDeviceRegistryPropertyU(
       (PBYTE)wPropertyBuffer, PropertyBufferSize, RequiredSize);
   err = GetLastError();
   if ((ret != 0) &&
-      (wchar_to_utf8_no_alloc(wPropertyBuffer,
-                              (char*)(uintptr_t)PropertyBuffer,
+      (wchar_to_utf8_no_alloc(wPropertyBuffer, (char*)(uintptr_t)PropertyBuffer,
                               PropertyBufferSize) == 0)) {
     err = GetLastError();
     ret = false;
