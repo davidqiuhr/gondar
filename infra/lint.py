@@ -24,7 +24,7 @@ import shared
 
 
 def main():
-    """Run clang-format to do in-place cleanups on source files."""
+    """Run cpplint to lint source files."""
     bin_path = shared.get_exe(['cpplint.py', 'cpplint'], 'CPPLINT')
     sources = shared.get_source_paths()
     options = [
