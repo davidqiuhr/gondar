@@ -46,7 +46,9 @@ build-gondar: print-config update-submodules
 			-DTREAT_WARNINGS_AS_ERRORS=${TREAT_WARNINGS_AS_ERRORS} \
 			-DWIN32_CONSOLE=${WIN32_CONSOLE} \
 			-DMETRICS_API_KEY:STRING=${METRICS_API_KEY} \
-			-DRELEASE=${RELEASE} && \
+			-DRELEASE=${RELEASE} \
+			-DCMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES:PATH='/usr/i686-w64-mingw32/sys-root/mingw/include' \
+			-DCMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES:PATH='/usr/i686-w64-mingw32/sys-root/mingw/include' && \
 		make -j
 
 

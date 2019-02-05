@@ -19,10 +19,6 @@
 
 #include "src/device_picker.h"
 
-#if defined(Q_OS_WIN)
-Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
-#endif
-
 namespace gondar {
 
 namespace {

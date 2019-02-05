@@ -16,8 +16,6 @@
 cmake_minimum_required(VERSION 3.4)
 project(gondar)
 
-include(infra/gondar.cmake)
-
 # Choose between free and paid product downloads
 set(CHROMEOVER OFF CACHE BOOL "Build for Chromeover customers")
 
@@ -67,6 +65,8 @@ set(EXTRA_WARNINGS ${EXTRA_WARNINGS}
   -Wunused-macros
   -Wwrite-strings)
 
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static -static-libgcc")
+
 # C++14 needed for std::experimental::optional. (C++17 is not
 # supported in the version of gcc used by MXE.)
 set(CMAKE_CXX_STANDARD 14)
@@ -91,6 +91,7 @@ find_package(Qt5 COMPONENTS Network Test Widgets REQUIRED)
 
 # Static lib with convenience functions that make unzipping easier
 add_library(minizip_extra STATIC minizip/minishared.c minizip/miniunz.c)
+target_link_libraries(minizip_extra PRIVATE minizip)
 target_compile_definitions(minizip_extra PRIVATE _LARGEFILE64_SOURCE NOMAIN)
 target_compile_options(minizip_extra PRIVATE
   ${EXTRA_WARNINGS}
@@ -156,10 +157,9 @@ if(WIN32)
     set_target_properties(cloudready-usb-maker PROPERTIES WIN32_EXECUTABLE ON)
   endif()
 
-  fix_qt_static_link(app)
-
   target_link_libraries(app PRIVATE setupapi)
   target_link_libraries(app PRIVATE gdisk)
+  target_link_libraries(app PRIVATE qwindows)
   # disable shadow variable checking for this file as it imports gdisk headers
   # which contain a shadowing whoopsie
   set_source_files_properties(src/gpt_pal.cc PROPERTIES COMPILE_FLAGS -Wno-shadow)

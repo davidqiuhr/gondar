@@ -21,10 +21,6 @@
 #include "src/gondarwizard.h"
 #include "src/log.h"
 
-#if defined(Q_OS_WIN)
-Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
-#endif
-
 inline void initResource() {
   Q_INIT_RESOURCE(gondarwizard);
 }
