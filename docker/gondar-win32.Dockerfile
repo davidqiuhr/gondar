@@ -1,5 +1,6 @@
 FROM fedora:29
 
+#ENV TREAT_WARNINGS_AS_ERRORS=true
 RUN dnf install -y \
     automake \
     bison \
@@ -31,7 +32,6 @@ RUN dnf install -y \
     zip
 
 ENV CMAKE=mingw32-cmake
-#ENV TREAT_WARNINGS_AS_ERRORS=true
 
 ADD CMakeLists.txt Makefile /opt/gondar/
 ADD gdisk /opt/gondar/gdisk
