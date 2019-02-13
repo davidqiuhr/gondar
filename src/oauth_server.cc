@@ -78,11 +78,11 @@ static void request_completed(void* cls,
   (void)toe;        /* Unused. Silence compiler warning. */
 
   // so far all con_info is used for is nothing, it just gets cleaned up here
-  if (NULL == con_info)
+  if (nullptr == con_info)
     return;
 
   free(con_info);
-  *con_cls = NULL;
+  *con_cls = nullptr;
 }
 
 static int answer_to_connection(void* cls,
@@ -99,11 +99,11 @@ static int answer_to_connection(void* cls,
   OauthServer* server_ptr = (OauthServer*)cls;
   // if this is the first contact with the server, create connection
   // info for it and return
-  if (NULL == *con_cls) {
+  if (nullptr == *con_cls) {
     struct connection_info_struct* con_info;
 
     con_info = new struct connection_info_struct;
-    if (NULL == con_info)
+    if (nullptr == con_info)
       return MHD_NO;
 
     con_info->connectiontype = GET;
@@ -153,16 +153,16 @@ OauthServer::OauthServer(QObject* parent) : QObject(parent) {
 }
 
 void OauthServer::start() {
-  if (daemon == NULL) {
+  if (daemon == nullptr) {
     daemon = MHD_start_daemon(MHD_USE_SELECT_INTERNALLY, port,
-                              NULL, NULL, &answer_to_connection, this,
+                              nullptr, nullptr, &answer_to_connection, this,
                               MHD_OPTION_NOTIFY_COMPLETED, request_completed,
-                              NULL, MHD_OPTION_END);
+                              nullptr, MHD_OPTION_END);
   }
 }
 
 void OauthServer::stop() {
-  if (daemon != NULL) {
+  if (daemon != nullptr) {
     MHD_stop_daemon(daemon);
   }
 }
