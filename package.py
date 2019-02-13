@@ -37,7 +37,7 @@ def build_image(image_name, release, chromeover, apikey, googleclient,
         cmd += ('--build-arg', 'METRICS_API_KEY={}'.format(apikey))
     if googleclient:
         cmd += ('--build-arg', 'GOOGLE_SIGN_IN_CLIENT={}'.format(googleclient))
-    if apikey:
+    if googlesecret:
         cmd += ('--build-arg', 'GOOGLE_SIGN_IN_SECRET={}'.format(googlesecret))
     run_cmd(*cmd)
 
