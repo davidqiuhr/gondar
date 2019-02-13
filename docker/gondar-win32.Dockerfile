@@ -7,10 +7,10 @@ RUN dnf install -y texinfo
 ADD libmicrohttpd /opt/gondar/libmicrohttpd
 # build microhttpd first so it's faster to iterate on our own changes
 WORKDIR /opt/gondar/libmicrohttpd
-run ./bootstrap
-run ./configure --host=i686-w64-mingw32.static --enable-static --disable-shared --disable-https
-run make
-run make install
+RUN ./bootstrap
+RUN ./configure --host=i686-w64-mingw32.static --enable-static --disable-shared --disable-https
+RUN make
+RUN make install
 
 ADD CMakeLists.txt Makefile /opt/gondar/
 ADD gdisk /opt/gondar/gdisk
