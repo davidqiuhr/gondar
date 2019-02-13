@@ -156,7 +156,8 @@ void OauthServer::start() {
   if (daemon == nullptr) {
     auto client_filter_func = nullptr;  // null means all clients allowed
     auto filter_args = nullptr;         // args to above
-    auto request_completed_args = nullptr;
+    // auto did not work for this var; had to explicitly make it a voidptr
+    void* request_completed_args = nullptr;
     daemon = MHD_start_daemon(
         MHD_USE_SELECT_INTERNALLY, port, client_filter_func, filter_args,
         &answer_to_connection, this, MHD_OPTION_NOTIFY_COMPLETED,
