@@ -73,9 +73,9 @@ static void request_completed(void* cls,
                               void** con_cls,
                               enum MHD_RequestTerminationCode toe) {
   struct connection_info_struct* con_info = (connection_info_struct*)*con_cls;
-  (void)cls;        /* Unused. Silent compiler warning. */
-  (void)connection; /* Unused. Silent compiler warning. */
-  (void)toe;        /* Unused. Silent compiler warning. */
+  (void)cls;        /* Unused. Silence compiler warning. */
+  (void)connection; /* Unused. Silence compiler warning. */
+  (void)toe;        /* Unused. Silence compiler warning. */
 
   // so far all con_info is used for is nothing, it just gets cleaned up here
   if (NULL == con_info)
