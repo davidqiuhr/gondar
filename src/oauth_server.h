@@ -19,7 +19,7 @@
 #include <QObject>
 #include <QString>
 
-#include <microhttpd.h>
+struct MHD_Daemon;
 
 class OauthServer : public QObject {
   Q_OBJECT
