@@ -150,11 +150,12 @@ static int answer_to_connection(void* cls,
 
 OauthServer::OauthServer(QObject* parent) : QObject(parent) {
   daemon = NULL;
+  port = gondar::getRandomPort();
 }
 
 void OauthServer::start() {
   if (daemon == NULL) {
-    daemon = MHD_start_daemon(MHD_USE_SELECT_INTERNALLY, gondar::getPort(),
+    daemon = MHD_start_daemon(MHD_USE_SELECT_INTERNALLY, port,
                               NULL, NULL, &answer_to_connection, this,
                               MHD_OPTION_NOTIFY_COMPLETED, request_completed,
                               NULL, MHD_OPTION_END);
@@ -165,4 +166,8 @@ void OauthServer::stop() {
   if (daemon != NULL) {
     MHD_stop_daemon(daemon);
   }
+}
+
+int OauthServer::getPort() {
+  return port;
 }
