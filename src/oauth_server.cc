@@ -149,7 +149,6 @@ static int answer_to_connection(void* cls,
 }
 
 OauthServer::OauthServer(QObject* parent) : QObject(parent) {
-  daemon = NULL;
   port = gondar::getRandomPort();
 }
 

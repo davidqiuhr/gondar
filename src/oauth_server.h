@@ -33,7 +33,7 @@ class OauthServer : public QObject {
   void authError(QString error);
 
  private:
-  struct MHD_Daemon* daemon;
+  struct MHD_Daemon* daemon = nullptr;
   int port;
 };
 
