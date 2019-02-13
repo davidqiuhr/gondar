@@ -15,6 +15,8 @@
 
 #include "util.h"
 
+#include <random>
+
 #include <QFile>
 #include <QJsonDocument>
 #include <QNetworkReply>
@@ -44,13 +46,9 @@ QByteArray getGoogleSignInSecret() {
 }
 
 // FIXME: currently using running system time as seed for random generator
-// seed our random number generator if it has not yet been seeded
 void initRand() {
-  static bool run = false;
-  if (!run) {
-    std::srand(std::time(nullptr));
-    run = true;
-  }
+  std::srand(std::time(nullptr));
+  run = true;
 }
 
 // get the port the local google sign in server will run on
