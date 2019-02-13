@@ -27,12 +27,14 @@ class OauthServer : public QObject {
   explicit OauthServer(QObject* parent = 0);
   void start();
   void stop();
+  int getPort();
  signals:
   void callbackReceived(QString state, QString code);
   void authError(QString error);
 
  private:
   struct MHD_Daemon* daemon;
+  int port;
 };
 
 #endif  // SRC_OAUTH_SERVER_H_

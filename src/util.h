@@ -25,8 +25,8 @@ namespace gondar {
 // used by google sign in flow
 QByteArray getGoogleSignInId();
 QByteArray getGoogleSignInSecret();
-void maybeInitRand();
-int getPort();
+void initRand();
+int getRandomPort();
 // Read the contents of |filepath| and decode as UTF-8. Throws an
 // exception on failure.
 QString readUtf8File(const QString& filepath);

@@ -32,13 +32,13 @@
 #include "util.h"
 
 // TODO(kendall): right now we are just using current time as rand seed
+// note: relies on initRand() having been called on startup
 static QString get_random_string() {
   // most basic version first: all lowercase characters
   const QString possibleCharacters(
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789");
   auto len = 20;
   QString ret;
-  gondar::maybeInitRand();
   for (auto i = 0; i < len; i++) {
     auto index = std::rand() % possibleCharacters.length();
     QChar cur_char = possibleCharacters.at(index);
@@ -68,7 +68,7 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
   forgotLabel.setOpenExternalLinks(true);
   client_id = gondar::getGoogleSignInId();
   client_secret = gondar::getGoogleSignInSecret();
-  redirect_uri = QString("http://127.0.0.1:%1").arg(gondar::getPort());
+  redirect_uri = QString("http://127.0.0.1:%1").arg(localServer.getPort());
   state = get_random_string();
   code_verifier = get_random_string();
   googleLabel.setText("<a href='#'>Sign in with Google</a>");
