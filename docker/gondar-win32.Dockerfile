@@ -2,13 +2,11 @@ FROM neverware/gondar-build-mxe:v3
 
 ENV TREAT_WARNINGS_AS_ERRORS=true
 
-RUN dnf install -y texinfo
-
 ADD libmicrohttpd /opt/gondar/libmicrohttpd
 # build microhttpd first so it's faster to iterate on our own changes
 WORKDIR /opt/gondar/libmicrohttpd
 RUN ./bootstrap
-RUN ./configure --host=i686-w64-mingw32.static --enable-static --disable-shared --disable-https
+RUN ./configure --host=i686-w64-mingw32.static --enable-static --disable-shared --disable-https --disable-doc
 RUN make
 RUN make install
 
