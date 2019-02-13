@@ -46,7 +46,6 @@ QByteArray getGoogleSignInSecret() {
 // FIXME: currently using running system time as seed for random generator
 void initRand() {
   std::srand(std::time(nullptr));
-  run = true;
 }
 
 // get the port the local google sign in server will run on
