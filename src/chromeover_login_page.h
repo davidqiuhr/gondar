@@ -40,6 +40,10 @@ class ChromeoverLoginPage : public gondar::WizardPage {
   bool validatePage() override;
 
  private:
+  void handleGoogleSigninError(QString error);
+  void handleGoogleSigninPart1();
+  void handleGoogleSigninPart2(QString state_in, QString code);
+  void handleGoogleSigninPart3(QNetworkReply* reply);
   void handleMeepoFinished();
 
   gondar::Meepo meepo_;
@@ -61,11 +65,6 @@ class ChromeoverLoginPage : public gondar::WizardPage {
   QString client_secret;
   QString redirect_uri;
   QString code_verifier;
- private slots:
-  void handleGoogleSigninError(QString error);
-  void handleGoogleSigninPart1();
-  void handleGoogleSigninPart2(QString state_in, QString code);
-  void handleGoogleSigninPart3(QNetworkReply* reply);
 };
 
 #endif  // SRC_CHROMEOVER_LOGIN_PAGE_H_
