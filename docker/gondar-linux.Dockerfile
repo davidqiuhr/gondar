@@ -5,6 +5,7 @@ RUN dnf install -y \
     gcc \
     gcc-c++ \
     git \
+    libmicrohttpd-devel \
     make \
     qt5-qtbase-devel \
     which \
@@ -23,4 +24,5 @@ ADD test /opt/gondar/test
 # needed by slowtest
 RUN mkdir /root/Downloads
 # Build gondar and run tests
+
 RUN make -C /opt/gondar build-gondar test
