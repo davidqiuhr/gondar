@@ -74,7 +74,6 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
   googleLabel.setText("<a href='#'>Sign in with Google</a>");
   googleLabel.setTextFormat(Qt::RichText);
   googleLabel.setTextInteractionFlags(Qt::TextBrowserInteraction);
-  // googleLabel.setOpenExternalLinks(true);
   meanWordsLabel.setObjectName("loginError");
   layout.addWidget(&passwordLineEditLabel, 1, 0);
   layout.addWidget(&passwordLineEdit, 1, 1);
