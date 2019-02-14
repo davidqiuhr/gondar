@@ -40,7 +40,7 @@ static QString get_random_string() {
   auto len = 20;
   QString ret;
   for (auto i = 0; i < len; i++) {
-    auto index = std::rand() % possibleCharacters.length();
+    auto index = gondar::getRandomNum(0, possibleCharacters.length() - 1);
     QChar cur_char = possibleCharacters.at(index);
     ret.append(cur_char);
   }

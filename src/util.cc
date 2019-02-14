@@ -15,6 +15,8 @@
 
 #include "util.h"
 
+#include <random>
+
 #include <QFile>
 #include <QJsonDocument>
 #include <QNetworkReply>
@@ -43,19 +45,17 @@ QByteArray getGoogleSignInSecret() {
 #endif
 }
 
-// FIXME: currently using running system time as seed for random generator
-void initRand() {
-  std::srand(std::time(nullptr));
-}
-
-// get the port the local google sign in server will run on
-int getRandomPort() {
-  // generate a new port
-  int MAX_PORT = 5000;
-  int MIN_PORT = 4000;
-  int port = MIN_PORT + std::rand() % (MAX_PORT - MIN_PORT);
-  LOG_INFO << "server running on port " << port;
-  return port;
+// the range is inclusive according to
+// https://en.cppreference.com/w/cpp/numeric/random/uniform_int_distribution
+// I believe a seed is generated on each call this way, but we only call it
+// twice so that should be fine.
+int getRandomNum(int lower, int higher) {
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_int_distribution<> dis(lower, higher);
+  int result = dis(gen);
+  LOG_INFO << "generated " << result;
+  return result;
 }
 
 QString readUtf8File(const QString& filepath) {
