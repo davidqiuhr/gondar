@@ -12,6 +12,7 @@ RUN dnf install -y \
     zlib-devel
 
 ENV TREAT_WARNINGS_AS_ERRORS=true
+ENV PATH="$PATH:/opt/gondar/styleguide/cpplint"
 
 ADD CMakeLists.txt Makefile /opt/gondar/
 ADD infra /opt/gondar/infra

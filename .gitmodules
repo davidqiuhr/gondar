@@ -7,3 +7,6 @@
 [submodule "gdisk"]
 	path = gdisk
 	url = https://github.com/neverware/gdisk
+[submodule "styleguide"]
+	path = styleguide
+	url = https://github.com/google/styleguide
