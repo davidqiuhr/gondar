@@ -21,6 +21,7 @@ ADD plog /opt/gondar/plog
 ADD resources /opt/gondar/resources
 ADD src /opt/gondar/src
 ADD test /opt/gondar/test
+ADD styleguide /opt/gondar/styleguide
 
 # needed by slowtest
 RUN mkdir /root/Downloads
