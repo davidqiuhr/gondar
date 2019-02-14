@@ -44,11 +44,15 @@ const int MAX_PORT = 5000;
 
 // as discussed in OVER-8763
 const char* gondarpage =
-    "<html><body>You are now signed in with Google.<br>Close this window and "
+    "<html><head><title>Signed in to CloudReady USB "
+    "Maker</title></head><body>You are now signed in with Google.<br>Close "
+    "this window and "
     "return to the CloudReady USB Maker to continue.</body></html>";
 
 const char* errorpage =
-    "<html><body>There was an error signing you in.<br>Please close this "
+    "<html><head><title>Error signing into CloudReady USB Maker with "
+    "Google</title></head><body>There was an error signing you in.<br>Please "
+    "close this "
     "window and try again, or contact <a "
     "href='https://neverware.com/support'>Neverware Support</a></body></html>";
 
