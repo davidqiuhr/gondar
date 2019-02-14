@@ -39,6 +39,9 @@
 
 #define GET 0
 
+const int MIN_PORT = 4000;
+const int MAX_PORT = 5000;
+
 // as discussed in OVER-8763
 const char* gondarpage =
     "<html><body>You are now signed in with Google.<br>Close this window and "
@@ -149,7 +152,7 @@ static int answer_to_connection(void* cls,
 }
 
 OauthServer::OauthServer(QObject* parent) : QObject(parent) {
-  port = gondar::getRandomNum(4000, 5000);
+  port = gondar::getRandomNum(MIN_PORT, MAX_PORT);
 }
 
 void OauthServer::start() {
