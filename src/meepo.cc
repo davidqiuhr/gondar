@@ -166,7 +166,7 @@ void Meepo::requestAuth(const QAuthenticator& auth) {
 void Meepo::requestGoogleAuth(QString id_token) {
   QJsonObject json;
   json["id_token"] = id_token;
-  LOG_WARNING << "id_token =" << id_token;
+  LOG_INFO << "id_token =" << id_token;
   QJsonDocument doc(json);
   auto request = createGoogleAuthRequest();
   LOG_INFO << "POST " << request.url().toString();
