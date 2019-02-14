@@ -16,18 +16,16 @@
 #ifndef SRC_CHROMEOVER_LOGIN_PAGE_H_
 #define SRC_CHROMEOVER_LOGIN_PAGE_H_
 
-#include <vector>
-
 #include <QGridLayout>
 #include <QLabel>
 #include <QLineEdit>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QString>
 
+#include "googleflow.h"
 #include "meepo.h"
 #include "oauth_server.h"
 #include "wizard_page.h"
+
+class QNetworkReply;
 
 class ChromeoverLoginPage : public gondar::WizardPage {
   Q_OBJECT
@@ -40,11 +38,8 @@ class ChromeoverLoginPage : public gondar::WizardPage {
   bool validatePage() override;
 
  private:
-  void handleGoogleSigninError(QString error);
-  void handleGoogleSigninPart1();
-  void handleGoogleSigninPart2(QString state_in, QString code);
-  void handleGoogleSigninPart3(QNetworkReply* reply);
   void handleMeepoFinished();
+  void handleGoogleSigninFinished(QNetworkReply* reply);
 
   gondar::Meepo meepo_;
 
@@ -58,13 +53,7 @@ class ChromeoverLoginPage : public gondar::WizardPage {
   QLabel googleLabel;
   bool finished;
   bool started;
-  OauthServer localServer;
-  QNetworkAccessManager manager;
-  QString client_id;
-  QString state;
-  QString client_secret;
-  QString redirect_uri;
-  QString code_verifier;
+  GoogleFlow googleFlow;
 };
 
 #endif  // SRC_CHROMEOVER_LOGIN_PAGE_H_
