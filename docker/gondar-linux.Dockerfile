@@ -5,6 +5,7 @@ RUN dnf install -y \
     gcc \
     gcc-c++ \
     git \
+    libmicrohttpd-devel \
     make \
     python \
     qt5-qtbase-devel \

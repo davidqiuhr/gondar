@@ -72,6 +72,8 @@ set(EXTRA_WARNINGS ${EXTRA_WARNINGS}
 set(CMAKE_CXX_STANDARD 14)
 
 set(METRICS_API_KEY CACHE STRING "metrics API key")
+set(GOOGLE_SIGN_IN_CLIENT CACHE STRING "sign in with google API client")
+set(GOOGLE_SIGN_IN_SECRET CACHE STRING "sign in with google API secret")
 configure_file(src/config.h.in src/config.h @ONLY)
 
 if(${TREAT_WARNINGS_AS_ERRORS})
@@ -115,11 +117,13 @@ add_library(app STATIC
   src/error_page.cc
   src/gondarsite.cc
   src/gondarwizard.cc
+  src/googleflow.cc
   src/image_select_page.cc
   src/log.cc
   src/meepo.cc
   src/metric.cc
   src/neverware_unzipper.cc
+  src/oauth_server.cc
   src/site_select_page.cc
   src/unzipthread.cc
   src/update_check.cc
@@ -133,7 +137,7 @@ target_compile_options(app PRIVATE ${EXTRA_WARNINGS})
 target_include_directories(app SYSTEM PUBLIC minizip plog/include)
 target_include_directories(app PRIVATE ${CMAKE_BINARY_DIR}/src)
 target_link_libraries(app PUBLIC
-  Qt5::Network Qt5::Widgets minizip minizip_extra)
+  Qt5::Network Qt5::Widgets minizip minizip_extra microhttpd)
 
 # Gondar application
 add_executable(cloudready-usb-maker src/main.cc)

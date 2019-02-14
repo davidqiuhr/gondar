@@ -1,4 +1,4 @@
-// Copyright 2017 Neverware
+// Copyright 2019 Neverware
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,29 +13,28 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SRC_UTIL_H_
-#define SRC_UTIL_H_
+#ifndef SRC_OAUTH_SERVER_H_
+#define SRC_OAUTH_SERVER_H_
 
-#include <QJsonObject>
-#include <QNetworkReply>
+#include <QObject>
 #include <QString>
 
-namespace gondar {
+struct MHD_Daemon;
 
-// used by google sign in flow
-QByteArray getGoogleSignInId();
-QByteArray getGoogleSignInSecret();
-int getRandomNum(int lower, int higher);
-// Read the contents of |filepath| and decode as UTF-8. Throws an
-// exception on failure.
-QString readUtf8File(const QString& filepath);
-bool isChromeover();
-bool isRelease();
-QString getDomain();
-QString getGondarVersion();
-QJsonObject jsonFromReply(QNetworkReply* reply);
-uint64_t getGigabyte();
+class OauthServer : public QObject {
+  Q_OBJECT
+ public:
+  explicit OauthServer(QObject* parent = 0);
+  void start();
+  void stop();
+  int getPort();
+ signals:
+  void callbackReceived(QString state, QString code);
+  void authError(QString error);
 
-}  // namespace gondar
+ private:
+  struct MHD_Daemon* daemon = nullptr;
+  int port;
+};
 
-#endif  // SRC_UTIL_H_
+#endif  // SRC_OAUTH_SERVER_H_

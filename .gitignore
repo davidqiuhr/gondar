@@ -2,5 +2,6 @@
 /package/
 /mxe/
 *.lz4
+*.pyc
 *.raw
 *.zip

@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 """Build Gondar with mingw in a Docker container.
 
 The output executable is copied to package/release/gondar.exe. On Jenkins the
@@ -19,17 +18,27 @@ def run_cmd(*args):
     subprocess.check_call(args)
 
 
-def build_image(image_name, release, chromeover, apikey):
+def build_image(image_name, release, chromeover, apikey, googleclient,
+                googlesecret):
     """Build the Dockerfile from the current directory."""
-    cmd = ('sudo', 'docker', 'build',
-            '--file', 'docker/gondar-win32.Dockerfile',
-            '--tag', image_name, '.')
+    cmd = ('sudo', 'docker', 'build', '--file',
+           'docker/gondar-win32.Dockerfile', '--tag', image_name, '.')
     if (release):
-      cmd += ('--build-arg', 'RELEASE=true',)
+        cmd += (
+            '--build-arg',
+            'RELEASE=true',
+        )
     if (chromeover):
-      cmd += ('--build-arg', 'CHROMEOVER=true',)
+        cmd += (
+            '--build-arg',
+            'CHROMEOVER=true',
+        )
     if apikey:
-      cmd += ('--build-arg', 'METRICS_API_KEY={}'.format(apikey))
+        cmd += ('--build-arg', 'METRICS_API_KEY={}'.format(apikey))
+    if googleclient:
+        cmd += ('--build-arg', 'GOOGLE_SIGN_IN_CLIENT={}'.format(googleclient))
+    if googlesecret:
+        cmd += ('--build-arg', 'GOOGLE_SIGN_IN_SECRET={}'.format(googlesecret))
     run_cmd(*cmd)
 
 
@@ -50,7 +59,7 @@ def run_container(image_name, *cmd, **kwargs):
     for volume in volumes:
         full_cmd += ('--volume', '{}:{}'.format(*volume))
 
-    full_cmd += (image_name,)
+    full_cmd += (image_name, )
     full_cmd += cmd
 
     # Copy the result back to the host
@@ -63,6 +72,8 @@ def parse_args():
     parser.add_argument('--release', action='store_true')
     parser.add_argument('--chromeover', action='store_true')
     parser.add_argument('--apikey')
+    parser.add_argument('--googleclient')
+    parser.add_argument('--googlesecret')
     return parser.parse_args()
 
 
@@ -72,16 +83,20 @@ def main():
     image_name = 'gondar-build'
     output_path = get_output_path('package')
 
-    build_image(image_name, args.release, args.chromeover, args.apikey)
+    build_image(image_name, args.release, args.chromeover, args.apikey,
+                args.googleclient, args.googlesecret)
     volume = (output_path, '/opt/host')
-    run_container(image_name,
-                  'cp', '-r', '/opt/gondar/build/', '/opt/host',
-                  volumes=[volume])
+    run_container(
+        image_name,
+        'cp',
+        '-r',
+        '/opt/gondar/build/',
+        '/opt/host',
+        volumes=[volume])
     # Change ownership of the output from root to the user running
     # this script
-    run_cmd('sudo', 'chown', '--recursive',
-            '{}:{}'.format(os.getuid(), os.getgid()),
-            output_path)
+    run_cmd('sudo', 'chown', '--recursive', '{}:{}'.format(
+        os.getuid(), os.getgid()), output_path)
 
 
 if __name__ == '__main__':
