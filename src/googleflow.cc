@@ -62,7 +62,6 @@ void GoogleFlow::handleGoogleSigninError(QString error) {
 // we generate the URL to open in their browser, send them there, and start
 // the local server to parse the sign-in response
 void GoogleFlow::handleGoogleSigninPart1() {
-  static bool http_server_started = false;
   if (http_server_started == false) {
     http_server_started = true;
     localServer.start();

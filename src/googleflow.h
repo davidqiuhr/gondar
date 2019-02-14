@@ -46,5 +46,6 @@ class GoogleFlow : public QObject {
   QString redirect_uri;
   QString code_verifier;
   QNetworkAccessManager manager;
+  bool http_server_started = false;
 };
 #endif  // SRC_GOOGLEFLOW_H_
