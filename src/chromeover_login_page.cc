@@ -31,10 +31,10 @@
 #include "oauth_server.h"
 #include "util.h"
 
-// TODO(kendall): right now we are just using current time as rand seed
-// note: relies on initRand() having been called on startup
+// use possibleCharacters to generate a random string
+// based on:
+// https://stackoverflow.com/questions/18862963/qt-c-random-string-generation
 static QString get_random_string() {
-  // most basic version first: all lowercase characters
   const QString possibleCharacters(
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789");
   auto len = 20;
