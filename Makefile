@@ -88,7 +88,7 @@ jenkins-win32:
 
 
 lint:
-	CPPLINT=${CPPLINT} infra/lint.py
+	CPPLINT=${CPPLINT} python infra/lint.py
 
 
 print-config:
