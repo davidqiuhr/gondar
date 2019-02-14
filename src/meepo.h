@@ -38,7 +38,7 @@ class Meepo : public QObject {
   // sites. Call this method to initiate that flow, and await the
   // finished() signal to get the results (including errors).
   void start(const QAuthenticator& auth);
-  void startGoogle(QString id_token);
+  void startGoogle(const QString id_token);
 
   QString error() const;
   Sites sites() const;
