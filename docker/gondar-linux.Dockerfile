@@ -23,4 +23,4 @@ ADD test /opt/gondar/test
 # needed by slowtest
 RUN mkdir /root/Downloads
 # Build gondar and run tests
-RUN make -C /opt/gondar build-gondar test
+RUN make -C /opt/gondar build-gondar test lint
