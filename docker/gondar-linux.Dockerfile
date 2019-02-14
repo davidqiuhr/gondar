@@ -6,6 +6,7 @@ RUN dnf install -y \
     gcc-c++ \
     git \
     make \
+    python \
     qt5-qtbase-devel \
     which \
     zlib-devel
