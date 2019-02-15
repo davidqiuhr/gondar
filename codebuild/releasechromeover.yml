@@ -4,6 +4,8 @@ phases:
   pre_build:
     commands:
       - export METRICS_API=$(aws ssm get-parameters --region us-east-1 --names gondar.codebuild.metricsapi --with-decryption --query Parameters[0].Value)
+      - export GOOGLE_SIGN_IN_CLIENT=$(aws ssm get-parameters --region us-east-1 --names gondar.codebuild.google_id --with-decryption --query Parameters[0].Value)
+      - export GOOGLE_SIGN_IN_SECRET=$(aws ssm get-parameters --region us-east-1 --names gondar.codebuild.google_secret --with-decryption --query Parameters[0].Value)
   build:
     commands:
       - echo Build started on `date`
