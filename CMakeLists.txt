@@ -73,7 +73,8 @@ set(CMAKE_CXX_STANDARD 14)
 
 set(METRICS_API_KEY CACHE STRING "metrics API key")
 set(GOOGLE_SIGN_IN_CLIENT CACHE STRING "sign in with google API client")
-set(GOOGLE_SIGN_IN_SECRET CACHE STRING "sign in with google API secret")
+set(GOOGLE_SIGN_IN_SECRET_HASH1 CACHE STRING "sign in with google API secret hash")
+set(GOOGLE_SIGN_IN_SECRET_HASH2 CACHE STRING "sign in with google API secret hash")
 configure_file(src/config.h.in src/config.h @ONLY)
 
 if(${TREAT_WARNINGS_AS_ERRORS})
@@ -130,7 +131,8 @@ add_library(app STATIC
   src/usb_insert_page.cc
   src/util.cc
   src/wizard_page.cc
-  src/write_operation_page.cc)
+  src/write_operation_page.cc
+  src/xor.cc)
 
 set_target_properties(app PROPERTIES AUTOMOC ON AUTORCC ON)
 target_compile_options(app PRIVATE ${EXTRA_WARNINGS})

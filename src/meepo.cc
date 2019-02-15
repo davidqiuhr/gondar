@@ -166,6 +166,7 @@ void Meepo::requestAuth(const QAuthenticator& auth) {
 void Meepo::requestGoogleAuth(QString id_token) {
   QJsonObject json;
   json["id_token"] = id_token;
+  // TODO(kendall): if this is null, we did not auth (our client id was bad?)
   LOG_INFO << "id_token =" << id_token;
   QJsonDocument doc(json);
   auto request = createGoogleAuthRequest();

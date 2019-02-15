@@ -20,9 +20,11 @@
 #include <QFile>
 #include <QJsonDocument>
 #include <QNetworkReply>
+#include <QString>
 
 #include "config.h"
 #include "log.h"
+#include "xor.h"
 
 namespace gondar {
 
@@ -38,8 +40,21 @@ QByteArray getGoogleSignInId() {
 
 // get the google sign in client secret
 QByteArray getGoogleSignInSecret() {
-#ifdef GOOGLE_SIGN_IN_SECRET
-  return QByteArray(GOOGLE_SIGN_IN_SECRET);
+// TODO(kendall): ifdef on both hash1 and 2
+#ifdef GOOGLE_SIGN_IN_SECRET_HASH1
+  QString client_secret = get_string_from_hashes(GOOGLE_SIGN_IN_SECRET_HASH1,
+                                                 GOOGLE_SIGN_IN_SECRET_HASH2);
+  QString retstr = client_secret.toLatin1();
+  // there's a case where sometimes this will be surrounded in quotes;
+  // address that:
+  // and retstr.endsWith("\")...
+  if (retstr.startsWith("\"")) {
+    // remove trailing quote
+    retstr.chop(1);
+    // remove leading quote
+    retstr = retstr.right(retstr.length() - 1);
+  }
+  return retstr.toLatin1();
 #else
   return QByteArray();
 #endif
@@ -54,6 +69,9 @@ int getRandomNum(int lower, int higher) {
   std::mt19937 gen(rd());
   std::uniform_int_distribution<> dis(lower, higher);
   int result = dis(gen);
+  // FIXME(kendall): i appear to be generating one good number, then 34 over
+  // and over.  i should probably save my seed instead of calling gen over
+  // and over
   LOG_INFO << "generated " << result;
   return result;
 }
