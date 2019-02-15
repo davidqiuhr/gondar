@@ -10,7 +10,7 @@ phases:
     commands:
       - echo Build started on `date`
       - git submodule update --init
-      - make jenkins PACKAGE_FLAGS="--chromeover --release --apikey $METRICS_API" RELEASE=true
+      - make jenkins PACKAGE_FLAGS="--chromeover --release --apikey $METRICS_API --googleclient $GOOGLE_SIGN_IN_CLIENT --googlesecret $GOOGLE_SIGN_IN_SECRET" RELEASE=true
   post_build:
     commands:
       - echo Build completed on `date`
