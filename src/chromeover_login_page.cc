@@ -15,9 +15,20 @@
 
 #include "chromeover_login_page.h"
 
+#include <QDesktopServices>
+#include <QJsonDocument>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QString>
+#include <QUrl>
+
+#include <cstdlib>
+#include <ctime>
+
 #include "gondarsite.h"
 #include "gondarwizard.h"
 #include "log.h"
+#include "oauth_server.h"
 #include "util.h"
 
 ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
@@ -39,20 +50,31 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
   forgotLabel.setTextFormat(Qt::RichText);
   forgotLabel.setTextInteractionFlags(Qt::TextBrowserInteraction);
   forgotLabel.setOpenExternalLinks(true);
+  googleLabel.setText("<a href='#'>Sign in with Google</a>");
+  googleLabel.setTextFormat(Qt::RichText);
+  googleLabel.setTextInteractionFlags(Qt::TextBrowserInteraction);
   meanWordsLabel.setObjectName("loginError");
   layout.addWidget(&passwordLineEditLabel, 1, 0);
   layout.addWidget(&passwordLineEdit, 1, 1);
   layout.addWidget(&meanWordsLabel, 2, 0, 1, 2);
   layout.addWidget(&forgotLabel, 3, 0, 1, 2);
+  layout.addWidget(&googleLabel, 4, 0, 1, 2);
   meanWordsLabel.setVisible(false);
+  // if our build does not have a client id and client secret configured,
+  // do not display the 'sign in with google' text
+  googleLabel.setVisible(googleFlow.shouldShowSignInWithGoogle());
   setLayout(&layout);
   // don't allow progressing to next page yet
   finished = false;
   // don't allow another launch of server interaction while another is running
   started = false;
-
+  // connect events between our members and ourself
+  connect(&googleLabel, &QLabel::linkActivated, &googleFlow,
+          &GoogleFlow::handleGoogleSigninPart1);
   connect(&meepo_, &gondar::Meepo::finished, this,
           &ChromeoverLoginPage::handleMeepoFinished);
+  connect(googleFlow.getManager(), &QNetworkAccessManager::finished, this,
+          &ChromeoverLoginPage::handleGoogleSigninFinished);
 }
 
 int ChromeoverLoginPage::nextId() const {
@@ -73,6 +95,7 @@ bool ChromeoverLoginPage::validatePage() {
   auth.setUser(usernameLineEdit.text());
   auth.setPassword(passwordLineEdit.text());
   if (finished) {
+    googleFlow.stopServer();
     return true;
   }
   if (!started) {
@@ -103,5 +126,17 @@ void ChromeoverLoginPage::handleMeepoFinished() {
   } else {
     started = false;
     meanWordsLabel.setVisible(true);
+  }
+}
+
+// This fires when we have received our token. We send the token to Meepo
+// to find the user's sites in a way very similar to user/password flow.
+// TODO(kendall): handle failure case
+void ChromeoverLoginPage::handleGoogleSigninFinished(QNetworkReply* reply) {
+  LOG_INFO << "id token received; contacting meepo...";
+  QString id_token = gondar::jsonFromReply(reply)["id_token"].toString();
+  if (!started) {
+    meepo_.startGoogle(id_token);
+    started = true;
   }
 }

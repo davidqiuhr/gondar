@@ -7,3 +7,9 @@
 [submodule "gdisk"]
 	path = gdisk
 	url = https://github.com/neverware/gdisk
+[submodule "libmicrohttpd"]
+	path = libmicrohttpd
+	url = https://github.com/neverware/libmicrohttpd
+[submodule "styleguide"]
+	path = styleguide
+	url = https://github.com/google/styleguide

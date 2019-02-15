@@ -15,6 +15,8 @@
 
 #include "util.h"
 
+#include <random>
+
 #include <QFile>
 #include <QJsonDocument>
 #include <QNetworkReply>
@@ -23,6 +25,38 @@
 #include "log.h"
 
 namespace gondar {
+
+// get the google sign in client id
+// see https://console.developers.google.com
+QByteArray getGoogleSignInId() {
+#ifdef GOOGLE_SIGN_IN_CLIENT
+  return QByteArray(GOOGLE_SIGN_IN_CLIENT);
+#else
+  return QByteArray();
+#endif
+}
+
+// get the google sign in client secret
+QByteArray getGoogleSignInSecret() {
+#ifdef GOOGLE_SIGN_IN_SECRET
+  return QByteArray(GOOGLE_SIGN_IN_SECRET);
+#else
+  return QByteArray();
+#endif
+}
+
+// the range is inclusive according to
+// https://en.cppreference.com/w/cpp/numeric/random/uniform_int_distribution
+// I believe a seed is generated on each call this way, but we only call it
+// twice so that should be fine.
+int getRandomNum(int lower, int higher) {
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_int_distribution<> dis(lower, higher);
+  int result = dis(gen);
+  LOG_INFO << "generated " << result;
+  return result;
+}
 
 QString readUtf8File(const QString& filepath) {
   LOG_INFO << "opening " << filepath << " for reading";

@@ -16,14 +16,16 @@
 #ifndef SRC_CHROMEOVER_LOGIN_PAGE_H_
 #define SRC_CHROMEOVER_LOGIN_PAGE_H_
 
-#include <vector>
-
 #include <QGridLayout>
 #include <QLabel>
 #include <QLineEdit>
 
+#include "googleflow.h"
 #include "meepo.h"
+#include "oauth_server.h"
 #include "wizard_page.h"
+
+class QNetworkReply;
 
 class ChromeoverLoginPage : public gondar::WizardPage {
   Q_OBJECT
@@ -37,6 +39,7 @@ class ChromeoverLoginPage : public gondar::WizardPage {
 
  private:
   void handleMeepoFinished();
+  void handleGoogleSigninFinished(QNetworkReply* reply);
 
   gondar::Meepo meepo_;
 
@@ -47,8 +50,10 @@ class ChromeoverLoginPage : public gondar::WizardPage {
   QLabel passwordLineEditLabel;
   QLabel meanWordsLabel;
   QLabel forgotLabel;
+  QLabel googleLabel;
   bool finished;
   bool started;
+  GoogleFlow googleFlow;
 };
 
 #endif  // SRC_CHROMEOVER_LOGIN_PAGE_H_

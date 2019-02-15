@@ -17,6 +17,8 @@ BUILD_DIR ?= build
 CHROMEOVER ?= false
 CMAKE ?= cmake
 METRICS_API_KEY ?= ""
+GOOGLE_SIGN_IN_CLIENT ?= ""
+GOOGLE_SIGN_IN_SECRET ?= ""
 RELEASE ?= false
 TREAT_WARNINGS_AS_ERRORS ?= false
 
@@ -46,6 +48,8 @@ build-gondar: print-config update-submodules
 			-DTREAT_WARNINGS_AS_ERRORS=${TREAT_WARNINGS_AS_ERRORS} \
 			-DWIN32_CONSOLE=${WIN32_CONSOLE} \
 			-DMETRICS_API_KEY:STRING=${METRICS_API_KEY} \
+			-DGOOGLE_SIGN_IN_CLIENT:STRING=${GOOGLE_SIGN_IN_CLIENT} \
+			-DGOOGLE_SIGN_IN_SECRET:STRING=${GOOGLE_SIGN_IN_SECRET} \
 			-DRELEASE=${RELEASE} && \
 		make -j
 
@@ -88,7 +92,7 @@ jenkins-win32:
 
 
 lint:
-	CPPLINT=${CPPLINT} infra/lint.py
+	CPPLINT=${CPPLINT} python infra/lint.py
 
 
 print-config:
