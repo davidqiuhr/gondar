@@ -1,0 +1,1 @@
+g++ -fPIC -DQT_CORE_LIB -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/x86_64-linux-gnu/qt5 -lQt5Core compress.cc
