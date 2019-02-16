@@ -1,7 +1,18 @@
 
-#include <QByteArray>
 #include <iostream>
+#include <QByteArray>
+#include <QString>
 #include <random>
+
+void printByteArray(QByteArray in) {
+  for (int i = 0; i < in.length(); i++) {
+    unsigned char cur_byte = in.at(i);   
+    printf("%x", cur_byte);
+  } 
+  printf("\n");
+  // this works!
+  std::cout << "cout version: " << in.toHex().toStdString() << std::endl;
+}
 
 QByteArray getRand(int len) {
   std::random_device rd;
@@ -13,9 +24,17 @@ QByteArray getRand(int len) {
     std::cout << "cur = " << (unsigned int)cur << std::endl;
     output.append(cur);
   }
-  bool ok;
   return output;
 }
+/*
+QByteArray getByteArrayFromString(QString in) {
+  QByteArray out;
+  for (int i = 0; i < in.length(); i+=2) {
+    // toLatin1?
+    //out.append(QByteArray::fromHex(
+  }
+}
+*/
 
 int main(int argc, char *argv[]) {
   if (argc != 2) {
@@ -24,6 +43,9 @@ int main(int argc, char *argv[]) {
   }
   QByteArray input(argv[1]);
   QByteArray salt = getRand(input.length());
+  //std::cout << salt.toHex();
+  printByteArray(input);
+  //printByteArray(salt);
   QByteArray derived;
   for (int i = 0 ; i < input.length(); i++) {
     derived.append(input.at(i)^salt.at(i));
