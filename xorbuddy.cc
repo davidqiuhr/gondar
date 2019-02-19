@@ -5,13 +5,7 @@
 #include <random>
 
 void printByteArray(QByteArray in) {
-  for (int i = 0; i < in.length(); i++) {
-    unsigned char cur_byte = in.at(i);   
-    printf("%x", cur_byte);
-  } 
-  printf("\n");
-  // this works!
-  std::cout << "cout version: " << in.toHex().toStdString() << std::endl;
+  std::cout << in.toHex().toStdString() << std::endl;
 }
 
 QByteArray getRand(int len) {
@@ -21,7 +15,7 @@ QByteArray getRand(int len) {
   QByteArray output;
   for (int i = 0; i < len; i++) {
     unsigned char cur = dis(gen);
-    std::cout << "cur = " << (unsigned int)cur << std::endl;
+    //std::cout << "cur = " << (unsigned int)cur << std::endl;
     output.append(cur);
   }
   return output;
@@ -43,13 +37,16 @@ int main(int argc, char *argv[]) {
   }
   QByteArray input(argv[1]);
   QByteArray salt = getRand(input.length());
-  //std::cout << salt.toHex();
-  printByteArray(input);
-  //printByteArray(salt);
   QByteArray derived;
   for (int i = 0 ; i < input.length(); i++) {
     derived.append(input.at(i)^salt.at(i));
   }
+  std::cout << "input:" << std::endl;
+  printByteArray(input);
+  std::cout << "salt:" << std::endl;
+  printByteArray(salt);
+  std::cout << "derived:" << std::endl;
+  printByteArray(derived);
   // then we store our data...
 
   // and extract it later:
@@ -57,5 +54,7 @@ int main(int argc, char *argv[]) {
   for (int i = 0; i < derived.length(); i++) {
     output.append(derived.at(i)^salt.at(i));
   }
+  std::cout << "output:" << std::endl;
+  printByteArray(output);
   std::cout << "final output: " << output.toStdString() << std::endl;
 }
