@@ -20,21 +20,38 @@ QByteArray getRand(int len) {
   }
   return output;
 }
-/*
+
 QByteArray getByteArrayFromString(QString in) {
   QByteArray out;
-  for (int i = 0; i < in.length(); i+=2) {
+  //for (int i = 0; i < in.length(); i+=2) {
     // toLatin1?
-    //out.append(QByteArray::fromHex(
-  }
+  out.append(QByteArray::fromHex(in.toLatin1()));
+  return out;
 }
-*/
 
 int main(int argc, char *argv[]) {
-  if (argc != 2) {
-    printf("wrong number of args\n");
+  if (argc < 3) {
+    printf("not enough args\n");
+    return 1;
+  }
+  if (std::string(argv[1]) == std::string("d")) {
+    if (argc != 4) {
+      printf("not enough args\n");
+      return 1;
+    }
+    // then we're in dexor mode
+    QByteArray hash1 = getByteArrayFromString(QString(argv[2]));
+    QByteArray hash2 = getByteArrayFromString(QString(argv[3]));
+    QByteArray output;
+    for (int i = 0; i < hash1.length(); i++) {
+      output.append(hash1.at(i)^hash2.at(i));
+    }
+    std::cout << "output:" << std::endl;
+    printByteArray(output);
+    std::cout << "final output: " << output.toStdString() << std::endl;
     return 0;
   }
+  // implicit else
   QByteArray input(argv[1]);
   QByteArray salt = getRand(input.length());
   QByteArray derived;
