@@ -28,25 +28,15 @@ QByteArray getByteArrayFromString(QString in) {
   return out;
 }
 
-QList<QByteArray> get_hashes(QString in) {
+//QList<QByteArray> get_hashes(QString in) {
+QByteArray get_hash(QString in, QByteArray hash1) {
   QByteArray input = in.toLatin1();
-  QByteArray salt = getRand(input.length());
+  QByteArray salt = hash1;
   QByteArray derived;
   for (int i = 0 ; i < input.length(); i++) {
     derived.append(input.at(i)^salt.at(i));
   }
-  /*
-  std::cout << "input:" << std::endl;
-  printByteArray(input);
-  std::cout << "salt:" << std::endl;
-  printByteArray(salt);
-  std::cout << "derived:" << std::endl;
-  printByteArray(derived);
-  */
-  QList<QByteArray> output;
-  output.append(salt);
-  output.append(derived);
-  return output;
+  return derived;
 }
 
 // assumes arguments come in as strings and need to be converted to regular
@@ -68,6 +58,18 @@ int main(int argc, char *argv[]) {
     printf("not enough args\n");
     return 1;
   }
+  // rand generation mode
+  if (std::string(argv[1]) == std::string("r")) {
+  // we need to pass in the string, so we generate a rand of the correct length
+    if (argc != 3) {
+      printf("wrong # of args\n");
+      return 1;
+    }
+    QString secret = argv[2];
+    QByteArray rand = getRand(secret.length());
+    printByteArray(rand);
+    return 0; 
+  }
   if (std::string(argv[1]) == std::string("d")) {
     if (argc != 4) {
       printf("not enough args\n");
@@ -79,9 +81,10 @@ int main(int argc, char *argv[]) {
     return 0;
   }
   // implicit else
-  QList<QByteArray> hashes = get_hashes(QString(argv[1]));
+  QByteArray randhash = getByteArrayFromString(QString(argv[2])); 
+  QByteArray hash = get_hash(QString(argv[1]), randhash);
   std::cout << "salt:" << std::endl;
-  printByteArray(hashes[0]);
+  printByteArray(randhash);
   std::cout << "derived:" << std::endl;
-  printByteArray(hashes[1]);
+  printByteArray(hash);
 }
