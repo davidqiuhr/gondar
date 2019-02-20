@@ -1,6 +1,6 @@
 
-# ifndef _XOR_H_
-# define _XOR_H_
+#ifndef _XOR_H_
+#define _XOR_H_
 
 #include <QByteArray>
 #include <QString>
@@ -11,4 +11,4 @@ QByteArray getByteArrayFromString(QString in);
 QByteArray get_hash(QString in, QByteArray hash1);
 QString get_string(QString hash1str, QString hash2str);
 
-#endif //  _XOR_H_
+#endif  //  _XOR_H_

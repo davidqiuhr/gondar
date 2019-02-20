@@ -1,10 +1,10 @@
 
 #include "xor.h"
 
-#include <iostream>
 #include <QByteArray>
-#include <QString>
 #include <QList>
+#include <QString>
+#include <iostream>
 #include <random>
 
 void printByteArray(QByteArray in) {
@@ -18,7 +18,7 @@ QByteArray getRand(int len) {
   QByteArray output;
   for (int i = 0; i < len; i++) {
     unsigned char cur = dis(gen);
-    //std::cout << "cur = " << (unsigned int)cur << std::endl;
+    // std::cout << "cur = " << (unsigned int)cur << std::endl;
     output.append(cur);
   }
   return output;
@@ -30,13 +30,13 @@ QByteArray getByteArrayFromString(QString in) {
   return out;
 }
 
-//QList<QByteArray> get_hashes(QString in) {
+// QList<QByteArray> get_hashes(QString in) {
 QByteArray get_hash(QString in, QByteArray hash1) {
   QByteArray input = in.toLatin1();
   QByteArray salt = hash1;
   QByteArray derived;
-  for (int i = 0 ; i < input.length(); i++) {
-    derived.append(input.at(i)^salt.at(i));
+  for (int i = 0; i < input.length(); i++) {
+    derived.append(input.at(i) ^ salt.at(i));
   }
   return derived;
 }
@@ -44,11 +44,11 @@ QByteArray get_hash(QString in, QByteArray hash1) {
 // assumes arguments come in as strings and need to be converted to regular
 // hex
 QString get_string(QString hash1str, QString hash2str) {
-    QByteArray hash1 = getByteArrayFromString(QString(hash1str));
-    QByteArray hash2 = getByteArrayFromString(QString(hash2str));
-    QByteArray output;
-    for (int i = 0; i < hash1.length(); i++) {
-      output.append(hash1.at(i)^hash2.at(i));
-    }
-    return QString(output);
+  QByteArray hash1 = getByteArrayFromString(QString(hash1str));
+  QByteArray hash2 = getByteArrayFromString(QString(hash2str));
+  QByteArray output;
+  for (int i = 0; i < hash1.length(); i++) {
+    output.append(hash1.at(i) ^ hash2.at(i));
+  }
+  return QString(output);
 }
