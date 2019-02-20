@@ -53,6 +53,7 @@ def parse_args():
   return parser.parse_args()
 
 def main():
+  """
   args = parse_args()
   if args.mode == 'rand':
     handle_rand(args)
@@ -60,16 +61,19 @@ def main():
     handle_derived(args)
   elif args.mode == 'reverse':
     handle_reverse(args)
+  """
   #args = parse_args()
   #instr = args.string
   # the original string seems to be working as intended
-  """
   instr = 'abc'
   rand = get_rand(instr)
-  derived = get_derived(instr, rand)
+  randmangle = bytes(rand).hex()
+  print(randmangle)
+  randunmangle = bytearray.fromhex(randmangle)
+  #derived = get_derived(instr, rand)
+  derived = get_derived(instr, randunmangle)
   reverse = get_original(rand, derived)
   print('{}, {}, {}, {}'.format(instr, rand, derived, reverse))
-  """
 
 if __name__ == '__main__':
   main()
