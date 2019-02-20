@@ -10,7 +10,10 @@ phases:
     commands:
       - echo Build started on `date`
       - git submodule update --init
-      - make jenkins PACKAGE_FLAGS="--chromeover --release --apikey $METRICS_API --googleclient $GOOGLE_SIGN_IN_CLIENT --googlesecret $GOOGLE_SIGN_IN_SECRET" RELEASE=true
+      - bash buildxor
+      - GOOGLE_SECRET_HASH1=`./xorbuddy random $GOOGLE_SIGN_IN_SECRET`
+      - GOOGLE_SECRET_HASH2=`./xorbuddy xor $GOOGLE_SIGN_IN_SECRET $GOOGLE_SECRET_HASH1`
+      - make jenkins PACKAGE_FLAGS="--chromeover --release --apikey $METRICS_API --googleclient $GOOGLE_SIGN_IN_CLIENT --googlesecrethash1 $GOOGLE_SECRET_HASH1 --googlesecrethash2 $GOOGLE_SECRET_HASH2" RELEASE=true
   post_build:
     commands:
       - echo Build completed on `date`
