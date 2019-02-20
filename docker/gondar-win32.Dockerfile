@@ -23,7 +23,8 @@ ARG RELEASE=false
 ARG CHROMEOVER=false
 ARG METRICS_API_KEY=""
 ARG GOOGLE_SIGN_IN_CLIENT=""
-ARG GOOGLE_SIGN_IN_SECRET=""
+ARG GOOGLE_SIGN_IN_SECRET_HASH1=""
+ARG GOOGLE_SIGN_IN_SECRET_HASH2=""
 
 # copy microhttpd lib into mxe environment
 RUN cp /usr/local/lib/libmicrohttpd.a /opt/mxe/usr/lib/gcc/i686-w64-mingw32.static/5.4.0/
