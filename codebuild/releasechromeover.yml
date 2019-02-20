@@ -12,8 +12,8 @@ phases:
       - git submodule update --init
       - apt update
       - apt install python3.5 -y
-      - GOOGLE_SECRET_HASH1=`./xorpal.py rand $GOOGLE_SIGN_IN_SECRET`
-      - GOOGLE_SECRET_HASH2=`./xorpal.py derived $GOOGLE_SIGN_IN_SECRET $GOOGLE_SECRET_HASH1`
+      - GOOGLE_SECRET_HASH1=`python3.5 xorpal.py rand $GOOGLE_SIGN_IN_SECRET`
+      - GOOGLE_SECRET_HASH2=`python3.5 xorpal.py derived $GOOGLE_SIGN_IN_SECRET $GOOGLE_SECRET_HASH1`
       - make jenkins PACKAGE_FLAGS="--chromeover --release --apikey $METRICS_API --googleclient $GOOGLE_SIGN_IN_CLIENT --googlesecrethash1 $GOOGLE_SECRET_HASH1 --googlesecrethash2 $GOOGLE_SECRET_HASH2" RELEASE=true
   post_build:
     commands:
