@@ -35,7 +35,8 @@ def handle_derived(args):
   print(bytes(derivedbytes).hex())
 
 def handle_reverse(args):
-  outstring = get_original(str_to_bytes(args.rand), str_to_bytes(args.derived))
+  #outstring = get_original(str_to_bytes(args.rand), str_to_bytes(args.derived))
+  outstring = get_original(bytearray.fromhex(args.rand), bytearray.fromhex(args.derived))
   print(outstring)
 
 def parse_args():
@@ -53,7 +54,6 @@ def parse_args():
   return parser.parse_args()
 
 def main():
-  """
   args = parse_args()
   if args.mode == 'rand':
     handle_rand(args)
@@ -61,10 +61,10 @@ def main():
     handle_derived(args)
   elif args.mode == 'reverse':
     handle_reverse(args)
-  """
   #args = parse_args()
   #instr = args.string
   # the original string seems to be working as intended
+  """
   instr = 'abc'
   rand = get_rand(instr)
   randmangle = bytes(rand).hex()
@@ -72,8 +72,12 @@ def main():
   randunmangle = bytearray.fromhex(randmangle)
   #derived = get_derived(instr, rand)
   derived = get_derived(instr, randunmangle)
-  reverse = get_original(rand, derived)
+  derivedmangle = bytes(derived).hex()
+  print(derivedmangle)
+  derivedunmangle = bytearray.fromhex(derivedmangle)
+  reverse = get_original(rand, derivedunmangle)
   print('{}, {}, {}, {}'.format(instr, rand, derived, reverse))
+  """
 
 if __name__ == '__main__':
   main()
