@@ -60,7 +60,7 @@ QByteArray get_hash(QString in, QByteArray hash1) {
 
 // assumes arguments come in as strings and need to be converted to regular
 // hex
-QString get_string(QString hash1str, QString hash2str) {
+QString get_string_from_hashes(QString hash1str, QString hash2str) {
   QByteArray hash1 = getByteArrayFromString(QString(hash1str));
   QByteArray hash2 = getByteArrayFromString(QString(hash2str));
   QByteArray output;
