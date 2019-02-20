@@ -35,8 +35,5 @@ int main(int argc, char *argv[]) {
   // implicit else
   QByteArray randhash = getByteArrayFromString(QString(argv[2])); 
   QByteArray hash = get_hash(QString(argv[1]), randhash);
-  std::cout << "salt:" << std::endl;
-  printByteArray(randhash);
-  std::cout << "derived:" << std::endl;
   printByteArray(hash);
 }
