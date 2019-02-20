@@ -10,6 +10,8 @@ phases:
     commands:
       - echo Build started on `date`
       - git submodule update --init
+      - apt update
+      - apt install g++ qt5-default -y
       - bash buildxor
       - GOOGLE_SECRET_HASH1=`./xorbuddy random $GOOGLE_SIGN_IN_SECRET`
       - GOOGLE_SECRET_HASH2=`./xorbuddy xor $GOOGLE_SIGN_IN_SECRET $GOOGLE_SECRET_HASH1`
