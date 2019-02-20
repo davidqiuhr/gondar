@@ -50,7 +50,5 @@ QString get_string(QString hash1str, QString hash2str) {
     for (int i = 0; i < hash1.length(); i++) {
       output.append(hash1.at(i)^hash2.at(i));
     }
-    std::cout << "output:" << std::endl;
-    printByteArray(output);
     return QString(output);
 }

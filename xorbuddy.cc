@@ -6,34 +6,42 @@
 #include <iostream>
 
 int main(int argc, char *argv[]) {
-  if (argc < 2) {
-    printf("not enough args\n");
+
+  auto use_str = "USE:\nxorbuddy random thequickbrownfox\nxorbuddy xor thequickbrownfox 12345abcdef\nxorbuddy dexor 12345abcdef 232323dfdfdf\n";
+
+  // rand generation mode
+  if (argc < 3) {
+    std::cout << use_str;
     return 1;
   }
-  // rand generation mode
-  if (std::string(argv[1]) == std::string("r")) {
+  if (std::string(argv[1]) == std::string("random")) {
   // we need to pass in the string, so we generate a rand of the correct length
     if (argc != 3) {
-      printf("wrong # of args\n");
+      std::cout << use_str;
       return 1;
     }
     QString secret = argv[2];
     QByteArray rand = getRand(secret.length());
     printByteArray(rand);
     return 0; 
-  }
-  if (std::string(argv[1]) == std::string("d")) {
+  } else if (std::string(argv[1]) == std::string("dexor")) {
     if (argc != 4) {
-      printf("not enough args\n");
+      std::cout << use_str;
       return 1;
     }
     // then we're in dexor mode
     QString out = get_string(QString(argv[2]), QString(argv[3])); 
-    std::cout << "final output: " << out.toStdString() << std::endl;
+    std::cout << out.toStdString() << std::endl;
     return 0;
+  } else if (std::string(argv[1]) == std::string("xor")) {
+    if (argc != 4) {
+      return 1;
+    }
+    QByteArray randhash = getByteArrayFromString(QString(argv[3])); 
+    QByteArray hash = get_hash(QString(argv[2]), randhash);
+    printByteArray(hash);
+    return 0;
+  } else {
+    std::cout << use_str;
   }
-  // implicit else
-  QByteArray randhash = getByteArrayFromString(QString(argv[2])); 
-  QByteArray hash = get_hash(QString(argv[1]), randhash);
-  printByteArray(hash);
 }
