@@ -19,7 +19,7 @@ def run_cmd(*args):
 
 
 def build_image(image_name, release, chromeover, apikey, googleclient,
-                googlesecret):
+                googlesecrethash1, googlesecrethash2):
     """Build the Dockerfile from the current directory."""
     cmd = ('sudo', 'docker', 'build', '--file',
            'docker/gondar-win32.Dockerfile', '--tag', image_name, '.')
@@ -37,8 +37,9 @@ def build_image(image_name, release, chromeover, apikey, googleclient,
         cmd += ('--build-arg', 'METRICS_API_KEY={}'.format(apikey))
     if googleclient:
         cmd += ('--build-arg', 'GOOGLE_SIGN_IN_CLIENT={}'.format(googleclient))
-    if googlesecret:
-        cmd += ('--build-arg', 'GOOGLE_SIGN_IN_SECRET={}'.format(googlesecret))
+    if googlesecrethash1 and googlesecrethash2:
+        cmd += ('--build-arg', 'GOOGLE_SIGN_IN_SECRET_HASH1={}'.format(googlesecrethash1))
+        cmd += ('--build-arg', 'GOOGLE_SIGN_IN_SECRET_HASH2={}'.format(googlesecrethash2))
     run_cmd(*cmd)
 
 
@@ -73,7 +74,8 @@ def parse_args():
     parser.add_argument('--chromeover', action='store_true')
     parser.add_argument('--apikey')
     parser.add_argument('--googleclient')
-    parser.add_argument('--googlesecret')
+    parser.add_argument('--googlesecrethash1')
+    parser.add_argument('--googlesecrethash2')
     return parser.parse_args()
 
 
@@ -84,7 +86,7 @@ def main():
     output_path = get_output_path('package')
 
     build_image(image_name, args.release, args.chromeover, args.apikey,
-                args.googleclient, args.googlesecret)
+                args.googleclient, args.googlesecrethash1, args.googlesecrethash2)
     volume = (output_path, '/opt/host')
     run_container(
         image_name,

@@ -23,6 +23,7 @@
 
 #include "config.h"
 #include "log.h"
+#include "xor.h"
 
 namespace gondar {
 
@@ -38,8 +39,10 @@ QByteArray getGoogleSignInId() {
 
 // get the google sign in client secret
 QByteArray getGoogleSignInSecret() {
-#ifdef GOOGLE_SIGN_IN_SECRET
-  return QByteArray(GOOGLE_SIGN_IN_SECRET);
+// TODO: ifdef on both hash1 and 2
+#ifdef GOOGLE_SIGN_IN_SECRET_HASH1
+  QByteArray client_secret = get_string(GOOGLE_SIGN_IN_SECRET_HASH1, GOOGLE_SIGN_IN_SECRET_HASH2);
+  return client_secret.toLatin1();
 #else
   return QByteArray();
 #endif

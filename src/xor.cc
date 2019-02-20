@@ -18,7 +18,6 @@ QByteArray getRand(int len) {
   QByteArray output;
   for (int i = 0; i < len; i++) {
     unsigned char cur = dis(gen);
-    // std::cout << "cur = " << (unsigned int)cur << std::endl;
     output.append(cur);
   }
   return output;
@@ -30,7 +29,6 @@ QByteArray getByteArrayFromString(QString in) {
   return out;
 }
 
-// QList<QByteArray> get_hashes(QString in) {
 QByteArray get_hash(QString in, QByteArray hash1) {
   QByteArray input = in.toLatin1();
   QByteArray salt = hash1;
