@@ -10,9 +10,6 @@ def get_rand(instr):
   randbytes = array.array('B', (bytes(os.urandom(len(inbytes)))))
   return randbytes
 
-def str_to_bytes(instr):
-  return array.array('B', bytes(instr, 'utf-8'))
-
 def get_derived(instr, randbytes):
   inbytes = array.array('B', bytes(instr, 'utf-8'))
   derivedbytes = array.array('B')
@@ -35,7 +32,6 @@ def handle_derived(args):
   print(bytes(derivedbytes).hex())
 
 def handle_reverse(args):
-  #outstring = get_original(str_to_bytes(args.rand), str_to_bytes(args.derived))
   outstring = get_original(bytearray.fromhex(args.rand), bytearray.fromhex(args.derived))
   print(outstring)
 
@@ -61,23 +57,6 @@ def main():
     handle_derived(args)
   elif args.mode == 'reverse':
     handle_reverse(args)
-  #args = parse_args()
-  #instr = args.string
-  # the original string seems to be working as intended
-  """
-  instr = 'abc'
-  rand = get_rand(instr)
-  randmangle = bytes(rand).hex()
-  print(randmangle)
-  randunmangle = bytearray.fromhex(randmangle)
-  #derived = get_derived(instr, rand)
-  derived = get_derived(instr, randunmangle)
-  derivedmangle = bytes(derived).hex()
-  print(derivedmangle)
-  derivedunmangle = bytearray.fromhex(derivedmangle)
-  reverse = get_original(rand, derivedunmangle)
-  print('{}, {}, {}, {}'.format(instr, rand, derived, reverse))
-  """
 
 if __name__ == '__main__':
   main()
