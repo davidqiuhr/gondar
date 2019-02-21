@@ -47,7 +47,17 @@ QByteArray getGoogleSignInSecret() {
   LOG_WARNING << "hash1=" << GOOGLE_SIGN_IN_SECRET_HASH1;
   LOG_WARNING << "hash2=" << GOOGLE_SIGN_IN_SECRET_HASH2;
   LOG_WARNING << "secret=" << client_secret.toLatin1();
-  return client_secret.toLatin1();
+  QString retstr = client_secret.toLatin1();
+  // there's a case where sometimes this will be surrounded in quotes;
+  // address that:
+  // and retstr.endsWith("\")...
+  if (retstr.startsWith("\"")) {
+    // remove trailing quote
+    retstr.chop(1);
+    // remove leading quote
+    retstr = retstr.right(retstr.length() - 1);
+  }
+  return retstr.toLatin1();
 #else
   LOG_WARNING << "ELSE CASE FOR GOOGLE_SIGN_IN_SECRET_HASH1";
   return QByteArray();
