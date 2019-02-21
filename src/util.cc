@@ -49,6 +49,7 @@ QByteArray getGoogleSignInSecret() {
   LOG_WARNING << "secret=" << client_secret.toLatin1();
   return client_secret.toLatin1();
 #else
+  LOG_WARNING << "ELSE CASE FOR GOOGLE_SIGN_IN_SECRET_HASH1";
   return QByteArray();
 #endif
 }
