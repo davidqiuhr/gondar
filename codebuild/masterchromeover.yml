@@ -5,11 +5,13 @@ phases:
     commands:
       - echo Logging in
       - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+      - export GOOGLE_SIGN_IN_CLIENT=$(aws ssm get-parameters --region us-east-1 --names gondar.codebuild.google_id --with-decryption --query Parameters[0].Value)
+      - export GOOGLE_SIGN_IN_SECRET=$(aws ssm get-parameters --region us-east-1 --names gondar.codebuild.google_secret --with-decryption --query Parameters[0].Value)
   build:
     commands:
       - echo Build started on `date`
       - git submodule update --init
-      - make jenkins PACKAGE_FLAGS="--chromeover"
+      - make jenkins PACKAGE_FLAGS="--chromeover --googleclient $GOOGLE_SIGN_IN_CLIENT --googlesecret $GOOGLE_SIGN_IN_SECRET"
   post_build:
     commands:
       - echo Build completed on `date`
