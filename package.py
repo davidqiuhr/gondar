@@ -38,8 +38,10 @@ def build_image(image_name, release, chromeover, apikey, googleclient,
     if googleclient:
         cmd += ('--build-arg', 'GOOGLE_SIGN_IN_CLIENT={}'.format(googleclient))
     if googlesecrethash1 and googlesecrethash2:
-        cmd += ('--build-arg', 'GOOGLE_SIGN_IN_SECRET_HASH1={}'.format(googlesecrethash1))
-        cmd += ('--build-arg', 'GOOGLE_SIGN_IN_SECRET_HASH2={}'.format(googlesecrethash2))
+        cmd += ('--build-arg',
+                'GOOGLE_SIGN_IN_SECRET_HASH1={}'.format(googlesecrethash1))
+        cmd += ('--build-arg',
+                'GOOGLE_SIGN_IN_SECRET_HASH2={}'.format(googlesecrethash2))
     run_cmd(*cmd)
 
 
@@ -86,7 +88,8 @@ def main():
     output_path = get_output_path('package')
 
     build_image(image_name, args.release, args.chromeover, args.apikey,
-                args.googleclient, args.googlesecrethash1, args.googlesecrethash2)
+                args.googleclient, args.googlesecrethash1,
+                args.googlesecrethash2)
     volume = (output_path, '/opt/host')
     run_container(
         image_name,
