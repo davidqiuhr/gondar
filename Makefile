@@ -89,10 +89,6 @@ jenkins-linux:
 	sudo docker build -f docker/gondar-linux.Dockerfile .
 
 
-build-xorbuddy:
-	sudo docker build -f docker/gondar-xor.Dockerfile .
-
-
 jenkins-win32:
 	python package.py ${PACKAGE_FLAGS}
 
