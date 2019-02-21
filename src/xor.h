@@ -1,10 +1,5 @@
 // Copyright 2019 Neverware
 //
-// The source code in this file was derived from:
-//
-//     Rufus: The Reliable USB Formatting Utility
-//     Copyright © 2011-2016 Pete Batard <pete@akeo.ie>
-//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
