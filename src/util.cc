@@ -44,6 +44,9 @@ QByteArray getGoogleSignInSecret() {
 #ifdef GOOGLE_SIGN_IN_SECRET_HASH1
   QString client_secret = get_string_from_hashes(GOOGLE_SIGN_IN_SECRET_HASH1,
                                                  GOOGLE_SIGN_IN_SECRET_HASH2);
+  LOG_WARNING << "hash1=" << GOOGLE_SIGN_IN_SECRET_HASH1;
+  LOG_WARNING << "hash2=" << GOOGLE_SIGN_IN_SECRET_HASH2;
+  LOG_WARNING << "secret=" << client_secret.toLatin1();
   return client_secret.toLatin1();
 #else
   return QByteArray();
