@@ -59,6 +59,9 @@ int getRandomNum(int lower, int higher) {
   std::mt19937 gen(rd());
   std::uniform_int_distribution<> dis(lower, higher);
   int result = dis(gen);
+  // FIXME(kendall): i appear to be generating one good number, then 34 over
+  // and over.  i should probably save my seed instead of calling gen over
+  // and over
   LOG_INFO << "generated " << result;
   return result;
 }
