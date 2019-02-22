@@ -15,25 +15,26 @@
 
 #include "randar.h"
 
-#if defined(Q_OS_WIN)
-#include <inttypes.h>
-//#include <windowsx.h>
-#include <winioctl.h>  // for MEDIA_TYPE
-#define WIN32_NO_STATUS
-#include <windows.h>
-#undef WIN32_NO_STATUS
-
-#include <bcrypt.h>
-#include <ntstatus.h>
-#include <sal.h>
-#include <stdio.h>
-#include <winerror.h>
-#include <winternl.h>
-#endif
 
 #include <random>
 
+#include <QFile>
+#include <QJsonDocument>
+#include <QNetworkReply>
+
+#include "config.h"
 #include "log.h"
+
+#if defined(Q_OS_WIN)
+#include <windows.h>
+
+#include <winternl.h>
+#include <ntstatus.h>
+#include <winerror.h>
+#include <stdio.h>
+#include <bcrypt.h>
+#include <sal.h>
+#endif
 
 namespace gondar {
 
