@@ -24,6 +24,18 @@
 #include "config.h"
 #include "log.h"
 
+#if defined(Q_OS_WIN)
+#include <windows.h>
+#undef WIN32_NO_STATUS
+
+#include <winternl.h>
+#include <ntstatus.h>
+#include <winerror.h>
+#include <stdio.h>
+#include <bcrypt.h>
+#include <sal.h>
+#endif
+
 namespace gondar {
 
 // get the google sign in client id
@@ -45,6 +57,29 @@ QByteArray getGoogleSignInSecret() {
 #endif
 }
 
+#if defined(Q_OS_WIN)
+int getRandomNum(int lower, int higher) {
+    lower = lower + 1;
+    higher = higher + 1;
+    // TODO(kendall): ^ unused
+    BYTE    Buffer[4];
+    DWORD   BufferSize;
+    
+    BufferSize = sizeof (Buffer);
+    memset (Buffer, 0, BufferSize);
+    
+    //
+    // Fill the buffer with random bytes
+    //
+
+    BCryptGenRandom(NULL,  // Alg Handle pointer; NUll is passed as BCRYPT_USE_SYSTEM_PREFERRED_RNG flag is used
+                    Buffer,                     // Address of the buffer that recieves the random number(s)
+                    BufferSize,                 // Size of the buffer in bytes
+                    BCRYPT_USE_SYSTEM_PREFERRED_RNG); // Flags                  
+    int ret = (Buffer[3] << 24) | (Buffer[2] << 16) | (Buffer[1] << 8) | (Buffer[0]);
+    return ret;
+}
+#else
 // the range is inclusive according to
 // https://en.cppreference.com/w/cpp/numeric/random/uniform_int_distribution
 // I believe a seed is generated on each call this way, but we only call it
@@ -57,6 +92,7 @@ int getRandomNum(int lower, int higher) {
   LOG_INFO << "generated " << result;
   return result;
 }
+#endif
 
 QString readUtf8File(const QString& filepath) {
   LOG_INFO << "opening " << filepath << " for reading";
