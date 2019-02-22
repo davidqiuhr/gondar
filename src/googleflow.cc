@@ -26,6 +26,7 @@
 #include <QUrl>
 
 #include "log.h"
+#include "randar.h"
 #include "util.h"
 
 static QString get_random_string() {

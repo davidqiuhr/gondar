@@ -1,4 +1,4 @@
-// Copyright 2017 Neverware
+// Copyright 2019 Neverware
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,28 +13,35 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SRC_UTIL_H_
-#define SRC_UTIL_H_
+#ifndef SRC_RANDAR_H_
+#define SRC_RANDAR_H_
 
-#include <QJsonObject>
-#include <QNetworkReply>
-#include <QString>
+#include <random>
 
 namespace gondar {
 
-// used by google sign in flow
-QByteArray getGoogleSignInId();
-QByteArray getGoogleSignInSecret();
-// Read the contents of |filepath| and decode as UTF-8. Throws an
-// exception on failure.
-QString readUtf8File(const QString& filepath);
-bool isChromeover();
-bool isRelease();
-QString getDomain();
-QString getGondarVersion();
-QJsonObject jsonFromReply(QNetworkReply* reply);
-uint64_t getGigabyte();
+class RandomManager {
+ public:
+  static RandomManager& getInstance() {
+    static RandomManager instance;
+    return instance;
+  }
+  unsigned int getRandomByte();
+
+ private:
+  RandomManager();
+  std::random_device rd;
+  std::mt19937 gen;
+
+ public:
+  // singleton buddies
+  // see https://stackoverflow.com/questions/1008019/c-singleton-design-pattern
+  RandomManager(RandomManager const&) = delete;
+  void operator=(RandomManager const&) = delete;
+};
+
+int getRandomNum(int lower, int higher);
 
 }  // namespace gondar
 
-#endif  // SRC_UTIL_H_
+#endif  // SRC_RANDAR_H_
