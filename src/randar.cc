@@ -16,6 +16,10 @@
 #include "randar.h"
 
 #if defined(Q_OS_WIN)
+#include <inttypes.h>
+//#include <windowsx.h>
+#include <winioctl.h>  // for MEDIA_TYPE
+#define WIN32_NO_STATUS
 #include <windows.h>
 #undef WIN32_NO_STATUS
 
@@ -41,8 +45,10 @@ RandomManager::RandomManager() {
 
 #if defined(Q_OS_WIN)
 unsigned int RandomManager::getSeed() {
-  BYTE Buffer[4];
-  DWORD BufferSize;
+  uint8_t Buffer[4];
+  uint16_t BufferSize;
+  //BYTE Buffer[4];
+  //DWORD BufferSize;
 
   BufferSize = sizeof(Buffer);
   memset(Buffer, 0, BufferSize);
@@ -53,6 +59,7 @@ unsigned int RandomManager::getSeed() {
   int ret =
       (Buffer[3] << 24) | (Buffer[2] << 16) | (Buffer[1] << 8) | (Buffer[0]);
   return ret;
+  //return 0;
 }
 #else
 

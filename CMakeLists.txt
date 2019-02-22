@@ -163,9 +163,7 @@ if(WIN32)
 
   fix_qt_static_link(app)
 
-  target_link_libraries(app PRIVATE setupapi)
-  target_link_libraries(app PRIVATE gdisk)
-  target_link_libraries(app PRIVATE bcrypt)
+  target_link_libraries(app PRIVATE setupapi gdisk bcrypt)
   # disable shadow variable checking for this file as it imports gdisk headers
   # which contain a shadowing whoopsie
   set_source_files_properties(src/gpt_pal.cc PROPERTIES COMPILE_FLAGS -Wno-shadow)
