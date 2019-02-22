@@ -15,14 +15,8 @@
 
 #include "randar.h"
 
-
 #include <random>
 
-#include <QFile>
-#include <QJsonDocument>
-#include <QNetworkReply>
-
-#include "config.h"
 #include "log.h"
 
 #if defined(Q_OS_WIN)
