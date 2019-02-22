@@ -12,12 +12,11 @@ class RandomManager {
     static RandomManager instance;
     return instance; 
   }
-  int getRandomNum(int lower, int higher); 
+  std::mt19937 gen;
  private:
   RandomManager();
   unsigned int getSeed();
   unsigned int seed;
-  std::mt19937 gen;
  public:
   // singleton buddies
   // see https://stackoverflow.com/questions/1008019/c-singleton-design-pattern
@@ -25,6 +24,8 @@ class RandomManager {
   void operator=(RandomManager const&) = delete;
 
 };
+
+int getRandomNum(int lower, int higher); 
 
 }
 

@@ -1,10 +1,10 @@
 
 #include "randar.h"
 
-#include <random>
-
 #if defined(Q_OS_WIN)
 #include <windows.h>
+#include <inttypes.h>
+#include <setupapi.h>
 #undef WIN32_NO_STATUS
 
 #include <winternl.h>
@@ -14,6 +14,8 @@
 #include <bcrypt.h>
 #include <sal.h>
 #endif
+
+#include <random>
 
 #include "log.h"
 
@@ -51,14 +53,15 @@ unsigned int RandomManager::getSeed() {
   std::random_device rd;
   return rd();
 }
-
 #endif
+
 // the range is inclusive according to
 // https://en.cppreference.com/w/cpp/numeric/random/uniform_int_distribution
 // I believe a seed is generated on each call this way, but we only call it
 // twice so that should be fine.
-int RandomManager::getRandomNum(int lower, int higher) {
+int getRandomNum(int lower, int higher) {
   std::uniform_int_distribution<> dis(lower, higher);
+  auto gen = gondar::RandomManager::getInstance().gen;
   int result = dis(gen);
   LOG_INFO << "generated " << result;
   return result;

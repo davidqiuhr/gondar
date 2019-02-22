@@ -138,7 +138,7 @@ target_compile_options(app PRIVATE ${EXTRA_WARNINGS})
 target_include_directories(app SYSTEM PUBLIC minizip plog/include)
 target_include_directories(app PRIVATE ${CMAKE_BINARY_DIR}/src)
 target_link_libraries(app PUBLIC
-  Qt5::Network Qt5::Widgets minizip minizip_extra microhttpd bcrypt)
+  Qt5::Network Qt5::Widgets minizip minizip_extra microhttpd)
 
 # Gondar application
 add_executable(cloudready-usb-maker src/main.cc)
@@ -165,6 +165,7 @@ if(WIN32)
 
   target_link_libraries(app PRIVATE setupapi)
   target_link_libraries(app PRIVATE gdisk)
+  target_link_libraries(app PRIVATE bcrypt)
   # disable shadow variable checking for this file as it imports gdisk headers
   # which contain a shadowing whoopsie
   set_source_files_properties(src/gpt_pal.cc PROPERTIES COMPILE_FLAGS -Wno-shadow)
