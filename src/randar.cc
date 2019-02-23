@@ -33,13 +33,11 @@
 namespace gondar {
 
 RandomManager::RandomManager() {
-  // we initialize the seed
-  seed = getSeed();
-  gen.seed(seed);
 }
 
 #if defined(Q_OS_WIN)
-unsigned int RandomManager::getSeed() {
+// TODO: rename getRandomByte?
+unsigned int RandomManager::getRandomByte() {
   uint8_t Buffer[4];
   uint16_t BufferSize;
   //BYTE Buffer[4];
@@ -54,26 +52,26 @@ unsigned int RandomManager::getSeed() {
   int ret =
       (Buffer[3] << 24) | (Buffer[2] << 16) | (Buffer[1] << 8) | (Buffer[0]);
   return ret;
-  //return 0;
 }
 #else
 
-unsigned int RandomManager::getSeed() {
+unsigned int RandomManager::getRandomByte() {
   // FIXME(kendall): make this work on linux
-  std::random_device rd;
-  return rd();
-}
-#endif
-
-// the range is inclusive according to
-// https://en.cppreference.com/w/cpp/numeric/random/uniform_int_distribution
-// I believe a seed is generated on each call this way, but we only call it
-// twice so that should be fine.
-int getRandomNum(int lower, int higher) {
-  std::uniform_int_distribution<> dis(lower, higher);
-  auto gen = gondar::RandomManager::getInstance().gen;
-  int result = dis(gen);
+  // TODO: move these static guys into the class
+  static std::random_device rd;
+  static std::mt19937 gen(rd());
+  // 2**32 - 1
+  //std::uniform_int_distribution<> dis(0, 4294967295);
+  //unsigned int result = dis(gen);
+  unsigned int result = gen();
   LOG_INFO << "generated " << result;
   return result;
 }
+#endif
+
+int getRandomNum(int lower, int higher) {
+  unsigned int byte = gondar::RandomManager::getInstance().getRandomByte();
+  return (byte % (higher - lower)) + lower;
+}
+
 }  // namespace gondar

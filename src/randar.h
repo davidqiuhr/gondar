@@ -26,11 +26,10 @@ class RandomManager {
     static RandomManager instance;
     return instance;
   }
-  std::mt19937 gen;
+  unsigned int getRandomByte();
 
  private:
   RandomManager();
-  unsigned int getSeed();
   unsigned int seed;
 
  public:
