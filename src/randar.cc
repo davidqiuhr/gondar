@@ -22,26 +22,25 @@
 #if defined(Q_OS_WIN)
 #include <windows.h>
 
-#include <winternl.h>
-#include <ntstatus.h>
-#include <winerror.h>
-#include <stdio.h>
 #include <bcrypt.h>
+#include <ntstatus.h>
 #include <sal.h>
+#include <stdio.h>
+#include <winerror.h>
+#include <winternl.h>
 #endif
 
 namespace gondar {
 
 RandomManager::RandomManager() {
+  // only used in linux implementation for now
+  gen.seed(rd());
 }
 
 #if defined(Q_OS_WIN)
-// TODO: rename getRandomByte?
 unsigned int RandomManager::getRandomByte() {
   uint8_t Buffer[4];
   uint16_t BufferSize;
-  //BYTE Buffer[4];
-  //DWORD BufferSize;
 
   BufferSize = sizeof(Buffer);
   memset(Buffer, 0, BufferSize);
@@ -56,16 +55,7 @@ unsigned int RandomManager::getRandomByte() {
 #else
 
 unsigned int RandomManager::getRandomByte() {
-  // FIXME(kendall): make this work on linux
-  // TODO: move these static guys into the class
-  static std::random_device rd;
-  static std::mt19937 gen(rd());
-  // 2**32 - 1
-  //std::uniform_int_distribution<> dis(0, 4294967295);
-  //unsigned int result = dis(gen);
-  unsigned int result = gen();
-  LOG_INFO << "generated " << result;
-  return result;
+  return gen();
 }
 #endif
 

@@ -30,7 +30,8 @@ class RandomManager {
 
  private:
   RandomManager();
-  unsigned int seed;
+  std::random_device rd;
+  std::mt19937 gen;
 
  public:
   // singleton buddies
