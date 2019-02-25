@@ -27,7 +27,6 @@
 #include "randar.h"
 #include "util.h"
 
-
 int main(int argc, char* argv[]) {
 #if defined(Q_OS_WIN)
   Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
