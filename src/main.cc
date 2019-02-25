@@ -24,9 +24,9 @@
 #include "gondarwizard.h"
 #include "log.h"
 #include "metric.h"
+#include "randar.h"
 #include "util.h"
 
-#include "randar.h"
 
 int main(int argc, char* argv[]) {
 #if defined(Q_OS_WIN)
@@ -40,9 +40,6 @@ int main(int argc, char* argv[]) {
   // placed here to enable logging for this step
   SetFormatPromptHook();
 #endif
-  for (int i = 0; i < 10; i++) {
-    LOG_WARNING << "rand=" << gondar::getRandomNum(0, 100);
-  }
   QApplication app(argc, argv);
   app.setStyleSheet(gondar::readUtf8File(":/style.css"));
 

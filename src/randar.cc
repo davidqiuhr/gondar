@@ -21,7 +21,6 @@
 
 #if defined(Q_OS_WIN)
 #include <windows.h>
-
 #include <bcrypt.h>
 #include <ntstatus.h>
 #include <sal.h>
@@ -59,6 +58,8 @@ unsigned int RandomManager::getRandomByte() {
 }
 #endif
 
+// return a random number between lower bound and upper bound
+// note that the random number has a max range of 255
 int getRandomNum(int lower, int higher) {
   unsigned int byte = gondar::RandomManager::getInstance().getRandomByte();
   return (byte % (higher - lower)) + lower;
