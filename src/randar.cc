@@ -20,11 +20,11 @@
 #include "log.h"
 
 #if defined(Q_OS_WIN)
+#include <windows.h>
 #include <bcrypt.h>
 #include <ntstatus.h>
 #include <sal.h>
 #include <stdio.h>
-#include <windows.h>
 #include <winerror.h>
 #include <winternl.h>
 #endif
