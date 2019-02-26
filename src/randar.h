@@ -26,7 +26,7 @@ class RandomManager {
     static RandomManager instance;
     return instance;
   }
-  unsigned int getRandomByte();
+  unsigned int getRandom4Bytes();
 
  private:
   RandomManager();

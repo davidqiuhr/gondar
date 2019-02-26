@@ -37,7 +37,7 @@ RandomManager::RandomManager() {
 }
 
 #if defined(Q_OS_WIN)
-unsigned int RandomManager::getRandomByte() {
+unsigned int RandomManager::getRandom4Bytes() {
   uint8_t Buffer[4];
   uint16_t BufferSize;
 
@@ -53,15 +53,15 @@ unsigned int RandomManager::getRandomByte() {
 }
 #else
 
-unsigned int RandomManager::getRandomByte() {
+unsigned int RandomManager::getRandom4Bytes() {
   return gen();
 }
 #endif
 
 // return a random number between lower bound and upper bound
-// note that the random number has a max range of 255
+// note that the random number has a max range of 2**32
 int getRandomNum(int lower, int higher) {
-  unsigned int byte = gondar::RandomManager::getInstance().getRandomByte();
+  unsigned int byte = gondar::RandomManager::getInstance().getRandom4Bytes();
   return (byte % (higher - lower)) + lower;
 }
 
