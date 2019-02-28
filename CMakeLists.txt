@@ -124,7 +124,7 @@ add_library(app STATIC
   src/metric.cc
   src/neverware_unzipper.cc
   src/oauth_server.cc
-  src/randar.cc
+  src/rand_util.cc
   src/site_select_page.cc
   src/unzipthread.cc
   src/update_check.cc

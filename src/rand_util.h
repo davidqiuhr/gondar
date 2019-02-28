@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SRC_RANDAR_H_
-#define SRC_RANDAR_H_
+#ifndef SRC_RAND_UTIL_H_
+#define SRC_RAND_UTIL_H_
 
 #include <random>
 
@@ -24,4 +24,4 @@ int getRandomNum(int lower, int higher);
 
 }  // namespace gondar
 
-#endif  // SRC_RANDAR_H_
+#endif  // SRC_RAND_UTIL_H_

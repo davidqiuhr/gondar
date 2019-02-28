@@ -30,7 +30,7 @@
 #include <string.h>
 
 #include "log.h"
-#include "randar.h"
+#include "rand_util.h"
 #include "util.h"
 
 #if defined(_MSC_VER) && _MSC_VER + 0 <= 1800
