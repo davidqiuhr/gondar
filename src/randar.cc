@@ -17,8 +17,6 @@
 
 #include <random>
 
-#include "log.h"
-
 // ensure windows.h is included first; including it later causes build failure
 #if defined(Q_OS_WIN)
 #include <windows.h>
@@ -61,6 +59,8 @@ RandomManager::RandomManager() {
 }
 
 #if defined(Q_OS_WIN)
+// this implementation from
+// https://github.com/Microsoft/Windows-classic-samples/blob/master/Samples/Security/RandomNumGeneration/cpp/RandomNumGeneration.cpp
 unsigned int RandomManager::getRandom4Bytes() {
   uint8_t Buffer[4];
   uint16_t BufferSize;

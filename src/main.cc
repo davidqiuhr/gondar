@@ -24,7 +24,6 @@
 #include "gondarwizard.h"
 #include "log.h"
 #include "metric.h"
-#include "randar.h"
 #include "util.h"
 
 int main(int argc, char* argv[]) {
