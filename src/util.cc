@@ -45,19 +45,6 @@ QByteArray getGoogleSignInSecret() {
 #endif
 }
 
-// the range is inclusive according to
-// https://en.cppreference.com/w/cpp/numeric/random/uniform_int_distribution
-// I believe a seed is generated on each call this way, but we only call it
-// twice so that should be fine.
-int getRandomNum(int lower, int higher) {
-  std::random_device rd;
-  std::mt19937 gen(rd());
-  std::uniform_int_distribution<> dis(lower, higher);
-  int result = dis(gen);
-  LOG_INFO << "generated " << result;
-  return result;
-}
-
 QString readUtf8File(const QString& filepath) {
   LOG_INFO << "opening " << filepath << " for reading";
   QFile file(filepath);
