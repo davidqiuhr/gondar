@@ -186,8 +186,9 @@ void OauthServer::start() {
   }
 }
 
-// FIXME: leak?  https://www.gnu.org/software/libmicrohttpd/tutorial.html and
-// similar seem to only call stop_daemon and do not delete it
+// FIXME(kendall): leak?
+// https://www.gnu.org/software/libmicrohttpd/tutorial.html and similar seem to
+// only call stop_daemon and do not delete it
 void OauthServer::stop() {
   if (daemon != nullptr) {
     MHD_stop_daemon(daemon);
