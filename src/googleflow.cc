@@ -58,6 +58,7 @@ GoogleFlow::GoogleFlow() {
 // this function is just a middleman so that the page does not have to know
 // about oauth server
 void GoogleFlow::handleGoogleSigninError(QString error) {
+  LOG_WARNING << "received google sign in error=" << error;
   emit errorMiddle();
 }
 
