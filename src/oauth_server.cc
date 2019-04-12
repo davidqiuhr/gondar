@@ -93,12 +93,17 @@ static void request_completed(void* cls,
   *con_cls = nullptr;
 }
 
-static int handle_success(QString state, QString code, struct MHD_Connection* connection, OauthServer* server_ptr) {
+static int handle_success(QString state,
+                          QString code,
+                          struct MHD_Connection* connection,
+                          OauthServer* server_ptr) {
   emit server_ptr->callbackReceived(state, code);
   return send_page(connection, gondarpage);
 }
 
-static int handle_fail(QString error, struct MHD_Connection* connection, OauthServer* server_ptr) {
+static int handle_fail(QString error,
+                       struct MHD_Connection* connection,
+                       OauthServer* server_ptr) {
   emit server_ptr->authError(error);
   return send_page(connection, errorpage);
 }

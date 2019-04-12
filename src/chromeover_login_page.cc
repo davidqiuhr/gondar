@@ -25,9 +25,9 @@
 #include <cstdlib>
 #include <ctime>
 
-#include "googleflow.h"
 #include "gondarsite.h"
 #include "gondarwizard.h"
+#include "googleflow.h"
 #include "log.h"
 #include "oauth_server.h"
 #include "util.h"
@@ -76,7 +76,8 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
           &ChromeoverLoginPage::handleMeepoFinished);
   connect(googleFlow.getManager(), &QNetworkAccessManager::finished, this,
           &ChromeoverLoginPage::handleGoogleSigninFinished);
-  connect(&googleFlow, &GoogleFlow::errorMiddle, this, &ChromeoverLoginPage::handleGoogleSigninFail);
+  connect(&googleFlow, &GoogleFlow::errorMiddle, this,
+          &ChromeoverLoginPage::handleGoogleSigninFail);
 }
 
 int ChromeoverLoginPage::nextId() const {
