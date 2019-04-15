@@ -55,8 +55,11 @@ GoogleFlow::GoogleFlow() {
           &GoogleFlow::handleGoogleSigninPart2);
 }
 
+// this function is just a middleman so that the page does not have to know
+// about oauth server
 void GoogleFlow::handleGoogleSigninError(QString error) {
   LOG_WARNING << "received google sign in error=" << error;
+  emit errorMiddle();
 }
 
 // This fires when the user has clicked on the 'sign in with google' link
@@ -112,10 +115,7 @@ QNetworkAccessManager* GoogleFlow::getManager() {
   return &manager;
 }
 
-void GoogleFlow::startServer() {
-  localServer.start();
-}
-
 void GoogleFlow::stopServer() {
   localServer.stop();
+  http_server_started = false;
 }

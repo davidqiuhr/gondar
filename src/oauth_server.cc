@@ -93,6 +93,21 @@ static void request_completed(void* cls,
   *con_cls = nullptr;
 }
 
+static int handle_success(QString state,
+                          QString code,
+                          struct MHD_Connection* connection,
+                          OauthServer* server_ptr) {
+  emit server_ptr->callbackReceived(state, code);
+  return send_page(connection, gondarpage);
+}
+
+static int handle_fail(QString error,
+                       struct MHD_Connection* connection,
+                       OauthServer* server_ptr) {
+  emit server_ptr->authError(error);
+  return send_page(connection, errorpage);
+}
+
 static int answer_to_connection(void* cls,
                                 struct MHD_Connection* connection,
                                 const char* url,
@@ -133,26 +148,24 @@ static int answer_to_connection(void* cls,
           connection, MHD_GET_ARGUMENT_KIND, "error");
       // state should equal the state we sent
       // code should be populated
+      // NOTE(kendall): this is the only success case.
       if (!state.isEmpty() && !code.isEmpty()) {
-        emit server_ptr->callbackReceived(state, code);
-        return send_page(connection, gondarpage);
+        return handle_success(state, code, connection, server_ptr);
       } else if (!error.isEmpty()) {
         // then it's a known error during auth process
-        emit server_ptr->authError(error);
-        return send_page(connection, errorpage);
+        return handle_fail(error, connection, server_ptr);
       } else {
         LOG_WARNING << "HTTPSERVER UNKNOWN CASE: this should never be reached";
         // TODO(kendall): make separate pages for each error
-        return send_page(connection, errorpage);
+        return handle_fail("unknown case error", connection, server_ptr);
       }
     } else {
       // only root should be hit
-      return send_page(connection, errorpage);
+      return handle_fail("non-root error", connection, server_ptr);
     }
   } else {
     // a non-get request
-    // TODO(kendall): make separate pages for each error
-    return send_page(connection, errorpage);
+    return handle_fail("non-get error", connection, server_ptr);
   }
 }
 
@@ -173,9 +186,13 @@ void OauthServer::start() {
   }
 }
 
+// FIXME(kendall): leak?
+// https://www.gnu.org/software/libmicrohttpd/tutorial.html and similar seem to
+// only call stop_daemon and do not delete it
 void OauthServer::stop() {
   if (daemon != nullptr) {
     MHD_stop_daemon(daemon);
+    daemon = nullptr;
   }
 }
 

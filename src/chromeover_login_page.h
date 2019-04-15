@@ -40,6 +40,7 @@ class ChromeoverLoginPage : public gondar::WizardPage {
  private:
   void handleMeepoFinished();
   void handleGoogleSigninFinished(QNetworkReply* reply);
+  void handleGoogleSigninFail();
 
   gondar::Meepo meepo_;
 

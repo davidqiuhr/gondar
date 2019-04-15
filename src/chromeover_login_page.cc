@@ -27,6 +27,7 @@
 
 #include "gondarsite.h"
 #include "gondarwizard.h"
+#include "googleflow.h"
 #include "log.h"
 #include "oauth_server.h"
 #include "util.h"
@@ -75,6 +76,8 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
           &ChromeoverLoginPage::handleMeepoFinished);
   connect(googleFlow.getManager(), &QNetworkAccessManager::finished, this,
           &ChromeoverLoginPage::handleGoogleSigninFinished);
+  connect(&googleFlow, &GoogleFlow::errorMiddle, this,
+          &ChromeoverLoginPage::handleGoogleSigninFail);
 }
 
 int ChromeoverLoginPage::nextId() const {
@@ -131,12 +134,22 @@ void ChromeoverLoginPage::handleMeepoFinished() {
 
 // This fires when we have received our token. We send the token to Meepo
 // to find the user's sites in a way very similar to user/password flow.
-// TODO(kendall): handle failure case
 void ChromeoverLoginPage::handleGoogleSigninFinished(QNetworkReply* reply) {
   LOG_INFO << "id token received; contacting meepo...";
+  // remove red error text that may have existed from a previous auth failure
+  meanWordsLabel.setVisible(false);
   QString id_token = gondar::jsonFromReply(reply)["id_token"].toString();
   if (!started) {
     meepo_.startGoogle(id_token);
     started = true;
   }
+}
+
+void ChromeoverLoginPage::handleGoogleSigninFail() {
+  LOG_WARNING << "Sign in with Google failed; resetting";
+  // we show the red text
+  meanWordsLabel.setVisible(true);
+  // then we turn off the server so we can repeat the flow similarly to
+  // the initial run
+  googleFlow.stopServer();
 }
