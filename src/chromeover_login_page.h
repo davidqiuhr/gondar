@@ -55,7 +55,6 @@ class ChromeoverLoginPage : public gondar::WizardPage {
   bool finished;
   bool started;
   GoogleFlow googleFlow;
-  QPixmap googlepix;
 };
 
 #endif  // SRC_CHROMEOVER_LOGIN_PAGE_H_

@@ -53,7 +53,7 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
 
   // image sourced from
   // https://developers.google.com/identity/branding-guidelines
-  googlepix.load(":/images/btn_google_signin_light_normal_web.png");
+  QPixmap googlepix(":/images/btn_google_signin_light_normal_web.png");
   googleButton.setIcon(googlepix);
   googleButton.setIconSize(
       QSize(googlepix.rect().width(), googlepix.rect().height()));
