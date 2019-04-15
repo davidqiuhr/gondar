@@ -55,7 +55,8 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
   // https://developers.google.com/identity/branding-guidelines
   googlepix.load(":/images/btn_google_signin_light_normal_web.png");
   googleButton.setIcon(googlepix);
-  googleButton.setIconSize(QSize(googlepix.rect().width(), googlepix.rect().height()));
+  googleButton.setIconSize(
+      QSize(googlepix.rect().width(), googlepix.rect().height()));
   googleButton.setMaximumWidth(googlepix.rect().width());
 
   meanWordsLabel.setObjectName("loginError");
