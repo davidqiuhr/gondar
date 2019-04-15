@@ -58,6 +58,7 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
   googleButton.setIconSize(
       QSize(googlepix.rect().width(), googlepix.rect().height()));
   googleButton.setMaximumWidth(googlepix.rect().width());
+  googleButton.setObjectName("googleSigninButton");
 
   meanWordsLabel.setObjectName("loginError");
   layout.addWidget(&passwordLineEditLabel, 1, 0);

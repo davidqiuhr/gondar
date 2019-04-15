@@ -19,6 +19,10 @@ ImageSelectPage QLabel {
     padding-left: 10px;
 }
 
+#googleSigninButton {
+  border: none;
+}
+
 * {
   font-size: 17px;
 }
