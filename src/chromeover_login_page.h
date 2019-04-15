@@ -28,6 +28,18 @@
 
 class QNetworkReply;
 
+class HoverBuddy : public QObject {
+  Q_OBJECT
+ public:
+  explicit HoverBuddy(QObject* parent = Q_NULLPTR);
+  virtual bool eventFilter(QObject* watched, QEvent* event) Q_DECL_OVERRIDE;
+ private:
+  QPixmap pixmap;
+  QPixmap clixmap;
+  QPixmap thxmap;
+};
+
+
 class ChromeoverLoginPage : public gondar::WizardPage {
   Q_OBJECT
 

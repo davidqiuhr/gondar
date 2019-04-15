@@ -16,6 +16,7 @@
 #include "chromeover_login_page.h"
 
 #include <QDesktopServices>
+#include <QEvent>
 #include <QJsonDocument>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
@@ -30,6 +31,35 @@
 #include "log.h"
 #include "oauth_server.h"
 #include "util.h"
+
+HoverBuddy::HoverBuddy(QObject* parent) : QObject(parent) {
+  pixmap.load(":/resources/btn_google_signin_light_normal_web.png");
+  thxmap.load(":/resources/btn_google_signin_light_focus_web.png");
+  clixmap.load(":/resources/btn_google_signin_light_pressed_web.png");
+}
+
+bool HoverBuddy::eventFilter(QObject* watched, QEvent* event) {
+  LOG_WARNING << "ken: in eventFilter";
+  QPushButton* button = qobject_cast<QPushButton*>(watched);
+  if (!button) {
+    return false;
+  }
+  if (event->type() == QEvent::Enter) {
+    LOG_WARNING << "ken: ~~~ENTER";
+    button->setIcon(thxmap);
+    button->setIconSize(QSize(pixmap.rect().width(), pixmap.rect().height()));
+    button->setMaximumWidth(pixmap.rect().width());
+    return true;
+  }
+  if (event->type() == QEvent::Leave) {
+    LOG_WARNING << "ken: ~~~LEAVE";
+    button->setIcon(pixmap);
+    button->setIconSize(QSize(pixmap.rect().width(), pixmap.rect().height()));
+    button->setMaximumWidth(pixmap.rect().width());
+    return true;
+  }
+  return false;
+}
 
 ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
   setTitle("Login");
@@ -54,6 +84,13 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
   // image sourced from
   // https://developers.google.com/identity/branding-guidelines
   googleButton.setObjectName("googleSigninButton");
+  QPixmap pixmap(":/resources/btn_google_signin_light_normal_web.png");
+  googleButton.setIcon(pixmap);
+  googleButton.setIconSize(QSize(pixmap.rect().width(), pixmap.rect().height()));
+  googleButton.setMaximumWidth(pixmap.rect().width());
+
+  HoverBuddy* buddy = new HoverBuddy(this);
+  googleButton.installEventFilter(buddy);
 
   meanWordsLabel.setObjectName("loginError");
   layout.addWidget(&passwordLineEditLabel, 1, 0);
