@@ -2,6 +2,7 @@
 <qresource prefix="images">
     <file>crlogo.png</file>
     <file>btn_google_signin_light_normal_web.png</file>
+    <file>btn_google_signin_light_focus_web.png</file>
 </qresource>
 
 <qresource>
