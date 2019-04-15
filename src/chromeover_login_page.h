@@ -19,6 +19,7 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QLineEdit>
+#include <QPushButton>
 
 #include "googleflow.h"
 #include "meepo.h"
@@ -50,10 +51,11 @@ class ChromeoverLoginPage : public gondar::WizardPage {
   QLabel passwordLineEditLabel;
   QLabel meanWordsLabel;
   QLabel forgotLabel;
-  QLabel googleLabel;
+  QPushButton googleButton;
   bool finished;
   bool started;
   GoogleFlow googleFlow;
+  QPixmap googlepix;
 };
 
 #endif  // SRC_CHROMEOVER_LOGIN_PAGE_H_

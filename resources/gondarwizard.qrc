@@ -1,6 +1,7 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource prefix="images">
     <file>crlogo.png</file>
+    <file>btn_google_signin_light_normal_web.png</file>
 </qresource>
 
 <qresource>
