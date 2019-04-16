@@ -29,12 +29,14 @@ class GoogleFlow : public QObject {
 
  public:
   GoogleFlow();
-  void startServer();  // start the local webserver
-  void stopServer();   // stop the local webserver
+  void stopServer();  // stop the local webserver
   bool shouldShowSignInWithGoogle();
   QNetworkAccessManager* getManager();
  public slots:
   void handleGoogleSigninPart1();
+
+ signals:
+  void errorMiddle();
 
  private:
   void handleGoogleSigninError(QString error);
