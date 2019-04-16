@@ -23,6 +23,7 @@ ImageSelectPage QLabel {
   border: none;
   qproperty-icon: url(" ");
   qproperty-iconSize: 191px 46px;
+  max-width: 191px;
   background-image: url(":/images/btn_google_signin_light_normal_web.png");
   background-repeat: no-repeat;
 }
@@ -31,6 +32,7 @@ ImageSelectPage QLabel {
   border: none;
   qproperty-icon: url(" ");
   qproperty-iconSize: 191px 46px;
+  max-width: 191px;
   background-image: url(":/images/btn_google_signin_light_focus_web.png");
   background-repeat: no-repeat;
 }
