@@ -33,14 +33,14 @@ class ChromeoverLoginPage : public gondar::WizardPage {
 
  public:
   explicit ChromeoverLoginPage(QWidget* parent = 0);
-  void showPressedButton();
-  void showUnpressedButton();
   int nextId() const override;
 
  protected:
   bool validatePage() override;
 
  private:
+  void showPressedButton();
+  void showUnpressedButton();
   void handleMeepoFinished();
   void handleGoogleSigninFinished(QNetworkReply* reply);
   void handleGoogleSigninFail();
