@@ -44,7 +44,6 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
   passwordLineEdit.setEchoMode(QLineEdit::Password);
   passwordLineEditLabel.setBuddy(&passwordLineEdit);
   passwordLineEditLabel.setText("Password:");
-  meanWordsLabel.setText("That's not right!  Try again.");
   QString forgotText = "<a href=\"https://my." + gondar::getDomain() +
                        "/forgot-password\">Forgot your password?</a>";
   forgotLabel.setText(forgotText);
