@@ -90,13 +90,19 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
 
 void ChromeoverLoginPage::showPressedButton() {
   LOG_WARNING << "ken: button pressed~~~~";
-  setStyleSheet("#googleSigninButton { background-image: url(':/images/btn_google_signin_light_pressed_web.png') }");
+  setStyleSheet(
+      "#googleSigninButton { background-image: "
+      "url(':/images/btn_google_signin_light_pressed_web.png') }");
 }
 void ChromeoverLoginPage::showUnpressedButton() {
   LOG_WARNING << "ken: button unpressed~~~~";
-  setStyleSheet("#googleSigninButton { background-image: url(':/images/btn_google_signin_light_normal_web.png') }");
-  setStyleSheet("#googleSigninButton:hover { background-image: url(':/images/btn_google_signin_light_focus_web.png') }");
-} 
+  setStyleSheet(
+      "#googleSigninButton { background-image: "
+      "url(':/images/btn_google_signin_light_normal_web.png') }");
+  setStyleSheet(
+      "#googleSigninButton:hover { background-image: "
+      "url(':/images/btn_google_signin_light_focus_web.png') }");
+}
 
 int ChromeoverLoginPage::nextId() const {
   const auto& siteList = wizard()->sites();
