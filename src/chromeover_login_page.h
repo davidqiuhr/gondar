@@ -33,6 +33,8 @@ class ChromeoverLoginPage : public gondar::WizardPage {
 
  public:
   explicit ChromeoverLoginPage(QWidget* parent = 0);
+  void showPressedButton();
+  void showUnpressedButton();
   int nextId() const override;
 
  protected:
