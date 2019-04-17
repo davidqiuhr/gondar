@@ -75,6 +75,8 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
           &GoogleFlow::handleGoogleSigninPart1);
   connect(&meepo_, &gondar::Meepo::finished, this,
           &ChromeoverLoginPage::handleMeepoFinished);
+  connect(&meepo_, &gondar::Meepo::failed, this,
+          &ChromeoverLoginPage::handleMeepoFailed);
   connect(googleFlow.getManager(), &QNetworkAccessManager::finished, this,
           &ChromeoverLoginPage::handleGoogleSigninFinished);
   connect(&googleFlow, &GoogleFlow::errorMiddle, this,
@@ -130,26 +132,32 @@ bool ChromeoverLoginPage::validatePage() {
 }
 
 void ChromeoverLoginPage::handleMeepoFinished() {
-  if (meepo_.error().isEmpty()) {
-    wizard()->setSites(meepo_.sites());
+  wizard()->setSites(meepo_.sites());
 
-    // we don't want users to be able to pass through the screen by pressing
-    // next while processing.  this will make validatePage pass and immediately
-    // move the user on to the next screen
-    finished = true;
-    // TODO(kendall): let's make this a commit page so we don't have to worry
-    // about the case of a user revisiting this segment for now
-    wizard()->next();
-    // If the user has no sites, proceed to the error screen with the
-    // appropriate error
-  } else if (meepo_.no_sites_error == meepo_.error()) {
+  // we don't want users to be able to pass through the screen by pressing
+  // next while processing.  this will make validatePage pass and immediately
+  // move the user on to the next screen
+  finished = true;
+  // TODO(kendall): let's make this a commit page so we don't have to worry
+  // about the case of a user revisiting this segment for now
+  wizard()->next();
+}
+
+void ChromeoverLoginPage::handleMeepoFailed(bool using_google) {
+  // If the user has no sites, proceed to the error screen with the
+  // appropriate error
+  if (meepo_.no_sites_error == meepo_.error()) {
     finished = true;
     wizard()->postError(meepo_.no_sites_error);
     // otherwise, assume login credentials are incorrect and prompt them to
     // retry
   } else {
     started = false;
-    meanWordsLabel.setText("That's not right!  Try again.");
+    if (using_google) {
+      meanWordsLabel.setText("That Google user doesn't have an account.");
+    } else {
+      meanWordsLabel.setText("That's not right!  Try again.");
+    }
     meanWordsLabel.setVisible(true);
   }
 }
@@ -170,7 +178,7 @@ void ChromeoverLoginPage::handleGoogleSigninFinished(QNetworkReply* reply) {
 void ChromeoverLoginPage::handleGoogleSigninFail() {
   LOG_WARNING << "Sign in with Google failed; resetting";
   // we show the red text
-  meanWordsLabel.setText("That Google user doesn't have an account.");
+  meanWordsLabel.setText("Authentication error signing in with Google");
   meanWordsLabel.setVisible(true);
   // then we turn off the server so we can repeat the flow similarly to
   // the initial run
