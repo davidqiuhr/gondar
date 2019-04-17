@@ -44,7 +44,6 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
   passwordLineEdit.setEchoMode(QLineEdit::Password);
   passwordLineEditLabel.setBuddy(&passwordLineEdit);
   passwordLineEditLabel.setText("Password:");
-  meanWordsLabel.setText("That's not right!  Try again.");
   QString forgotText = "<a href=\"https://my." + gondar::getDomain() +
                        "/forgot-password\">Forgot your password?</a>";
   forgotLabel.setText(forgotText);
@@ -128,6 +127,7 @@ void ChromeoverLoginPage::handleMeepoFinished() {
     // retry
   } else {
     started = false;
+    meanWordsLabel.setText("That's not right!  Try again.");
     meanWordsLabel.setVisible(true);
   }
 }
@@ -148,6 +148,7 @@ void ChromeoverLoginPage::handleGoogleSigninFinished(QNetworkReply* reply) {
 void ChromeoverLoginPage::handleGoogleSigninFail() {
   LOG_WARNING << "Sign in with Google failed; resetting";
   // we show the red text
+  meanWordsLabel.setText("That Google user doesn't have an account.");
   meanWordsLabel.setVisible(true);
   // then we turn off the server so we can repeat the flow similarly to
   // the initial run
