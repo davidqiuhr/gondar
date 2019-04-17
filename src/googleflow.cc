@@ -66,17 +66,17 @@ void GoogleFlow::handleGoogleSigninPart1() {
   if (http_server_started == false) {
     http_server_started = true;
     localServer.start();
-    QString googleText =
-        QString(
-            "https://accounts.google.com/o/oauth2/v2/"
-            "auth?client_id=%1&redirect_uri=%2&response_type=code&scope=email&"
-            "state=%3&code_"
-            "challenge_method=plain&code_challenge=%4")
-            .arg(client_id, redirect_uri, state, code_verifier);
-    // notably, using QDesktopServices instead of using a regular hyperlink
-    // appears to suppress the windows warning about opening a local port
-    QDesktopServices::openUrl(QUrl(googleText));
   }
+  QString googleText =
+      QString(
+          "https://accounts.google.com/o/oauth2/v2/"
+          "auth?client_id=%1&redirect_uri=%2&response_type=code&scope=email&"
+          "state=%3&code_"
+          "challenge_method=plain&code_challenge=%4")
+          .arg(client_id, redirect_uri, state, code_verifier);
+  // notably, using QDesktopServices instead of using a regular hyperlink
+  // appears to suppress the windows warning about opening a local port
+  QDesktopServices::openUrl(QUrl(googleText));
 }
 
 // This fires when the local server has received the code required to receive
