@@ -50,26 +50,28 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
   forgotLabel.setTextFormat(Qt::RichText);
   forgotLabel.setTextInteractionFlags(Qt::TextBrowserInteraction);
   forgotLabel.setOpenExternalLinks(true);
-  googleLabel.setText("<a href='#'>Sign in with Google</a>");
-  googleLabel.setTextFormat(Qt::RichText);
-  googleLabel.setTextInteractionFlags(Qt::TextBrowserInteraction);
+
+  // image sourced from
+  // https://developers.google.com/identity/branding-guidelines
+  googleButton.setObjectName("googleSigninButton");
+
   meanWordsLabel.setObjectName("loginError");
   layout.addWidget(&passwordLineEditLabel, 1, 0);
   layout.addWidget(&passwordLineEdit, 1, 1);
   layout.addWidget(&meanWordsLabel, 2, 0, 1, 2);
   layout.addWidget(&forgotLabel, 3, 0, 1, 2);
-  layout.addWidget(&googleLabel, 4, 0, 1, 2);
+  layout.addWidget(&googleButton, 4, 0, 1, 2);
   meanWordsLabel.setVisible(false);
   // if our build does not have a client id and client secret configured,
   // do not display the 'sign in with google' text
-  googleLabel.setVisible(googleFlow.shouldShowSignInWithGoogle());
+  googleButton.setVisible(googleFlow.shouldShowSignInWithGoogle());
   setLayout(&layout);
   // don't allow progressing to next page yet
   finished = false;
   // don't allow another launch of server interaction while another is running
   started = false;
   // connect events between our members and ourself
-  connect(&googleLabel, &QLabel::linkActivated, &googleFlow,
+  connect(&googleButton, &QPushButton::clicked, &googleFlow,
           &GoogleFlow::handleGoogleSigninPart1);
   connect(&meepo_, &gondar::Meepo::finished, this,
           &ChromeoverLoginPage::handleMeepoFinished);
@@ -77,6 +79,26 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
           &ChromeoverLoginPage::handleGoogleSigninFinished);
   connect(&googleFlow, &GoogleFlow::errorMiddle, this,
           &ChromeoverLoginPage::handleGoogleSigninFail);
+
+  // signals for button rendering
+  connect(&googleButton, &QPushButton::pressed, this,
+          &ChromeoverLoginPage::showPressedButton);
+  connect(&googleButton, &QPushButton::released, this,
+          &ChromeoverLoginPage::showUnpressedButton);
+}
+
+void ChromeoverLoginPage::showPressedButton() {
+  setStyleSheet(
+      "#googleSigninButton { background-image: "
+      "url(':/images/btn_google_signin_light_pressed_web.png') }");
+}
+void ChromeoverLoginPage::showUnpressedButton() {
+  setStyleSheet(
+      "#googleSigninButton { background-image: "
+      "url(':/images/btn_google_signin_light_normal_web.png') }");
+  setStyleSheet(
+      "#googleSigninButton:hover { background-image: "
+      "url(':/images/btn_google_signin_light_focus_web.png') }");
 }
 
 int ChromeoverLoginPage::nextId() const {
