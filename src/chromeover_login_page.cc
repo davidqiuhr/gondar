@@ -89,13 +89,11 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
 }
 
 void ChromeoverLoginPage::showPressedButton() {
-  LOG_WARNING << "ken: button pressed~~~~";
   setStyleSheet(
       "#googleSigninButton { background-image: "
       "url(':/images/btn_google_signin_light_pressed_web.png') }");
 }
 void ChromeoverLoginPage::showUnpressedButton() {
-  LOG_WARNING << "ken: button unpressed~~~~";
   setStyleSheet(
       "#googleSigninButton { background-image: "
       "url(':/images/btn_google_signin_light_normal_web.png') }");
