@@ -134,14 +134,14 @@ void Meepo::clear() {
 }
 
 void Meepo::start(const QAuthenticator& auth) {
-  google_mode = false;
+  google_mode_ = false;
   LOG_INFO << "starting meepo flow";
   clear();
   requestAuth(auth);
 }
 
 void Meepo::startGoogle(QString id_token) {
-  google_mode = true;
+  google_mode_ = true;
   LOG_INFO << "starting meepo flow with google";
   clear();
   requestGoogleAuth(id_token);
@@ -281,7 +281,7 @@ void Meepo::dispatchReply(QNetworkReply* reply) {
 void Meepo::fail(const QString& error) {
   LOG_ERROR << "error";
   error_ = error;
-  emit failed(google_mode);
+  emit failed(google_mode_);
 }
 
 GondarSite* Meepo::siteFromSiteId(const int site_id) {

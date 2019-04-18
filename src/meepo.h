@@ -73,7 +73,9 @@ class Meepo : public QObject {
   Sites sites_;
   QString error_;
   int sites_remaining_ = 0;
-  bool google_mode = false;
+  // whether or not the user is currently authenticating using
+  // 'sign in with google'
+  bool google_mode_ = false;
 };
 
 }  // namespace gondar
