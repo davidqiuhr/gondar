@@ -42,6 +42,7 @@ class ChromeoverLoginPage : public gondar::WizardPage {
   void showPressedButton();
   void showUnpressedButton();
   void handleMeepoFinished();
+  void handleMeepoFailed(bool using_google);
   void handleGoogleSigninFinished(QNetworkReply* reply);
   void handleGoogleSigninFail();
 

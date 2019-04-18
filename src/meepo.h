@@ -46,6 +46,7 @@ class Meepo : public QObject {
 
  signals:
   void finished();
+  void failed(bool google_mode);
 
  private:
   void requestAuth(const QAuthenticator& auth);
@@ -72,6 +73,9 @@ class Meepo : public QObject {
   Sites sites_;
   QString error_;
   int sites_remaining_ = 0;
+  // whether or not the user is currently authenticating using
+  // 'sign in with google'
+  bool google_mode_ = false;
 };
 
 }  // namespace gondar
