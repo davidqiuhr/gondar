@@ -61,13 +61,22 @@ struct connection_info_struct {
   int connectiontype;
 };
 
-static int send_page(struct MHD_Connection* connection, const char* page) {
+static int send_page(struct MHD_Connection* connection,
+                     const char* page,
+                     bool success) {
   int ret;
   struct MHD_Response* response;
 
   response = MHD_create_response_from_buffer(strlen(page), (void*)page,
                                              MHD_RESPMEM_PERSISTENT);
-  MHD_add_response_header(response, "Location", "https://my.neverware.com/usb-maker/login-success");
+  const char* redirect_url;
+  // TODO(kendall): use grv endpoint if in dev mode
+  if (success) {
+    redirect_url = "https://my.neverware.com/usb-maker/login-success";
+  } else {
+    redirect_url = "https://my.neverware.com/usb-maker/login-error";
+  }
+  MHD_add_response_header(response, "Location", redirect_url);
   if (!response)
     return MHD_NO;
 
@@ -99,14 +108,14 @@ static int handle_success(QString state,
                           struct MHD_Connection* connection,
                           OauthServer* server_ptr) {
   emit server_ptr->callbackReceived(state, code);
-  return send_page(connection, gondarpage);
+  return send_page(connection, gondarpage, true);
 }
 
 static int handle_fail(QString error,
                        struct MHD_Connection* connection,
                        OauthServer* server_ptr) {
   emit server_ptr->authError(error);
-  return send_page(connection, errorpage);
+  return send_page(connection, errorpage, false);
 }
 
 static int answer_to_connection(void* cls,
