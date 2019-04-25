@@ -67,6 +67,7 @@ static int send_page(struct MHD_Connection* connection, const char* page) {
 
   response = MHD_create_response_from_buffer(strlen(page), (void*)page,
                                              MHD_RESPMEM_PERSISTENT);
+  MHD_add_response_header(response, "Location", "https://my.neverware.com/usb-maker/login-success");
   if (!response)
     return MHD_NO;
 
