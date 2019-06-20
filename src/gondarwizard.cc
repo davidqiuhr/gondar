@@ -70,7 +70,7 @@ void GondarWizard::init() {
   setPage(Page_downloadProgress, &downloadProgressPage);
   setPage(Page_writeOperation, &writeOperationPage);
   setPage(Page_error, &p_->errorPage);
-  setWizardStyle(QWizard::ModernStyle);
+  setWizardStyle(QWizard::ClassicStyle);
   setWindowTitle(tr("CloudReady USB Maker"));
   setPixmap(QWizard::LogoPixmap, QPixmap(":/images/crlogo.png"));
 
@@ -90,7 +90,7 @@ void GondarWizard::init() {
   p_->updateCheck.start(this);
 
   // resize the window (width, height)
-  resize(640, 480);
+  resize(720, 480);
 }
 
 GondarWizard::~GondarWizard() {}
