@@ -90,7 +90,7 @@ void GondarWizard::init() {
   p_->updateCheck.start(this);
 
   // resize the window (width, height)
-  resize(800, 600);
+  resize(720, 480);
 }
 
 GondarWizard::~GondarWizard() {}
