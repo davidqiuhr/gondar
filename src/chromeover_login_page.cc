@@ -29,6 +29,7 @@
 #include "gondarwizard.h"
 #include "googleflow.h"
 #include "log.h"
+#include "metric.h"
 #include "oauth_server.h"
 #include "util.h"
 
@@ -111,6 +112,9 @@ int ChromeoverLoginPage::nextId() const {
     // if there are multiple sites, we'll set the urls on the site select page
     return GondarWizard::Page_siteSelect;
   } else {
+    // populate the current site for metrics now as we'll be skipping the
+    // site select page; OVER-11255
+    gondar::SetSiteId(siteList[0].getSiteId());
     wizard()->imageSelectPage.addImages(siteList[0].getImages());
     return GondarWizard::Page_imageSelect;
   }
