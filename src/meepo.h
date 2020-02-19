@@ -42,7 +42,9 @@ class Meepo : public QObject {
 
   QString error() const;
   Sites sites() const;
-  const QString no_sites_error = "User has no sites";
+  const QString no_sites_error =
+      "User has no sites.  Please visit <a "
+      "href=\"https://try.neverware.com\">try.neverware.com</a> for a trial.";
 
  signals:
   void finished();

@@ -21,6 +21,12 @@ ErrorPage::ErrorPage(QWidget* parent) : WizardPage(parent) {
   setSubTitle(" ");
   layout.addWidget(&label);
   label.setText("");
+  // we can set the label so it may display links; it's ok
+  // if we don't use the link functionality in all cases
+  label.setTextFormat(Qt::RichText);
+  label.setTextInteractionFlags(Qt::TextBrowserInteraction);
+  label.setOpenExternalLinks(true);
+  label.setWordWrap(true);
   setLayout(&layout);
 }
 
