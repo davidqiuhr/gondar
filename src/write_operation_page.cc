@@ -138,8 +138,9 @@ void WriteOperationPage::onDoneWriting() {
   switch (diskWriteThread->state()) {
     case DiskWriteThread::State::Initial:
     case DiskWriteThread::State::Running:
-      // It should not be possible to get here at runtime
-      writeFailed("Internal state error");
+      // OVER-5124: we reach this state if the user unplugs usb prior to
+      // writing, for example during the download segment
+      writeFailed("Cannot read USB device; is it still connected?");
       return;
 
     case DiskWriteThread::State::GetFileSizeFailed:
