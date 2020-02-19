@@ -42,7 +42,7 @@ class Meepo : public QObject {
 
   QString error() const;
   Sites sites() const;
-  const QString no_sites_error = "User has no sites";
+  const QString no_sites_error = "User has no sites.\nPlease visit https://try.neverware.com to sign up for a trial";
 
  signals:
   void finished();
