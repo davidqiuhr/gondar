@@ -106,6 +106,8 @@ void ChromeoverLoginPage::showUnpressedButton() {
 
 int ChromeoverLoginPage::nextId() const {
   const auto& siteList = wizard()->sites();
+  // TODO(ken):
+  // OVER-5156: populate the error here
   if (siteList.size() == 0) {
     return GondarWizard::Page_error;
   } else if (siteList.size() > 1) {
