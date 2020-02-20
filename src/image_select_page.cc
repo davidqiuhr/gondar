@@ -37,23 +37,12 @@ ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
 
   // we use these buttons for beerover only now
   if (!gondar::isChromeover()) {
-    thirtyTwo.setText("32-bit");
-    thirtyTwoDetails.setText(
-        "<a href=\"https://guide.neverware.com/supported-devices\">Only "
-        "intended "
-        "for certified models marked '32-bit Only'</a>");
-    thirtyTwoDetails.setTextFormat(Qt::RichText);
-    thirtyTwoDetails.setTextInteractionFlags(Qt::TextBrowserInteraction);
-    thirtyTwoDetails.setOpenExternalLinks(true);
     sixtyFourDetails.setText("Suitable for most computers made after 2007");
     sixtyFour.setText("64-bit (recommended)");
     sixtyFour.setChecked(true);
-    bitnessButtons.addButton(&thirtyTwo);
     bitnessButtons.addButton(&sixtyFour);
     layout.addWidget(&sixtyFour);
     layout.addWidget(&sixtyFourDetails);
-    layout.addWidget(&thirtyTwo);
-    layout.addWidget(&thirtyTwoDetails);
   }
 
   setLayout(&layout);
@@ -76,9 +65,6 @@ bool ImageSelectPage::validatePage() {
     return true;
   }
   if (
-      // beerover case
-      bitnessButtons.checkedButton() ==
-          qobject_cast<QAbstractButton*>(&thirtyTwo) ||
       // chromeover case
       bitnessButtons.checkedButton()->text().contains("32")) {
     QMessageBox confirmBox;
@@ -129,23 +115,11 @@ void ImageSelectPage::addImage(GondarImage image) {
   newButton->setText(image.getCompositeName());
   bitnessButtons.addButton(newButton);
   layout.addWidget(newButton);
-  if (image.is32Bit()) {
-    layout.addWidget(&thirtyTwoDetails);
-  }
 }
 
 void ImageSelectPage::addImages(QList<GondarImage> images) {
   for (const auto& curImage : images) {
-    // FIXME: 32-bit images should be last.  For the time being, this must be
-    // handled on the Gondar side.
-    if (!curImage.is32Bit()) {
-      addImage(curImage);
-    }
-  }
-  for (const auto& curImage : images) {
-    if (curImage.is32Bit()) {
-      addImage(curImage);
-    }
+    addImage(curImage);
   }
 }
 
@@ -159,9 +133,7 @@ QUrl ImageSelectPage::getUrl() {
     return selected_download_button->getUrl();
   } else {
     // for beerover, we had to wait on a url lookup and we consult newestImage
-    if (selected == &thirtyTwo) {
-      return newestImageUrl.get32Url();
-    } else if (selected == &sixtyFour) {
+    if (selected == &sixtyFour) {
       return newestImageUrl.get64Url();
     } else {
       // TODO(kendall): decide what this behavior should be

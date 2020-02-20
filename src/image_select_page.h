@@ -46,8 +46,6 @@ class ImageSelectPage : public gondar::WizardPage {
 
  private:
   QButtonGroup bitnessButtons;
-  QRadioButton thirtyTwo;
-  QLabel thirtyTwoDetails;
   QRadioButton sixtyFour;
   QLabel sixtyFourDetails;
   QVBoxLayout layout;
