@@ -28,6 +28,16 @@ DownloadProgressPage::DownloadProgressPage(QWidget* parent)
 
 void DownloadProgressPage::initializePage() {
   setLayout(&layout);
+  // TODO(ken): maybe it is fine if imageSelectPage contains
+  // newest... guy
+  // admin_check_page can call imageSelectPage.fetch()
+  // using wizard() and then block on imageSelectPage.isReady()
+  // during its validate page, then blow past image select page
+  // and onto the next one.  that would be a pretty small change
+  // and it would be easy to add beerover image selection back again.
+  // i don't want to over-simplify this based on the current reality
+  // because it seems likely we'll add image selection back for
+  // beerover flow at some point
   const QUrl url = wizard()->imageSelectPage.getUrl();
   qDebug() << "using url= " << url;
   connect(&manager, &DownloadManager::finished, this,
