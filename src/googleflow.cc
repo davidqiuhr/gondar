@@ -106,8 +106,8 @@ void GoogleFlow::handleGoogleSigninPart2(QString state_in, QString code) {
     LOG_WARNING << "error: state did not match";
   }
 }
-// TODO(ken): i guess i will need a part3 now that i want to actually get
-// their email address
+// TODO(ken): consider how we can best correlate these metrics with meepo
+// metrics, ideally without handling an email address locally
 
 bool GoogleFlow::shouldShowSignInWithGoogle() {
   return !client_id.isEmpty() && !client_secret.isEmpty();
