@@ -44,8 +44,7 @@ void AdminCheckPage::handleFormatOnly() {
 }
 
 void AdminCheckPage::initializePage() {
-  // FIXME(ken): how to handle the error case?
-  // right now that stuff lives in the other page which is no good
+  // get the latest url for beerover if we're in beerover mode
   wizard()->imageSelectPage.maybe_fetch();
   is_admin = IsCurrentProcessElevated();
   if (!is_admin) {
