@@ -48,7 +48,6 @@ ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
   setLayout(&layout);
   connect(&newestImageUrl, &NewestImageUrl::errorOccurred, this,
           &ImageSelectPage::handleNewestImageUrlError);
-  hasError = false;
 }
 
 // if beerover, start the requisite image fetching
@@ -62,7 +61,7 @@ void ImageSelectPage::maybe_fetch() {
 bool ImageSelectPage::validatePage() {
   // if there is an error, we need to allow the user to proceed to the error
   // screen
-  if (hasError) {
+  if (wizard()->getError()) {
     return true;
   }
   if (
@@ -144,6 +143,7 @@ QUrl ImageSelectPage::getUrl() {
 }
 
 void ImageSelectPage::handleNewestImageUrlError() {
-  hasError = true;
+  // TODO(ken): can't postError set the error state?
+  wizard()->setError(true);
   wizard()->postError("An error has occurred fetching the latest image");
 }

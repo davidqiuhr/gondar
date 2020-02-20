@@ -51,7 +51,6 @@ class ImageSelectPage : public gondar::WizardPage {
   QLabel sixtyFourDetails;
   QVBoxLayout layout;
   NewestImageUrl newestImageUrl;
-  bool hasError;
 };
 
 #endif  // SRC_IMAGE_SELECT_PAGE_H_

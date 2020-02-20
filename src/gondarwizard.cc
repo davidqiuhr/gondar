@@ -56,6 +56,8 @@ GondarWizard::GondarWizard(std::unique_ptr<gondar::DevicePicker> picker_in,
 }
 
 void GondarWizard::init() {
+  // set shared error state to false
+  session_error = false;
   // these pages are automatically cleaned up
   // new instances are made whenever navigation moves on to another page
   // according to qt docs
@@ -158,4 +160,12 @@ void GondarWizard::catchError(const QString& error) {
 
 qint64 GondarWizard::getRunTime() {
   return p_->runTime.secsTo(QDateTime::currentDateTime());
+}
+
+bool GondarWizard::getError() {
+  return session_error;
+}
+
+void GondarWizard::setError(bool error_in) {
+  session_error = error_in;
 }

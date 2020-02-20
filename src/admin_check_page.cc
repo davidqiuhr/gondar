@@ -46,7 +46,6 @@ void AdminCheckPage::handleFormatOnly() {
 void AdminCheckPage::initializePage() {
   // FIXME(ken): how to handle the error case?
   // right now that stuff lives in the other page which is no good
-  //hasError = false;
   wizard()->imageSelectPage.maybe_fetch();
   is_admin = IsCurrentProcessElevated();
   if (!is_admin) {
@@ -91,9 +90,9 @@ void AdminCheckPage::showIsNotAdmin() {
 bool AdminCheckPage::validatePage() {
   // if there is an error, we need to allow the user to proceed to the error
   // screen
-  //if (hasError) {
-  //  return true;
-  //}
+  if (wizard()->getError()) {
+    return true;
+  }
   if (!gondar::isChromeover()) {
     // in the beerover case, we need to have retrieved the latest image url
     return wizard()->imageSelectPage.newestIsReady();
