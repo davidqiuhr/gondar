@@ -35,7 +35,15 @@ AdminCheckPage::AdminCheckPage(QWidget* parent) : WizardPage(parent) {
     gondar::SendMetric(gondar::Metric::ChromeoverUse);
   } else {
     gondar::SendMetric(gondar::Metric::BeeroverUse);
+    connect(&newestImageUrl, &NewestImageUrl::errorOccurred, this,
+          &AdminCheckPage::handleNewestImageUrlError);
+    hasError = false;
   }
+}
+
+void AdminCheckPage::handleNewestImageUrlError() {
+  hasError = true;
+  wizard()->postError("An error has occurred fetching the latest image");
 }
 
 void AdminCheckPage::handleFormatOnly() {
@@ -44,6 +52,7 @@ void AdminCheckPage::handleFormatOnly() {
 }
 
 void AdminCheckPage::initializePage() {
+  newestImageUrl.fetch();
   is_admin = IsCurrentProcessElevated();
   if (!is_admin) {
     showIsNotAdmin();
@@ -91,6 +100,21 @@ int AdminCheckPage::nextId() const {
   if (gondar::isChromeover()) {
     return GondarWizard::Page_chromeoverLogin;
   } else {
+    // TODO(ken): this should now just set 64-bit and move past
     return GondarWizard::Page_imageSelect;
   }
+}
+
+bool AdminCheckPage::validatePage() {
+  // if there is an error, we need to allow the user to proceed to the error
+  // screen
+  if (hasError) {
+    return true;
+  }
+  if (!gondar::isChromeover()) {
+    // in the beerover case, we need to have retrieved the latest image url
+    return newestImageUrl.isReady();
+  }
+  // chromeover case
+  return true;
 }

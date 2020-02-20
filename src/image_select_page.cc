@@ -57,24 +57,9 @@ ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
   }
 
   setLayout(&layout);
-  connect(&newestImageUrl, &NewestImageUrl::errorOccurred, this,
-          &ImageSelectPage::handleNewestImageUrlError);
-  hasError = false;
-}
-
-void ImageSelectPage::initializePage() {
-  if (!gondar::isChromeover()) {
-    // for beerover, we'll have to check what the latest release is
-    newestImageUrl.fetch();
-  }
 }
 
 bool ImageSelectPage::validatePage() {
-  // if there is an error, we need to allow the user to proceed to the error
-  // screen
-  if (hasError) {
-    return true;
-  }
   if (
       // beerover case
       bitnessButtons.checkedButton() ==
@@ -108,10 +93,6 @@ bool ImageSelectPage::validatePage() {
   // be equally worried were this true in either case
   if (!bitnessButtons.checkedButton()) {
     return false;
-  }
-  if (!gondar::isChromeover()) {
-    // in the beerover case, we need to have retrieved the latest image url
-    return newestImageUrl.isReady();
   }
   return true;
 }
@@ -150,6 +131,8 @@ void ImageSelectPage::addImages(QList<GondarImage> images) {
 }
 
 // this is what is used later in the wizard to find what url should be used
+// FIXME(ken): what to do about this?  maybe it is best to keep
+// newestImageUrl here and just go to next page once we've finished loading
 QUrl ImageSelectPage::getUrl() {
   QAbstractButton* selected = bitnessButtons.checkedButton();
   if (gondar::isChromeover()) {
@@ -168,9 +151,4 @@ QUrl ImageSelectPage::getUrl() {
       return newestImageUrl.get64Url();
     }
   }
-}
-
-void ImageSelectPage::handleNewestImageUrlError() {
-  hasError = true;
-  wizard()->postError("An error has occurred fetching the latest image");
 }

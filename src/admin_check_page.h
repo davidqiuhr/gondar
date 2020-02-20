@@ -19,6 +19,7 @@
 #include <QLabel>
 #include <QVBoxLayout>
 
+#include "newest_image_url.h"
 #include "wizard_page.h"
 
 class AdminCheckPage : public gondar::WizardPage {
@@ -28,12 +29,14 @@ class AdminCheckPage : public gondar::WizardPage {
   explicit AdminCheckPage(QWidget* parent = 0);
   int nextId() const override;
   void handleFormatOnly();
+  void handleNewestImageUrlError();
 
  protected:
   void initializePage() override;
   bool isComplete() const override;
   void showIsAdmin();
   void showIsNotAdmin();
+  bool validatePage() override;
 
  private:
   QLabel label;
@@ -41,6 +44,8 @@ class AdminCheckPage : public gondar::WizardPage {
   QLabel formatLink;
   bool is_admin;
   QVBoxLayout layout;
+  NewestImageUrl newestImageUrl;
+  bool hasError;
 };
 
 #endif  // SRC_ADMIN_CHECK_PAGE_H_

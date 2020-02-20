@@ -22,10 +22,7 @@
 #include <QUrl>
 #include <QVBoxLayout>
 
-#include "newest_image_url.h"
-
 #include "wizard_page.h"
-
 #include "gondarimage.h"
 
 class ImageSelectPage : public gondar::WizardPage {
@@ -51,8 +48,6 @@ class ImageSelectPage : public gondar::WizardPage {
   QRadioButton sixtyFour;
   QLabel sixtyFourDetails;
   QVBoxLayout layout;
-  NewestImageUrl newestImageUrl;
-  bool hasError;
 };
 
 #endif  // SRC_IMAGE_SELECT_PAGE_H_
