@@ -51,7 +51,8 @@ ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
   hasError = false;
 }
 
-void ImageSelectPage::initializePage() {
+// if beerover, start the requisite image fetching
+void ImageSelectPage::maybe_fetch() {
   if (!gondar::isChromeover()) {
     // for beerover, we'll have to check what the latest release is
     newestImageUrl.fetch();
@@ -95,11 +96,11 @@ bool ImageSelectPage::validatePage() {
   if (!bitnessButtons.checkedButton()) {
     return false;
   }
-  if (!gondar::isChromeover()) {
-    // in the beerover case, we need to have retrieved the latest image url
-    return newestImageUrl.isReady();
-  }
   return true;
+}
+
+bool ImageSelectPage::newestIsReady() {
+  return newestImageUrl.isReady();
 }
 
 int ImageSelectPage::nextId() const {

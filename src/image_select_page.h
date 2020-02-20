@@ -39,9 +39,10 @@ class ImageSelectPage : public gondar::WizardPage {
   void addImages(QList<GondarImage> images);
   QUrl getUrl();
   void handleNewestImageUrlError();
+  bool newestIsReady();
+  void maybe_fetch();
 
  protected:
-  void initializePage() override;
   bool validatePage() override;
 
  private:
