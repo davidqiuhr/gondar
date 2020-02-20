@@ -44,6 +44,8 @@ void AdminCheckPage::handleFormatOnly() {
 }
 
 void AdminCheckPage::initializePage() {
+  // get the latest url for beerover if we're in beerover mode
+  wizard()->maybe_fetch();
   is_admin = IsCurrentProcessElevated();
   if (!is_admin) {
     showIsNotAdmin();
@@ -84,6 +86,19 @@ void AdminCheckPage::showIsNotAdmin() {
       "program with sufficient rights.");
 }
 
+bool AdminCheckPage::validatePage() {
+  // if there is an error, we need to allow the user to proceed to the error
+  // screen
+  if (wizard()->getError()) {
+    return true;
+  }
+  if (!gondar::isChromeover()) {
+    // in the beerover case, we need to have retrieved the latest image url
+    return wizard()->newestIsReady();
+  }
+  return true;
+}
+
 int AdminCheckPage::nextId() const {
   if (wizard()->isFormatOnly()) {
     return GondarWizard::Page_usbInsert;
@@ -91,6 +106,6 @@ int AdminCheckPage::nextId() const {
   if (gondar::isChromeover()) {
     return GondarWizard::Page_chromeoverLogin;
   } else {
-    return GondarWizard::Page_imageSelect;
+    return GondarWizard::Page_usbInsert;
   }
 }

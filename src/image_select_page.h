@@ -22,37 +22,27 @@
 #include <QUrl>
 #include <QVBoxLayout>
 
-#include "newest_image_url.h"
-
-#include "wizard_page.h"
-
 #include "gondarimage.h"
+#include "wizard_page.h"
 
 class ImageSelectPage : public gondar::WizardPage {
   Q_OBJECT
 
  public:
   explicit ImageSelectPage(QWidget* parent = 0);
-  QUrl getUrl() const;
   int nextId() const override;
   void addImage(GondarImage image);
   void addImages(QList<GondarImage> images);
   QUrl getUrl();
-  void handleNewestImageUrlError();
 
  protected:
-  void initializePage() override;
   bool validatePage() override;
 
  private:
   QButtonGroup bitnessButtons;
-  QRadioButton thirtyTwo;
-  QLabel thirtyTwoDetails;
   QRadioButton sixtyFour;
   QLabel sixtyFourDetails;
   QVBoxLayout layout;
-  NewestImageUrl newestImageUrl;
-  bool hasError;
 };
 
 #endif  // SRC_IMAGE_SELECT_PAGE_H_

@@ -37,81 +37,28 @@ ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
 
   // we use these buttons for beerover only now
   if (!gondar::isChromeover()) {
-    thirtyTwo.setText("32-bit");
-    thirtyTwoDetails.setText(
-        "<a href=\"https://guide.neverware.com/supported-devices\">Only "
-        "intended "
-        "for certified models marked '32-bit Only'</a>");
-    thirtyTwoDetails.setTextFormat(Qt::RichText);
-    thirtyTwoDetails.setTextInteractionFlags(Qt::TextBrowserInteraction);
-    thirtyTwoDetails.setOpenExternalLinks(true);
     sixtyFourDetails.setText("Suitable for most computers made after 2007");
     sixtyFour.setText("64-bit (recommended)");
     sixtyFour.setChecked(true);
-    bitnessButtons.addButton(&thirtyTwo);
     bitnessButtons.addButton(&sixtyFour);
     layout.addWidget(&sixtyFour);
     layout.addWidget(&sixtyFourDetails);
-    layout.addWidget(&thirtyTwo);
-    layout.addWidget(&thirtyTwoDetails);
   }
 
   setLayout(&layout);
-  connect(&newestImageUrl, &NewestImageUrl::errorOccurred, this,
-          &ImageSelectPage::handleNewestImageUrlError);
-  hasError = false;
-}
-
-void ImageSelectPage::initializePage() {
-  if (!gondar::isChromeover()) {
-    // for beerover, we'll have to check what the latest release is
-    newestImageUrl.fetch();
-  }
 }
 
 bool ImageSelectPage::validatePage() {
   // if there is an error, we need to allow the user to proceed to the error
   // screen
-  if (hasError) {
+  // TODO(ken): was this handling just for the beerover case?  if so, can remove
+  if (wizard()->getError()) {
     return true;
-  }
-  if (
-      // beerover case
-      bitnessButtons.checkedButton() ==
-          qobject_cast<QAbstractButton*>(&thirtyTwo) ||
-      // chromeover case
-      bitnessButtons.checkedButton()->text().contains("32")) {
-    QMessageBox confirmBox;
-    confirmBox.setIcon(QMessageBox::Question);
-    confirmBox.setWindowTitle("CloudReady USB Maker");
-    confirmBox.setText(
-        "32-bit CloudReady is not supported on 64-bit machines. Use 32-bit "
-        "CloudReady only on hardware that requires it.");
-    // counter-intuitive that RejectRole maps to forward, but the roles
-    // really just determine button order and are not used for later logic
-    QPushButton* backButton =
-        confirmBox.addButton("Back", QMessageBox::ActionRole);
-    QPushButton* continueButton =
-        confirmBox.addButton("Use 32-bit", QMessageBox::RejectRole);
-    confirmBox.setEscapeButton(backButton);
-    confirmBox.setDefaultButton(continueButton);
-    confirmBox.exec();
-    if (confirmBox.clickedButton() ==
-        qobject_cast<QAbstractButton*>(continueButton)) {
-      return true;
-
-    } else {
-      return false;
-    }
   }
   // currently this is only a concern in the chromeover case, but we would
   // be equally worried were this true in either case
   if (!bitnessButtons.checkedButton()) {
     return false;
-  }
-  if (!gondar::isChromeover()) {
-    // in the beerover case, we need to have retrieved the latest image url
-    return newestImageUrl.isReady();
   }
   return true;
 }
@@ -129,23 +76,11 @@ void ImageSelectPage::addImage(GondarImage image) {
   newButton->setText(image.getCompositeName());
   bitnessButtons.addButton(newButton);
   layout.addWidget(newButton);
-  if (image.is32Bit()) {
-    layout.addWidget(&thirtyTwoDetails);
-  }
 }
 
 void ImageSelectPage::addImages(QList<GondarImage> images) {
   for (const auto& curImage : images) {
-    // FIXME: 32-bit images should be last.  For the time being, this must be
-    // handled on the Gondar side.
-    if (!curImage.is32Bit()) {
-      addImage(curImage);
-    }
-  }
-  for (const auto& curImage : images) {
-    if (curImage.is32Bit()) {
-      addImage(curImage);
-    }
+    addImage(curImage);
   }
 }
 
@@ -159,18 +94,11 @@ QUrl ImageSelectPage::getUrl() {
     return selected_download_button->getUrl();
   } else {
     // for beerover, we had to wait on a url lookup and we consult newestImage
-    if (selected == &thirtyTwo) {
-      return newestImageUrl.get32Url();
-    } else if (selected == &sixtyFour) {
-      return newestImageUrl.get64Url();
+    if (selected == &sixtyFour) {
+      return wizard()->newestImageUrl.get64Url();
     } else {
       // TODO(kendall): decide what this behavior should be
-      return newestImageUrl.get64Url();
+      return wizard()->newestImageUrl.get64Url();
     }
   }
-}
-
-void ImageSelectPage::handleNewestImageUrlError() {
-  hasError = true;
-  wizard()->postError("An error has occurred fetching the latest image");
 }
