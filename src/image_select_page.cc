@@ -93,12 +93,6 @@ QUrl ImageSelectPage::getUrl() {
         dynamic_cast<DownloadButton*>(selected);
     return selected_download_button->getUrl();
   } else {
-    // for beerover, we had to wait on a url lookup and we consult newestImage
-    if (selected == &sixtyFour) {
-      return wizard()->newestImageUrl.get64Url();
-    } else {
-      // TODO(kendall): decide what this behavior should be
-      return wizard()->newestImageUrl.get64Url();
-    }
+    return wizard()->newestImageUrl.get64Url();
   }
 }
