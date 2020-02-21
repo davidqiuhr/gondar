@@ -40,7 +40,7 @@ ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
 bool ImageSelectPage::validatePage() {
   // if there is an error, we need to allow the user to proceed to the error
   // screen
-  // TODO(ken): was this handling just for the beerover case?  if so, can remove
+  // TODO(ken): may be superfluous, have to look at chromeover flow again
   if (wizard()->getError()) {
     return true;
   }
