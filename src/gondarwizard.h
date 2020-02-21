@@ -66,8 +66,8 @@ class GondarWizard : public QWizard {
   void setSites(const std::vector<GondarSite>& sites);
   bool isFormatOnly() const { return formatOnly; }
   void setFormatOnly(bool newValue) { formatOnly = newValue; }
-  bool getError();
-  void setError(bool);
+  bool getSessionError();
+  void setSessionError(bool);
   bool newestIsReady();
   void maybe_fetch();
   void handleNewestImageUrlError();

@@ -89,7 +89,7 @@ void AdminCheckPage::showIsNotAdmin() {
 bool AdminCheckPage::validatePage() {
   // if there is an error, we need to allow the user to proceed to the error
   // screen
-  if (wizard()->getError()) {
+  if (wizard()->getSessionError()) {
     return true;
   }
   if (!gondar::isChromeover()) {

@@ -38,12 +38,6 @@ ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
 }
 
 bool ImageSelectPage::validatePage() {
-  // if there is an error, we need to allow the user to proceed to the error
-  // screen
-  // TODO(ken): may be superfluous, have to look at chromeover flow again
-  if (wizard()->getError()) {
-    return true;
-  }
   // currently this is only a concern in the chromeover case, but we would
   // be equally worried were this true in either case
   if (!bitnessButtons.checkedButton()) {

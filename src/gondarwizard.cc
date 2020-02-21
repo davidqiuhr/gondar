@@ -151,7 +151,7 @@ int GondarWizard::nextId() const {
 }
 
 void GondarWizard::postError(const QString& error) {
-  setError(true);
+  setSessionError(true);
   QTimer::singleShot(0, this, [=]() { catchError(error); });
 }
 
@@ -167,11 +167,13 @@ qint64 GondarWizard::getRunTime() {
   return p_->runTime.secsTo(QDateTime::currentDateTime());
 }
 
-bool GondarWizard::getError() {
+bool GondarWizard::getSessionError() {
   return session_error;
 }
 
-void GondarWizard::setError(bool error_in) {
+// set wizard-wide error bool so pages with validate page functions
+// can pass through
+void GondarWizard::setSessionError(bool error_in) {
   session_error = error_in;
 }
 
