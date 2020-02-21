@@ -147,6 +147,7 @@ int GondarWizard::nextId() const {
 }
 
 void GondarWizard::postError(const QString& error) {
+  setError(true);
   QTimer::singleShot(0, this, [=]() { catchError(error); });
 }
 

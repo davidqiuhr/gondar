@@ -46,6 +46,10 @@ ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
   }
 
   setLayout(&layout);
+  // FIXME(ken): when does the constructor fire?  is it adequate to put this
+  // here?  feels like this should happen at the wizard level.  ideally this
+  // page should not have sucvh an intimate relationship with newestImageUrl.
+  // instead it should be part of the wizard and pages can access it that way.
   connect(&newestImageUrl, &NewestImageUrl::errorOccurred, this,
           &ImageSelectPage::handleNewestImageUrlError);
 }
@@ -117,7 +121,6 @@ QUrl ImageSelectPage::getUrl() {
 }
 
 void ImageSelectPage::handleNewestImageUrlError() {
-  // TODO(ken): can't postError set the error state?
-  wizard()->setError(true);
+  // TODO(ken): this should be moved out of this page now? vOv
   wizard()->postError("An error has occurred fetching the latest image");
 }
