@@ -34,17 +34,6 @@ class DownloadButton : public QRadioButton {
 ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
   setTitle("Which version of CloudReady do you need?");
   setSubTitle(" ");
-
-  // we use these buttons for beerover only now
-  if (!gondar::isChromeover()) {
-    sixtyFourDetails.setText("Suitable for most computers made after 2007");
-    sixtyFour.setText("64-bit (recommended)");
-    sixtyFour.setChecked(true);
-    bitnessButtons.addButton(&sixtyFour);
-    layout.addWidget(&sixtyFour);
-    layout.addWidget(&sixtyFourDetails);
-  }
-
   setLayout(&layout);
 }
 
