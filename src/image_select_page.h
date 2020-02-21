@@ -22,25 +22,20 @@
 #include <QUrl>
 #include <QVBoxLayout>
 
-#include "newest_image_url.h"
-
-#include "wizard_page.h"
-
 #include "gondarimage.h"
+#include "wizard_page.h"
 
 class ImageSelectPage : public gondar::WizardPage {
   Q_OBJECT
 
  public:
   explicit ImageSelectPage(QWidget* parent = 0);
-  QUrl getUrl() const;
   int nextId() const override;
   void addImage(GondarImage image);
   void addImages(QList<GondarImage> images);
+  // TODO(ken): why did i have two getUrl()s: one const and one not?
+  QUrl getUrl() const;
   QUrl getUrl();
-  void handleNewestImageUrlError();
-  bool newestIsReady();
-  void maybe_fetch();
 
  protected:
   bool validatePage() override;
@@ -50,7 +45,6 @@ class ImageSelectPage : public gondar::WizardPage {
   QRadioButton sixtyFour;
   QLabel sixtyFourDetails;
   QVBoxLayout layout;
-  NewestImageUrl newestImageUrl;
 };
 
 #endif  // SRC_IMAGE_SELECT_PAGE_H_

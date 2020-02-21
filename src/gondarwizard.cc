@@ -86,6 +86,10 @@ void GondarWizard::init() {
           &gondar::AboutDialog::show);
   connect(this, &GondarWizard::customButtonClicked, this,
           &GondarWizard::handleCustomButton);
+  // appropriately move to error screen if there is a problem getting
+  // latest beerover url
+  connect(&newestImageUrl, &NewestImageUrl::errorOccurred, this,
+          &GondarWizard::handleNewestImageUrlError);
 
   p_->runTime = QDateTime::currentDateTime();
 
@@ -169,4 +173,21 @@ bool GondarWizard::getError() {
 
 void GondarWizard::setError(bool error_in) {
   session_error = error_in;
+}
+
+// TODO(ken): update calls to these
+// if beerover, start the requisite image fetching
+void GondarWizard::maybe_fetch() {
+  if (!gondar::isChromeover()) {
+    // for beerover, we'll have to check what the latest release is
+    newestImageUrl.fetch();
+  }
+}
+
+bool GondarWizard::newestIsReady() {
+  return newestImageUrl.isReady();
+}
+
+void GondarWizard::handleNewestImageUrlError() {
+  postError("An error has occurred fetching the latest image");
 }

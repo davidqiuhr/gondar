@@ -46,20 +46,6 @@ ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
   }
 
   setLayout(&layout);
-  // FIXME(ken): when does the constructor fire?  is it adequate to put this
-  // here?  feels like this should happen at the wizard level.  ideally this
-  // page should not have sucvh an intimate relationship with newestImageUrl.
-  // instead it should be part of the wizard and pages can access it that way.
-  connect(&newestImageUrl, &NewestImageUrl::errorOccurred, this,
-          &ImageSelectPage::handleNewestImageUrlError);
-}
-
-// if beerover, start the requisite image fetching
-void ImageSelectPage::maybe_fetch() {
-  if (!gondar::isChromeover()) {
-    // for beerover, we'll have to check what the latest release is
-    newestImageUrl.fetch();
-  }
 }
 
 bool ImageSelectPage::validatePage() {
@@ -74,10 +60,6 @@ bool ImageSelectPage::validatePage() {
     return false;
   }
   return true;
-}
-
-bool ImageSelectPage::newestIsReady() {
-  return newestImageUrl.isReady();
 }
 
 int ImageSelectPage::nextId() const {
@@ -112,15 +94,10 @@ QUrl ImageSelectPage::getUrl() {
   } else {
     // for beerover, we had to wait on a url lookup and we consult newestImage
     if (selected == &sixtyFour) {
-      return newestImageUrl.get64Url();
+      return wizard()->newestImageUrl.get64Url();
     } else {
       // TODO(kendall): decide what this behavior should be
-      return newestImageUrl.get64Url();
+      return wizard()->newestImageUrl.get64Url();
     }
   }
-}
-
-void ImageSelectPage::handleNewestImageUrlError() {
-  // TODO(ken): this should be moved out of this page now? vOv
-  wizard()->postError("An error has occurred fetching the latest image");
 }

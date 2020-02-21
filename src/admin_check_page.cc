@@ -45,7 +45,7 @@ void AdminCheckPage::handleFormatOnly() {
 
 void AdminCheckPage::initializePage() {
   // get the latest url for beerover if we're in beerover mode
-  wizard()->imageSelectPage.maybe_fetch();
+  wizard()->maybe_fetch();
   is_admin = IsCurrentProcessElevated();
   if (!is_admin) {
     showIsNotAdmin();
@@ -94,7 +94,7 @@ bool AdminCheckPage::validatePage() {
   }
   if (!gondar::isChromeover()) {
     // in the beerover case, we need to have retrieved the latest image url
-    return wizard()->imageSelectPage.newestIsReady();
+    return wizard()->newestIsReady();
   }
   return true;
 }
