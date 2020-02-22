@@ -33,7 +33,6 @@ void NewestImageUrl::fetch() {
   connect(&networkManager, &QNetworkAccessManager::finished, this,
           &NewestImageUrl::handleReply);
   networkManager.get(QNetworkRequest(QUrl(baseUrl + "latest-stable-64bit")));
-  networkManager.get(QNetworkRequest(QUrl(baseUrl + "latest-stable-32bit")));
 }
 
 void NewestImageUrl::handleReply(QNetworkReply* reply) {
@@ -45,17 +44,9 @@ void NewestImageUrl::handleReply(QNetworkReply* reply) {
   }
   // we find out which request this is a response for
   QUrl url = getLatestUrl(reply);
-  if (reply->url().toString().contains("32bit")) {
-    thirtyTwoUrl = url;
-  } else {
-    sixtyFourUrl = url;
-  }
+  sixtyFourUrl = url;
   LOG_INFO << "using latest url: " << url;
   reply->deleteLater();
-}
-
-void NewestImageUrl::set32Url(const QUrl& url_in) {
-  thirtyTwoUrl = url_in;
 }
 
 void NewestImageUrl::set64Url(const QUrl& url_in) {
@@ -63,15 +54,11 @@ void NewestImageUrl::set64Url(const QUrl& url_in) {
 }
 
 bool NewestImageUrl::isReady() const {
-  if (thirtyTwoUrl.isEmpty() || sixtyFourUrl.isEmpty()) {
+  if (sixtyFourUrl.isEmpty()) {
     return false;
   } else {
     return true;
   }
-}
-
-const QUrl& NewestImageUrl::get32Url() const {
-  return thirtyTwoUrl;
 }
 
 const QUrl& NewestImageUrl::get64Url() const {

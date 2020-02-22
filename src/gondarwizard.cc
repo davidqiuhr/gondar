@@ -56,6 +56,8 @@ GondarWizard::GondarWizard(std::unique_ptr<gondar::DevicePicker> picker_in,
 }
 
 void GondarWizard::init() {
+  // set shared error state to false
+  session_error = false;
   // these pages are automatically cleaned up
   // new instances are made whenever navigation moves on to another page
   // according to qt docs
@@ -84,6 +86,10 @@ void GondarWizard::init() {
           &gondar::AboutDialog::show);
   connect(this, &GondarWizard::customButtonClicked, this,
           &GondarWizard::handleCustomButton);
+  // appropriately move to error screen if there is a problem getting
+  // latest beerover url
+  connect(&newestImageUrl, &NewestImageUrl::errorOccurred, this,
+          &GondarWizard::handleNewestImageUrlError);
 
   p_->runTime = QDateTime::currentDateTime();
 
@@ -145,6 +151,7 @@ int GondarWizard::nextId() const {
 }
 
 void GondarWizard::postError(const QString& error) {
+  setSessionError(true);
   QTimer::singleShot(0, this, [=]() { catchError(error); });
 }
 
@@ -158,4 +165,30 @@ void GondarWizard::catchError(const QString& error) {
 
 qint64 GondarWizard::getRunTime() {
   return p_->runTime.secsTo(QDateTime::currentDateTime());
+}
+
+bool GondarWizard::getSessionError() {
+  return session_error;
+}
+
+// set wizard-wide error bool so pages with validate page functions
+// can pass through
+void GondarWizard::setSessionError(bool error_in) {
+  session_error = error_in;
+}
+
+// if beerover, start the requisite image fetching
+void GondarWizard::maybe_fetch() {
+  if (!gondar::isChromeover()) {
+    // for beerover, we'll have to check what the latest release is
+    newestImageUrl.fetch();
+  }
+}
+
+bool GondarWizard::newestIsReady() {
+  return newestImageUrl.isReady();
+}
+
+void GondarWizard::handleNewestImageUrlError() {
+  postError("An error has occurred fetching the latest image");
 }

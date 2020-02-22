@@ -34,6 +34,7 @@ class AdminCheckPage : public gondar::WizardPage {
   bool isComplete() const override;
   void showIsAdmin();
   void showIsNotAdmin();
+  bool validatePage() override;
 
  private:
   QLabel label;
