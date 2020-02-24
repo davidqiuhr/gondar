@@ -21,6 +21,7 @@
 
 #include "log.h"
 #include "util.h"
+#include "metric.h"
 
 namespace gondar {
 
@@ -48,6 +49,8 @@ void FeedbackDialog::submit() {
   LOG_WARNING << "the feedback was accepted";
   LOG_WARNING << "title = " << title_.text();
   LOG_WARNING << "contents = " << details_.toPlainText();
+  LOG_WARNING << "uuid = " << gondar::GetUuid();
+  LOG_WARNING << "site = " << gondar::GetSiteId();
   accept();
 }
 }  // namespace gondar

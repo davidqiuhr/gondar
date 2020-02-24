@@ -17,6 +17,7 @@
 #define SRC_METRIC_H_
 
 #include <string>
+#include <QString>
 
 namespace gondar {
 
@@ -38,6 +39,9 @@ enum class Metric {
 void SetSiteId(int site_id);
 
 void SendMetric(Metric metric, const std::string& value = "");
+
+QString GetUuid();
+int GetSiteId();
 
 }  // namespace gondar
 
