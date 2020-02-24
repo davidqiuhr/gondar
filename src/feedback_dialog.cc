@@ -24,25 +24,14 @@
 namespace gondar {
 
 FeedbackDialog::FeedbackDialog() {
-  about_label_.setOpenExternalLinks(true);
-  about_label_.setWordWrap(true);
-  about_label_.setText(readUtf8File(":/about.html"));
-
-  license_text_browser_.setOpenExternalLinks(true);
-  license_text_browser_.setHtml(readUtf8File(":/gpl-3.0-standalone.html"));
-  license_text_browser_.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  feedback_label_.setText("Feedback");
 
   close_button_.setText(tr("&Close"));
   connect(&close_button_, &QPushButton::clicked, this, &FeedbackDialog::accept);
 
-  QString version = gondar::getGondarVersion();
-  // if version is non-empty
-  if (version.size() > 0) {
-    version_label_.setText("Version " + version);
-    layout_.addWidget(&version_label_);
-  }
-  layout_.addWidget(&about_label_);
-  layout_.addWidget(&license_text_browser_);
+  layout_.addWidget(&feedback_label_);
+  layout_.addWidget(&title_);
+  layout_.addWidget(&details_);
   layout_.addWidget(&close_button_, 0, Qt::AlignRight);
   setLayout(&layout_);
   setMinimumWidth(500);

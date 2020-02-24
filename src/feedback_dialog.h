@@ -32,9 +32,9 @@ class FeedbackDialog : public QDialog {
 
  private:
   QVBoxLayout layout_;
-  QLabel version_label_;
-  QLabel about_label_;
-  QTextBrowser license_text_browser_;
+  QLabel feedback_label_;
+  QTextEdit title_;
+  QTextEdit details_;
   QPushButton close_button_;
 };
 }  // namespace gondar
