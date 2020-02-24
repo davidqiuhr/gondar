@@ -21,6 +21,7 @@
 #include <QPushButton>
 #include <QTextBrowser>
 #include <QVBoxLayout>
+#include <QLineEdit>
 
 namespace gondar {
 
@@ -34,7 +35,7 @@ class FeedbackDialog : public QDialog {
  private:
   QVBoxLayout layout_;
   QLabel feedback_label_;
-  QTextEdit title_;
+  QLineEdit title_;
   QTextEdit details_;
   QPushButton submit_button_;
 };

@@ -39,8 +39,14 @@ FeedbackDialog::FeedbackDialog() {
   setWindowTitle(tr("CloudReady USB Maker"));
 }
 
+// we collect:
+// the title of the ticket
+// the ticket contents
+// the user's UUID
+// any site information (do we want to only offer this after sign-in phase?)
 void FeedbackDialog::submit() {
   LOG_WARNING << "the feedback was accepted";
+  //LOG_WARNING << "title = " << title_;
   accept();
 }
 }  // namespace gondar
