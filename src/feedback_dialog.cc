@@ -51,6 +51,9 @@ void FeedbackDialog::submit() {
   LOG_WARNING << "contents = " << details_.toPlainText();
   LOG_WARNING << "uuid = " << gondar::GetUuid();
   LOG_WARNING << "site = " << gondar::GetSiteId();
+  // TODO(ken): we need to send of a subprocess to jsonify and send this data
+
+  // closes the window
   accept();
 }
 }  // namespace gondar
