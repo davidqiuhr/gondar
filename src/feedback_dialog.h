@@ -35,7 +35,7 @@ class FeedbackDialog : public QDialog {
   QLabel feedback_label_;
   QTextEdit title_;
   QTextEdit details_;
-  QPushButton close_button_;
+  QPushButton submit_button_;
 };
 }  // namespace gondar
 

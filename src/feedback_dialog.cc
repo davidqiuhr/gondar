@@ -26,13 +26,13 @@ namespace gondar {
 FeedbackDialog::FeedbackDialog() {
   feedback_label_.setText("Feedback");
 
-  close_button_.setText(tr("&Close"));
-  connect(&close_button_, &QPushButton::clicked, this, &FeedbackDialog::accept);
+  submit_button_.setText(tr("&Submit"));
+  connect(&submit_button_, &QPushButton::clicked, this, &FeedbackDialog::accept);
 
   layout_.addWidget(&feedback_label_);
   layout_.addWidget(&title_);
   layout_.addWidget(&details_);
-  layout_.addWidget(&close_button_, 0, Qt::AlignRight);
+  layout_.addWidget(&submit_button_, 0, Qt::AlignRight);
   setLayout(&layout_);
   setMinimumWidth(500);
   setWindowTitle(tr("CloudReady USB Maker"));
