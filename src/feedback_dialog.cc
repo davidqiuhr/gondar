@@ -28,7 +28,7 @@ FeedbackDialog::FeedbackDialog() {
   feedback_label_.setText("Feedback");
 
   submit_button_.setText(tr("&Submit"));
-  connect(&submit_button_, &QPushButton::clicked, this, &FeedbackDialog::accept);
+  connect(&submit_button_, &QPushButton::clicked, this, &FeedbackDialog::submit);
 
   layout_.addWidget(&feedback_label_);
   layout_.addWidget(&title_);
@@ -39,7 +39,8 @@ FeedbackDialog::FeedbackDialog() {
   setWindowTitle(tr("CloudReady USB Maker"));
 }
 
-void FeedbackDialog::accepted() {
+void FeedbackDialog::submit() {
   LOG_WARNING << "the feedback was accepted";
+  accept();
 }
 }  // namespace gondar

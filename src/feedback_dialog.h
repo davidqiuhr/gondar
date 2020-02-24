@@ -29,7 +29,7 @@ class FeedbackDialog : public QDialog {
 
  public:
   FeedbackDialog();
-  void accepted();
+  void submit();
 
  private:
   QVBoxLayout layout_;
