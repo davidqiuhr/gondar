@@ -115,6 +115,7 @@ add_library(app STATIC
   src/download_progress_page.cc
   src/downloader.cc
   src/error_page.cc
+  src/feedback_dialog.cc
   src/gondarsite.cc
   src/gondarwizard.cc
   src/googleflow.cc

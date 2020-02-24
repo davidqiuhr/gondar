@@ -99,6 +99,7 @@ class GondarWizard : public QWizard {
   void setNormalLayout();
 
   QShortcut about_shortcut_;
+  QShortcut feedback_shortcut_;
   bool formatOnly;
 };
 

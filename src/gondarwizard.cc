@@ -22,6 +22,7 @@
 #include "chromeover_login_page.h"
 #include "device_select_page.h"
 #include "error_page.h"
+#include "feedback_dialog.h"
 #include "log.h"
 #include "metric.h"
 #include "site_select_page.h"
@@ -34,6 +35,7 @@ class GondarWizard::Private {
 
   gondar::UpdateCheck updateCheck;
   gondar::AboutDialog aboutDialog;
+  gondar::FeedbackDialog feedbackDialog;
 
   AdminCheckPage adminCheckPage;
   DeviceSelectPage deviceSelectPage;
@@ -51,6 +53,7 @@ GondarWizard::GondarWizard(std::unique_ptr<gondar::DevicePicker> picker_in,
     : QWizard(parent),
       p_(std::make_unique<Private>(std::move(picker_in))),
       about_shortcut_(QKeySequence::HelpContents, this),
+      feedback_shortcut_(QKeySequence::HelpContents, this),
       formatOnly(false) {
   init();
 }
@@ -78,12 +81,15 @@ void GondarWizard::init() {
 
   setButtonText(QWizard::CustomButton1, "Make Another USB");
   setButtonText(QWizard::CustomButton2, "About");
+  setButtonText(QWizard::CustomButton3, "Feedback");
   setNormalLayout();
   // remove '?' button that does not do anything in our current setup
   setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
   connect(&about_shortcut_, &QShortcut::activated, &p_->aboutDialog,
           &gondar::AboutDialog::show);
+  connect(&feedback_shortcut_, &QShortcut::activated, &p_->feedbackDialog,
+          &gondar::FeedbackDialog::show);
   connect(this, &GondarWizard::customButtonClicked, this,
           &GondarWizard::handleCustomButton);
   // appropriately move to error screen if there is a problem getting
@@ -103,16 +109,17 @@ GondarWizard::~GondarWizard() {}
 
 void GondarWizard::setNormalLayout() {
   QList<QWizard::WizardButton> button_layout;
-  button_layout << QWizard::CustomButton2 << QWizard::Stretch
-                << QWizard::NextButton << QWizard::FinishButton;
+  button_layout << QWizard::CustomButton2 << QWizard::CustomButton3
+                << QWizard::Stretch << QWizard::NextButton
+                << QWizard::FinishButton;
   setButtonLayout(button_layout);
 }
 
 void GondarWizard::setMakeAnotherLayout() {
   QList<QWizard::WizardButton> button_layout;
-  button_layout << QWizard::CustomButton2 << QWizard::Stretch
-                << QWizard::CustomButton1 << QWizard::NextButton
-                << QWizard::FinishButton;
+  button_layout << QWizard::CustomButton2 << QWizard::CustomButton3
+                << QWizard::Stretch << QWizard::CustomButton1
+                << QWizard::NextButton << QWizard::FinishButton;
   setButtonLayout(button_layout);
 }
 
@@ -133,6 +140,8 @@ void GondarWizard::handleCustomButton(int buttonIndex) {
     restart();
   } else if (buttonIndex == QWizard::CustomButton2) {
     p_->aboutDialog.show();
+  } else if (buttonIndex == QWizard::CustomButton3) {
+    p_->feedbackDialog.show();
   } else {
     LOG_ERROR << "Unknown custom button pressed";
   }

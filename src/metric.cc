@@ -78,7 +78,7 @@ QByteArray getMetricsApiKey() {
 }
 }  // namespace
 
-static QString getUuid() {
+QString GetUuid() {
   static QString id;
   // if we've already initialized the UUID this program run, use the old value
   if (!id.isEmpty()) {
@@ -116,7 +116,7 @@ void SetSiteId(int site_id_in) {
   site_id = site_id_in;
 }
 
-static int GetSiteId() {
+int GetSiteId() {
   return site_id;
 }
 
@@ -131,7 +131,7 @@ void SendMetric(Metric metric, const std::string& value) {
   QNetworkAccessManager* manager = getNetworkManager();
   QUrl url("https://gondar-metrics.neverware.com/prod");
   QJsonObject json;
-  QString id = getUuid();
+  QString id = GetUuid();
   json["identifier"] = id;
   json.insert("metric", QString::fromStdString(metricStr));
   if (!value.empty()) {
