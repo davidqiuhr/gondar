@@ -19,6 +19,7 @@
 
 #include <QFile>
 
+#include "log.h"
 #include "util.h"
 
 namespace gondar {
@@ -36,5 +37,9 @@ FeedbackDialog::FeedbackDialog() {
   setLayout(&layout_);
   setMinimumWidth(500);
   setWindowTitle(tr("CloudReady USB Maker"));
+}
+
+void FeedbackDialog::accepted() {
+  LOG_WARNING << "the feedback was accepted";
 }
 }  // namespace gondar
