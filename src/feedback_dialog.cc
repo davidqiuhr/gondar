@@ -43,7 +43,7 @@ FeedbackDialog::FeedbackDialog() {
 
 static QNetworkRequest createFeedbackRequest() {
   // TODO(ken): validate this port is correct
-  auto url = QUrl("https://localhost:7777");
+  auto url = QUrl("http://localhost:7777");
   QNetworkRequest request(url);
   request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
   return request;
