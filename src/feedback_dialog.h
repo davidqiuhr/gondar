@@ -18,10 +18,12 @@
 
 #include <QDialog>
 #include <QLabel>
+#include <QLineEdit>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
 #include <QPushButton>
 #include <QTextBrowser>
 #include <QVBoxLayout>
-#include <QLineEdit>
 
 namespace gondar {
 
@@ -33,11 +35,12 @@ class FeedbackDialog : public QDialog {
   void submit();
 
  private:
-  QVBoxLayout layout_;
   QLabel feedback_label_;
   QLineEdit title_;
-  QTextEdit details_;
+  QNetworkAccessManager network_manager_;
   QPushButton submit_button_;
+  QTextEdit details_;
+  QVBoxLayout layout_;
 };
 }  // namespace gondar
 

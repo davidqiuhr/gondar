@@ -18,6 +18,7 @@
 #include <stdexcept>
 
 #include <QFile>
+#include <QJsonDocument>
 
 #include "log.h"
 #include "util.h"
@@ -40,6 +41,14 @@ FeedbackDialog::FeedbackDialog() {
   setWindowTitle(tr("CloudReady USB Maker"));
 }
 
+static QNetworkRequest createFeedbackRequest() {
+  // TODO(ken): validate this port is correct
+  auto url = QUrl("https://localhost:7777");
+  QNetworkRequest request(url);
+  request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+  return request;
+}
+
 // we collect:
 // the title of the ticket
 // the ticket contents
@@ -51,7 +60,15 @@ void FeedbackDialog::submit() {
   LOG_WARNING << "contents = " << details_.toPlainText();
   LOG_WARNING << "uuid = " << gondar::GetUuid();
   LOG_WARNING << "site = " << gondar::GetSiteId();
-  // TODO(ken): we need to send of a subprocess to jsonify and send this data
+  auto request = createFeedbackRequest();
+  QJsonObject json;
+  json["title"] = title_.text();
+  json["details"] = details_.toPlainText();
+  json["uuid"] = gondar::GetUuid();
+  json["site"] = gondar::GetSiteId();
+  QJsonDocument doc(json);
+  network_manager_.post(request, doc.toJson(QJsonDocument::Compact));
+  // TODO(ken): follow meepo example for how to handle response etc.
 
   // closes the window
   accept();
