@@ -15,11 +15,10 @@
 
 #include "util.h"
 
-#include <random>
-
 #include <QFile>
 #include <QJsonDocument>
 #include <QNetworkReply>
+#include <random>
 
 #include "config.h"
 #include "log.h"

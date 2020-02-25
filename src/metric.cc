@@ -120,7 +120,8 @@ static int GetSiteId() {
   return site_id;
 }
 
-void SendMetric(Metric metric, const std::string& value) {
+// send regular gondar metrics
+void SendMetricGondar(Metric metric, const std::string& value) {
   const auto api_key = getMetricsApiKey();
   if (api_key.isEmpty()) {
     // all production builds should sent metrics
@@ -161,5 +162,20 @@ void SendMetric(Metric metric, const std::string& value) {
   QJsonDocument doc(json);
   QString strJson(doc.toJson(QJsonDocument::Compact));
   manager->post(request, QByteArray(strJson.toUtf8()));
+}
+
+void SendMetricMeepo(Metric metric, const std::string& value) {}
+
+void SendMetric(Metric metric, const std::string& value) {
+  SendMetricGondar(metric, value);
+  // if we have a token, also send the metric to meepo
+  // TODO(ken): decide how we're going to share this state between different
+  // places
+  // should the wizard contain hasToken?
+  // i think maybe meepo should have access to the metrics stuff and pass
+  // the token into here
+  if (Meepo::hasToken()) {
+    SendMetricMeepo(metric, value);
+  }
 }
 }  // namespace gondar

@@ -17,7 +17,6 @@
 #define TEST_TEST_H_
 
 #include <QObject>
-
 #include <QtTest/QtTest>
 
 namespace gondar {

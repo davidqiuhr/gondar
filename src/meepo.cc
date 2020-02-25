@@ -147,6 +147,10 @@ void Meepo::startGoogle(QString id_token) {
   requestGoogleAuth(id_token);
 }
 
+bool Meepo::hasToken() {
+  return api_token_.is_empty();
+}
+
 QString Meepo::error() const {
   return error_;
 }

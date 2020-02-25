@@ -16,10 +16,9 @@
 #ifndef SRC_DEVICE_SELECT_PAGE_H_
 #define SRC_DEVICE_SELECT_PAGE_H_
 
-#include <memory>
-
 #include <QLabel>
 #include <QVBoxLayout>
+#include <memory>
 
 #include "device_picker.h"
 #include "wizard_page.h"

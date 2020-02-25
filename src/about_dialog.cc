@@ -15,9 +15,8 @@
 
 #include "about_dialog.h"
 
-#include <stdexcept>
-
 #include <QFile>
+#include <stdexcept>
 
 #include "util.h"
 
