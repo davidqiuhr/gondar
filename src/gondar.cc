@@ -22,21 +22,18 @@
 // USB_GET_NODE_CONNECTION_INFORMATION_EX_V2
 #define _WIN32_WINNT _WIN32_WINNT_WIN8
 
-#include <windows.h>
-
-#include <setupapi.h>
-#include <usbioctl.h>
-#include <versionhelpers.h>
-
-#include <inttypes.h>
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "gondar.h"
 
-#include "msapi_utf8.h"
+#include <inttypes.h>
+#include <setupapi.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <usbioctl.h>
+#include <versionhelpers.h>
+#include <windows.h>
 
 #include "hdd_vs_ufd.h"
+#include "msapi_utf8.h"
 
 // gondar-level includes
 #include "device.h"

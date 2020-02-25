@@ -15,12 +15,11 @@
 
 #include "log.h"
 
-#include <cstdio>
+#include <plog/Appenders/ConsoleAppender.h>
 
 #include <QDir>
 #include <QStandardPaths>
-
-#include <plog/Appenders/ConsoleAppender.h>
+#include <cstdio>
 
 #include "device.h"
 

@@ -21,7 +21,6 @@
 #include <QNetworkReply>
 #include <QString>
 #include <QUrl>
-
 #include <cstdlib>
 #include <ctime>
 

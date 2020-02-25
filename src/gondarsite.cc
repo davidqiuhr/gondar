@@ -14,6 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "gondarsite.h"
+
 #include <QDebug>
 
 GondarSite::GondarSite(int siteIdIn, QString siteNameIn) {

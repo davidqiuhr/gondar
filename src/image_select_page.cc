@@ -17,6 +17,7 @@
 
 #include <QMessageBox>
 #include <QPushButton>
+
 #include "gondarimage.h"
 #include "gondarwizard.h"
 #include "log.h"
