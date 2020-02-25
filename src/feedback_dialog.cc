@@ -67,6 +67,7 @@ void FeedbackDialog::submit() {
   json["uuid"] = gondar::GetUuid();
   json["site"] = gondar::GetSiteId();
   QJsonDocument doc(json);
+  LOG_WARNING << "doc: " << std::endl << doc.toJson(QJsonDocument::Indented);
   network_manager_.post(request, doc.toJson(QJsonDocument::Compact));
   // TODO(ken): follow meepo example for how to handle response etc.
 
