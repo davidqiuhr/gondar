@@ -18,6 +18,7 @@
 #include <QNetworkReply>
 #include <QString>
 #include <QUrl>
+
 #include "log.h"
 
 static QUrl getLatestUrl(QNetworkReply* reply) {

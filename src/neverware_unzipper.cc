@@ -15,9 +15,8 @@
 
 #include "neverware_unzipper.h"
 
-#include <stdexcept>
-
 #include <QDir>
+#include <stdexcept>
 
 #include "unzip.h"
 
