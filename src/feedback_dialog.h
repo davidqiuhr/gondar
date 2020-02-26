@@ -37,9 +37,10 @@ class FeedbackDialog : public QDialog {
  private:
   QLabel feedback_label_;
   QLineEdit title_;
+  QLabel details_label_;
+  QTextEdit details_;
   QNetworkAccessManager network_manager_;
   QPushButton submit_button_;
-  QTextEdit details_;
   QVBoxLayout layout_;
 };
 }  // namespace gondar
