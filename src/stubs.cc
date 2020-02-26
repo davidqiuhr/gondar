@@ -16,7 +16,6 @@
 #include <QtGlobal>
 
 #include "gondar.h"
-
 #include "util.h"
 
 DeviceGuyList GetDeviceList() {
