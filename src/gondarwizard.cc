@@ -53,7 +53,6 @@ GondarWizard::GondarWizard(std::unique_ptr<gondar::DevicePicker> picker_in,
     : QWizard(parent),
       p_(std::make_unique<Private>(std::move(picker_in))),
       about_shortcut_(QKeySequence::HelpContents, this),
-      feedback_shortcut_(QKeySequence::HelpContents, this),
       formatOnly(false) {
   init();
 }
@@ -88,8 +87,6 @@ void GondarWizard::init() {
 
   connect(&about_shortcut_, &QShortcut::activated, &p_->aboutDialog,
           &gondar::AboutDialog::show);
-  connect(&feedback_shortcut_, &QShortcut::activated, &p_->feedbackDialog,
-          &gondar::FeedbackDialog::show);
   connect(this, &GondarWizard::customButtonClicked, this,
           &GondarWizard::handleCustomButton);
   // appropriately move to error screen if there is a problem getting
