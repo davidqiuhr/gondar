@@ -21,8 +21,8 @@
 #include <QJsonDocument>
 
 #include "log.h"
-#include "util.h"
 #include "metric.h"
+#include "util.h"
 
 namespace gondar {
 
@@ -30,7 +30,8 @@ FeedbackDialog::FeedbackDialog() {
   feedback_label_.setText("Feedback");
 
   submit_button_.setText(tr("&Submit"));
-  connect(&submit_button_, &QPushButton::clicked, this, &FeedbackDialog::submit);
+  connect(&submit_button_, &QPushButton::clicked, this,
+          &FeedbackDialog::submit);
 
   layout_.addWidget(&feedback_label_);
   layout_.addWidget(&title_);

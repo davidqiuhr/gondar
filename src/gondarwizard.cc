@@ -18,11 +18,11 @@
 #include <QTimer>
 
 #include "about_dialog.h"
-#include "feedback_dialog.h"
 #include "admin_check_page.h"
 #include "chromeover_login_page.h"
 #include "device_select_page.h"
 #include "error_page.h"
+#include "feedback_dialog.h"
 #include "log.h"
 #include "metric.h"
 #include "site_select_page.h"
@@ -109,16 +109,17 @@ GondarWizard::~GondarWizard() {}
 
 void GondarWizard::setNormalLayout() {
   QList<QWizard::WizardButton> button_layout;
-  button_layout << QWizard::CustomButton2 << QWizard::CustomButton3 << QWizard::Stretch
-                << QWizard::NextButton << QWizard::FinishButton;
+  button_layout << QWizard::CustomButton2 << QWizard::CustomButton3
+                << QWizard::Stretch << QWizard::NextButton
+                << QWizard::FinishButton;
   setButtonLayout(button_layout);
 }
 
 void GondarWizard::setMakeAnotherLayout() {
   QList<QWizard::WizardButton> button_layout;
-  button_layout << QWizard::CustomButton2 << QWizard::CustomButton3 << QWizard::Stretch
-                << QWizard::CustomButton1 << QWizard::NextButton
-                << QWizard::FinishButton;
+  button_layout << QWizard::CustomButton2 << QWizard::CustomButton3
+                << QWizard::Stretch << QWizard::CustomButton1
+                << QWizard::NextButton << QWizard::FinishButton;
   setButtonLayout(button_layout);
 }
 

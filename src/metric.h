@@ -16,8 +16,8 @@
 #ifndef SRC_METRIC_H_
 #define SRC_METRIC_H_
 
-#include <string>
 #include <QString>
+#include <string>
 
 namespace gondar {
 
