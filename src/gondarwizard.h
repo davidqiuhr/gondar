@@ -16,12 +16,11 @@
 #ifndef SRC_GONDARWIZARD_H_
 #define SRC_GONDARWIZARD_H_
 
-#include <memory>
-#include <vector>
-
 #include <QShortcut>
 #include <QString>
 #include <QWizard>
+#include <memory>
+#include <vector>
 
 #include "device_picker.h"
 #include "download_progress_page.h"

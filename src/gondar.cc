@@ -22,21 +22,23 @@
 // USB_GET_NODE_CONNECTION_INFORMATION_EX_V2
 #define _WIN32_WINNT _WIN32_WINNT_WIN8
 
-#include <windows.h>
+#include "gondar.h"
 
+// NB(ken): this windows include must come first
+// do not allow clang-format to sort it
+// clang-format off
+#include <windows.h>
+// clang-format on
+
+#include <inttypes.h>
 #include <setupapi.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <usbioctl.h>
 #include <versionhelpers.h>
 
-#include <inttypes.h>
-#include <stdio.h>
-#include <stdlib.h>
-
-#include "gondar.h"
-
-#include "msapi_utf8.h"
-
 #include "hdd_vs_ufd.h"
+#include "msapi_utf8.h"
 
 // gondar-level includes
 #include "device.h"

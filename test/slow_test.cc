@@ -13,9 +13,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <QAbstractButton>
-
 #include "slow_test.h"
+
+#include <QAbstractButton>
 
 #include "src/device_picker.h"
 #include "src/gondarwizard.h"
