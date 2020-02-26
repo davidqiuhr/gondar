@@ -36,6 +36,7 @@ class FeedbackDialog : public QDialog {
 
  private:
   QLabel feedback_label_;
+  QLabel title_label_;
   QLineEdit title_;
   QLabel details_label_;
   QTextEdit details_;

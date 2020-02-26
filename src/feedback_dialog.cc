@@ -28,6 +28,8 @@ namespace gondar {
 
 FeedbackDialog::FeedbackDialog() {
   feedback_label_.setText("Tell us what you think");
+  feedback_label_.setAlignment(Qt::AlignCenter);
+  title_label_.setText("Title:");
   details_label_.setText("Details:");
 
   submit_button_.setText(tr("&Submit"));
@@ -35,6 +37,7 @@ FeedbackDialog::FeedbackDialog() {
           &FeedbackDialog::submit);
 
   layout_.addWidget(&feedback_label_);
+  layout_.addWidget(&title_label_);
   layout_.addWidget(&title_);
   layout_.addWidget(&details_label_);
   layout_.addWidget(&details_);
