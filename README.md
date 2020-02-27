@@ -43,7 +43,7 @@ Fedora:
 
 Ubuntu/Debian:
 
-    apt install cmake qtbase5-dev libmicrohttpd-dev
+    apt install cmake qtbase5-dev libmicrohttpd-dev build-essential zlib1g-dev
 
 ## Code style
 
