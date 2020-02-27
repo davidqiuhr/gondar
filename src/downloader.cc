@@ -62,6 +62,10 @@ void DownloadManager::startNextDownload() {
 
   const QDir dir =
       QStandardPaths::writableLocation(QStandardPaths::DownloadLocation);
+  if (!dir.exists()) {
+    // equivalent of mkdir -p
+    dir.mkpath(".");
+  }
   QString filename = saveFileName(url);
 
   output.setFileName(dir.filePath(filename));
