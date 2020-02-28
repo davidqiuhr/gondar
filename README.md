@@ -41,9 +41,9 @@ Fedora:
 
     dnf install cmake qt5-qtbase-devel
 
-Ubuntu:
+Ubuntu/Debian:
 
-    aptitude install cmake qt5-default
+    apt install build-essential cmake libmicrohttpd-dev qtbase5-dev zlib1g-dev
 
 ## Code style
 
