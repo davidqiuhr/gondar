@@ -67,7 +67,7 @@ void DownloadManager::startNextDownload() {
     bool success = dir.mkpath(".");
     if (!success) {
       LOG_ERROR << "Could not create download directory: "
-                << QStandardPaths::DownloadLocation;
+                << dir.absolutePath();
     }
   }
   QString filename = saveFileName(url);
