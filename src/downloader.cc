@@ -64,7 +64,11 @@ void DownloadManager::startNextDownload() {
       QStandardPaths::writableLocation(QStandardPaths::DownloadLocation);
   if (!dir.exists()) {
     // equivalent of mkdir -p
-    dir.mkpath(".");
+    bool success = dir.mkpath(".");
+    if (!success) {
+      LOG_ERROR << "Could not create download directory: "
+                << QStandardPaths::DownloadLocation;
+    }
   }
   QString filename = saveFileName(url);
 
