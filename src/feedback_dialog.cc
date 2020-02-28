@@ -98,6 +98,9 @@ void FeedbackDialog::submit() {
               << doc.toJson(QJsonDocument::Indented);
   network_manager_.post(request, doc.toJson(QJsonDocument::Compact));
 
+  // clear text field in case user wants to send more feedback later
+  feedback_field_.clear();
+
   // closes the window
   accept();
 }
