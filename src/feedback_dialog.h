@@ -22,7 +22,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QPushButton>
-#include <QTextBrowser>
+#include <QTextEdit>
 #include <QVBoxLayout>
 
 namespace gondar {
