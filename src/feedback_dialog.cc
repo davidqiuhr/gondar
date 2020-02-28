@@ -28,8 +28,6 @@ namespace gondar {
 FeedbackDialog::FeedbackDialog() {
   feedback_label_.setText("Tell us what you think");
   feedback_label_.setAlignment(Qt::AlignCenter);
-  title_label_.setText("Title:");
-  details_label_.setText("Details:");
 
   submit_button_.setText(tr("&Submit"));
   connect(&submit_button_, &QPushButton::clicked, this,
@@ -38,10 +36,7 @@ FeedbackDialog::FeedbackDialog() {
           &FeedbackDialog::handleReply);
 
   layout_.addWidget(&feedback_label_);
-  layout_.addWidget(&title_label_);
-  layout_.addWidget(&title_);
-  layout_.addWidget(&details_label_);
-  layout_.addWidget(&details_);
+  layout_.addWidget(&feedback_field_);
   layout_.addWidget(&submit_button_, 0, Qt::AlignRight);
   setLayout(&layout_);
   setMinimumWidth(500);
@@ -75,8 +70,7 @@ void FeedbackDialog::submit() {
   LOG_WARNING << "the feedback was accepted";
   auto request = createFeedbackRequest();
   QJsonObject json;
-  json["title"] = title_.text();
-  json["details"] = details_.toPlainText();
+  json["feedback"] = feedback_field_.toPlainText();
   json["uuid"] = gondar::GetUuid();
   json["site"] = gondar::GetSiteId();
   if (gondar::isChromeover()) {

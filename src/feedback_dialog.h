@@ -37,10 +37,7 @@ class FeedbackDialog : public QDialog {
  private:
   void handleReply(QNetworkReply* reply);
   QLabel feedback_label_;
-  QLabel title_label_;
-  QLineEdit title_;
-  QLabel details_label_;
-  QTextEdit details_;
+  QTextEdit feedback_field_;
   QNetworkAccessManager network_manager_;
   QPushButton submit_button_;
   QVBoxLayout layout_;
