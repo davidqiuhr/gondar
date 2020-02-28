@@ -68,7 +68,7 @@ void FeedbackDialog::handleReply(QNetworkReply* reply) {
 // if the feedback field is non-empty, enable submit button
 void FeedbackDialog::maybeEnableSubmit() {
   QString content = feedback_field_.toPlainText();
-  if (content.length() == 0) {
+  if (content.isEmpty()) {
     // submit should be grayed out
     submit_button_.setEnabled(false);
   } else {
