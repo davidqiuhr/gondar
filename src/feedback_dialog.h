@@ -33,6 +33,7 @@ class FeedbackDialog : public QDialog {
  public:
   FeedbackDialog();
   void submit();
+  void maybeEnableSubmit();
 
  private:
   void handleReply(QNetworkReply* reply);

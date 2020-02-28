@@ -34,6 +34,8 @@ FeedbackDialog::FeedbackDialog() {
           &FeedbackDialog::submit);
   connect(&network_manager_, &QNetworkAccessManager::finished, this,
           &FeedbackDialog::handleReply);
+  connect(&feedback_field_, &QTextEdit::textChanged, this,
+          &FeedbackDialog::maybeEnableSubmit);
 
   layout_.addWidget(&feedback_label_);
   layout_.addWidget(&feedback_field_);
@@ -41,6 +43,8 @@ FeedbackDialog::FeedbackDialog() {
   setLayout(&layout_);
   setMinimumWidth(500);
   setWindowTitle(tr("CloudReady USB Maker"));
+  // submit button initially grayed out, there's no input yet
+  submit_button_.setEnabled(false);
 }
 
 static QNetworkRequest createFeedbackRequest() {
@@ -61,12 +65,24 @@ void FeedbackDialog::handleReply(QNetworkReply* reply) {
   }
 }
 
+// if the feedback field is non-empty, enable submit button
+void FeedbackDialog::maybeEnableSubmit() {
+  QString content = feedback_field_.toPlainText();
+  if (content.length() == 0) {
+    // submit should be grayed out
+    submit_button_.setEnabled(false);
+  } else {
+    // submit should be clickable
+    submit_button_.setEnabled(true);
+  }
+}
+
 // we collect:
 // the ticket contents
 // the user's UUID
 // any site information (do we want to only offer this after sign-in phase?)
 void FeedbackDialog::submit() {
-  LOG_WARNING << "the feedback was accepted";
+  LOG_WARNING << "the feedback was submitted";
   auto request = createFeedbackRequest();
   QJsonObject json;
   json["feedback"] = feedback_field_.toPlainText();
