@@ -82,7 +82,7 @@ void FeedbackDialog::maybeEnableSubmit() {
 // the user's UUID
 // any site information (do we want to only offer this after sign-in phase?)
 void FeedbackDialog::submit() {
-  LOG_WARNING << "the feedback was submitted";
+  LOG_INFO << "the feedback was submitted";
   auto request = createFeedbackRequest();
   QJsonObject json;
   json["feedback"] = feedback_field_.toPlainText();
