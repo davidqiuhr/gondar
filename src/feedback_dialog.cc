@@ -15,10 +15,9 @@
 
 #include "feedback_dialog.h"
 
-#include <stdexcept>
-
 #include <QFile>
 #include <QJsonDocument>
+#include <stdexcept>
 
 #include "log.h"
 #include "metric.h"
@@ -80,6 +79,11 @@ void FeedbackDialog::submit() {
   json["details"] = details_.toPlainText();
   json["uuid"] = gondar::GetUuid();
   json["site"] = gondar::GetSiteId();
+  if (gondar::isChromeover()) {
+    json["product"] = "chromeover";
+  } else {
+    json["product"] = "beerover";
+  }
   QJsonDocument doc(json);
   LOG_WARNING << "feedback: " << std::endl
               << doc.toJson(QJsonDocument::Indented);
