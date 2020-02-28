@@ -94,7 +94,7 @@ void FeedbackDialog::submit() {
     json["product"] = "beerover";
   }
   QJsonDocument doc(json);
-  LOG_WARNING << "feedback: " << std::endl
+  LOG_INFO << "feedback: " << std::endl
               << doc.toJson(QJsonDocument::Indented);
   network_manager_.post(request, doc.toJson(QJsonDocument::Compact));
 
