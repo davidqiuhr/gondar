@@ -49,7 +49,8 @@ FeedbackDialog::FeedbackDialog() {
 
 static QNetworkRequest createFeedbackRequest() {
   // FIXME(ken): send to the real endpoint once it exists
-  auto url = QUrl("https://udrhaj2mil.execute-api.us-east-1.amazonaws.com/dev/gondar");
+  auto url =
+      QUrl("https://udrhaj2mil.execute-api.us-east-1.amazonaws.com/dev/gondar");
   QNetworkRequest request(url);
   request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
   return request;
@@ -94,8 +95,7 @@ void FeedbackDialog::submit() {
     json["product"] = "beerover";
   }
   QJsonDocument doc(json);
-  LOG_INFO << "feedback: " << std::endl
-              << doc.toJson(QJsonDocument::Indented);
+  LOG_INFO << "feedback: " << std::endl << doc.toJson(QJsonDocument::Indented);
   network_manager_.post(request, doc.toJson(QJsonDocument::Compact));
 
   // clear text field in case user wants to send more feedback later
