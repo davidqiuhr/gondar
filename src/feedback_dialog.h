@@ -1,4 +1,4 @@
-// Copyright 2017 Neverware
+// Copyright 2020 Neverware
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,38 +13,36 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SRC_METRIC_H_
-#define SRC_METRIC_H_
+#ifndef SRC_FEEDBACK_DIALOG_H_
+#define SRC_FEEDBACK_DIALOG_H_
 
-#include <QString>
-#include <string>
+#include <QDialog>
+#include <QLabel>
+#include <QLineEdit>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QPushButton>
+#include <QTextEdit>
+#include <QVBoxLayout>
 
 namespace gondar {
 
-enum class Metric {
-  BeeroverUse,
-  ChromeoverUse,
-  DownloadAttempt,
-  DownloadFailure,
-  DownloadSuccess,
-  Error,
-  FormatAttempt,
-  FormatSuccess,
-  SuccessDuration,
-  UsbAttempt,
-  UsbSuccess,
-  Use,
+class FeedbackDialog : public QDialog {
+  Q_OBJECT
+
+ public:
+  FeedbackDialog();
+  void submit();
+  void maybeEnableSubmit();
+
+ private:
+  void handleReply(QNetworkReply* reply);
+  QLabel feedback_label_;
+  QTextEdit feedback_field_;
+  QNetworkAccessManager network_manager_;
+  QPushButton submit_button_;
+  QVBoxLayout layout_;
 };
-
-void SetSiteId(int site_id);
-
-void SendMetricGondar(Metric metric, const std::string& value = "");
-void SendMetricMeepo(Metric metric, const std::string& value = "");
-void SendMetric(Metric metric, const std::string& value = "");
-
-QString GetUuid();
-int GetSiteId();
-
 }  // namespace gondar
 
-#endif  // SRC_METRIC_H_
+#endif  // SRC_FEEDBACK_DIALOG_H_

@@ -24,13 +24,18 @@
 
 #include "gondar.h"
 
+// NB(ken): this windows include must come first
+// do not allow clang-format to sort it
+// clang-format off
+#include <windows.h>
+// clang-format on
+
 #include <inttypes.h>
 #include <setupapi.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <usbioctl.h>
 #include <versionhelpers.h>
-#include <windows.h>
 
 #include "hdd_vs_ufd.h"
 #include "msapi_utf8.h"
