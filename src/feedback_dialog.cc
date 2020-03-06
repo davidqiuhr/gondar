@@ -49,8 +49,7 @@ FeedbackDialog::FeedbackDialog() {
 
 static QNetworkRequest createFeedbackRequest() {
   // FIXME(ken): send to the real endpoint once it exists
-  auto url =
-      QUrl("https://udrhaj2mil.execute-api.us-east-1.amazonaws.com/dev/gondar");
+  auto url = QUrl("https://feedback.neverware.com/gondar");
   QNetworkRequest request(url);
   request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
   return request;
