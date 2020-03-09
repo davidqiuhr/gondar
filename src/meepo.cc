@@ -86,7 +86,7 @@ QNetworkRequest createSitesRequest(const QString& api_token, int page) {
   auto url = createUrl(path_sites);
   QUrlQuery query;
   query.addQueryItem("token", api_token);
-  query.addQueryItem("page", QString(page));
+  query.addQueryItem("page", "1");
   url.setQuery(query);
   return QNetworkRequest(url);
 }
@@ -117,8 +117,10 @@ std::vector<GondarSite> sitesFromReply(QNetworkReply* reply) {
   return sites;
 }
 
-int pageFromReply(QNetworkReply* reply) {
-  return gondar::jsonFromReply(reply)["page"].toInt();
+int printPageInfo(QNetworkReply* reply) {
+  const QJsonValue json = gondar::jsonFromReply(reply)["pagination"].toValue();
+  LOG_INFO << "current page: " << json["current"];
+  LOG_INFO << "total page: " << json["total"];
 }
 
 }  // namespace
@@ -208,8 +210,7 @@ void Meepo::requestSites(int page) {
 // we should probably set a max pages to like 100
 void Meepo::handleSitesReply(QNetworkReply* reply) {
   sites_ = sitesFromReply(reply);
-  auto page = pageFromReply(reply);
-  LOG_INFO << "~~~PAGE=" << page;
+  printPageInfo(reply);
   LOG_INFO << "received " << sites_.size() << " site(s)";
 
   sites_remaining_ = sites_.size();
