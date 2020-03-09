@@ -193,6 +193,10 @@ void Meepo::requestSites() {
   network_manager_.get(request);
 }
 
+// FIXME(ken): what i don't understand is why am i getting all the downloads
+// for the sites i do not have an interest in?
+// it feels like i should choose a site, hit next, then validate page does
+// a transaction to find the images for that site before calling next()
 void Meepo::handleSitesReply(QNetworkReply* reply) {
   sites_ = sitesFromReply(reply);
   LOG_INFO << "received " << sites_.size() << " site(s)";
