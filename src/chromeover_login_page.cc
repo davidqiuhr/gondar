@@ -73,9 +73,9 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
   // connect events between our members and ourself
   connect(&googleButton, &QPushButton::clicked, &googleFlow,
           &GoogleFlow::handleGoogleSigninPart1);
-  connect(&meepo_, &gondar::Meepo::finished, this,
+  connect(&wizard()->meepo_, &gondar::Meepo::finished, this,
           &ChromeoverLoginPage::handleMeepoFinished);
-  connect(&meepo_, &gondar::Meepo::failed, this,
+  connect(&wizard()->meepo_, &gondar::Meepo::failed, this,
           &ChromeoverLoginPage::handleMeepoFailed);
   connect(googleFlow.getManager(), &QNetworkAccessManager::finished, this,
           &ChromeoverLoginPage::handleGoogleSigninFinished);
@@ -128,14 +128,14 @@ bool ChromeoverLoginPage::validatePage() {
     return true;
   }
   if (!started) {
-    meepo_.start(auth);
+    wizard()->meepo_.start(auth);
   }
   started = true;
   return false;
 }
 
 void ChromeoverLoginPage::handleMeepoFinished() {
-  wizard()->setSites(meepo_.sites());
+  wizard()->setSites(wizard()->meepo_.sites());
 
   // we don't want users to be able to pass through the screen by pressing
   // next while processing.  this will make validatePage pass and immediately
@@ -149,9 +149,9 @@ void ChromeoverLoginPage::handleMeepoFinished() {
 void ChromeoverLoginPage::handleMeepoFailed(bool using_google) {
   // If the user has no sites, proceed to the error screen with the
   // appropriate error
-  if (meepo_.no_sites_error == meepo_.error()) {
+  if (wizard()->meepo_.no_sites_error == wizard()->meepo_.error()) {
     finished = true;
-    wizard()->postError(meepo_.no_sites_error);
+    wizard()->postError(wizard()->meepo_.no_sites_error);
     // otherwise, assume login credentials are incorrect and prompt them to
     // retry
   } else {
@@ -173,7 +173,7 @@ void ChromeoverLoginPage::handleGoogleSigninFinished(QNetworkReply* reply) {
   meanWordsLabel.setVisible(false);
   QString id_token = gondar::jsonFromReply(reply)["id_token"].toString();
   if (!started) {
-    meepo_.startGoogle(id_token);
+    wizard()->meepo_.startGoogle(id_token);
     started = true;
   }
 }

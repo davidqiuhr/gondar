@@ -109,6 +109,7 @@ QString GetUuid() {
 
 // the metrics layer stores the site id to provide in later metrics
 // once it is available
+// FIXME(ken): really?  static state like this?
 namespace {
 static int site_id = 0;
 }
@@ -175,7 +176,7 @@ void SendMetric(Metric metric, const std::string& value) {
   // should the wizard contain hasToken?
   // i think maybe meepo should have access to the metrics stuff and pass
   // the token into here
-  if (Meepo::hasToken()) {
+  if (wizard()->meepo_.hasToken()) {
     SendMetricMeepo(metric, value);
   }
 }
