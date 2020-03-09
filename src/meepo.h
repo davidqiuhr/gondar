@@ -55,7 +55,7 @@ class Meepo : public QObject {
   void requestGoogleAuth(QString);
   void handleAuthReply(QNetworkReply* reply);
 
-  void requestSites();
+  void requestSites(int page);
   void handleSitesReply(QNetworkReply* reply);
 
   void requestDownloads(const GondarSite& site);

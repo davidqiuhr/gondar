@@ -82,10 +82,11 @@ QNetworkRequest createGoogleAuthRequest() {
   return request;
 }
 
-QNetworkRequest createSitesRequest(const QString& api_token) {
+QNetworkRequest createSitesRequest(const QString& api_token, int page) {
   auto url = createUrl(path_sites);
   QUrlQuery query;
   query.addQueryItem("token", api_token);
+  query.addQueryItem("page", QString(page));
   url.setQuery(query);
   return QNetworkRequest(url);
 }
@@ -184,11 +185,11 @@ void Meepo::handleAuthReply(QNetworkReply* reply) {
   }
 
   LOG_INFO << "token received";
-  requestSites();
+  requestSites(1);
 }
 
-void Meepo::requestSites() {
-  const auto request = createSitesRequest(api_token_);
+void Meepo::requestSites(int page) {
+  const auto request = createSitesRequest(api_token_, page);
   LOG_INFO << "GET " << request.url().toString();
   network_manager_.get(request);
 }
@@ -197,6 +198,10 @@ void Meepo::requestSites() {
 // for the sites i do not have an interest in?
 // it feels like i should choose a site, hit next, then validate page does
 // a transaction to find the images for that site before calling next()
+
+// the weird thing about this function in its new reality is that it will be
+// called on each page; it's basically recursive like a nightmare
+// we should probably set a max pages to like 100
 void Meepo::handleSitesReply(QNetworkReply* reply) {
   sites_ = sitesFromReply(reply);
   LOG_INFO << "received " << sites_.size() << " site(s)";
@@ -209,6 +214,9 @@ void Meepo::handleSitesReply(QNetworkReply* reply) {
     return;
   }
 
+//}
+
+//void Meepo::processSites() {
   for (const auto& site : sites_) {
     requestDownloads(site);
   }
