@@ -17,7 +17,9 @@
 #define SRC_SITE_SELECT_PAGE_H_
 
 #include <QButtonGroup>
+#include <QGroupBox>
 #include <QLabel>
+#include <QPushButton>
 #include <QRadioButton>
 #include <QVBoxLayout>
 
@@ -35,8 +37,17 @@ class SiteSelectPage : public gondar::WizardPage {
   bool validatePage() override;
 
  private:
+  int getTotalPages();
+  void handleNextPage();
+  void handlePrevPage();
+  void updateSitesForPage();
   QButtonGroup sitesButtons;
   QVBoxLayout layout;
+  QHBoxLayout pageNavLayout;
+  QPushButton nextPageButton;
+  QPushButton prevPageButton;
+  QGroupBox pageGroup;
+  int page;
 };
 
 #endif  // SRC_SITE_SELECT_PAGE_H_
