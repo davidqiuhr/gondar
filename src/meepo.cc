@@ -117,6 +117,10 @@ std::vector<GondarSite> sitesFromReply(QNetworkReply* reply) {
   return sites;
 }
 
+int pageFromReply(QNetworkReply* reply) {
+  return gondar::jsonFromReply(reply)["page"].toInt();
+}
+
 }  // namespace
 
 namespace gondar {
@@ -204,6 +208,8 @@ void Meepo::requestSites(int page) {
 // we should probably set a max pages to like 100
 void Meepo::handleSitesReply(QNetworkReply* reply) {
   sites_ = sitesFromReply(reply);
+  auto page = pageFromReply(reply);
+  LOG_INFO << "~~~PAGE=" << page;
   LOG_INFO << "received " << sites_.size() << " site(s)";
 
   sites_remaining_ = sites_.size();
@@ -214,9 +220,9 @@ void Meepo::handleSitesReply(QNetworkReply* reply) {
     return;
   }
 
-//}
+  //}
 
-//void Meepo::processSites() {
+  // void Meepo::processSites() {
   for (const auto& site : sites_) {
     requestDownloads(site);
   }
