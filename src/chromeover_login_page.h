@@ -46,6 +46,8 @@ class ChromeoverLoginPage : public gondar::WizardPage {
   void handleGoogleSigninFinished(QNetworkReply* reply);
   void handleGoogleSigninFail();
 
+  // TODO(ken): meepo_ should now belong to the entire wizard.
+  // we'll be accessing it outside of just one page
   gondar::Meepo meepo_;
 
   QGridLayout layout;

@@ -148,7 +148,7 @@ void Meepo::startGoogle(QString id_token) {
 }
 
 bool Meepo::hasToken() {
-  return api_token_.is_empty();
+  return api_token_.isEmpty();
 }
 
 QString Meepo::error() const {

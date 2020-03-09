@@ -27,6 +27,7 @@
 #include "config.h"
 #include "log.h"
 #include "util.h"
+#include "meepo.h"
 
 namespace gondar {
 
