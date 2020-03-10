@@ -116,22 +116,13 @@ std::vector<GondarSite> sitesFromReply(const QJsonArray& rawSites) {
   return sites;
 }
 
-int printPageInfo(const QJsonObject& outer_json) {
+bool shouldGetMore(const QJsonObject& outer_json) {
   const QJsonObject json = outer_json["pagination"].toObject();
-  LOG_INFO << "~~pagination size = " << json.size();
   LOG_INFO << "~~pagination cur = " << json.value("current").toInt();
   LOG_INFO << "~~pagination total = " << json.value("total").toInt();
-
-  //const QJsonValue json = gondar::jsonFromReply(reply)["pagination"];
-  //const QJsonArray rawSites = gondar::jsonFromReply(reply)["sites"].toArray();
-  //const QJsonObject json = gondar::jsonFromReply(reply);
-  //LOG_INFO << "~~size = " << rawSites.size();
-  //const QStringList keys = gondar::jsonFromReply(reply).keys();
-  //for (const QString& cur : keys) {
-  //  LOG_INFO << "~~reply part:" << cur;
- // }
-  //LOG_INFO << "current page: " << json["current"].toString();
-  //LOG_INFO << "total page: " << json["total"].toString();
+  auto cur = json.value("current").toInt();
+  auto total = json.value("total").toInt();
+  return cur < total;
 }
 
 }  // namespace
@@ -222,18 +213,9 @@ void Meepo::requestSites(int page) {
 void Meepo::handleSitesReply(QNetworkReply* reply) {
   const QJsonObject json = gondar::jsonFromReply(reply);
   const QJsonArray rawSites = json["sites"].toArray();
+  // TODO(ken): lower priority but maybe rename?
   sites_ = sitesFromReply(rawSites);
   
-  // how about for now i do the high level reply extraction here,
-  // then pass along the sites part to sitesFromReply and
-  // get the page info from a version of printPageInfo
-  // printPageInfo could be a func called GoAgain or similar
-  // that returns true if cur < total
-
-  // FIXME(ken): i can only read from the reply once, mystery solved
-  printPageInfo(json);
-  // TODO(ken): rename this like 'extractReply' or something
-  // as we now also need meta-information about pages
   LOG_INFO << "received " << sites_.size() << " site(s)";
 
   sites_remaining_ = sites_.size();
@@ -248,6 +230,12 @@ void Meepo::handleSitesReply(QNetworkReply* reply) {
   // and as long as it is recursive i think we're fine
   for (const auto& site : sites_) {
     requestDownloads(site);
+  }
+
+  // so now that we're done, we check printPageInfo (becomes shouldGetMore)
+  // and see if we want to submit another request to this func
+  if shouldGetMore(json) {
+
   }
 }
 
@@ -310,6 +298,8 @@ void Meepo::dispatchReply(QNetworkReply* reply) {
     handleAuthReply(reply);
   } else if (url.path().endsWith("/google-auth")) {
     handleAuthReply(reply);
+  // FIXME(ken): this might be a pickle...will the url path still end with
+  // /sites or will it have ?page=1 now?
   } else if (url.path().endsWith("/sites")) {
     handleSitesReply(reply);
   } else if (url.path().endsWith("/downloads")) {
