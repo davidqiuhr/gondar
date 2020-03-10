@@ -120,10 +120,8 @@ std::vector<GondarSite> sitesFromReply(QNetworkReply* reply) {
 int printPageInfo(QNetworkReply* reply) {
   const QJsonObject json = gondar::jsonFromReply(reply)["pagination"].toObject();
   LOG_INFO << "~~pagination size = " << json.size();
-  LOG_INFO << "~~pagination cur = " << json.contains("current");
-  LOG_INFO << "~~pagination total = " << json.contains("total");
-  //LOG_INFO << "current page: " << json["current"].toString();
-  //LOG_INFO << "total page: " << json["total"].toString();
+  LOG_INFO << "~~pagination cur = " << json.value("current").toInt();
+  LOG_INFO << "~~pagination total = " << json.value("total").toInt();
 
   //const QJsonValue json = gondar::jsonFromReply(reply)["pagination"];
   //const QJsonArray rawSites = gondar::jsonFromReply(reply)["sites"].toArray();
