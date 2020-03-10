@@ -15,6 +15,7 @@
 
 #include "site_select_page.h"
 
+#include <QLabel>
 #include <QRadioButton>
 
 #include "gondarsite.h"
@@ -48,6 +49,14 @@ void SiteSelectPage::initializePage() {
     sitesButtons.addButton(curButton);
     layout.addWidget(curButton);
   }
+  // TODO(ken): should be invisible for starters until we
+  // discover user has a bunch of sites
+  moreSitesLabel.setVisible(true);
+  moreSitesButton.setVisible(true);
+  moreSitesLabel.setText("You have a lot of sites!");
+  moreSitesButton.setText("More");
+  layout.addWidget(&moreSitesLabel);
+  layout.addWidget(&moreSitesButton);
 }
 
 bool SiteSelectPage::validatePage() {

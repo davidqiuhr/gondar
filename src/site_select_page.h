@@ -18,6 +18,7 @@
 
 #include <QButtonGroup>
 #include <QLabel>
+#include <QPushButton>
 #include <QRadioButton>
 #include <QVBoxLayout>
 
@@ -37,6 +38,8 @@ class SiteSelectPage : public gondar::WizardPage {
  private:
   QButtonGroup sitesButtons;
   QVBoxLayout layout;
+  QLabel moreSitesLabel;
+  QPushButton moreSitesButton;
 };
 
 #endif  // SRC_SITE_SELECT_PAGE_H_
