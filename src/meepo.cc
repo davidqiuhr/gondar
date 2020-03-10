@@ -103,7 +103,7 @@ QNetworkRequest createDownloadsRequest(const QString& api_token,
   return request;
 }
 
-std::vector<GondarSite> sitesFromReply(QJsonArray& rawSites) {
+std::vector<GondarSite> sitesFromReply(const QJsonArray& rawSites) {
   std::vector<GondarSite> sites;
 
   for (const QJsonValue& cur : rawSites) {
@@ -116,7 +116,7 @@ std::vector<GondarSite> sitesFromReply(QJsonArray& rawSites) {
   return sites;
 }
 
-int printPageInfo(QJsonObject& outer_json) {
+int printPageInfo(const QJsonObject& outer_json) {
   const QJsonObject json = outer_json["pagination"].toObject();
   LOG_INFO << "~~pagination size = " << json.size();
   LOG_INFO << "~~pagination cur = " << json.value("current").toInt();
@@ -220,9 +220,9 @@ void Meepo::requestSites(int page) {
 // called on each page; it's basically recursive like a nightmare
 // we should probably set a max pages to like 100
 void Meepo::handleSitesReply(QNetworkReply* reply) {
-  QJsonObject json = gondar::jsonFromReply(reply);
+  const QJsonObject json = gondar::jsonFromReply(reply);
   const QJsonArray rawSites = json["sites"].toArray();
-  sites_ = sitesFromReply(&rawSites);
+  sites_ = sitesFromReply(rawSites);
   
   // how about for now i do the high level reply extraction here,
   // then pass along the sites part to sitesFromReply and
@@ -231,7 +231,7 @@ void Meepo::handleSitesReply(QNetworkReply* reply) {
   // that returns true if cur < total
 
   // FIXME(ken): i can only read from the reply once, mystery solved
-  printPageInfo(&json);
+  printPageInfo(json);
   // TODO(ken): rename this like 'extractReply' or something
   // as we now also need meta-information about pages
   LOG_INFO << "received " << sites_.size() << " site(s)";
