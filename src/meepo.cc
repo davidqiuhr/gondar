@@ -103,8 +103,7 @@ QNetworkRequest createDownloadsRequest(const QString& api_token,
   return request;
 }
 
-std::vector<GondarSite> sitesFromReply(QNetworkReply* reply) {
-  const QJsonArray rawSites = gondar::jsonFromReply(reply)["sites"].toArray();
+std::vector<GondarSite> sitesFromReply(QJsonArray& rawSites) {
   std::vector<GondarSite> sites;
 
   for (const QJsonValue& cur : rawSites) {
@@ -117,8 +116,8 @@ std::vector<GondarSite> sitesFromReply(QNetworkReply* reply) {
   return sites;
 }
 
-int printPageInfo(QNetworkReply* reply) {
-  const QJsonObject json = gondar::jsonFromReply(reply)["pagination"].toObject();
+int printPageInfo(QJsonObject& outer_json) {
+  const QJsonObject json = outer_json["pagination"].toObject();
   LOG_INFO << "~~pagination size = " << json.size();
   LOG_INFO << "~~pagination cur = " << json.value("current").toInt();
   LOG_INFO << "~~pagination total = " << json.value("total").toInt();
@@ -221,9 +220,20 @@ void Meepo::requestSites(int page) {
 // called on each page; it's basically recursive like a nightmare
 // we should probably set a max pages to like 100
 void Meepo::handleSitesReply(QNetworkReply* reply) {
+  QJsonObject json = gondar::jsonFromReply(reply);
+  const QJsonArray rawSites = json["sites"].toArray();
+  sites_ = sitesFromReply(&rawSites);
+  
+  // how about for now i do the high level reply extraction here,
+  // then pass along the sites part to sitesFromReply and
+  // get the page info from a version of printPageInfo
+  // printPageInfo could be a func called GoAgain or similar
+  // that returns true if cur < total
+
   // FIXME(ken): i can only read from the reply once, mystery solved
-  printPageInfo(reply);
-  sites_ = sitesFromReply(reply);
+  printPageInfo(&json);
+  // TODO(ken): rename this like 'extractReply' or something
+  // as we now also need meta-information about pages
   LOG_INFO << "received " << sites_.size() << " site(s)";
 
   sites_remaining_ = sites_.size();
@@ -234,9 +244,8 @@ void Meepo::handleSitesReply(QNetworkReply* reply) {
     return;
   }
 
-  //}
-
-  // void Meepo::processSites() {
+  // i was going to have this separate, but i'm looking over the logic now
+  // and as long as it is recursive i think we're fine
   for (const auto& site : sites_) {
     requestDownloads(site);
   }
