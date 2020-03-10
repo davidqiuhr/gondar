@@ -86,7 +86,7 @@ QNetworkRequest createSitesRequest(const QString& api_token, int page) {
   auto url = createUrl(path_sites);
   QUrlQuery query;
   query.addQueryItem("token", api_token);
-  query.addQueryItem("page", "1");
+  query.addQueryItem("page", QString(page));
   url.setQuery(query);
   return QNetworkRequest(url);
 }
@@ -236,7 +236,7 @@ void Meepo::handleSitesReply(QNetworkReply* reply) {
 
   // so now that we're done, we check printPageInfo (becomes shouldGetMore)
   // and see if we want to submit another request to this func
-  if shouldGetMore(json) {
+  if (shouldGetMore(json)) {
 
   }
 }
