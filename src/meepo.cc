@@ -118,9 +118,10 @@ std::vector<GondarSite> sitesFromReply(QNetworkReply* reply) {
 }
 
 int printPageInfo(QNetworkReply* reply) {
-  const QStringList json = gondar::jsonFromReply(reply).keys();
-  for (const QString& cur : json) {
-    LOG_INFO << "key: " << cur;
+  const QJsonObject json = gondar::jsonFromReply(reply)["pagination"].toObject();
+  LOG_INFO << "~~pagination size = " << json.size();
+  for (const QJsonValue& cur : json) {
+    LOG_INFO << "key: " << cur.toString();
   }
   //LOG_INFO << "current page: " << json["current"].toString();
   //LOG_INFO << "total page: " << json["total"].toString();
