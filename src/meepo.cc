@@ -118,9 +118,20 @@ std::vector<GondarSite> sitesFromReply(QNetworkReply* reply) {
 }
 
 int printPageInfo(QNetworkReply* reply) {
-  const QJsonValue json = gondar::jsonFromReply(reply)["pagination"].toValue();
-  LOG_INFO << "current page: " << json["current"];
-  LOG_INFO << "total page: " << json["total"];
+//  const QJsonValue json = gondar::jsonFromReply(reply)["pagination"].toValue();
+//  LOG_INFO << "current page: " << json["current"];
+//  LOG_INFO << "total page: " << json["total"];
+
+  //const QJsonValue json = gondar::jsonFromReply(reply)["pagination"];
+  const QJsonArray rawSites = gondar::jsonFromReply(reply)["sites"].toArray();
+  //const QJsonObject json = gondar::jsonFromReply(reply);
+  LOG_INFO << "~~size = " << rawSites.size();
+  //const QStringList keys = gondar::jsonFromReply(reply).keys();
+  //for (const QString& cur : keys) {
+  //  LOG_INFO << "~~reply part:" << cur;
+ // }
+  //LOG_INFO << "current page: " << json["current"].toString();
+  //LOG_INFO << "total page: " << json["total"].toString();
 }
 
 }  // namespace
@@ -209,8 +220,9 @@ void Meepo::requestSites(int page) {
 // called on each page; it's basically recursive like a nightmare
 // we should probably set a max pages to like 100
 void Meepo::handleSitesReply(QNetworkReply* reply) {
-  sites_ = sitesFromReply(reply);
+  // FIXME(ken): i can only read from the reply once, mystery solved
   printPageInfo(reply);
+  sites_ = sitesFromReply(reply);
   LOG_INFO << "received " << sites_.size() << " site(s)";
 
   sites_remaining_ = sites_.size();
