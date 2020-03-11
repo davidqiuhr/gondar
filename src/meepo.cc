@@ -199,7 +199,7 @@ void Meepo::handleAuthReply(QNetworkReply* reply) {
   LOG_INFO << "token received";
   // FIXME(ken): ok now we're back to the mystery of why this page
   // arg is not being used
-  requestSites(2);
+  requestSites(1);
 }
 
 void Meepo::requestSites(int page) {
