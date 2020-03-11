@@ -89,7 +89,7 @@ QNetworkRequest createSitesRequest(const QString& api_token, int page) {
   // QString wants a C string.  we start with an int.
   // so we go int->to_string->c_str()->QString
   // makes sense to me
-  query.addQueryItem("page", QString::fromStdString(std::to_string(page)));
+  query.addQueryItem("page", QString::number(page));
   url.setQuery(query);
   LOG_INFO << "~~ken: createsitesreq = " << url.toString();
   return QNetworkRequest(url);
@@ -241,7 +241,6 @@ void Meepo::handleSitesReply(QNetworkReply* reply) {
   // so now that we're done, we check printPageInfo (becomes shouldGetMore)
   // and see if we want to submit another request to this func
   if (shouldGetMore(json)) {
-
   }
 }
 
