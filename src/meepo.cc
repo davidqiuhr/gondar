@@ -232,6 +232,7 @@ void Meepo::handleSitesReply(QNetworkReply* reply) {
   // sites starts at zero, and every time we go get another page,
   // there are more sites remaining to get downloads from
   sites_remaining_ += sites_.size();
+  LOG_INFO << "~~KEN: sites_remaining increased, now " << sites_remaining_;
 
   // special handling for the zero sites case
   if (sites_remaining_ == 0) {
@@ -239,8 +240,7 @@ void Meepo::handleSitesReply(QNetworkReply* reply) {
     return;
   }
 
-  // i was going to have this separate, but i'm looking over the logic now
-  // and as long as it is recursive i think we're fine
+  // FIXME(ken): my sites_remaining math maybe wrong?
   for (const auto& site : sites_) {
     requestDownloads(site);
   }
@@ -286,6 +286,8 @@ void Meepo::handleDownloadsReply(QNetworkReply* reply) {
     }
   }
   sites_remaining_--;
+  // FIXME(ken): this is not being called for that first set of 5 requests
+  LOG_INFO << "~~KEN: sites_remaining lowered, now " << sites_remaining_;
 
   // see if we're done
   if (sites_remaining_ == 0) {
