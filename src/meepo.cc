@@ -120,13 +120,19 @@ std::vector<GondarSite> sitesFromReply(const QJsonArray& rawSites) {
   return sites;
 }
 
-bool shouldGetMore(const QJsonObject& outer_json) {
+// TODO(ken): test for this
+int getNextPage(const QJsonObject& outer_json) {
   const QJsonObject json = outer_json["pagination"].toObject();
   LOG_INFO << "~~pagination cur = " << json.value("current").toInt();
   LOG_INFO << "~~pagination total = " << json.value("total").toInt();
   auto cur = json.value("current").toInt();
   auto total = json.value("total").toInt();
   return cur < total;
+  if (cur < total) {
+    return cur + 1;
+  } else {
+    return 0;
+  }
 }
 
 }  // namespace
@@ -224,7 +230,9 @@ void Meepo::handleSitesReply(QNetworkReply* reply) {
   
   LOG_INFO << "received " << sites_.size() << " site(s)";
 
-  sites_remaining_ = sites_.size();
+  // sites starts at zero, and every time we go get another page,
+  // there are more sites remaining to get downloads from
+  sites_remaining_ += sites_.size();
 
   // special handling for the zero sites case
   if (sites_remaining_ == 0) {
@@ -240,7 +248,9 @@ void Meepo::handleSitesReply(QNetworkReply* reply) {
 
   // so now that we're done, we check printPageInfo (becomes shouldGetMore)
   // and see if we want to submit another request to this func
-  if (shouldGetMore(json)) {
+  int next_page = getNextPage(json);
+  if (next_page > 0) {
+    requestSites(next_page);
   }
 }
 
