@@ -86,10 +86,11 @@ QNetworkRequest createSitesRequest(const QString& api_token, int page) {
   auto url = createUrl(path_sites);
   QUrlQuery query;
   query.addQueryItem("token", api_token);
+  // QString wants a C string.  we start with an int.
+  // so we go int->to_string->c_str()->QString
+  // makes sense to me
   query.addQueryItem("page", QString(std::to_string(page).c_str()));
   url.setQuery(query);
-  // FIXME(ken): page=%00
-  // that's not right
   LOG_INFO << "~~ken: createsitesreq = " << url.toString();
   return QNetworkRequest(url);
 }
