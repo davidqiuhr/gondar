@@ -86,8 +86,11 @@ QNetworkRequest createSitesRequest(const QString& api_token, int page) {
   auto url = createUrl(path_sites);
   QUrlQuery query;
   query.addQueryItem("token", api_token);
-  query.addQueryItem("page", QString(page));
+  query.addQueryItem("page", "2");
   url.setQuery(query);
+  // FIXME(ken): page=%00
+  // that's not right
+  LOG_INFO << "~~ken: createsitesreq = " << url.toString();
   return QNetworkRequest(url);
 }
 
