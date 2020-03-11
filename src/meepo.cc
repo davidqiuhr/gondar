@@ -127,7 +127,6 @@ int getNextPage(const QJsonObject& outer_json) {
   LOG_INFO << "~~pagination total = " << json.value("total").toInt();
   auto cur = json.value("current").toInt();
   auto total = json.value("total").toInt();
-  return cur < total;
   if (cur < total) {
     return cur + 1;
   } else {
@@ -246,9 +245,9 @@ void Meepo::handleSitesReply(QNetworkReply* reply) {
     requestDownloads(site);
   }
 
-  // so now that we're done, we check printPageInfo (becomes shouldGetMore)
-  // and see if we want to submit another request to this func
+  // see if there's another batch
   int next_page = getNextPage(json);
+  LOG_INFO << "~~~KEN: next page = " << next_page;
   if (next_page > 0) {
     requestSites(next_page);
   }
