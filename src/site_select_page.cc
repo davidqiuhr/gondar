@@ -52,8 +52,12 @@ void SiteSelectPage::initializePage() {
   // TODO(ken): should be invisible for starters until we
   // discover user has a bunch of sites
   // TODO(ken): do that logic now
-  moreSitesLabel.setVisible(false);
-  moreSitesButton.setVisible(false);
+  bool lots_of_sites = false;
+  if (wizard()->sites().size() > 5) {
+    lots_of_sites = true;
+  }
+  moreSitesLabel.setVisible(lots_of_sites);
+  moreSitesButton.setVisible(lots_of_sites);
   moreSitesLabel.setText("You have a lot of sites!");
   moreSitesButton.setText("More");
   layout.addWidget(&moreSitesLabel);
