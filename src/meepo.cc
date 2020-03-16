@@ -240,7 +240,8 @@ void Meepo::handleSitesReply(QNetworkReply* reply) {
     return;
   }
 
-  // FIXME(ken): my sites_remaining math maybe wrong?
+  // FIXME(ken): i never handle the first page (5 results)
+  // only the second page (two results)
   for (const auto& site : sites_) {
     requestDownloads(site);
   }
