@@ -231,7 +231,10 @@ void Meepo::handleSitesReply(QNetworkReply* reply) {
   // to this function?
   // i must be making some logic error by assuming it is.
   // if i make it local to this function, i can see what is trying to use it.
-  sites_ = sitesFromReply(rawSites);
+  // this should be sites_.append...
+  //sites_.append(sitesFromReply(rawSites));
+  auto new_sites = sitesFromReply(rawSites);
+  sites_.insert(sites_.end(), new_sites.begin(), new_sites.end());
   
   // TODO(ken): do i get two of these?  one 5, one 2?
   // i get both of these as expected.
