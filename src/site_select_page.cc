@@ -51,6 +51,7 @@ void SiteSelectPage::initializePage() {
   }
   // TODO(ken): should be invisible for starters until we
   // discover user has a bunch of sites
+  // TODO(ken): do that logic now
   moreSitesLabel.setVisible(false);
   moreSitesButton.setVisible(false);
   moreSitesLabel.setText("You have a lot of sites!");
