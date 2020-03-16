@@ -227,6 +227,8 @@ void Meepo::handleSitesReply(QNetworkReply* reply) {
   // TODO(ken): lower priority but maybe rename?
   sites_ = sitesFromReply(rawSites);
   
+  // TODO(ken): do i get two of these?  one 5, one 2?
+  // i get both of these as expected.
   LOG_INFO << "received " << sites_.size() << " site(s)";
 
   // sites starts at zero, and every time we go get another page,
@@ -235,6 +237,7 @@ void Meepo::handleSitesReply(QNetworkReply* reply) {
   LOG_INFO << "~~KEN: sites_remaining increased, now " << sites_remaining_;
 
   // special handling for the zero sites case
+  // FIXME(ken): is this the problem for now?  last page is empty?
   if (sites_remaining_ == 0) {
     fail(no_sites_error);
     return;
@@ -249,6 +252,7 @@ void Meepo::handleSitesReply(QNetworkReply* reply) {
   // see if there's another batch
   int next_page = getNextPage(json);
   LOG_INFO << "~~~KEN: next page = " << next_page;
+  // first 2, then 0
   if (next_page > 0) {
     requestSites(next_page);
   }
@@ -327,7 +331,7 @@ void Meepo::dispatchReply(QNetworkReply* reply) {
 }
 
 void Meepo::fail(const QString& error) {
-  LOG_ERROR << "error";
+  LOG_ERROR << "error: " << error;
   error_ = error;
   emit failed(google_mode_);
 }
