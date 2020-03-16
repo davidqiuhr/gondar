@@ -49,9 +49,8 @@ void SiteSelectPage::initializePage() {
     sitesButtons.addButton(curButton);
     layout.addWidget(curButton);
   }
-  // TODO(ken): should be invisible for starters until we
-  // discover user has a bunch of sites
-  // TODO(ken): do that logic now
+  // TODO(ken): revise logic so this only shows if there are more pages in
+  // either direction?  also change button to have previous and next pages?
   bool lots_of_sites = false;
   if (wizard()->sites().size() > 5) {
     lots_of_sites = true;
