@@ -225,6 +225,12 @@ void Meepo::handleSitesReply(QNetworkReply* reply) {
   const QJsonObject json = gondar::jsonFromReply(reply);
   const QJsonArray rawSites = json["sites"].toArray();
   // TODO(ken): lower priority but maybe rename?
+  // FIXME(ken): i think the issue is i'm reassigning sites
+  // while processing the other set of sites?
+  // FIXME(ken): basically, why isn't this sites_ guy local
+  // to this function?
+  // i must be making some logic error by assuming it is.
+  // if i make it local to this function, i can see what is trying to use it.
   sites_ = sitesFromReply(rawSites);
   
   // TODO(ken): do i get two of these?  one 5, one 2?
