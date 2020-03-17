@@ -79,15 +79,11 @@ int SiteSelectPage::getTotalPages() {
 
 void SiteSelectPage::initializePage() {
   const auto& sitesList = wizard()->sites();
-  // TODO(ken): move this to separate func?  need to clear the site list
-  // and repopulate it with a page's contents
   for (const auto& site : sitesList) {
     auto* curButton = new SiteButton(site);
     sitesButtons.addButton(curButton);
     layout.addWidget(curButton);
   }
-  // TODO(ken): revise logic so this only shows if there are more pages in
-  // either direction?  also change button to have previous and next pages?
   page = 1;
   int total_pages = getTotalPages();
   bool lots_of_sites = false;
@@ -112,24 +108,17 @@ void SiteSelectPage::initializePage() {
   updateSitesForPage();
 }
 
-void SiteSelectPage::handlePrevPage() {
-  LOG_WARNING << "handleprev";
-  if (page > 1) {
-    LOG_WARNING << "showing prev page...";
-    page--;
+void SiteSelectPage::handleNextPage() {
+  if (page < getTotalPages()) {
+    page++;
     updateSitesForPage();
-  } else {
-    LOG_WARNING << "already at first page";
   }
 }
 
-void SiteSelectPage::handleNextPage() {
-  if (page < getTotalPages()) {
-    LOG_WARNING << "showing next page...";
-    page++;
+void SiteSelectPage::handlePrevPage() {
+  if (page > 1) {
+    page--;
     updateSitesForPage();
-  } else {
-    LOG_WARNING << "already at last page";
   }
 }
 

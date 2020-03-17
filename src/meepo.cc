@@ -86,12 +86,8 @@ QNetworkRequest createSitesRequest(const QString& api_token, int page) {
   auto url = createUrl(path_sites);
   QUrlQuery query;
   query.addQueryItem("token", api_token);
-  // QString wants a C string.  we start with an int.
-  // so we go int->to_string->c_str()->QString
-  // makes sense to me
   query.addQueryItem("page", QString::number(page));
   url.setQuery(query);
-  LOG_INFO << "~~ken: createsitesreq = " << url.toString();
   return QNetworkRequest(url);
 }
 
@@ -123,8 +119,6 @@ std::vector<GondarSite> sitesFromReply(const QJsonArray& rawSites) {
 // TODO(ken): test for this
 int getNextPage(const QJsonObject& outer_json) {
   const QJsonObject json = outer_json["pagination"].toObject();
-  LOG_INFO << "~~pagination cur = " << json.value("current").toInt();
-  LOG_INFO << "~~pagination total = " << json.value("total").toInt();
   auto cur = json.value("current").toInt();
   auto total = json.value("total").toInt();
   if (cur < total) {
@@ -202,8 +196,7 @@ void Meepo::handleAuthReply(QNetworkReply* reply) {
   }
 
   LOG_INFO << "token received";
-  // FIXME(ken): ok now we're back to the mystery of why this page
-  // arg is not being used
+  // request the first page of sites
   requestSites(1);
 }
 
@@ -213,56 +206,32 @@ void Meepo::requestSites(int page) {
   network_manager_.get(request);
 }
 
-// FIXME(ken): what i don't understand is why am i getting all the downloads
-// for the sites i do not have an interest in?
-// it feels like i should choose a site, hit next, then validate page does
-// a transaction to find the images for that site before calling next()
-
-// the weird thing about this function in its new reality is that it will be
-// called on each page; it's basically recursive like a nightmare
-// we should probably set a max pages to like 100
 void Meepo::handleSitesReply(QNetworkReply* reply) {
   const QJsonObject json = gondar::jsonFromReply(reply);
   const QJsonArray rawSites = json["sites"].toArray();
-  // TODO(ken): lower priority but maybe rename?
-  // FIXME(ken): i think the issue is i'm reassigning sites
-  // while processing the other set of sites?
-  // FIXME(ken): basically, why isn't this sites_ guy local
-  // to this function?
-  // i must be making some logic error by assuming it is.
-  // if i make it local to this function, i can see what is trying to use it.
-  // this should be sites_.append...
-  // sites_.append(sitesFromReply(rawSites));
   auto new_sites = sitesFromReply(rawSites);
   sites_.insert(sites_.end(), new_sites.begin(), new_sites.end());
 
-  // TODO(ken): do i get two of these?  one 5, one 2?
-  // i get both of these as expected.
   LOG_INFO << "received " << sites_.size() << " site(s)";
 
   // sites starts at zero, and every time we go get another page,
   // there are more sites remaining to get downloads from
   sites_remaining_ += sites_.size();
-  LOG_INFO << "~~KEN: sites_remaining increased, now " << sites_remaining_;
+  LOG_INFO << "sites_remaining increased, now " << sites_remaining_;
 
-  // special handling for the zero sites case
-  // FIXME(ken): is this the problem for now?  last page is empty?
+  // this logic should still work for the multi-page case
   if (sites_remaining_ == 0) {
     fail(no_sites_error);
     return;
   }
 
-  // FIXME(ken): i never handle the first page (5 results)
-  // only the second page (two results)
   for (const auto& site : sites_) {
     requestDownloads(site);
   }
-
   // see if there's another batch
   int next_page = getNextPage(json);
-  LOG_INFO << "~~~KEN: next page = " << next_page;
-  // first 2, then 0
   if (next_page > 0) {
+    LOG_INFO << "getting next page of sites, page " << next_page;
     requestSites(next_page);
   }
 }
