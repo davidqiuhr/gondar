@@ -20,6 +20,7 @@
 
 #include "gondarsite.h"
 #include "gondarwizard.h"
+#include "log.h"
 #include "metric.h"
 
 class SiteButton : public QRadioButton {
@@ -54,7 +55,7 @@ void SiteSelectPage::initializePage() {
   page = 1;
   int total_sites = wizard()->sites().size();
   // something like that, not sure what cleanest heuristic is
-  int total_pages = total_sites + 4 / 5;
+  int total_pages = (total_sites + 4) / 5;
   bool lots_of_sites = false;
   if (wizard()->sites().size() > 5) {
     lots_of_sites = true;
@@ -64,15 +65,25 @@ void SiteSelectPage::initializePage() {
   pageLabel.setVisible(lots_of_sites);
   nextPageButton.setVisible(lots_of_sites);
   prevPageButton.setVisible(lots_of_sites);
-  pageLabel.setText("Page {} / {}", page, total_pages);
+  pageLabel.setText(QString("Page %1 / %2").arg(page).arg(total_pages));
   prevPageButton.setText("Previous");
   nextPageButton.setText("Next");
-  layout.addWidget(&moreSitesLabel);
-  pageNavLayout.addWidget(&lessSitesButton);
-  pageNavLayout.addWidget(&moreSitesButton);
+  layout.addWidget(&pageLabel);
+  pageNavLayout.addWidget(&prevPageButton);
+  pageNavLayout.addWidget(&nextPageButton);
   layout.addLayout(&pageNavLayout);
-  connect(&nextPageButton, &QPushButton::clicked, this, &SiteSelectPage::handleNextPage);
-  connect(&prevPageButton, &QPushButton::clicked, this, &SiteSelectPage::handlePrevPage);
+  connect(&nextPageButton, &QPushButton::clicked, this,
+          &SiteSelectPage::handleNextPage);
+  connect(&prevPageButton, &QPushButton::clicked, this,
+          &SiteSelectPage::handlePrevPage);
+}
+
+void SiteSelectPage::handlePrevPage() {
+  LOG_WARNING << "handleprev";
+}
+
+void SiteSelectPage::handleNextPage() {
+  LOG_WARNING << "handlenext";
 }
 
 bool SiteSelectPage::validatePage() {

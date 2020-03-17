@@ -232,10 +232,10 @@ void Meepo::handleSitesReply(QNetworkReply* reply) {
   // i must be making some logic error by assuming it is.
   // if i make it local to this function, i can see what is trying to use it.
   // this should be sites_.append...
-  //sites_.append(sitesFromReply(rawSites));
+  // sites_.append(sitesFromReply(rawSites));
   auto new_sites = sitesFromReply(rawSites);
   sites_.insert(sites_.end(), new_sites.begin(), new_sites.end());
-  
+
   // TODO(ken): do i get two of these?  one 5, one 2?
   // i get both of these as expected.
   LOG_INFO << "received " << sites_.size() << " site(s)";
@@ -328,8 +328,8 @@ void Meepo::dispatchReply(QNetworkReply* reply) {
     handleAuthReply(reply);
   } else if (url.path().endsWith("/google-auth")) {
     handleAuthReply(reply);
-  // FIXME(ken): this might be a pickle...will the url path still end with
-  // /sites or will it have ?page=1 now?
+    // FIXME(ken): this might be a pickle...will the url path still end with
+    // /sites or will it have ?page=1 now?
   } else if (url.path().endsWith("/sites")) {
     handleSitesReply(reply);
   } else if (url.path().endsWith("/downloads")) {
