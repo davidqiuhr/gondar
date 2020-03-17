@@ -39,6 +39,7 @@ class SiteSelectPage : public gondar::WizardPage {
   void handleNextPage();
   void handlePrevPage();
   void updateSitesForPage();
+  int getTotalPages();
   QButtonGroup sitesButtons;
   QVBoxLayout layout;
   QLabel pageLabel;

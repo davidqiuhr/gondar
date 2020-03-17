@@ -47,7 +47,7 @@ SiteSelectPage::SiteSelectPage(QWidget* parent) : WizardPage(parent) {
 // given this, does it make more sense for this to be outside the class
 // and take the page and siteButtons as args so it's more clear what
 // instance members it depends on?
-void SiteSelectPage::UpdateSitesForPage() {
+void SiteSelectPage::updateSitesForPage() {
   // for page 1, 0
   // for page 2, 5
   int min = (page - 1) * 5;
@@ -56,18 +56,27 @@ void SiteSelectPage::UpdateSitesForPage() {
   int max = page * 5;
   int itr = 0;
   // assumes sitesButtons has already been populated
-  for (const auto& button : sitesButtons) {
+  for (const auto &button : sitesButtons.buttons()) {
+  //QList<QAbstractButton *> list = sitesButtons->buttons();
+  //foreach (QAbstractButton *button, sitesButtons) {
     if (itr >= min && itr < max) {
       // ideally we would not instantiate the sitebuttons.
       // we will need a separate vector of sitebuttons
       // and then we will add/remove them from sitesButtons list?
       // or we just toggle them invisible?  that seems simpler
-      button.setVisible(true);
+      button->setVisible(true);
     } else {
-      button.setVisible(false);
+      button->setVisible(false);
     }
     itr++;
   }
+}
+
+int SiteSelectPage::getTotalPages() {
+  int total_sites = wizard()->sites().size();
+  // something like that, not sure what cleanest heuristic is
+  int total_pages = (total_sites + 4) / 5;
+  return total_pages;
 }
 
 void SiteSelectPage::initializePage() {
@@ -82,9 +91,7 @@ void SiteSelectPage::initializePage() {
   // TODO(ken): revise logic so this only shows if there are more pages in
   // either direction?  also change button to have previous and next pages?
   page = 1;
-  int total_sites = wizard()->sites().size();
-  // something like that, not sure what cleanest heuristic is
-  int total_pages = (total_sites + 4) / 5;
+  int total_pages = getTotalPages();
   bool lots_of_sites = false;
   if (wizard()->sites().size() > 5) {
     lots_of_sites = true;
@@ -109,10 +116,23 @@ void SiteSelectPage::initializePage() {
 
 void SiteSelectPage::handlePrevPage() {
   LOG_WARNING << "handleprev";
+  if (page > 1) {
+    LOG_WARNING << "showing prev page...";
+    page--;
+    updateSitesForPage();
+  } else {
+    LOG_WARNING << "already at first page";
+  }
 }
 
 void SiteSelectPage::handleNextPage() {
-  LOG_WARNING << "handlenext";
+  if (page < getTotalPages()) {
+    LOG_WARNING << "showing next page...";
+    page++;
+    updateSitesForPage();
+  } else {
+    LOG_WARNING << "already at last page";
+  }
 }
 
 bool SiteSelectPage::validatePage() {
