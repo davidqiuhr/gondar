@@ -91,8 +91,6 @@ void SiteSelectPage::initializePage() {
     lots_of_sites = true;
   }
   pageGroup.setVisible(lots_of_sites);
-  //nextPageButton.setVisible(lots_of_sites);
-  //prevPageButton.setVisible(lots_of_sites);
   prevPageButton.setText("Previous");
   nextPageButton.setText("Next");
   layout.addWidget(&pageGroup);
