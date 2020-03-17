@@ -57,8 +57,6 @@ void SiteSelectPage::updateSitesForPage() {
   int itr = 0;
   // assumes sitesButtons has already been populated
   for (const auto &button : sitesButtons.buttons()) {
-  //QList<QAbstractButton *> list = sitesButtons->buttons();
-  //foreach (QAbstractButton *button, sitesButtons) {
     if (itr >= min && itr < max) {
       // ideally we would not instantiate the sitebuttons.
       // we will need a separate vector of sitebuttons
@@ -96,8 +94,6 @@ void SiteSelectPage::initializePage() {
   if (wizard()->sites().size() > 5) {
     lots_of_sites = true;
   }
-  // FIXME(ken): temp
-  lots_of_sites = true;
   pageLabel.setVisible(lots_of_sites);
   nextPageButton.setVisible(lots_of_sites);
   prevPageButton.setVisible(lots_of_sites);
@@ -112,6 +108,8 @@ void SiteSelectPage::initializePage() {
           &SiteSelectPage::handleNextPage);
   connect(&prevPageButton, &QPushButton::clicked, this,
           &SiteSelectPage::handlePrevPage);
+  // limit visible sites to those on this page
+  updateSitesForPage();
 }
 
 void SiteSelectPage::handlePrevPage() {
