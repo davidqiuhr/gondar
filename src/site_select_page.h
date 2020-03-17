@@ -36,12 +36,14 @@ class SiteSelectPage : public gondar::WizardPage {
   bool validatePage() override;
 
  private:
+  void handleNextPage();
+  void handlePrevPage();
   QButtonGroup sitesButtons;
   QVBoxLayout layout;
-  QLabel moreSitesLabel;
+  QLabel pageLabel;
   QHBoxLayout pageNavLayout;
-  QPushButton moreSitesButton;
-  QPushButton lessSitesButton;
+  QPushButton nextPageButton;
+  QPushButton prevPageButton;
   int page;
 };
 
