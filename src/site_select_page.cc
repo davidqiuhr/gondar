@@ -43,16 +43,10 @@ SiteSelectPage::SiteSelectPage(QWidget* parent) : WizardPage(parent) {
   setLayout(&layout);
 }
 
-// TODO(ken): background: i hate OO
-// given this, does it make more sense for this to be outside the class
-// and take the page and siteButtons as args so it's more clear what
-// instance members it depends on?
 void SiteSelectPage::updateSitesForPage() {
-  // for page 1, 0
-  // for page 2, 5
+  // lowest # site to display
   int min = (page - 1) * 5;
-  // for page 1, 5
-  // for page 2, 10
+  // first site we do not display
   int max = page * 5;
   int itr = 0;
   // assumes sitesButtons has already been populated
@@ -73,7 +67,8 @@ void SiteSelectPage::updateSitesForPage() {
 
 int SiteSelectPage::getTotalPages() {
   int total_sites = wizard()->sites().size();
-  // something like that, not sure what cleanest heuristic is
+  // arithmetic wiggle is a little weird here, but works out
+  // s.t. 1 site = 1 page, 5 sites = 1 page, 6 sites = 2 pages
   int total_pages = (total_sites + 4) / 5;
   return total_pages;
 }
@@ -91,12 +86,11 @@ void SiteSelectPage::initializePage() {
     lots_of_sites = true;
   }
   pageGroup.setVisible(lots_of_sites);
-  prevPageButton.setText("Previous");
-  nextPageButton.setText("Next");
+  prevPageButton.setText("Previous Page");
+  nextPageButton.setText("Next Page");
   layout.addWidget(&pageGroup);
   pageNavLayout.addWidget(&prevPageButton);
   pageNavLayout.addWidget(&nextPageButton);
-  //layout.addLayout(&pageNavLayout);
   pageGroup.setLayout(&pageNavLayout);
   connect(&nextPageButton, &QPushButton::clicked, this,
           &SiteSelectPage::handleNextPage);
