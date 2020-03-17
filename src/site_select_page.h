@@ -21,6 +21,7 @@
 #include <QPushButton>
 #include <QRadioButton>
 #include <QVBoxLayout>
+#include <QGroupBox>
 
 #include "gondarsite.h"
 #include "wizard_page.h"
@@ -42,10 +43,10 @@ class SiteSelectPage : public gondar::WizardPage {
   void updateSitesForPage();
   QButtonGroup sitesButtons;
   QVBoxLayout layout;
-  QLabel pageLabel;
   QHBoxLayout pageNavLayout;
   QPushButton nextPageButton;
   QPushButton prevPageButton;
+  QGroupBox pageGroup;
   int page;
 };
 

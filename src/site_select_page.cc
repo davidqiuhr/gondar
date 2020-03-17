@@ -68,6 +68,7 @@ void SiteSelectPage::updateSitesForPage() {
     }
     itr++;
   }
+  pageGroup.setTitle(QString("Page %1 / %2").arg(page).arg(getTotalPages()));
 }
 
 int SiteSelectPage::getTotalPages() {
@@ -85,21 +86,20 @@ void SiteSelectPage::initializePage() {
     layout.addWidget(curButton);
   }
   page = 1;
-  int total_pages = getTotalPages();
   bool lots_of_sites = false;
   if (wizard()->sites().size() > 5) {
     lots_of_sites = true;
   }
-  pageLabel.setVisible(lots_of_sites);
-  nextPageButton.setVisible(lots_of_sites);
-  prevPageButton.setVisible(lots_of_sites);
-  pageLabel.setText(QString("Page %1 / %2").arg(page).arg(total_pages));
+  pageGroup.setVisible(lots_of_sites);
+  //nextPageButton.setVisible(lots_of_sites);
+  //prevPageButton.setVisible(lots_of_sites);
   prevPageButton.setText("Previous");
   nextPageButton.setText("Next");
-  layout.addWidget(&pageLabel);
+  layout.addWidget(&pageGroup);
   pageNavLayout.addWidget(&prevPageButton);
   pageNavLayout.addWidget(&nextPageButton);
-  layout.addLayout(&pageNavLayout);
+  //layout.addLayout(&pageNavLayout);
+  pageGroup.setLayout(&pageNavLayout);
   connect(&nextPageButton, &QPushButton::clicked, this,
           &SiteSelectPage::handleNextPage);
   connect(&prevPageButton, &QPushButton::clicked, this,
