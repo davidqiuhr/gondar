@@ -43,8 +43,37 @@ SiteSelectPage::SiteSelectPage(QWidget* parent) : WizardPage(parent) {
   setLayout(&layout);
 }
 
+// TODO(ken): background: i hate OO
+// given this, does it make more sense for this to be outside the class
+// and take the page and siteButtons as args so it's more clear what
+// instance members it depends on?
+void SiteSelectPage::UpdateSitesForPage() {
+  // for page 1, 0
+  // for page 2, 5
+  int min = (page - 1) * 5;
+  // for page 1, 5
+  // for page 2, 10
+  int max = page * 5;
+  int itr = 0;
+  // assumes sitesButtons has already been populated
+  for (const auto& button : sitesButtons) {
+    if (itr >= min && itr < max) {
+      // ideally we would not instantiate the sitebuttons.
+      // we will need a separate vector of sitebuttons
+      // and then we will add/remove them from sitesButtons list?
+      // or we just toggle them invisible?  that seems simpler
+      button.setVisible(true);
+    } else {
+      button.setVisible(false);
+    }
+    itr++;
+  }
+}
+
 void SiteSelectPage::initializePage() {
   const auto& sitesList = wizard()->sites();
+  // TODO(ken): move this to separate func?  need to clear the site list
+  // and repopulate it with a page's contents
   for (const auto& site : sitesList) {
     auto* curButton = new SiteButton(site);
     sitesButtons.addButton(curButton);
