@@ -51,16 +51,23 @@ void SiteSelectPage::initializePage() {
   }
   // TODO(ken): revise logic so this only shows if there are more pages in
   // either direction?  also change button to have previous and next pages?
+  page = 0;
   bool lots_of_sites = false;
   if (wizard()->sites().size() > 5) {
     lots_of_sites = true;
   }
+  // FIXME(ken): temp
+  lots_of_sites = true;
   moreSitesLabel.setVisible(lots_of_sites);
   moreSitesButton.setVisible(lots_of_sites);
+  lessSitesButton.setVisible(lots_of_sites);
   moreSitesLabel.setText("You have a lot of sites!");
+  lessSitesButton.setText("Less");
   moreSitesButton.setText("More");
   layout.addWidget(&moreSitesLabel);
-  layout.addWidget(&moreSitesButton);
+  pageNavLayout.addWidget(&lessSitesButton);
+  pageNavLayout.addWidget(&moreSitesButton);
+  layout.addLayout(&pageNavLayout);
 }
 
 bool SiteSelectPage::validatePage() {
