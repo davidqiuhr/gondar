@@ -50,7 +50,7 @@ void SiteSelectPage::updateSitesForPage() {
   int max = page * 5;
   int itr = 0;
   // assumes sitesButtons has already been populated
-  for (const auto &button : sitesButtons.buttons()) {
+  for (const auto& button : sitesButtons.buttons()) {
     if (itr >= min && itr < max) {
       // ideally we would not instantiate the sitebuttons.
       // we will need a separate vector of sitebuttons

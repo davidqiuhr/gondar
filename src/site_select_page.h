@@ -17,11 +17,11 @@
 #define SRC_SITE_SELECT_PAGE_H_
 
 #include <QButtonGroup>
+#include <QGroupBox>
 #include <QLabel>
 #include <QPushButton>
 #include <QRadioButton>
 #include <QVBoxLayout>
-#include <QGroupBox>
 
 #include "gondarsite.h"
 #include "wizard_page.h"
