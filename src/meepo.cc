@@ -296,8 +296,6 @@ void Meepo::dispatchReply(QNetworkReply* reply) {
     handleAuthReply(reply);
   } else if (url.path().endsWith("/google-auth")) {
     handleAuthReply(reply);
-    // FIXME(ken): this might be a pickle...will the url path still end with
-    // /sites or will it have ?page=1 now?
   } else if (url.path().endsWith("/sites")) {
     handleSitesReply(reply);
   } else if (url.path().endsWith("/downloads")) {
