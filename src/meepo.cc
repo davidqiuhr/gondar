@@ -116,6 +116,7 @@ std::vector<GondarSite> sitesFromReply(const QJsonArray& rawSites) {
   return sites;
 }
 
+// Get the next page from the pagination dict. If on the last page, return 0.
 int getNextPage(const QJsonObject& outer_json) {
   const QJsonObject json = outer_json["pagination"].toObject();
   auto cur = json.value("current").toInt();
