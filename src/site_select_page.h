@@ -48,6 +48,7 @@ class SiteSelectPage : public gondar::WizardPage {
   QPushButton prevPageButton;
   QGroupBox pageGroup;
   int page;
+  unsigned int sites_per_page;
 };
 
 #endif  // SRC_SITE_SELECT_PAGE_H_

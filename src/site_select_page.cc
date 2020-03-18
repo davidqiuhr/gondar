@@ -40,13 +40,14 @@ SiteSelectPage::SiteSelectPage(QWidget* parent) : WizardPage(parent) {
       "Your account is associated with more than one site. "
       "Select the site you'd like to use.");
   setLayout(&layout);
+  sites_per_page = 5;
 }
 
 void SiteSelectPage::updateSitesForPage() {
   // lowest # site to display
-  int min = (page - 1) * 5;
+  int min = (page - 1) * sites_per_page;
   // first site we do not display
-  int max = page * 5;
+  int max = page * sites_per_page;
   int itr = 0;
   // assumes sitesButtons has already been populated
   for (const auto& button : sitesButtons.buttons()) {
@@ -68,7 +69,7 @@ int SiteSelectPage::getTotalPages() {
   int total_sites = wizard()->sites().size();
   // arithmetic wiggle is a little weird here, but works out
   // s.t. 1 site = 1 page, 5 sites = 1 page, 6 sites = 2 pages
-  int total_pages = (total_sites + 4) / 5;
+  int total_pages = (total_sites + sites_per_page - 1) / sites_per_page;
   return total_pages;
 }
 
@@ -81,7 +82,7 @@ void SiteSelectPage::initializePage() {
   }
   page = 1;
   bool lots_of_sites = false;
-  if (wizard()->sites().size() > 5) {
+  if (wizard()->sites().size() > sites_per_page) {
     lots_of_sites = true;
   }
   pageGroup.setVisible(lots_of_sites);
