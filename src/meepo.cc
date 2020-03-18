@@ -209,7 +209,8 @@ void Meepo::handleSitesReply(QNetworkReply* reply) {
   const QJsonObject json = gondar::jsonFromReply(reply);
   const QJsonArray rawSites = json["sites"].toArray();
   auto new_sites = sitesFromReply(rawSites);
-  sites_.insert(sites_.end(), new_sites.begin(), new_sites.end());
+  // FIXME(ken): was this causing the leak?
+  //sites_.insert(sites_.end(), new_sites.begin(), new_sites.end());
 
   LOG_INFO << "received " << sites_.size() << " site(s)";
 
