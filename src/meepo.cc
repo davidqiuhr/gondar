@@ -269,8 +269,7 @@ void Meepo::handleDownloadsReply(QNetworkReply* reply) {
     }
   }
   sites_remaining_--;
-  // FIXME(ken): this is not being called for that first set of 5 requests
-  LOG_INFO << "~~KEN: sites_remaining lowered, now " << sites_remaining_;
+  LOG_INFO << "processed a site; sites remaining = " << sites_remaining_;
 
   // see if we're done
   if (sites_remaining_ == 0) {
