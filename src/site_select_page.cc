@@ -45,12 +45,9 @@ void SiteSelectPage::initializePage() {
   const auto& sitesList = wizard()->sites();
   for (const auto& site : sitesList) {
     auto* curSite = new SiteEntry(site);
-    // TODO(ken): rename these, they are not buttons
     sitesEntries.addItem(curSite);
-    //layout.addWidget(curSite);
   }
 }
-
 
 bool SiteSelectPage::validatePage() {
   // if we have a site selected, update our download links and continue
