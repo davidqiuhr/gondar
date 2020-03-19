@@ -23,39 +23,30 @@
 FindDialog::FindDialog(QWidget *parent)
     : QDialog(parent)
 {
-    QLabel *findLabel = new QLabel(tr("Enter the name of a contact:"));
-
-    findButton.setText(tr("&Find"));
+    findLabel.setText("Search:");
+    findButton.setText("Find");
     findText = "";
-
-    QHBoxLayout *layout = new QHBoxLayout;
-    layout->addWidget(findLabel);
-    layout->addWidget(lineEdit);
-    layout->addWidget(findButton);
-
-    setLayout(layout);
+    layout.addWidget(&findLabel);
+    layout.addWidget(&lineEdit);
+    layout.addWidget(&findButton);
+    setLayout(&layout);
     setWindowTitle(tr("Find a Contact"));
-    connect(findButton, &QPushButton::clicked,
-            this, &FindDialog::findClicked);
-    connect(findButton, &QPushButton::clicked,
-            this, &FindDialog::accept);
 }
 
-void FindDialog::findClicked()
-{
+/*
+void FindDialog::findClicked() {
     QString text = lineEdit.text();
 
     if (text.isEmpty()) {
-        //QMessageBox::information(this, tr("Empty Field"),
-        //    tr("Please enter a name."));
         LOG_WARNING << "field is empty";
         return;
     } else {
         findText = text;
         lineEdit.clear();
-        hide();
+        //hide();
     }
 }
+*/
 
 QString FindDialog::getFindText()
 {
@@ -90,6 +81,8 @@ void SiteSelectPage::initializePage() {
     auto* curSite = new SiteEntry(site);
     sitesEntries.addItem(curSite);
   }
+  connect(&find.findButton, &QPushButton::clicked,
+          this, &SiteSelectPage::filterSites);
 }
 
 bool SiteSelectPage::validatePage() {
@@ -106,4 +99,8 @@ bool SiteSelectPage::validatePage() {
     wizard()->imageSelectPage.addImages(imageList);
     return true;
   }
+}
+
+void SiteSelectPage::filterSites() {
+  LOG_WARNING << "clicked";
 }

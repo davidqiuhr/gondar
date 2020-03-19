@@ -30,14 +30,14 @@ class FindDialog : public QDialog {
  public:
   FindDialog(QWidget *parent = nullptr);
   QString getFindText();
-
-public slots:
-  void findClicked();
+  // TODO(ken): private
+  QPushButton findButton;
 
 private:
-  QPushButton findButton;
+  QLabel findLabel;
   QLineEdit lineEdit;
   QString findText;
+  QHBoxLayout layout;
 };
 
 class SiteSelectPage : public gondar::WizardPage {
@@ -46,6 +46,8 @@ class SiteSelectPage : public gondar::WizardPage {
  public:
   explicit SiteSelectPage(QWidget* parent = 0);
   QString getFindText();
+  // TODO(ken): private
+  FindDialog find;
 
  protected:
   void initializePage() override;
@@ -54,7 +56,7 @@ class SiteSelectPage : public gondar::WizardPage {
  private:
   QListWidget sitesEntries;
   QVBoxLayout layout;
-  FindDialog find;
+  void filterSites();
 };
 
 #endif  // SRC_SITE_SELECT_PAGE_H_
