@@ -19,6 +19,7 @@
 #include <QButtonGroup>
 #include <QGroupBox>
 #include <QLabel>
+#include <QListWidget>
 #include <QPushButton>
 #include <QRadioButton>
 #include <QVBoxLayout>
@@ -37,18 +38,10 @@ class SiteSelectPage : public gondar::WizardPage {
   bool validatePage() override;
 
  private:
-  int getTotalPages();
-  void handleNextPage();
-  void handlePrevPage();
-  void updateSitesForPage();
-  QButtonGroup sitesButtons;
+  QListWidget sitesButtons;
   QVBoxLayout layout;
   QGroupBox pageGroup;
-  QHBoxLayout pageNavLayout;
-  QPushButton nextPageButton;
-  QPushButton prevPageButton;
-  int page;
-  unsigned int sites_per_page;
+  QListWidget siteList;
 };
 
 #endif  // SRC_SITE_SELECT_PAGE_H_
