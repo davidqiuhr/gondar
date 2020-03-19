@@ -38,7 +38,7 @@ class SiteSelectPage : public gondar::WizardPage {
   bool validatePage() override;
 
  private:
-  QListWidget sitesButtons;
+  QListWidget sitesEntries;
   QVBoxLayout layout;
   QGroupBox pageGroup;
   QListWidget siteList;

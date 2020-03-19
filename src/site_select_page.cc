@@ -15,16 +15,14 @@
 
 #include "site_select_page.h"
 
-#include <QRadioButton>
-
 #include "gondarsite.h"
 #include "gondarwizard.h"
 #include "log.h"
 #include "metric.h"
 
-class SiteButton : public QListWidgetItem {
+class SiteEntry : public QListWidgetItem {
  public:
-  explicit SiteButton(const GondarSite& site) : site_(site) {
+  explicit SiteEntry(const GondarSite& site) : site_(site) {
     setText(site.getSiteName());
   }
 
@@ -40,16 +38,16 @@ SiteSelectPage::SiteSelectPage(QWidget* parent) : WizardPage(parent) {
       "Your account is associated with more than one site. "
       "Select the site you'd like to use.");
   setLayout(&layout);
-  layout.addWidget(&sitesButtons);
+  layout.addWidget(&sitesEntries);
 }
 
 void SiteSelectPage::initializePage() {
   const auto& sitesList = wizard()->sites();
   for (const auto& site : sitesList) {
-    auto* curButton = new SiteButton(site);
+    auto* curSite = new SiteEntry(site);
     // TODO(ken): rename these, they are not buttons
-    sitesButtons.addItem(curButton);
-    //layout.addWidget(curButton);
+    sitesEntries.addItem(curSite);
+    //layout.addWidget(curSite);
   }
 }
 
@@ -57,7 +55,7 @@ void SiteSelectPage::initializePage() {
 bool SiteSelectPage::validatePage() {
   // if we have a site selected, update our download links and continue
   // otherwise, return false
-  auto* selected = dynamic_cast<SiteButton*>(sitesButtons.currentItem());
+  auto* selected = dynamic_cast<SiteEntry*>(sitesEntries.currentItem());
   if (selected == NULL) {
     return false;
   } else {
