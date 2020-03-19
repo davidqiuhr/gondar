@@ -16,12 +16,8 @@
 #ifndef SRC_SITE_SELECT_PAGE_H_
 #define SRC_SITE_SELECT_PAGE_H_
 
-#include <QButtonGroup>
-#include <QGroupBox>
 #include <QLabel>
 #include <QListWidget>
-#include <QPushButton>
-#include <QRadioButton>
 #include <QVBoxLayout>
 
 #include "gondarsite.h"
@@ -40,7 +36,6 @@ class SiteSelectPage : public gondar::WizardPage {
  private:
   QListWidget sitesEntries;
   QVBoxLayout layout;
-  QGroupBox pageGroup;
   QListWidget siteList;
 };
 
