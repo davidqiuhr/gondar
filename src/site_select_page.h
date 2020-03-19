@@ -36,7 +36,6 @@ class SiteSelectPage : public gondar::WizardPage {
  private:
   QListWidget sitesEntries;
   QVBoxLayout layout;
-  QListWidget siteList;
 };
 
 #endif  // SRC_SITE_SELECT_PAGE_H_
