@@ -36,7 +36,6 @@ class FindDialog : public QDialog {
 private:
   QLabel findLabel;
   QLineEdit lineEdit;
-  QString findText;
   QHBoxLayout layout;
 };
 

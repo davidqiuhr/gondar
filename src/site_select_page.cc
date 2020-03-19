@@ -25,7 +25,6 @@ FindDialog::FindDialog(QWidget *parent)
 {
     findLabel.setText("Search:");
     findButton.setText("Find");
-    findText = "";
     layout.addWidget(&findLabel);
     layout.addWidget(&lineEdit);
     layout.addWidget(&findButton);
@@ -33,24 +32,9 @@ FindDialog::FindDialog(QWidget *parent)
     setWindowTitle(tr("Find a Contact"));
 }
 
-/*
-void FindDialog::findClicked() {
-    QString text = lineEdit.text();
-
-    if (text.isEmpty()) {
-        LOG_WARNING << "field is empty";
-        return;
-    } else {
-        findText = text;
-        lineEdit.clear();
-        //hide();
-    }
-}
-*/
-
 QString FindDialog::getFindText()
 {
-    return findText;
+    return lineEdit.text();
 }
 
 class SiteEntry : public QListWidgetItem {
@@ -102,5 +86,9 @@ bool SiteSelectPage::validatePage() {
 }
 
 void SiteSelectPage::filterSites() {
-  LOG_WARNING << "clicked";
+  LOG_WARNING << "clicked, text = " << find.getFindText();
+  // first we get the text they entered
+
+  // then we iterate over sites and keep the ones that contain that string
+  // we hide the ones that don't contain it
 }
