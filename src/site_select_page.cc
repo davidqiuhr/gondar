@@ -20,6 +20,19 @@
 #include "log.h"
 #include "metric.h"
 
+FindDialog::FindDialog(QWidget* parent) : QDialog(parent) {
+  findLabel.setText("Search:");
+  findButton.setText("Find");
+  layout.addWidget(&findLabel);
+  layout.addWidget(&lineEdit);
+  layout.addWidget(&findButton);
+  setLayout(&layout);
+}
+
+QString FindDialog::getFindText() {
+  return lineEdit.text();
+}
+
 class SiteEntry : public QListWidgetItem {
  public:
   explicit SiteEntry(const GondarSite& site) : site_(site) {
@@ -38,6 +51,7 @@ SiteSelectPage::SiteSelectPage(QWidget* parent) : WizardPage(parent) {
       "Your account is associated with more than one site. "
       "Select the site you'd like to use.");
   setLayout(&layout);
+  layout.addWidget(&find);
   layout.addWidget(&sitesEntries);
 }
 
@@ -47,6 +61,8 @@ void SiteSelectPage::initializePage() {
     auto* curSite = new SiteEntry(site);
     sitesEntries.addItem(curSite);
   }
+  connect(&find.findButton, &QPushButton::clicked, this,
+          &SiteSelectPage::filterSites);
 }
 
 bool SiteSelectPage::validatePage() {
@@ -62,5 +78,16 @@ bool SiteSelectPage::validatePage() {
     QList<GondarImage> imageList = site.getImages();
     wizard()->imageSelectPage.addImages(imageList);
     return true;
+  }
+}
+
+void SiteSelectPage::filterSites() {
+  for (int i = 0; i < sitesEntries.count(); i++) {
+    if (sitesEntries.item(i)->text().toLower().contains(
+            find.getFindText().toLower())) {
+      sitesEntries.item(i)->setHidden(false);
+    } else {
+      sitesEntries.item(i)->setHidden(true);
+    }
   }
 }
