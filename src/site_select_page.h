@@ -17,17 +17,35 @@
 #define SRC_SITE_SELECT_PAGE_H_
 
 #include <QLabel>
+#include <QLineEdit>
 #include <QListWidget>
+#include <QPushButton>
 #include <QVBoxLayout>
 
 #include "gondarsite.h"
 #include "wizard_page.h"
+
+class FindDialog : public QDialog {
+  Q_OBJECT
+ public:
+  FindDialog(QWidget *parent = nullptr);
+  QString getFindText();
+
+public slots:
+  void findClicked();
+
+private:
+  QPushButton findButton;
+  QLineEdit lineEdit;
+  QString findText;
+};
 
 class SiteSelectPage : public gondar::WizardPage {
   Q_OBJECT
 
  public:
   explicit SiteSelectPage(QWidget* parent = 0);
+  QString getFindText();
 
  protected:
   void initializePage() override;
@@ -36,6 +54,7 @@ class SiteSelectPage : public gondar::WizardPage {
  private:
   QListWidget sitesEntries;
   QVBoxLayout layout;
+  FindDialog find;
 };
 
 #endif  // SRC_SITE_SELECT_PAGE_H_
