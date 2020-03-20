@@ -20,17 +20,6 @@
 #include "log.h"
 #include "metric.h"
 
-FindWidget::FindWidget(QWidget* parent) : QWidget(parent) {
-  findLabel.setText("Search:");
-  layout.addWidget(&findLabel);
-  layout.addWidget(&lineEdit);
-  setLayout(&layout);
-}
-
-QString FindWidget::getFindText() {
-  return lineEdit.text();
-}
-
 class SiteEntry : public QListWidgetItem {
  public:
   explicit SiteEntry(const GondarSite& site) : site_(site) {
@@ -49,7 +38,12 @@ SiteSelectPage::SiteSelectPage(QWidget* parent) : WizardPage(parent) {
       "Your account is associated with more than one site. "
       "Select the site you'd like to use.");
   setLayout(&layout);
-  layout.addWidget(&find);
+  // set up the find section
+  findLabel.setText("Search:");
+  findLayout.addWidget(&findLabel);
+  findLayout.addWidget(&lineEdit);
+  layout.addLayout(&findLayout);
+
   layout.addWidget(&sitesEntries);
 }
 
@@ -59,7 +53,7 @@ void SiteSelectPage::initializePage() {
     auto* curSite = new SiteEntry(site);
     sitesEntries.addItem(curSite);
   }
-  connect(&find.lineEdit, &QLineEdit::textChanged, this,
+  connect(&lineEdit, &QLineEdit::textChanged, this,
           &SiteSelectPage::filterSites);
 }
 
@@ -82,10 +76,14 @@ bool SiteSelectPage::validatePage() {
 void SiteSelectPage::filterSites() {
   for (int i = 0; i < sitesEntries.count(); i++) {
     if (sitesEntries.item(i)->text().toLower().contains(
-            find.getFindText().toLower())) {
+            getFindText().toLower())) {
       sitesEntries.item(i)->setHidden(false);
     } else {
       sitesEntries.item(i)->setHidden(true);
     }
   }
+}
+
+QString SiteSelectPage::getFindText() {
+  return lineEdit.text();
 }

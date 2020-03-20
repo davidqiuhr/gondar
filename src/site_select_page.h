@@ -25,18 +25,6 @@
 #include "gondarsite.h"
 #include "wizard_page.h"
 
-class FindWidget : public QWidget {
-  Q_OBJECT
- public:
-  explicit FindWidget(QWidget* parent = nullptr);
-  QString getFindText();
-  QLineEdit lineEdit;
-
- private:
-  QLabel findLabel;
-  QHBoxLayout layout;
-};
-
 class SiteSelectPage : public gondar::WizardPage {
   Q_OBJECT
 
@@ -49,7 +37,9 @@ class SiteSelectPage : public gondar::WizardPage {
   bool validatePage() override;
 
  private:
-  FindWidget find;
+  QLabel findLabel;
+  QHBoxLayout findLayout;
+  QLineEdit lineEdit;
   QListWidget sitesEntries;
   QVBoxLayout layout;
   void filterSites();
