@@ -22,10 +22,8 @@
 
 FindWidget::FindWidget(QWidget* parent) : QWidget(parent) {
   findLabel.setText("Search:");
-  findButton.setText("Find");
   layout.addWidget(&findLabel);
   layout.addWidget(&lineEdit);
-  layout.addWidget(&findButton);
   setLayout(&layout);
 }
 
@@ -61,7 +59,7 @@ void SiteSelectPage::initializePage() {
     auto* curSite = new SiteEntry(site);
     sitesEntries.addItem(curSite);
   }
-  connect(&find.findButton, &QPushButton::clicked, this,
+  connect(&find.lineEdit, &QLineEdit::textChanged, this,
           &SiteSelectPage::filterSites);
 }
 

@@ -30,11 +30,10 @@ class FindWidget : public QWidget {
  public:
   explicit FindWidget(QWidget* parent = nullptr);
   QString getFindText();
-  QPushButton findButton;
+  QLineEdit lineEdit;
 
  private:
   QLabel findLabel;
-  QLineEdit lineEdit;
   QHBoxLayout layout;
 };
 
