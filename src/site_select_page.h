@@ -30,7 +30,6 @@ class FindDialog : public QDialog {
  public:
   FindDialog(QWidget *parent = nullptr);
   QString getFindText();
-  // TODO(ken): private
   QPushButton findButton;
 
 private:
@@ -45,7 +44,6 @@ class SiteSelectPage : public gondar::WizardPage {
  public:
   explicit SiteSelectPage(QWidget* parent = 0);
   QString getFindText();
-  // TODO(ken): private
   FindDialog find;
 
  protected:

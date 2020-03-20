@@ -86,9 +86,6 @@ bool SiteSelectPage::validatePage() {
 }
 
 void SiteSelectPage::filterSites() {
-  LOG_WARNING << "clicked, text = " << find.getFindText();
-  //for (const auto& site : sitesEntries.items()) {
-    // FIXME
   for (int i = 0; i < sitesEntries.count(); i++) {
     if (sitesEntries.item(i)->text().contains(find.getFindText())) {
       sitesEntries.item(i)->setHidden(false);
@@ -96,8 +93,4 @@ void SiteSelectPage::filterSites() {
       sitesEntries.item(i)->setHidden(true);
     }
   }
-  // first we get the text they entered
-
-  // then we iterate over sites and keep the ones that contain that string
-  // we hide the ones that don't contain it
 }
