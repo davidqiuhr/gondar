@@ -35,6 +35,7 @@ WORKDIR /opt/mxe
 
 # Check out a specific MXE revision to ensure reproducible builds
 #RUN git checkout 8285eb550400c4987e8ca202b6c4a80eb8658ed9
+RUN git checkout build-2019-06-02
 
 # Download and build each root package separately to (hopefully) limit
 # rebuild time with future modifications
