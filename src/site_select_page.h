@@ -43,13 +43,13 @@ class SiteSelectPage : public gondar::WizardPage {
  public:
   explicit SiteSelectPage(QWidget* parent = 0);
   QString getFindText();
-  FindWidget find;
 
  protected:
   void initializePage() override;
   bool validatePage() override;
 
  private:
+  FindWidget find;
   QListWidget sitesEntries;
   QVBoxLayout layout;
   void filterSites();
