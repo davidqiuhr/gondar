@@ -19,7 +19,6 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QListWidget>
-#include <QPushButton>
 #include <QVBoxLayout>
 
 #include "gondarsite.h"
