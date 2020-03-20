@@ -25,10 +25,10 @@
 #include "gondarsite.h"
 #include "wizard_page.h"
 
-class FindDialog : public QDialog {
+class FindWidget : public QWidget {
   Q_OBJECT
  public:
-  explicit FindDialog(QWidget* parent = nullptr);
+  explicit FindWidget(QWidget* parent = nullptr);
   QString getFindText();
   QPushButton findButton;
 
@@ -44,7 +44,7 @@ class SiteSelectPage : public gondar::WizardPage {
  public:
   explicit SiteSelectPage(QWidget* parent = 0);
   QString getFindText();
-  FindDialog find;
+  FindWidget find;
 
  protected:
   void initializePage() override;

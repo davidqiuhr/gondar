@@ -20,7 +20,7 @@
 #include "log.h"
 #include "metric.h"
 
-FindDialog::FindDialog(QWidget* parent) : QDialog(parent) {
+FindWidget::FindWidget(QWidget* parent) : QWidget(parent) {
   findLabel.setText("Search:");
   findButton.setText("Find");
   layout.addWidget(&findLabel);
@@ -29,7 +29,7 @@ FindDialog::FindDialog(QWidget* parent) : QDialog(parent) {
   setLayout(&layout);
 }
 
-QString FindDialog::getFindText() {
+QString FindWidget::getFindText() {
   return lineEdit.text();
 }
 
