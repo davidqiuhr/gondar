@@ -16,6 +16,7 @@
 #ifndef SRC_SITE_SELECT_PAGE_H_
 #define SRC_SITE_SELECT_PAGE_H_
 
+#include <QHBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
 #include <QListWidget>
