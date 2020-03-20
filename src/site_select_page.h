@@ -28,7 +28,7 @@
 class FindDialog : public QDialog {
   Q_OBJECT
  public:
-  FindDialog(QWidget* parent = nullptr);
+  explicit FindDialog(QWidget* parent = nullptr);
   QString getFindText();
   QPushButton findButton;
 
