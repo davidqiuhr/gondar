@@ -67,7 +67,7 @@ bool SiteSelectPage::validatePage() {
   // if we have a site selected, update our download links and continue
   // otherwise, return false
   auto* selected = dynamic_cast<SiteEntry*>(sitesEntries.currentItem());
-  if (selected == NULL) {
+  if (selected == NULL || selected->isHidden()) {
     return false;
   } else {
     const auto site = selected->site();
