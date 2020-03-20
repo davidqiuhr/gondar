@@ -1,4 +1,4 @@
-FROM fedora:25
+FROM fedora:31
 
 RUN dnf install -y \
     automake \
@@ -22,6 +22,7 @@ RUN dnf install -y \
     p7zip \
     patch \
     python \
+    python2 \
     ruby \
     scons \
     wget \
@@ -33,7 +34,7 @@ RUN git clone https://github.com/mxe/mxe /opt/mxe
 WORKDIR /opt/mxe
 
 # Check out a specific MXE revision to ensure reproducible builds
-RUN git checkout 8285eb550400c4987e8ca202b6c4a80eb8658ed9
+#RUN git checkout 8285eb550400c4987e8ca202b6c4a80eb8658ed9
 
 # Download and build each root package separately to (hopefully) limit
 # rebuild time with future modifications
