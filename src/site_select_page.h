@@ -37,11 +37,11 @@ class SiteSelectPage : public gondar::WizardPage {
   bool validatePage() override;
 
  private:
-  QLabel findLabel;
+  QVBoxLayout layout;
   QHBoxLayout findLayout;
+  QLabel findLabel;
   QLineEdit lineEdit;
   QListWidget sitesEntries;
-  QVBoxLayout layout;
   void filterSites();
 };
 
