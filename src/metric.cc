@@ -22,10 +22,12 @@
 #include <QNetworkRequest>
 #include <QStandardPaths>
 #include <QUrl>
+#include <QUrlQuery>
 #include <QUuid>
 
 #include "config.h"
 #include "log.h"
+#include "meepo.h"
 #include "util.h"
 
 namespace gondar {
@@ -108,6 +110,8 @@ QString GetUuid() {
 
 // the metrics layer stores the site id to provide in later metrics
 // once it is available
+// TODO(ken): now that the metrics layer is passed a wizard instance
+// there is no real reason to have static state just for site_id
 namespace {
 static int site_id = 0;
 }
@@ -120,13 +124,23 @@ int GetSiteId() {
   return site_id;
 }
 
-void SendMetric(Metric metric, const std::string& value) {
+static bool shouldSendMetrics() {
   const auto api_key = getMetricsApiKey();
   if (api_key.isEmpty()) {
     // all production builds should sent metrics
     LOG_WARNING << "not sending metrics!";
+    return false;
+  }
+  return true;
+}
+
+// send regular gondar metrics
+void SendMetricGondar(Metric metric, const std::string& value) {
+  if (!shouldSendMetrics()) {
     return;
   }
+  LOG_INFO << "sending a Klassic Metric: " << getMetricString(metric);
+  const auto api_key = getMetricsApiKey();
   std::string metricStr = getMetricString(metric);
   QNetworkAccessManager* manager = getNetworkManager();
   QUrl url("https://gondar-metrics.neverware.com/prod");
@@ -161,5 +175,26 @@ void SendMetric(Metric metric, const std::string& value) {
   QJsonDocument doc(json);
   QString strJson(doc.toJson(QJsonDocument::Compact));
   manager->post(request, QByteArray(strJson.toUtf8()));
+}
+
+static void SendMetricMeepo(Metric metric,
+                            const std::string& value,
+                            GondarWizard* wizard) {
+  // don't send metrics to meepo if we're not configured to send metrics
+  // technically we could, but for simplicity all metrics will be on/off
+  // together.
+  if (!shouldSendMetrics()) {
+    return;
+  }
+  LOG_INFO << "sending a Meepo Metric: " << getMetricString(metric);
+  wizard->meepo_.sendMetric(getMetricString(metric), value);
+}
+
+void SendMetric(GondarWizard* wizard, Metric metric, const std::string& value) {
+  SendMetricGondar(metric, value);
+  // if we have a token, also send the metric to meepo
+  if (wizard && wizard->meepo_.hasToken()) {
+    SendMetricMeepo(metric, value, wizard);
+  }
 }
 }  // namespace gondar

@@ -34,6 +34,9 @@ class ChromeoverLoginPage : public gondar::WizardPage {
  public:
   explicit ChromeoverLoginPage(QWidget* parent = 0);
   int nextId() const override;
+  // linked to by wizard
+  void handleMeepoFinished();
+  void handleMeepoFailed(bool using_google);
 
  protected:
   bool validatePage() override;
@@ -41,12 +44,8 @@ class ChromeoverLoginPage : public gondar::WizardPage {
  private:
   void showPressedButton();
   void showUnpressedButton();
-  void handleMeepoFinished();
-  void handleMeepoFailed(bool using_google);
   void handleGoogleSigninFinished(QNetworkReply* reply);
   void handleGoogleSigninFail();
-
-  gondar::Meepo meepo_;
 
   QGridLayout layout;
   QLineEdit usernameLineEdit;

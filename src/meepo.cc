@@ -26,6 +26,7 @@
 #include "config.h"
 #include "gondarsite.h"
 #include "log.h"
+#include "metric.h"
 #include "util.h"
 
 namespace {
@@ -159,6 +160,10 @@ void Meepo::startGoogle(QString id_token) {
   requestGoogleAuth(id_token);
 }
 
+bool Meepo::hasToken() {
+  return !api_token_.isEmpty();
+}
+
 QString Meepo::error() const {
   return error_;
 }
@@ -281,13 +286,56 @@ void Meepo::handleDownloadsReply(QNetworkReply* reply) {
   }
 }
 
+void Meepo::sendMetric(std::string metric, std::string value) {
+  // TODO(ken): currently this is not called successfully until downloadAttempt
+  // is this expected?
+  auto url = createUrl("/activity");
+  QUrlQuery query;
+  query.addQueryItem("token", api_token_);
+  url.setQuery(query);
+  QJsonObject json;
+  QJsonObject inner_json;
+
+  // FIXME(ken): try removing these extra values
+  // QString id = gondar::GetUuid();
+  // inner_json["identifier"] = id;
+  // metric becomes 'action'
+  // json.insert("action", QString::fromStdString(metricStr));
+  inner_json.insert("activity", QString::fromStdString(metric));
+  // value becomes "description"
+  if (value.length() == 0) {
+    inner_json.insert("description", QString::fromStdString(metric));
+  } else {
+    inner_json.insert("description", QString::fromStdString(value));
+  }
+  const auto siteId = GetSiteId();
+  // only show site when on chromeover and site id has been initialized
+  // TODO(ken): is this if really valuabe?  for meepo we'll only be
+  // handling this case
+  if (isChromeover() && siteId != 0) {
+    inner_json.insert("site_id", siteId);
+  }
+  json["activity"] = inner_json;
+  QNetworkRequest request(url);
+  request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+  QJsonDocument doc(json);
+  QString strJson(doc.toJson(QJsonDocument::Compact));
+  LOG_WARNING << "sending json=" << strJson;
+  network_manager_.post(request, QByteArray(strJson.toUtf8()));
+}
+
+void Meepo::handleMetricsReply(QNetworkReply* reply) {
+  LOG_WARNING << "KEN: meepo metrics reply: " << reply;
+}
+
 void Meepo::dispatchReply(QNetworkReply* reply) {
   const auto error = reply->error();
   const auto url = reply->url();
 
   if (error != QNetworkReply::NoError) {
     // TODO(nicholasbishop): make this more readable
-    LOG_ERROR << "network error: " << url.toString() << ", error " << error;
+    LOG_ERROR << "network error: " << url.toString() << std::endl
+              << ", error " << error;
     // TODO(nicholasbishop): move the error handling into each of the
     // three handlers below so that errors can be more specific
     fail("network error");
@@ -300,8 +348,9 @@ void Meepo::dispatchReply(QNetworkReply* reply) {
     handleSitesReply(reply);
   } else if (url.path().endsWith("/downloads")) {
     handleDownloadsReply(reply);
+  } else if (url.path().endsWith("/activity")) {
+    handleMetricsReply(reply);
   }
-
   reply->deleteLater();
 }
 

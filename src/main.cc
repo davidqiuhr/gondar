@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
 #endif
   Q_INIT_RESOURCE(gondarwizard);
   gondar::InitializeLogging();
-  gondar::SendMetric(gondar::Metric::Use);
+  gondar::SendMetricGondar(gondar::Metric::Use);
 #if defined(Q_OS_WIN)
   // dismiss Windows 'format disk' popups
   // placed here to enable logging for this step
