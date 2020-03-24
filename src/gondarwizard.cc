@@ -19,7 +19,6 @@
 
 #include "about_dialog.h"
 #include "admin_check_page.h"
-#include "chromeover_login_page.h"
 #include "device_select_page.h"
 #include "error_page.h"
 #include "feedback_dialog.h"
@@ -39,7 +38,6 @@ class GondarWizard::Private {
 
   AdminCheckPage adminCheckPage;
   DeviceSelectPage deviceSelectPage;
-  ChromeoverLoginPage chromeoverLoginPage;
   SiteSelectPage siteSelectPage;
   ErrorPage errorPage;
 
@@ -66,7 +64,7 @@ void GondarWizard::init() {
   setPage(Page_adminCheck, &p_->adminCheckPage);
   // chromeoverLogin and imageSelect are alternatives to each other
   // that both progress to usbInsertPage
-  setPage(Page_chromeoverLogin, &p_->chromeoverLoginPage);
+  setPage(Page_chromeoverLogin, &chromeoverLoginPage);
   setPage(Page_siteSelect, &p_->siteSelectPage);
   setPage(Page_imageSelect, &imageSelectPage);
   setPage(Page_usbInsert, &usbInsertPage);
@@ -93,6 +91,13 @@ void GondarWizard::init() {
   // latest beerover url
   connect(&newestImageUrl, &NewestImageUrl::errorOccurred, this,
           &GondarWizard::handleNewestImageUrlError);
+
+  // wizard is responsible for this connection as wizard() is not callable
+  // at construction time
+  connect(&meepo_, &gondar::Meepo::finished, &chromeoverLoginPage,
+          &ChromeoverLoginPage::handleMeepoFinished);
+  connect(&meepo_, &gondar::Meepo::failed, &chromeoverLoginPage,
+          &ChromeoverLoginPage::handleMeepoFailed);
 
   p_->runTime = QDateTime::currentDateTime();
 
@@ -165,7 +170,7 @@ void GondarWizard::catchError(const QString& error) {
   LOG_ERROR << "displaying error: " << error;
   p_->errorPage.setErrorString(error);
   // TODO(kendall): sanitize error string?
-  gondar::SendMetric(gondar::Metric::Error, error.toStdString());
+  gondar::SendMetric(this, gondar::Metric::Error, error.toStdString());
   next();
 }
 

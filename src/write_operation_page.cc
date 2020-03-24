@@ -77,12 +77,12 @@ void WriteOperationPage::writeToDrive() {
   if (wizard()->isFormatOnly()) {
     // make a disk write thread in format mode
     diskWriteThread = new DiskWriteThread(&device, this);
-    gondar::SendMetric(gondar::Metric::FormatAttempt);
+    gondar::SendMetric(wizard(), gondar::Metric::FormatAttempt);
   } else {
     image_path.clear();
     image_path.append(wizard()->downloadProgressPage.getImageFileName());
     diskWriteThread = new DiskWriteThread(&device, image_path, this);
-    gondar::SendMetric(gondar::Metric::UsbAttempt);
+    gondar::SendMetric(wizard(), gondar::Metric::UsbAttempt);
   }
   connect(diskWriteThread, &DiskWriteThread::finished, this,
           &WriteOperationPage::onDoneWriting);
@@ -162,12 +162,12 @@ void WriteOperationPage::onDoneWriting() {
   progress.setRange(0, 100);
   progress.setValue(100);
   if (wizard()->isFormatOnly()) {
-    gondar::SendMetric(gondar::Metric::FormatSuccess);
+    gondar::SendMetric(wizard(), gondar::Metric::FormatSuccess);
   } else {
     wizard()->setMakeAnotherLayout();
-    gondar::SendMetric(gondar::Metric::UsbSuccess);
+    gondar::SendMetric(wizard(), gondar::Metric::UsbSuccess);
     // when a USB was successfully created, report time the run took
-    gondar::SendMetric(gondar::Metric::SuccessDuration,
+    gondar::SendMetric(wizard(), gondar::Metric::SuccessDuration,
                        QString::number(wizard()->getRunTime()).toStdString());
   }
   emit completeChanged();
