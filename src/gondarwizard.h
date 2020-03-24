@@ -62,7 +62,6 @@ class GondarWizard : public QWizard {
   WriteOperationPage writeOperationPage;
   NewestImageUrl newestImageUrl;
 
-  // TODO(ken): first tentative sip of moving meepo_ to the wizard-level
   gondar::Meepo meepo_;
 
   const std::vector<GondarSite>& sites() const;
