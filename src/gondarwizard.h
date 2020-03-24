@@ -28,6 +28,7 @@
 #include "newest_image_url.h"
 #include "usb_insert_page.h"
 #include "write_operation_page.h"
+#include "meepo.h"
 
 class QCheckBox;
 class QGroupBox;
@@ -60,6 +61,9 @@ class GondarWizard : public QWizard {
   UsbInsertPage usbInsertPage;
   WriteOperationPage writeOperationPage;
   NewestImageUrl newestImageUrl;
+
+  // TODO(ken): first tentative sip of moving meepo_ to the wizard-level
+  gondar::Meepo meepo_;
 
   const std::vector<GondarSite>& sites() const;
   void setSites(const std::vector<GondarSite>& sites);

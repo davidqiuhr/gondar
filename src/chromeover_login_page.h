@@ -46,8 +46,6 @@ class ChromeoverLoginPage : public gondar::WizardPage {
   void handleGoogleSigninFinished(QNetworkReply* reply);
   void handleGoogleSigninFail();
 
-  gondar::Meepo meepo_;
-
   QGridLayout layout;
   QLineEdit usernameLineEdit;
   QLabel usernameLineEditLabel;
