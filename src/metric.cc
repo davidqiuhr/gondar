@@ -27,6 +27,7 @@
 #include "config.h"
 #include "log.h"
 #include "util.h"
+#include "meepo.h"
 
 namespace gondar {
 
@@ -108,6 +109,7 @@ QString GetUuid() {
 
 // the metrics layer stores the site id to provide in later metrics
 // once it is available
+// FIXME(ken): really?  static state like this?
 namespace {
 static int site_id = 0;
 }
@@ -120,7 +122,8 @@ int GetSiteId() {
   return site_id;
 }
 
-void SendMetric(Metric metric, const std::string& value) {
+// send regular gondar metrics
+void SendMetricGondar(Metric metric, const std::string& value) {
   const auto api_key = getMetricsApiKey();
   if (api_key.isEmpty()) {
     // all production builds should sent metrics
@@ -161,5 +164,22 @@ void SendMetric(Metric metric, const std::string& value) {
   QJsonDocument doc(json);
   QString strJson(doc.toJson(QJsonDocument::Compact));
   manager->post(request, QByteArray(strJson.toUtf8()));
+}
+
+//void SendMetricMeepo(Metric metric, const std::string& value) {}
+
+void SendMetric(Metric metric, const std::string& value, GondarWizard* wizard) {
+  SendMetricGondar(metric, value);
+  // if we have a token, also send the metric to meepo
+  // TODO(ken): decide how we're going to share this state between different
+  // places
+  // should the wizard contain hasToken?
+  // i think maybe meepo should have access to the metrics stuff and pass
+  // the token into here
+
+  // TODO(ken): implement this bit
+  //if (wizard()->meepo_.hasToken()) {
+  //  SendMetricMeepo(metric, value);
+  //}
 }
 }  // namespace gondar
