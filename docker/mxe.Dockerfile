@@ -44,10 +44,12 @@ RUN git checkout build-2019-06-02
 # controls parallelism within a particular package's build. The value
 # of eight was chosen quite arbitrarily.
 
-RUN make -j8 download-zlib
-RUN make -j8 zlib JOBS=8
-RUN make -j8 download-qtbase
-RUN make -j8 qtbase JOBS=8
+#RUN make -j8 download-zlib
+#RUN make -j8 zlib JOBS=8
+#RUN make -j8 download-qtbase
+#RUN make -j8 qtbase JOBS=8
+RUN make -j8 download-libmysqlclient
+RUN make -j8 libmysqlclient JOBS=8
 
 ENV PATH=$PATH:/opt/mxe/usr/bin
 ENV CMAKE=i686-w64-mingw32.static-cmake
