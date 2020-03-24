@@ -26,8 +26,8 @@
 
 #include "config.h"
 #include "log.h"
-#include "util.h"
 #include "meepo.h"
+#include "util.h"
 
 namespace gondar {
 
@@ -123,7 +123,7 @@ int GetSiteId() {
 }
 
 // send regular gondar metrics
-void SendMetricGondar(Metric metric, const std::string& value) {
+static void SendMetricGondar(Metric metric, const std::string& value) {
   const auto api_key = getMetricsApiKey();
   if (api_key.isEmpty()) {
     // all production builds should sent metrics
@@ -166,7 +166,7 @@ void SendMetricGondar(Metric metric, const std::string& value) {
   manager->post(request, QByteArray(strJson.toUtf8()));
 }
 
-//void SendMetricMeepo(Metric metric, const std::string& value) {}
+static void SendMetricMeepo(Metric metric, const std::string& value) {}
 
 void SendMetric(GondarWizard* wizard, Metric metric, const std::string& value) {
   SendMetricGondar(metric, value);
@@ -178,8 +178,8 @@ void SendMetric(GondarWizard* wizard, Metric metric, const std::string& value) {
   // the token into here
 
   // TODO(ken): implement this bit
-  //if (wizard()->meepo_.hasToken()) {
-  //  SendMetricMeepo(metric, value);
-  //}
+  if (wizard->meepo_.hasToken()) {
+    SendMetricMeepo(metric, value);
+  }
 }
 }  // namespace gondar
