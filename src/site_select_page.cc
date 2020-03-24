@@ -15,15 +15,14 @@
 
 #include "site_select_page.h"
 
-#include <QRadioButton>
-
 #include "gondarsite.h"
 #include "gondarwizard.h"
+#include "log.h"
 #include "metric.h"
 
-class SiteButton : public QRadioButton {
+class SiteEntry : public QListWidgetItem {
  public:
-  explicit SiteButton(const GondarSite& site) : site_(site) {
+  explicit SiteEntry(const GondarSite& site) : site_(site) {
     setText(site.getSiteName());
   }
 
@@ -39,22 +38,30 @@ SiteSelectPage::SiteSelectPage(QWidget* parent) : WizardPage(parent) {
       "Your account is associated with more than one site. "
       "Select the site you'd like to use.");
   setLayout(&layout);
+  // set up the find section
+  findLabel.setText("Search:");
+  findLayout.addWidget(&findLabel);
+  findLayout.addWidget(&lineEdit);
+  layout.addLayout(&findLayout);
+
+  layout.addWidget(&sitesEntries);
 }
 
 void SiteSelectPage::initializePage() {
   const auto& sitesList = wizard()->sites();
   for (const auto& site : sitesList) {
-    auto* curButton = new SiteButton(site);
-    sitesButtons.addButton(curButton);
-    layout.addWidget(curButton);
+    auto* curSite = new SiteEntry(site);
+    sitesEntries.addItem(curSite);
   }
+  connect(&lineEdit, &QLineEdit::textChanged, this,
+          &SiteSelectPage::filterSites);
 }
 
 bool SiteSelectPage::validatePage() {
   // if we have a site selected, update our download links and continue
   // otherwise, return false
-  auto* selected = dynamic_cast<SiteButton*>(sitesButtons.checkedButton());
-  if (selected == NULL) {
+  auto* selected = dynamic_cast<SiteEntry*>(sitesEntries.currentItem());
+  if (selected == NULL || selected->isHidden()) {
     return false;
   } else {
     const auto site = selected->site();
@@ -64,4 +71,19 @@ bool SiteSelectPage::validatePage() {
     wizard()->imageSelectPage.addImages(imageList);
     return true;
   }
+}
+
+void SiteSelectPage::filterSites() {
+  for (int i = 0; i < sitesEntries.count(); i++) {
+    if (sitesEntries.item(i)->text().toLower().contains(
+            getFindText().toLower())) {
+      sitesEntries.item(i)->setHidden(false);
+    } else {
+      sitesEntries.item(i)->setHidden(true);
+    }
+  }
+}
+
+QString SiteSelectPage::getFindText() {
+  return lineEdit.text();
 }

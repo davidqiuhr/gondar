@@ -82,10 +82,11 @@ QNetworkRequest createGoogleAuthRequest() {
   return request;
 }
 
-QNetworkRequest createSitesRequest(const QString& api_token) {
+QNetworkRequest createSitesRequest(const QString& api_token, int page) {
   auto url = createUrl(path_sites);
   QUrlQuery query;
   query.addQueryItem("token", api_token);
+  query.addQueryItem("page", QString::number(page));
   url.setQuery(query);
   return QNetworkRequest(url);
 }
@@ -102,8 +103,7 @@ QNetworkRequest createDownloadsRequest(const QString& api_token,
   return request;
 }
 
-std::vector<GondarSite> sitesFromReply(QNetworkReply* reply) {
-  const QJsonArray rawSites = gondar::jsonFromReply(reply)["sites"].toArray();
+std::vector<GondarSite> sitesFromReply(const QJsonArray& rawSites) {
   std::vector<GondarSite> sites;
 
   for (const QJsonValue& cur : rawSites) {
@@ -114,6 +114,18 @@ std::vector<GondarSite> sitesFromReply(QNetworkReply* reply) {
   }
 
   return sites;
+}
+
+// Get the next page from the pagination dict. If on the last page, return 0.
+int getNextPage(const QJsonObject& outer_json) {
+  const QJsonObject json = outer_json["pagination"].toObject();
+  auto cur = json.value("current").toInt();
+  auto total = json.value("total").toInt();
+  if (cur < total) {
+    return cur + 1;
+  } else {
+    return 0;
+  }
 }
 
 }  // namespace
@@ -184,22 +196,30 @@ void Meepo::handleAuthReply(QNetworkReply* reply) {
   }
 
   LOG_INFO << "token received";
-  requestSites();
+  // request the first page of sites
+  requestSites(1);
 }
 
-void Meepo::requestSites() {
-  const auto request = createSitesRequest(api_token_);
+void Meepo::requestSites(int page) {
+  const auto request = createSitesRequest(api_token_, page);
   LOG_INFO << "GET " << request.url().toString();
   network_manager_.get(request);
 }
 
 void Meepo::handleSitesReply(QNetworkReply* reply) {
-  sites_ = sitesFromReply(reply);
+  const QJsonObject json = gondar::jsonFromReply(reply);
+  const QJsonArray rawSites = json["sites"].toArray();
+  auto new_sites = sitesFromReply(rawSites);
+  sites_.insert(sites_.end(), new_sites.begin(), new_sites.end());
+
   LOG_INFO << "received " << sites_.size() << " site(s)";
 
-  sites_remaining_ = sites_.size();
+  // sites starts at zero, and every time we go get another page,
+  // there are more sites remaining to get downloads from
+  sites_remaining_ += sites_.size();
+  LOG_INFO << "sites_remaining increased, now " << sites_remaining_;
 
-  // special handling for the zero sites case
+  // this logic should still work for the multi-page case
   if (sites_remaining_ == 0) {
     fail(no_sites_error);
     return;
@@ -207,6 +227,12 @@ void Meepo::handleSitesReply(QNetworkReply* reply) {
 
   for (const auto& site : sites_) {
     requestDownloads(site);
+  }
+  // see if there's another batch
+  int next_page = getNextPage(json);
+  if (next_page > 0) {
+    LOG_INFO << "getting next page of sites, page " << next_page;
+    requestSites(next_page);
   }
 }
 
@@ -243,6 +269,7 @@ void Meepo::handleDownloadsReply(QNetworkReply* reply) {
     }
   }
   sites_remaining_--;
+  LOG_INFO << "processed a site; sites remaining = " << sites_remaining_;
 
   // see if we're done
   if (sites_remaining_ == 0) {
@@ -279,7 +306,7 @@ void Meepo::dispatchReply(QNetworkReply* reply) {
 }
 
 void Meepo::fail(const QString& error) {
-  LOG_ERROR << "error";
+  LOG_ERROR << "error: " << error;
   error_ = error;
   emit failed(google_mode_);
 }

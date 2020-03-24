@@ -16,9 +16,10 @@
 #ifndef SRC_SITE_SELECT_PAGE_H_
 #define SRC_SITE_SELECT_PAGE_H_
 
-#include <QButtonGroup>
+#include <QHBoxLayout>
 #include <QLabel>
-#include <QRadioButton>
+#include <QLineEdit>
+#include <QListWidget>
 #include <QVBoxLayout>
 
 #include "gondarsite.h"
@@ -29,14 +30,19 @@ class SiteSelectPage : public gondar::WizardPage {
 
  public:
   explicit SiteSelectPage(QWidget* parent = 0);
+  QString getFindText();
 
  protected:
   void initializePage() override;
   bool validatePage() override;
 
  private:
-  QButtonGroup sitesButtons;
   QVBoxLayout layout;
+  QHBoxLayout findLayout;
+  QLabel findLabel;
+  QLineEdit lineEdit;
+  QListWidget sitesEntries;
+  void filterSites();
 };
 
 #endif  // SRC_SITE_SELECT_PAGE_H_
