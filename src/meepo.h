@@ -39,6 +39,9 @@ class Meepo : public QObject {
   // finished() signal to get the results (including errors).
   void start(const QAuthenticator& auth);
   void startGoogle(const QString id_token);
+  // whether we have a token
+  bool hasToken();
+  void sendMetric(std::string metric, std::string value);
 
   QString error() const;
   Sites sites() const;
@@ -60,6 +63,8 @@ class Meepo : public QObject {
 
   void requestDownloads(const GondarSite& site);
   void handleDownloadsReply(QNetworkReply* reply);
+
+  void handleMetricsReply(QNetworkReply* reply);
 
   void dispatchReply(QNetworkReply* reply);
   void fail(const QString& error);
