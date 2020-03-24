@@ -33,9 +33,9 @@ AdminCheckPage::AdminCheckPage(QWidget* parent) : WizardPage(parent) {
   // TODO(kendall): move isChromeover() out of AdminCheckPage and call these
   // metrics from a more intuitive context
   if (gondar::isChromeover()) {
-    gondar::SendMetric(gondar::Metric::ChromeoverUse, wizard());
+    gondar::SendMetric(wizard(), gondar::Metric::ChromeoverUse);
   } else {
-    gondar::SendMetric(gondar::Metric::BeeroverUse, wizard());
+    gondar::SendMetric(wizard(), gondar::Metric::BeeroverUse);
   }
 }
 

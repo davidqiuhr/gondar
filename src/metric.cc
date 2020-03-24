@@ -168,7 +168,7 @@ void SendMetricGondar(Metric metric, const std::string& value) {
 
 //void SendMetricMeepo(Metric metric, const std::string& value) {}
 
-void SendMetric(Metric metric, const std::string& value, GondarWizard* wizard) {
+void SendMetric(GondarWizard* wizard, Metric metric, const std::string& value) {
   SendMetricGondar(metric, value);
   // if we have a token, also send the metric to meepo
   // TODO(ken): decide how we're going to share this state between different
