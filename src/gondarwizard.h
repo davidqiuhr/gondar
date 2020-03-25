@@ -51,6 +51,7 @@ class GondarWizard : public QWizard {
   void postError(const QString& error);
   qint64 getRunTime();
   void setMakeAnotherLayout();
+  gondar::Meepo* getMeepo();
   // There's an elaborate state-sharing solution via the 'field' mechanism
   // supported by QWizard.  I found the logic for that to be easy for sharing
   // some data types and convoluted for others.  In this case, a later page
@@ -62,7 +63,7 @@ class GondarWizard : public QWizard {
   WriteOperationPage writeOperationPage;
   NewestImageUrl newestImageUrl;
 
-  gondar::Meepo meepo_;
+  gondar::Meepo* getMeepo();
 
   const std::vector<GondarSite>& sites() const;
   void setSites(const std::vector<GondarSite>& sites);

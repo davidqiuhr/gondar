@@ -73,8 +73,10 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
   // connect events between our members and ourself
   connect(&googleButton, &QPushButton::clicked, &googleFlow,
           &GoogleFlow::handleGoogleSigninPart1);
+  // FIXME(ken): i guess wizard() cannot be called yet?
   //connect(&wizard()->meepo_, &gondar::Meepo::finished, this,
   //        &ChromeoverLoginPage::handleMeepoFinished);
+  // TODO(ken): also move this one
   //connect(&wizard()->meepo_, &gondar::Meepo::failed, this,
   //        &ChromeoverLoginPage::handleMeepoFailed);
   connect(googleFlow.getManager(), &QNetworkAccessManager::finished, this,
