@@ -36,7 +36,6 @@ class GondarWizard::Private {
   gondar::UpdateCheck updateCheck;
   gondar::AboutDialog aboutDialog;
   gondar::FeedbackDialog feedbackDialog;
-  gondar::Meepo meepo_;
 
   AdminCheckPage adminCheckPage;
   DeviceSelectPage deviceSelectPage;
@@ -95,11 +94,6 @@ void GondarWizard::init() {
   connect(&newestImageUrl, &NewestImageUrl::errorOccurred, this,
           &GondarWizard::handleNewestImageUrlError);
 
-  connect(p_->meepo_, &gondar::Meepo::finished, &p_->chromeoverLoginPage,
-          &ChromeoverLoginPage::handleMeepoFinished);
-  connect(p_->meepo_, &gondar::Meepo::failed, &p_->chromeoverLoginPage,
-          &ChromeoverLoginPage::handleMeepoFailed);
-
   p_->runTime = QDateTime::currentDateTime();
 
   p_->updateCheck.start(this);
@@ -109,10 +103,6 @@ void GondarWizard::init() {
 }
 
 GondarWizard::~GondarWizard() {}
-
-gondar::Meepo* getMeepo() {
-  return &p_->meepo;
-}
 
 void GondarWizard::setNormalLayout() {
   QList<QWizard::WizardButton> button_layout;
