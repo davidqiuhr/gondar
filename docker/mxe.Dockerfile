@@ -1,11 +1,14 @@
 FROM fedora:31
 
 RUN dnf install -y \
+    autoconf \
     automake \
+    #autopoint \
     bison \
     bzip2 \
     cmake \
     flex \
+    #g++-multilib \
     gcc \
     gcc-c++ \
     gdk-pixbuf2 \
@@ -15,27 +18,38 @@ RUN dnf install -y \
     gperf \
     intltool \
     kernel-devel \
+    #libc6-dev-i386 \
+    #libgdk-pixbuf2.0-dev \
+    #libltdl-dev \
+    #libssl-dev \
     libtool \
+    #libxml-parser-perl \
     lzip \
     make \
     openssl-devel \
     p7zip \
+    pkg-config \
     patch \
+    perl \
     python \
     python2 \
     ruby \
     scons \
+    sed \
     wget \
     which \
     xz-static \
     zip
 
+RUN dnf install -y \
+  mariadb-devel
+
 RUN git clone https://github.com/mxe/mxe /opt/mxe
 WORKDIR /opt/mxe
 
 # Check out a specific MXE revision to ensure reproducible builds
-#RUN git checkout 8285eb550400c4987e8ca202b6c4a80eb8658ed9
-RUN git checkout build-2019-06-02
+# this is master as of 2020/03/25
+RUN git checkout 3a84473a0d1b9b523798565382e3763c3ed08f87
 
 # Download and build each root package separately to (hopefully) limit
 # rebuild time with future modifications
@@ -44,12 +58,12 @@ RUN git checkout build-2019-06-02
 # controls parallelism within a particular package's build. The value
 # of eight was chosen quite arbitrarily.
 
-#RUN make -j8 download-zlib
-#RUN make -j8 zlib JOBS=8
-#RUN make -j8 download-qtbase
-#RUN make -j8 qtbase JOBS=8
-RUN make -j8 download-libmysqlclient
-RUN make -j8 libmysqlclient JOBS=8
+RUN make -j4 download-zlib
+RUN make -j4 zlib JOBS=4
+RUN make -j4 download-qtbase
+RUN make -j4 qtbase JOBS=4 EXCLUDE_PKGS='ocaml%'
+#RUN make -j8 download-libmysqlclient
+#RUN make -j4 libmysqlclient JOBS=4 EXCLUDE_PKGS='ocaml%'
 
 ENV PATH=$PATH:/opt/mxe/usr/bin
 ENV CMAKE=i686-w64-mingw32.static-cmake
