@@ -73,6 +73,8 @@ class DownloadManager : public QObject {
 
   QFileInfo outputFileInfo() const;
   bool hasError();
+  // TODO(ken): implement, pass in a GondarWizard*
+  void setWizard();
 
  signals:
   void started();
