@@ -92,6 +92,13 @@ void GondarWizard::init() {
   connect(&newestImageUrl, &NewestImageUrl::errorOccurred, this,
           &GondarWizard::handleNewestImageUrlError);
 
+  // wizard is responsible for this connection as wizard() is not callable
+  // at construction time
+  connect(&meepo_, &gondar::Meepo::finished, &chromeoverLoginPage,
+          &ChromeoverLoginPage::handleMeepoFinished);
+  connect(&meepo_, &gondar::Meepo::failed, &chromeoverLoginPage,
+          &ChromeoverLoginPage::handleMeepoFailed);
+
   p_->runTime = QDateTime::currentDateTime();
 
   p_->updateCheck.start(this);
