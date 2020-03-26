@@ -32,11 +32,6 @@ AdminCheckPage::AdminCheckPage(QWidget* parent) : WizardPage(parent) {
   setLayout(&layout);
   // TODO(kendall): move isChromeover() out of AdminCheckPage and call these
   // metrics from a more intuitive context
-  if (gondar::isChromeover()) {
-    gondar::SendMetric(wizard(), gondar::Metric::ChromeoverUse);
-  } else {
-    gondar::SendMetric(wizard(), gondar::Metric::BeeroverUse);
-  }
 }
 
 void AdminCheckPage::handleFormatOnly() {
@@ -45,6 +40,13 @@ void AdminCheckPage::handleFormatOnly() {
 }
 
 void AdminCheckPage::initializePage() {
+  // nb(ken): things bomb whenever i try to call wizard() from
+  // constructor context.
+  if (gondar::isChromeover()) {
+    gondar::SendMetric(wizard(), gondar::Metric::ChromeoverUse);
+  } else {
+    gondar::SendMetric(wizard(), gondar::Metric::BeeroverUse);
+  }
   // get the latest url for beerover if we're in beerover mode
   wizard()->maybe_fetch();
   is_admin = IsCurrentProcessElevated();
