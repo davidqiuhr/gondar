@@ -32,7 +32,8 @@ int main(int argc, char* argv[]) {
 #endif
   Q_INIT_RESOURCE(gondarwizard);
   gondar::InitializeLogging();
-  gondar::SendMetric(gondar::Metric::Use);
+  // FIXME(ken): need a version that does not send to both
+  // gondar::SendMetric(&gondarwizard, gondar::Metric::Use);
 #if defined(Q_OS_WIN)
   // dismiss Windows 'format disk' popups
   // placed here to enable logging for this step

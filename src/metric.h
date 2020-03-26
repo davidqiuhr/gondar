@@ -19,6 +19,8 @@
 #include <QString>
 #include <string>
 
+#include "gondarwizard.h"
+
 namespace gondar {
 
 enum class Metric {
@@ -38,7 +40,11 @@ enum class Metric {
 
 void SetSiteId(int site_id);
 
-void SendMetric(Metric metric, const std::string& value = "");
+// void SendMetricGondar(Metric metric, const std::string& value = "");
+// void SendMetricMeepo(Metric metric, const std::string& value = "");
+void SendMetric(GondarWizard* wizard,
+                Metric metric,
+                const std::string& value = "");
 
 QString GetUuid();
 int GetSiteId();

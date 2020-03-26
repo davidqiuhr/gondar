@@ -39,6 +39,8 @@ class Meepo : public QObject {
   // finished() signal to get the results (including errors).
   void start(const QAuthenticator& auth);
   void startGoogle(const QString id_token);
+  // whether we have a token
+  bool hasToken();
 
   QString error() const;
   Sites sites() const;

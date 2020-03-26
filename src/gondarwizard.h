@@ -26,10 +26,10 @@
 #include "device_picker.h"
 #include "download_progress_page.h"
 #include "image_select_page.h"
+#include "meepo.h"
 #include "newest_image_url.h"
 #include "usb_insert_page.h"
 #include "write_operation_page.h"
-#include "meepo.h"
 
 class QCheckBox;
 class QGroupBox;
