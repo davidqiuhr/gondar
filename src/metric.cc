@@ -124,6 +124,7 @@ int GetSiteId() {
 
 // send regular gondar metrics
 static void SendMetricGondar(Metric metric, const std::string& value) {
+  LOG_WARNING << "sending a Klassic Metric";
   const auto api_key = getMetricsApiKey();
   if (api_key.isEmpty()) {
     // all production builds should sent metrics
@@ -166,7 +167,9 @@ static void SendMetricGondar(Metric metric, const std::string& value) {
   manager->post(request, QByteArray(strJson.toUtf8()));
 }
 
-static void SendMetricMeepo(Metric metric, const std::string& value) {}
+static void SendMetricMeepo(Metric metric, const std::string& value) {
+  LOG_WARNING << "sending a Meepo Metric";
+}
 
 void SendMetric(GondarWizard* wizard, Metric metric, const std::string& value) {
   SendMetricGondar(metric, value);

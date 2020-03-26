@@ -73,10 +73,6 @@ ChromeoverLoginPage::ChromeoverLoginPage(QWidget* parent) : WizardPage(parent) {
   // connect events between our members and ourself
   connect(&googleButton, &QPushButton::clicked, &googleFlow,
           &GoogleFlow::handleGoogleSigninPart1);
-  //connect(&wizard()->meepo_, &gondar::Meepo::finished, this,
-  //        &ChromeoverLoginPage::handleMeepoFinished);
-  //connect(&wizard()->meepo_, &gondar::Meepo::failed, this,
-  //        &ChromeoverLoginPage::handleMeepoFailed);
   connect(googleFlow.getManager(), &QNetworkAccessManager::finished, this,
           &ChromeoverLoginPage::handleGoogleSigninFinished);
   connect(&googleFlow, &GoogleFlow::errorMiddle, this,
