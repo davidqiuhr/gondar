@@ -84,7 +84,7 @@ void DownloadManager::startNextDownload() {
 
   QNetworkRequest request(url);
   // FIXME(ken): temporarily disable SendMetric calls from downloader
-  // gondar::SendMetric(gondar::Metric::DownloadAttempt);
+   gondar::SendMetricGondar(gondar::Metric::DownloadAttempt);
   currentDownload = manager.get(request);
   connect(currentDownload, &QNetworkReply::finished, this,
           &DownloadManager::downloadFinished);
@@ -105,12 +105,12 @@ void DownloadManager::downloadFinished() {
     LOG_ERROR << "download failed: " << currentDownload->errorString();
     error = true;
     // FIXME(ken): temporarily disable SendMetric calls from downloader
-    // gondar::SendMetric(gondar::Metric::DownloadFailure);
+    gondar::SendMetricGondar(gondar::Metric::DownloadFailure);
   } else {
     LOG_INFO << "download succeeded";
     ++downloadedCount;
     // FIXME(ken): temporarily disable SendMetric calls from downloader
-    //  gondar::SendMetric(gondar::Metric::DownloadSuccess);
+    gondar::SendMetricGondar(gondar::Metric::DownloadSuccess);
   }
 
   currentDownload->deleteLater();

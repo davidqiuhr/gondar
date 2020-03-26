@@ -40,7 +40,7 @@ enum class Metric {
 
 void SetSiteId(int site_id);
 
-// void SendMetricGondar(Metric metric, const std::string& value = "");
+void SendMetricGondar(Metric metric, const std::string& value = "");
 // void SendMetricMeepo(Metric metric, const std::string& value = "");
 void SendMetric(GondarWizard* wizard,
                 Metric metric,

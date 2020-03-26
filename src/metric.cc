@@ -123,7 +123,7 @@ int GetSiteId() {
 }
 
 // send regular gondar metrics
-static void SendMetricGondar(Metric metric, const std::string& value) {
+void SendMetricGondar(Metric metric, const std::string& value) {
   LOG_WARNING << "sending a Klassic Metric";
   const auto api_key = getMetricsApiKey();
   if (api_key.isEmpty()) {
