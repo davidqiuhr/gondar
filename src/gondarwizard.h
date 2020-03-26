@@ -22,6 +22,7 @@
 #include <memory>
 #include <vector>
 
+#include "chromeover_login_page.h"
 #include "device_picker.h"
 #include "download_progress_page.h"
 #include "image_select_page.h"
@@ -61,6 +62,7 @@ class GondarWizard : public QWizard {
   UsbInsertPage usbInsertPage;
   WriteOperationPage writeOperationPage;
   NewestImageUrl newestImageUrl;
+  ChromeoverLoginPage chromeoverLoginPage;
 
   gondar::Meepo meepo_;
 
