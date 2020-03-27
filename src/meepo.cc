@@ -159,6 +159,10 @@ bool Meepo::hasToken() {
   return api_token_.isEmpty();
 }
 
+QString Meepo::getToken() {
+  return api_token_;
+}
+
 QString Meepo::error() const {
   return error_;
 }

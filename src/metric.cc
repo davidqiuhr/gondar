@@ -175,7 +175,9 @@ void SendMetricGondar(Metric metric, const std::string& value) {
   manager->post(request, QByteArray(strJson.toUtf8()));
 }
 
-static void SendMetricMeepo(Metric metric, const std::string& value) {
+static void SendMetricMeepo(Metric metric,
+                            const std::string& value,
+                            QString meepo_token) {
   LOG_WARNING << "sending a Meepo Metric";
   if (!shouldSendMetrics()) {
     return;
@@ -219,7 +221,7 @@ void SendMetric(GondarWizard* wizard, Metric metric, const std::string& value) {
   SendMetricGondar(metric, value);
   // if we have a token, also send the metric to meepo
   if (wizard && wizard->meepo_.hasToken()) {
-    SendMetricMeepo(metric, value);
+    SendMetricMeepo(metric, value, wizard->meepo_.getToken());
   }
 }
 }  // namespace gondar
