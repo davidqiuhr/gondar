@@ -75,6 +75,8 @@ class GondarWizard : public QWizard {
   bool newestIsReady();
   void maybe_fetch();
   void handleNewestImageUrlError();
+  QString getToken();
+  void setToken(QString token_in);
 
   // this enum determines page order
   enum {
@@ -105,6 +107,8 @@ class GondarWizard : public QWizard {
 
   QShortcut about_shortcut_;
   bool formatOnly;
+  // the token for our meepo interactions
+  QString meepo_token;
 };
 
 #endif  // SRC_GONDARWIZARD_H_

@@ -168,6 +168,7 @@ void ChromeoverLoginPage::handleGoogleSigninFinished(QNetworkReply* reply) {
   // remove red error text that may have existed from a previous auth failure
   meanWordsLabel.setVisible(false);
   QString id_token = gondar::jsonFromReply(reply)["id_token"].toString();
+  wizard()->setToken(id_token);
   if (!started) {
     wizard()->meepo_.startGoogle(id_token);
     started = true;

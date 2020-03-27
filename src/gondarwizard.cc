@@ -203,3 +203,11 @@ bool GondarWizard::newestIsReady() {
 void GondarWizard::handleNewestImageUrlError() {
   postError("An error has occurred fetching the latest image");
 }
+
+QString GondarWizard::getToken() {
+  return meepo_token;
+}
+
+void GondarWizard::setToken(QString token_in) {
+  meepo_token = token_in;
+}
