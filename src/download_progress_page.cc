@@ -36,6 +36,7 @@ void DownloadProgressPage::initializePage() {
   manager.append(url.toString());
   connect(&manager, &DownloadManager::started, this,
           &DownloadProgressPage::onDownloadStarted);
+  manager.setWizard(wizard());
 }
 
 void DownloadProgressPage::onDownloadStarted() {
