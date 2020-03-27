@@ -174,14 +174,7 @@ static void SendMetricMeepo(Metric metric, const std::string& value) {
 void SendMetric(GondarWizard* wizard, Metric metric, const std::string& value) {
   SendMetricGondar(metric, value);
   // if we have a token, also send the metric to meepo
-  // TODO(ken): decide how we're going to share this state between different
-  // places
-  // should the wizard contain hasToken?
-  // i think maybe meepo should have access to the metrics stuff and pass
-  // the token into here
-
-  // TODO(ken): implement this bit
-  if (wizard->meepo_.hasToken()) {
+  if (wizard && wizard->meepo_.hasToken()) {
     SendMetricMeepo(metric, value);
   }
 }
