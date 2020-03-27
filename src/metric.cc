@@ -122,15 +122,23 @@ int GetSiteId() {
   return site_id;
 }
 
-// send regular gondar metrics
-void SendMetricGondar(Metric metric, const std::string& value) {
-  LOG_WARNING << "sending a Klassic Metric";
+bool shouldSendMetrics() {
   const auto api_key = getMetricsApiKey();
   if (api_key.isEmpty()) {
     // all production builds should sent metrics
     LOG_WARNING << "not sending metrics!";
+    return false;
+  }
+  return true;
+}
+
+// send regular gondar metrics
+void SendMetricGondar(Metric metric, const std::string& value) {
+  LOG_WARNING << "sending a Klassic Metric";
+  if (!shouldSendMetrics()) {
     return;
   }
+  const auto api_key = getMetricsApiKey();
   std::string metricStr = getMetricString(metric);
   QNetworkAccessManager* manager = getNetworkManager();
   QUrl url("https://gondar-metrics.neverware.com/prod");
@@ -169,15 +177,12 @@ void SendMetricGondar(Metric metric, const std::string& value) {
 
 static void SendMetricMeepo(Metric metric, const std::string& value) {
   LOG_WARNING << "sending a Meepo Metric";
-  const auto api_key = getMetricsApiKey();
-  if (api_key.isEmpty()) {
-    // all production builds should sent metrics
-    LOG_WARNING << "not sending metrics!";
+  if (!shouldSendMetrics()) {
     return;
   }
   std::string metricStr = getMetricString(metric);
   QNetworkAccessManager* manager = getNetworkManager();
-  QUrl url("https://api.grv.neverware.com/poof/activity");
+  QUrl url(createUrl("/activity"));
   QJsonObject json;
   QString id = GetUuid();
   json["identifier"] = id;
@@ -203,7 +208,6 @@ static void SendMetricMeepo(Metric metric, const std::string& value) {
     json.insert("site", siteId);
   }
   QNetworkRequest request(url);
-  request.setRawHeader(QByteArray("x-api-key"), api_key);
   request.setHeader(QNetworkRequest::ContentTypeHeader,
                     "application/x-www-form-urlencoded");
   QJsonDocument doc(json);
