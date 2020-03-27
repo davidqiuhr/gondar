@@ -135,10 +135,10 @@ static bool shouldSendMetrics() {
 
 // send regular gondar metrics
 void SendMetricGondar(Metric metric, const std::string& value) {
-  LOG_WARNING << "sending a Klassic Metric";
   if (!shouldSendMetrics()) {
     return;
   }
+  LOG_WARNING << "sending a Klassic Metric";
   const auto api_key = getMetricsApiKey();
   std::string metricStr = getMetricString(metric);
   QNetworkAccessManager* manager = getNetworkManager();
@@ -190,12 +190,15 @@ static void SendMetricMeepo(Metric metric,
   auto url = gondar::createUrl("/activity");
   QUrlQuery query;
   query.addQueryItem("token", meepo_token);
+  query.addQueryItem("action", "dinked");
+  query.addQueryItem("description", "dinked");
   //query.addQueryItem("page", QString::number(page));
   url.setQuery(query);
   //return QNetworkRequest(url);
 
   std::string metricStr = getMetricString(metric);
   QNetworkAccessManager* manager = getNetworkManager();
+  /*
   QJsonObject json;
   QString id = GetUuid();
   json["identifier"] = id;
@@ -225,12 +228,17 @@ static void SendMetricMeepo(Metric metric,
                     "application/x-www-form-urlencoded");
   QJsonDocument doc(json);
   QString strJson(doc.toJson(QJsonDocument::Compact));
-  manager->post(request, QByteArray(strJson.toUtf8()));
+  */
+  QNetworkRequest request(url);
+  manager->get(request);
 }
 
 void SendMetric(GondarWizard* wizard, Metric metric, const std::string& value) {
+  LOG_WARNING << "HIT OUTER METRIC GUY";
   SendMetricGondar(metric, value);
   // if we have a token, also send the metric to meepo
+  // FIXME(ken): seems like we could just send in the whole meepo instance,
+  // then most of the handling could be in meepo
   if (wizard && wizard->meepo_.hasToken()) {
     SendMetricMeepo(metric, value, wizard->meepo_.getToken());
   }
