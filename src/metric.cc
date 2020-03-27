@@ -169,6 +169,46 @@ void SendMetricGondar(Metric metric, const std::string& value) {
 
 static void SendMetricMeepo(Metric metric, const std::string& value) {
   LOG_WARNING << "sending a Meepo Metric";
+  const auto api_key = getMetricsApiKey();
+  if (api_key.isEmpty()) {
+    // all production builds should sent metrics
+    LOG_WARNING << "not sending metrics!";
+    return;
+  }
+  std::string metricStr = getMetricString(metric);
+  QNetworkAccessManager* manager = getNetworkManager();
+  QUrl url("https://api.grv.neverware.com/poof/activity");
+  QJsonObject json;
+  QString id = GetUuid();
+  json["identifier"] = id;
+  json.insert("metric", QString::fromStdString(metricStr));
+  if (!value.empty()) {
+    // then we append the value to the metric
+    json.insert("value", QString::fromStdString(value));
+  }
+  const auto version = gondar::getGondarVersion();
+  if (!version.isEmpty()) {
+    json.insert("version", version);
+  }
+  QString product;
+  if (gondar::isChromeover()) {
+    product = "chromeover";
+  } else {
+    product = "beerover";
+  }
+  json.insert("product", product);
+  const auto siteId = GetSiteId();
+  // only show site when on chromeover and site id has been initialized
+  if (isChromeover() && siteId != 0) {
+    json.insert("site", siteId);
+  }
+  QNetworkRequest request(url);
+  request.setRawHeader(QByteArray("x-api-key"), api_key);
+  request.setHeader(QNetworkRequest::ContentTypeHeader,
+                    "application/x-www-form-urlencoded");
+  QJsonDocument doc(json);
+  QString strJson(doc.toJson(QJsonDocument::Compact));
+  manager->post(request, QByteArray(strJson.toUtf8()));
 }
 
 void SendMetric(GondarWizard* wizard, Metric metric, const std::string& value) {
