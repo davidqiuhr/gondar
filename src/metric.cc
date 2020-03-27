@@ -22,6 +22,7 @@
 #include <QNetworkRequest>
 #include <QStandardPaths>
 #include <QUrl>
+#include <QUrlQuery>
 #include <QUuid>
 
 #include "config.h"
@@ -122,7 +123,7 @@ int GetSiteId() {
   return site_id;
 }
 
-bool shouldSendMetrics() {
+static bool shouldSendMetrics() {
   const auto api_key = getMetricsApiKey();
   if (api_key.isEmpty()) {
     // all production builds should sent metrics
@@ -178,13 +179,23 @@ void SendMetricGondar(Metric metric, const std::string& value) {
 static void SendMetricMeepo(Metric metric,
                             const std::string& value,
                             QString meepo_token) {
-  LOG_WARNING << "sending a Meepo Metric";
+  // don't send metrics to meepo if we're not configured to send metrics
+  // technically we could, but for simplicity all metrics will be on/off
+  // together.
   if (!shouldSendMetrics()) {
     return;
   }
+
+  LOG_WARNING << "sending a Meepo Metric";
+  auto url = gondar::createUrl("/activity");
+  QUrlQuery query;
+  query.addQueryItem("token", meepo_token);
+  //query.addQueryItem("page", QString::number(page));
+  url.setQuery(query);
+  //return QNetworkRequest(url);
+
   std::string metricStr = getMetricString(metric);
   QNetworkAccessManager* manager = getNetworkManager();
-  QUrl url(createUrl("/activity"));
   QJsonObject json;
   QString id = GetUuid();
   json["identifier"] = id;
