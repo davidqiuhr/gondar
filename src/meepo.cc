@@ -321,8 +321,9 @@ void Meepo::sendMetric() {
     json.insert("site", siteId);
   }
   QNetworkRequest request(url);
-  request.setHeader(QNetworkRequest::ContentTypeHeader,
-                    "application/x-www-form-urlencoded");
+  //request.setHeader(QNetworkRequest::ContentTypeHeader,
+  //                  "application/x-www-form-urlencoded");
+  request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
   QJsonDocument doc(json);
   QString strJson(doc.toJson(QJsonDocument::Compact));
   // QNetworkRequest request(url);
