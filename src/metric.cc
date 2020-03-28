@@ -196,6 +196,7 @@ void SendMetric(GondarWizard* wizard, Metric metric, const std::string& value) {
   // FIXME(ken): seems like we could just send in the whole meepo instance,
   // then most of the handling could be in meepo
   if (wizard && wizard->meepo_.hasToken()) {
+    LOG_WARNING << "SENDING MEEPO METRIC";
     SendMetricMeepo(metric, value, wizard);
   }
 }
