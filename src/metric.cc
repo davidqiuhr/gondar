@@ -178,59 +178,15 @@ void SendMetricGondar(Metric metric, const std::string& value) {
 
 static void SendMetricMeepo(Metric metric,
                             const std::string& value,
-                            QString meepo_token) {
+                            GondarWizard* wizard) {
   // don't send metrics to meepo if we're not configured to send metrics
   // technically we could, but for simplicity all metrics will be on/off
   // together.
   if (!shouldSendMetrics()) {
     return;
   }
-
   LOG_WARNING << "sending a Meepo Metric";
-  auto url = gondar::createUrl("/activity");
-  QUrlQuery query;
-  query.addQueryItem("token", meepo_token);
-  query.addQueryItem("action", "dinked");
-  query.addQueryItem("description", "dinked");
-  //query.addQueryItem("page", QString::number(page));
-  url.setQuery(query);
-  //return QNetworkRequest(url);
-
-  std::string metricStr = getMetricString(metric);
-  QNetworkAccessManager* manager = getNetworkManager();
-  /*
-  QJsonObject json;
-  QString id = GetUuid();
-  json["identifier"] = id;
-  json.insert("metric", QString::fromStdString(metricStr));
-  if (!value.empty()) {
-    // then we append the value to the metric
-    json.insert("value", QString::fromStdString(value));
-  }
-  const auto version = gondar::getGondarVersion();
-  if (!version.isEmpty()) {
-    json.insert("version", version);
-  }
-  QString product;
-  if (gondar::isChromeover()) {
-    product = "chromeover";
-  } else {
-    product = "beerover";
-  }
-  json.insert("product", product);
-  const auto siteId = GetSiteId();
-  // only show site when on chromeover and site id has been initialized
-  if (isChromeover() && siteId != 0) {
-    json.insert("site", siteId);
-  }
-  QNetworkRequest request(url);
-  request.setHeader(QNetworkRequest::ContentTypeHeader,
-                    "application/x-www-form-urlencoded");
-  QJsonDocument doc(json);
-  QString strJson(doc.toJson(QJsonDocument::Compact));
-  */
-  QNetworkRequest request(url);
-  manager->get(request);
+  wizard->meepo_.sendMetric();
 }
 
 void SendMetric(GondarWizard* wizard, Metric metric, const std::string& value) {
@@ -240,7 +196,7 @@ void SendMetric(GondarWizard* wizard, Metric metric, const std::string& value) {
   // FIXME(ken): seems like we could just send in the whole meepo instance,
   // then most of the handling could be in meepo
   if (wizard && wizard->meepo_.hasToken()) {
-    SendMetricMeepo(metric, value, wizard->meepo_.getToken());
+    SendMetricMeepo(metric, value, wizard);
   }
 }
 }  // namespace gondar

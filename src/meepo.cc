@@ -159,10 +159,6 @@ bool Meepo::hasToken() {
   return api_token_.isEmpty();
 }
 
-QString Meepo::getToken() {
-  return api_token_;
-}
-
 QString Meepo::error() const {
   return error_;
 }
@@ -285,6 +281,57 @@ void Meepo::handleDownloadsReply(QNetworkReply* reply) {
   }
 }
 
+void Meepo::sendMetric() {
+  auto url = gondar::createUrl("/activity");
+  QUrlQuery query;
+  query.addQueryItem("token", api_token_);
+  query.addQueryItem("action", "dinked");
+  query.addQueryItem("description", "dinked");
+  url.setQuery(query);
+  auto req = QNetworkRequest(url);
+  network_manager_.get(req);
+
+  // std::string metricStr = getMetricString(metric);
+  // QNetworkAccessManager* manager = getNetworkManager();
+  /*
+  QJsonObject json;
+  QString id = GetUuid();
+  json["identifier"] = id;
+  json.insert("metric", QString::fromStdString(metricStr));
+  if (!value.empty()) {
+    // then we append the value to the metric
+    json.insert("value", QString::fromStdString(value));
+  }
+  const auto version = gondar::getGondarVersion();
+  if (!version.isEmpty()) {
+    json.insert("version", version);
+  }
+  QString product;
+  if (gondar::isChromeover()) {
+    product = "chromeover";
+  } else {
+    product = "beerover";
+  }
+  json.insert("product", product);
+  const auto siteId = GetSiteId();
+  // only show site when on chromeover and site id has been initialized
+  if (isChromeover() && siteId != 0) {
+    json.insert("site", siteId);
+  }
+  QNetworkRequest request(url);
+  request.setHeader(QNetworkRequest::ContentTypeHeader,
+                    "application/x-www-form-urlencoded");
+  QJsonDocument doc(json);
+  QString strJson(doc.toJson(QJsonDocument::Compact));
+  */
+  // QNetworkRequest request(url);
+  // manager->get(request);
+}
+
+void Meepo::handleMetricsReply(QNetworkReply* reply) {
+  LOG_WARNING << "KEN: meepo metrics reply: " << reply;
+}
+
 void Meepo::dispatchReply(QNetworkReply* reply) {
   const auto error = reply->error();
   const auto url = reply->url();
@@ -304,8 +351,9 @@ void Meepo::dispatchReply(QNetworkReply* reply) {
     handleSitesReply(reply);
   } else if (url.path().endsWith("/downloads")) {
     handleDownloadsReply(reply);
+  } else if (url.path().endsWith("/activity")) {
+    handleMetricsReply(reply);
   }
-
   reply->deleteLater();
 }
 

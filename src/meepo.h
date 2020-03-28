@@ -41,7 +41,7 @@ class Meepo : public QObject {
   void startGoogle(const QString id_token);
   // whether we have a token
   bool hasToken();
-  QString getToken();
+  void sendMetric();
 
   QString error() const;
   Sites sites() const;
@@ -63,6 +63,8 @@ class Meepo : public QObject {
 
   void requestDownloads(const GondarSite& site);
   void handleDownloadsReply(QNetworkReply* reply);
+
+  void handleMetricsReply(QNetworkReply* reply);
 
   void dispatchReply(QNetworkReply* reply);
   void fail(const QString& error);
