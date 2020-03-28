@@ -26,6 +26,7 @@
 #include "config.h"
 #include "gondarsite.h"
 #include "log.h"
+#include "metric.h"
 #include "util.h"
 
 namespace {
@@ -288,20 +289,21 @@ void Meepo::sendMetric() {
   query.addQueryItem("action", "dinked");
   query.addQueryItem("description", "dinked");
   url.setQuery(query);
-  auto req = QNetworkRequest(url);
-  network_manager_.get(req);
+  //auto req = QNetworkRequest(url);
+  //network_manager_.get(req);
 
   // std::string metricStr = getMetricString(metric);
   // QNetworkAccessManager* manager = getNetworkManager();
-  /*
   QJsonObject json;
-  QString id = GetUuid();
+  QString id = gondar::GetUuid();
   json["identifier"] = id;
-  json.insert("metric", QString::fromStdString(metricStr));
-  if (!value.empty()) {
-    // then we append the value to the metric
-    json.insert("value", QString::fromStdString(value));
-  }
+  // metric becomes 'action'
+  //json.insert("action", QString::fromStdString(metricStr));
+  json.insert("action", QString::fromStdString("dinked"));
+  //if (!value.empty()) {
+    // value becomes "description"
+    json.insert("description", QString::fromStdString("dinked"));
+  //}
   const auto version = gondar::getGondarVersion();
   if (!version.isEmpty()) {
     json.insert("version", version);
@@ -323,9 +325,9 @@ void Meepo::sendMetric() {
                     "application/x-www-form-urlencoded");
   QJsonDocument doc(json);
   QString strJson(doc.toJson(QJsonDocument::Compact));
-  */
   // QNetworkRequest request(url);
   // manager->get(request);
+  network_manager_.post(request, QByteArray(strJson.toUtf8()));
 }
 
 void Meepo::handleMetricsReply(QNetworkReply* reply) {
