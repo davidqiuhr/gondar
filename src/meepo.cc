@@ -290,24 +290,28 @@ void Meepo::sendMetric() {
   query.addQueryItem("description", "dinked");
   query.addQueryItem("site_id", "1");
   url.setQuery(query);
-  //auto req = QNetworkRequest(url);
-  //network_manager_.get(req);
+  // auto req = QNetworkRequest(url);
+  // network_manager_.get(req);
 
   // std::string metricStr = getMetricString(metric);
   // QNetworkAccessManager* manager = getNetworkManager();
   QJsonObject json;
+  QJsonObject inner_json;
+
+  json["activity"] = inner_json;
+
   QString id = gondar::GetUuid();
-  json["identifier"] = id;
+  inner_json["identifier"] = id;
   // metric becomes 'action'
-  //json.insert("action", QString::fromStdString(metricStr));
-  json.insert("activity", QString::fromStdString("dinked"));
-  //if (!value.empty()) {
-    // value becomes "description"
-    json.insert("description", QString::fromStdString("dinked"));
+  // json.insert("action", QString::fromStdString(metricStr));
+  inner_json.insert("activity", QString::fromStdString("dinked"));
+  // if (!value.empty()) {
+  // value becomes "description"
+  inner_json.insert("description", QString::fromStdString("dinked"));
   //}
   const auto version = gondar::getGondarVersion();
   if (!version.isEmpty()) {
-    json.insert("version", version);
+    inner_json.insert("version", version);
   }
   QString product;
   if (gondar::isChromeover()) {
@@ -315,14 +319,14 @@ void Meepo::sendMetric() {
   } else {
     product = "beerover";
   }
-  json.insert("product", product);
+  inner_json.insert("product", product);
   const auto siteId = GetSiteId();
   // only show site when on chromeover and site id has been initialized
   if (isChromeover() && siteId != 0) {
-    json.insert("site_id", siteId);
+    inner_json.insert("site_id", siteId);
   }
   QNetworkRequest request(url);
-  //request.setHeader(QNetworkRequest::ContentTypeHeader,
+  // request.setHeader(QNetworkRequest::ContentTypeHeader,
   //                  "application/x-www-form-urlencoded");
   request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
   QJsonDocument doc(json);
