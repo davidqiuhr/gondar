@@ -298,7 +298,6 @@ void Meepo::sendMetric() {
   QJsonObject json;
   QJsonObject inner_json;
 
-  json["activity"] = inner_json;
 
   // FIXME(ken): try removing these extra values
   //QString id = gondar::GetUuid();
@@ -326,6 +325,7 @@ void Meepo::sendMetric() {
   if (isChromeover() && siteId != 0) {
     inner_json.insert("site_id", QString::number(siteId));
   }
+  json["activity"] = inner_json;
   QNetworkRequest request(url);
   // request.setHeader(QNetworkRequest::ContentTypeHeader,
   //                  "application/x-www-form-urlencoded");
