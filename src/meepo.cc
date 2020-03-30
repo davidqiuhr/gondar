@@ -286,9 +286,9 @@ void Meepo::sendMetric() {
   auto url = gondar::createUrl("/log-activity");
   QUrlQuery query;
   query.addQueryItem("token", api_token_);
-  query.addQueryItem("activity", "dinked");
-  query.addQueryItem("description", "dinked");
-  query.addQueryItem("site_id", "1");
+  //query.addQueryItem("activity", "dinked");
+  //query.addQueryItem("description", "dinked");
+  //query.addQueryItem("site_id", "1");
   url.setQuery(query);
   // auto req = QNetworkRequest(url);
   // network_manager_.get(req);
@@ -300,8 +300,9 @@ void Meepo::sendMetric() {
 
   json["activity"] = inner_json;
 
-  QString id = gondar::GetUuid();
-  inner_json["identifier"] = id;
+  // FIXME(ken): try removing these extra values
+  //QString id = gondar::GetUuid();
+  //inner_json["identifier"] = id;
   // metric becomes 'action'
   // json.insert("action", QString::fromStdString(metricStr));
   inner_json.insert("activity", QString::fromStdString("dinked"));
@@ -309,21 +310,21 @@ void Meepo::sendMetric() {
   // value becomes "description"
   inner_json.insert("description", QString::fromStdString("dinked"));
   //}
-  const auto version = gondar::getGondarVersion();
-  if (!version.isEmpty()) {
-    inner_json.insert("version", version);
-  }
-  QString product;
-  if (gondar::isChromeover()) {
-    product = "chromeover";
-  } else {
-    product = "beerover";
-  }
-  inner_json.insert("product", product);
+  //const auto version = gondar::getGondarVersion();
+  //if (!version.isEmpty()) {
+    //inner_json.insert("version", version);
+  //}
+  //QString product;
+  //if (gondar::isChromeover()) {
+  //  product = "chromeover";
+  //} else {
+  //  product = "beerover";
+ // }
+  //inner_json.insert("product", product);
   const auto siteId = GetSiteId();
   // only show site when on chromeover and site id has been initialized
   if (isChromeover() && siteId != 0) {
-    inner_json.insert("site_id", siteId);
+    inner_json.insert("site_id", QString::number(siteId));
   }
   QNetworkRequest request(url);
   // request.setHeader(QNetworkRequest::ContentTypeHeader,
