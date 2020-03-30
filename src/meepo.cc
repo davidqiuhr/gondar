@@ -332,6 +332,7 @@ void Meepo::sendMetric() {
   request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
   QJsonDocument doc(json);
   QString strJson(doc.toJson(QJsonDocument::Compact));
+  LOG_WARNING << "sending json=" << strJson;
   // QNetworkRequest request(url);
   // manager->get(request);
   network_manager_.post(request, QByteArray(strJson.toUtf8()));
