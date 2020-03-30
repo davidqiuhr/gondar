@@ -283,11 +283,12 @@ void Meepo::handleDownloadsReply(QNetworkReply* reply) {
 }
 
 void Meepo::sendMetric() {
-  auto url = gondar::createUrl("/activity");
+  auto url = gondar::createUrl("/log-activity");
   QUrlQuery query;
   query.addQueryItem("token", api_token_);
-  query.addQueryItem("action", "dinked");
+  query.addQueryItem("activity", "dinked");
   query.addQueryItem("description", "dinked");
+  query.addQueryItem("site_id", "1");
   url.setQuery(query);
   //auto req = QNetworkRequest(url);
   //network_manager_.get(req);
@@ -299,7 +300,7 @@ void Meepo::sendMetric() {
   json["identifier"] = id;
   // metric becomes 'action'
   //json.insert("action", QString::fromStdString(metricStr));
-  json.insert("action", QString::fromStdString("dinked"));
+  json.insert("activity", QString::fromStdString("dinked"));
   //if (!value.empty()) {
     // value becomes "description"
     json.insert("description", QString::fromStdString("dinked"));
@@ -318,7 +319,7 @@ void Meepo::sendMetric() {
   const auto siteId = GetSiteId();
   // only show site when on chromeover and site id has been initialized
   if (isChromeover() && siteId != 0) {
-    json.insert("site", siteId);
+    json.insert("site_id", siteId);
   }
   QNetworkRequest request(url);
   //request.setHeader(QNetworkRequest::ContentTypeHeader,
