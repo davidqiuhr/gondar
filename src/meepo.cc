@@ -283,12 +283,11 @@ void Meepo::handleDownloadsReply(QNetworkReply* reply) {
 }
 
 void Meepo::sendMetric() {
+  // TODO(ken): currently this is not called successfully until downloadAttempt
+  // is this expected?
   auto url = gondar::createUrl("/activity");
   QUrlQuery query;
   query.addQueryItem("token", api_token_);
-  //query.addQueryItem("activity", "dinked");
-  //query.addQueryItem("description", "dinked");
-  //query.addQueryItem("site_id", "1");
   url.setQuery(query);
   // auto req = QNetworkRequest(url);
   // network_manager_.get(req);
@@ -327,14 +326,10 @@ void Meepo::sendMetric() {
   }
   json["activity"] = inner_json;
   QNetworkRequest request(url);
-  // request.setHeader(QNetworkRequest::ContentTypeHeader,
-  //                  "application/x-www-form-urlencoded");
   request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
   QJsonDocument doc(json);
   QString strJson(doc.toJson(QJsonDocument::Compact));
   LOG_WARNING << "sending json=" << strJson;
-  // QNetworkRequest request(url);
-  // manager->get(request);
   network_manager_.post(request, QByteArray(strJson.toUtf8()));
 }
 
