@@ -283,7 +283,7 @@ void Meepo::handleDownloadsReply(QNetworkReply* reply) {
 }
 
 void Meepo::sendMetric() {
-  auto url = gondar::createUrl("/log-activity");
+  auto url = gondar::createUrl("/activity");
   QUrlQuery query;
   query.addQueryItem("token", api_token_);
   //query.addQueryItem("activity", "dinked");
@@ -297,7 +297,6 @@ void Meepo::sendMetric() {
   // QNetworkAccessManager* manager = getNetworkManager();
   QJsonObject json;
   QJsonObject inner_json;
-
 
   // FIXME(ken): try removing these extra values
   //QString id = gondar::GetUuid();
@@ -323,7 +322,8 @@ void Meepo::sendMetric() {
   const auto siteId = GetSiteId();
   // only show site when on chromeover and site id has been initialized
   if (isChromeover() && siteId != 0) {
-    inner_json.insert("site_id", QString::number(siteId));
+    //inner_json.insert("site_id", QString::number(siteId));
+    inner_json.insert("site_id", siteId);
   }
   json["activity"] = inner_json;
   QNetworkRequest request(url);
@@ -348,7 +348,7 @@ void Meepo::dispatchReply(QNetworkReply* reply) {
 
   if (error != QNetworkReply::NoError) {
     // TODO(nicholasbishop): make this more readable
-    LOG_ERROR << "network error: " << url.toString() << ", error " << error;
+    LOG_ERROR << "network error: " << url.toString() << std::endl << ", error " << error;
     // TODO(nicholasbishop): move the error handling into each of the
     // three handlers below so that errors can be more specific
     fail("network error");
