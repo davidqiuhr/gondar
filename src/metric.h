@@ -40,8 +40,9 @@ enum class Metric {
 
 void SetSiteId(int site_id);
 
+// send a metric just to gondar endpoint, not both gondar and meepo
 void SendMetricGondar(Metric metric, const std::string& value = "");
-// void SendMetricMeepo(Metric metric, const std::string& value = "");
+// send a metric to gondar endpoint and meepo endpoint if we have a session
 void SendMetric(GondarWizard* wizard,
                 Metric metric,
                 const std::string& value = "");

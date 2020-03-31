@@ -75,7 +75,7 @@ class DownloadManager : public QObject {
 
   QFileInfo outputFileInfo() const;
   bool hasError();
-  // TODO(ken): implement, pass in a GondarWizard*
+  // allow downloader to access wizard state
   void setWizard(GondarWizard* wizard_in);
 
  signals:
