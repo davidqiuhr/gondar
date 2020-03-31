@@ -299,7 +299,8 @@ void Meepo::sendMetric(std::string metric, std::string value) {
   // json.insert("action", QString::fromStdString(metricStr));
   inner_json.insert("activity", QString::fromStdString(metric));
   // value becomes "description"
-  inner_json.insert("description", QString::fromStdString(value));
+  //inner_json.insert("description", QString::fromStdString(value));
+  inner_json.insert("description", QString::fromStdString("something"));
   const auto siteId = GetSiteId();
   // only show site when on chromeover and site id has been initialized
   // TODO(ken): is this if really valuabe?  for meepo we'll only be
