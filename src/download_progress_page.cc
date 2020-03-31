@@ -36,6 +36,7 @@ void DownloadProgressPage::initializePage() {
   manager.append(url.toString());
   connect(&manager, &DownloadManager::started, this,
           &DownloadProgressPage::onDownloadStarted);
+  // allow the download manager to access session state in the wizard
   manager.setWizard(wizard());
 }
 

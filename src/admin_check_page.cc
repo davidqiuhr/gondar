@@ -30,8 +30,6 @@ AdminCheckPage::AdminCheckPage(QWidget* parent) : WizardPage(parent) {
   layout.addStretch();
   layout.addWidget(&formatLink);
   setLayout(&layout);
-  // TODO(kendall): move isChromeover() out of AdminCheckPage and call these
-  // metrics from a more intuitive context
 }
 
 void AdminCheckPage::handleFormatOnly() {
@@ -40,8 +38,8 @@ void AdminCheckPage::handleFormatOnly() {
 }
 
 void AdminCheckPage::initializePage() {
-  // nb(ken): things bomb whenever i try to call wizard() from
-  // constructor context.
+  // this logic is in initializePage because wizard() is not callable
+  // from the constructor
   if (gondar::isChromeover()) {
     gondar::SendMetric(wizard(), gondar::Metric::ChromeoverUse);
   } else {
