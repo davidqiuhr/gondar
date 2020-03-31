@@ -186,7 +186,7 @@ static void SendMetricMeepo(Metric metric,
     return;
   }
   LOG_WARNING << "sending a Meepo Metric";
-  wizard->meepo_.sendMetric();
+  wizard->meepo_.sendMetric(getMetricString(metric), value);
 }
 
 void SendMetric(GondarWizard* wizard, Metric metric, const std::string& value) {

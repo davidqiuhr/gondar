@@ -282,18 +282,13 @@ void Meepo::handleDownloadsReply(QNetworkReply* reply) {
   }
 }
 
-void Meepo::sendMetric() {
+void Meepo::sendMetric(std::string metric, std::string value) {
   // TODO(ken): currently this is not called successfully until downloadAttempt
   // is this expected?
   auto url = gondar::createUrl("/activity");
   QUrlQuery query;
   query.addQueryItem("token", api_token_);
   url.setQuery(query);
-  // auto req = QNetworkRequest(url);
-  // network_manager_.get(req);
-
-  // std::string metricStr = getMetricString(metric);
-  // QNetworkAccessManager* manager = getNetworkManager();
   QJsonObject json;
   QJsonObject inner_json;
 
@@ -302,26 +297,14 @@ void Meepo::sendMetric() {
   //inner_json["identifier"] = id;
   // metric becomes 'action'
   // json.insert("action", QString::fromStdString(metricStr));
-  inner_json.insert("activity", QString::fromStdString("dinked"));
-  // if (!value.empty()) {
+  inner_json.insert("activity", QString::fromStdString(metric));
   // value becomes "description"
-  inner_json.insert("description", QString::fromStdString("dinked"));
-  //}
-  //const auto version = gondar::getGondarVersion();
-  //if (!version.isEmpty()) {
-    //inner_json.insert("version", version);
-  //}
-  //QString product;
-  //if (gondar::isChromeover()) {
-  //  product = "chromeover";
-  //} else {
-  //  product = "beerover";
- // }
-  //inner_json.insert("product", product);
+  inner_json.insert("description", QString::fromStdString(value));
   const auto siteId = GetSiteId();
   // only show site when on chromeover and site id has been initialized
+  // TODO(ken): is this if really valuabe?  for meepo we'll only be
+  // handling this case
   if (isChromeover() && siteId != 0) {
-    //inner_json.insert("site_id", QString::number(siteId));
     inner_json.insert("site_id", siteId);
   }
   json["activity"] = inner_json;
