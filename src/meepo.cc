@@ -293,8 +293,8 @@ void Meepo::sendMetric(std::string metric, std::string value) {
   QJsonObject inner_json;
 
   // FIXME(ken): try removing these extra values
-  //QString id = gondar::GetUuid();
-  //inner_json["identifier"] = id;
+  // QString id = gondar::GetUuid();
+  // inner_json["identifier"] = id;
   // metric becomes 'action'
   // json.insert("action", QString::fromStdString(metricStr));
   inner_json.insert("activity", QString::fromStdString(metric));
@@ -330,7 +330,8 @@ void Meepo::dispatchReply(QNetworkReply* reply) {
 
   if (error != QNetworkReply::NoError) {
     // TODO(nicholasbishop): make this more readable
-    LOG_ERROR << "network error: " << url.toString() << std::endl << ", error " << error;
+    LOG_ERROR << "network error: " << url.toString() << std::endl
+              << ", error " << error;
     // TODO(nicholasbishop): move the error handling into each of the
     // three handlers below so that errors can be more specific
     fail("network error");
