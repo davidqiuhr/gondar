@@ -307,7 +307,8 @@ void Meepo::sendMetric(std::string metric, std::string value) {
   if (value_string.length() == 0) {
     value_string = none_string;
   }
-  QString description_string = QString("version=%1,value=%2").arg(version_string).arg(value_string);
+  QString description_string =
+      QString("version=%1,value=%2").arg(version_string).arg(value_string);
   inner_json.insert("description", description_string);
   const auto siteId = GetSiteId();
   // note that for meepo, currently we will always hit this case
