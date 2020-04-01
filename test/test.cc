@@ -16,8 +16,15 @@
 #include "test.h"
 
 #include <QAbstractButton>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QNetworkRequest>
+#include <QUrl>
 
 #include "src/device_picker.h"
+#include "src/log.h"
+#include "src/meepo.h"
 
 #if defined(Q_OS_WIN)
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
@@ -61,6 +68,31 @@ void Test::testDevicePicker() {
   btn->click();
 
   QCOMPARE(*picker.selectedDevice(), DeviceGuy(3, "c", getValidDiskSize()));
+}
+
+void Test::testMeepoGetMetricJson() {
+  Meepo meepo;
+  meepo.setSiteId(3);
+  meepo.setToken(QString("kewltok"));
+  // then we test the json against expected for our meepo's state
+  QString expected_json_str =
+      "{\"activity\":{\"activity\":\"usb-maker-kewlmetric\",\"description\":"
+      "\"version=none,value=kewlvalue\",\"site_id\":3}}";
+  QJsonDocument expected_doc =
+      QJsonDocument::fromJson(expected_json_str.toUtf8());
+  // then we test the url against expected for our meepo's state
+  QString metric_json = meepo.getMetricJson("kewlmetric", "kewlvalue");
+  QString expected = expected_doc.toJson(QJsonDocument::Compact);
+  QCOMPARE(expected, metric_json);
+}
+
+// currently this just tests that the url is as expected
+void Test::testMeepoGetMetricRequest() {
+  Meepo meepo;
+  meepo.setToken(QString("kewltok2"));
+  auto expected_url = QUrl("https://api.grv.neverware.com/poof/activity?token=kewltok2");
+  QNetworkRequest actual_request = meepo.getMetricRequest();
+  QCOMPARE(expected_url, actual_request.url());
 }
 
 }  // namespace gondar

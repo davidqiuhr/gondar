@@ -41,13 +41,20 @@ class Meepo : public QObject {
   void startGoogle(const QString id_token);
   // whether we have a token
   bool hasToken();
+  // just used by tests
+  void setToken(QString token_in);
+  // used by sendMetric and tests
+  QString getMetricJson(std::string metric, std::string value);
+  QNetworkRequest getMetricRequest();
+  // send a metric to meepo
   void sendMetric(std::string metric, std::string value);
-
   QString error() const;
   Sites sites() const;
   const QString no_sites_error =
       "User has no sites.  Please visit <a "
       "href=\"https://try.neverware.com\">try.neverware.com</a> for a trial.";
+  int getSiteId();
+  void setSiteId(int site_id_in);
 
  signals:
   void finished();
@@ -83,6 +90,8 @@ class Meepo : public QObject {
   // whether or not the user is currently authenticating using
   // 'sign in with google'
   bool google_mode_ = false;
+  // the site for our images, if selected, 0 otherwise
+  int site_id;
 };
 
 }  // namespace gondar

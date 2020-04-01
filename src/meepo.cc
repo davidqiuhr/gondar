@@ -165,6 +165,11 @@ bool Meepo::hasToken() {
   return !api_token_.isEmpty();
 }
 
+// tests use this
+void Meepo::setToken(QString token_in) {
+  api_token_ = token_in;
+}
+
 QString Meepo::error() const {
   return error_;
 }
@@ -249,13 +254,13 @@ void Meepo::requestDownloads(const GondarSite& site) {
 }
 
 void Meepo::handleDownloadsReply(QNetworkReply* reply) {
-  const auto site_id = siteIdFromUrl(reply->url());
-  if (site_id == -1) {
+  const auto site_id_from_reply = siteIdFromUrl(reply->url());
+  if (site_id_from_reply == -1) {
     fail("missing site ID");
     return;
   }
 
-  GondarSite* site = siteFromSiteId(site_id);
+  GondarSite* site = siteFromSiteId(site_id_from_reply);
   if (!site) {
     fail("site not found");
     return;
@@ -287,14 +292,9 @@ void Meepo::handleDownloadsReply(QNetworkReply* reply) {
   }
 }
 
-void Meepo::sendMetric(std::string metric, std::string value) {
-  auto url = createUrl(path_activity);
-  QUrlQuery query;
-  query.addQueryItem("token", api_token_);
-  url.setQuery(query);
+QString Meepo::getMetricJson(std::string metric, std::string value) {
   QJsonObject json;
   QJsonObject inner_json;
-
   QString activity_string =
       QString("usb-maker-%1").arg(QString::fromStdString(metric));
   inner_json.insert("activity", activity_string);
@@ -313,19 +313,32 @@ void Meepo::sendMetric(std::string metric, std::string value) {
   QString description_string =
       QString("version=%1,value=%2").arg(version_string).arg(value_string);
   inner_json.insert("description", description_string);
-  const auto siteId = GetSiteId();
   // note that for meepo, currently we will always hit this case
   // but a day may come when we add stuff like this to beerover, so
   // there's no harm in adding a guard here
-  if (isChromeover() && siteId != 0) {
-    inner_json.insert("site_id", siteId);
+  if (isChromeover() && site_id != 0) {
+    inner_json.insert("site_id", site_id);
   }
   json["activity"] = inner_json;
-  QNetworkRequest request(url);
-  request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
   QJsonDocument doc(json);
   QString strJson(doc.toJson(QJsonDocument::Compact));
-  network_manager_.post(request, QByteArray(strJson.toUtf8()));
+  return doc.toJson(QJsonDocument::Compact);
+}
+
+QNetworkRequest Meepo::getMetricRequest() {
+  auto url = createUrl(path_activity);
+  QUrlQuery query;
+  query.addQueryItem("token", api_token_);
+  url.setQuery(query);
+  QNetworkRequest request(url);
+  request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+  return request;
+}
+
+void Meepo::sendMetric(std::string metric, std::string value) {
+  QNetworkRequest request = getMetricRequest();
+  QString json = getMetricJson(metric, value);
+  network_manager_.post(request, QByteArray(json.toUtf8()));
 }
 
 void Meepo::handleMetricsReply(QNetworkReply* reply) {
@@ -368,13 +381,21 @@ void Meepo::fail(const QString& error) {
   emit failed(google_mode_);
 }
 
-GondarSite* Meepo::siteFromSiteId(const int site_id) {
+GondarSite* Meepo::siteFromSiteId(const int site_id_in) {
   for (auto& site : sites_) {
-    if (site.getSiteId() == site_id) {
+    if (site.getSiteId() == site_id_in) {
       return &site;
     }
   }
   return nullptr;
+}
+
+int Meepo::getSiteId() {
+  return site_id;
+}
+
+void Meepo::setSiteId(int site_id_in) {
+  site_id = site_id_in;
 }
 
 }  // namespace gondar

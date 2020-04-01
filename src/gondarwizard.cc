@@ -93,7 +93,6 @@ void GondarWizard::init() {
   // latest beerover url
   connect(&newestImageUrl, &NewestImageUrl::errorOccurred, this,
           &GondarWizard::handleNewestImageUrlError);
-
   // wizard is responsible for this connection as wizard() is not callable
   // at construction time
   connect(&meepo_, &gondar::Meepo::finished, &p_->chromeoverLoginPage,
@@ -101,8 +100,9 @@ void GondarWizard::init() {
   connect(&meepo_, &gondar::Meepo::failed, &p_->chromeoverLoginPage,
           &ChromeoverLoginPage::handleMeepoFailed);
 
-  p_->runTime = QDateTime::currentDateTime();
+  p_->feedbackDialog.setWizard(this);
 
+  p_->runTime = QDateTime::currentDateTime();
   p_->updateCheck.start(this);
 
   // resize the window (width, height)
@@ -204,4 +204,12 @@ bool GondarWizard::newestIsReady() {
 
 void GondarWizard::handleNewestImageUrlError() {
   postError("An error has occurred fetching the latest image");
+}
+
+int GondarWizard::getSiteId() {
+  return meepo_.getSiteId();
+}
+
+void GondarWizard::setSiteId(int site_id_in) {
+  meepo_.setSiteId(site_id_in);
 }

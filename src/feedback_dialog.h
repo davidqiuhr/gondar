@@ -25,6 +25,8 @@
 #include <QTextEdit>
 #include <QVBoxLayout>
 
+class GondarWizard;
+
 namespace gondar {
 
 class FeedbackDialog : public QDialog {
@@ -32,6 +34,8 @@ class FeedbackDialog : public QDialog {
 
  public:
   FeedbackDialog();
+  // allow this widget to access the wizard state like a wizard page
+  void setWizard(GondarWizard* wizard_in);
   void submit();
   void maybeEnableSubmit();
 
@@ -42,6 +46,7 @@ class FeedbackDialog : public QDialog {
   QNetworkAccessManager network_manager_;
   QPushButton submit_button_;
   QVBoxLayout layout_;
+  GondarWizard* wizard;
 };
 }  // namespace gondar
 
