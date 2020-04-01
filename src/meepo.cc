@@ -295,12 +295,13 @@ void Meepo::sendMetric(std::string metric, std::string value) {
   QJsonObject inner_json;
 
   inner_json.insert("activity", QString::fromStdString(metric));
-  // value becomes "description"
-  if (value.length() == 0) {
-    inner_json.insert("description", QString::fromStdString(metric));
-  } else {
-    inner_json.insert("description", QString::fromStdString(value));
-  }
+  // meepo already knows the site.
+  // description should become a combination of gondar version and value if it
+  // exists
+  QString version_string = gondar::getGondarVersion();
+  QString value_string = QString::fromStdString(value);
+  QString description_string = QString("version=%1,value=%2").arg(version_string).arg(value_string);
+  inner_json.insert("description", description_string);
   const auto siteId = GetSiteId();
   // note that for meepo, currently we will always hit this case
   // but a day may come when we add stuff like this to beerover, so
