@@ -112,6 +112,7 @@ QString GetUuid() {
 // once it is available
 // TODO(ken): now that the metrics layer is passed a wizard instance
 // there is no real reason to have static state just for site_id
+// OVER-11807
 namespace {
 static int site_id = 0;
 }
