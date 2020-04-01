@@ -31,6 +31,7 @@
 
 namespace {
 
+const char path_activity[] = "/activity";
 const char path_auth[] = "/auth";
 const char path_google_auth[] = "/google-auth";
 const char path_sites[] = "/sites";
@@ -287,14 +288,16 @@ void Meepo::handleDownloadsReply(QNetworkReply* reply) {
 }
 
 void Meepo::sendMetric(std::string metric, std::string value) {
-  auto url = createUrl("/activity");
+  auto url = createUrl(path_activity);
   QUrlQuery query;
   query.addQueryItem("token", api_token_);
   url.setQuery(query);
   QJsonObject json;
   QJsonObject inner_json;
 
-  inner_json.insert("activity", QString::fromStdString(metric));
+  QString activity_string =
+      QString("usb-maker-%1").arg(QString::fromStdString(metric));
+  inner_json.insert("activity", activity_string);
   // meepo already knows the site.
   // description should become a combination of gondar version and value if it
   // exists
