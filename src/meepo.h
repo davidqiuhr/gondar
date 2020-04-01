@@ -41,8 +41,11 @@ class Meepo : public QObject {
   void startGoogle(const QString id_token);
   // whether we have a token
   bool hasToken();
+  // used by sendMetric and tests
+  QString getMetricJson(std::string metric, std::string value);
+  QNetworkRequest getMetricRequest();
+  // send a metric to meepo
   void sendMetric(std::string metric, std::string value);
-
   QString error() const;
   Sites sites() const;
   const QString no_sites_error =

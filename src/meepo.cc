@@ -287,14 +287,9 @@ void Meepo::handleDownloadsReply(QNetworkReply* reply) {
   }
 }
 
-void Meepo::sendMetric(std::string metric, std::string value) {
-  auto url = createUrl(path_activity);
-  QUrlQuery query;
-  query.addQueryItem("token", api_token_);
-  url.setQuery(query);
+QString Meepo::getMetricJson(std::string metric, std::string value) {
   QJsonObject json;
   QJsonObject inner_json;
-
   QString activity_string =
       QString("usb-maker-%1").arg(QString::fromStdString(metric));
   inner_json.insert("activity", activity_string);
@@ -321,11 +316,25 @@ void Meepo::sendMetric(std::string metric, std::string value) {
     inner_json.insert("site_id", siteId);
   }
   json["activity"] = inner_json;
-  QNetworkRequest request(url);
-  request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
   QJsonDocument doc(json);
   QString strJson(doc.toJson(QJsonDocument::Compact));
-  network_manager_.post(request, QByteArray(strJson.toUtf8()));
+  return strJson;
+}
+
+QNetworkRequest Meepo::getMetricRequest() {
+  auto url = createUrl(path_activity);
+  QUrlQuery query;
+  query.addQueryItem("token", api_token_);
+  url.setQuery(query);
+  QNetworkRequest request(url);
+  request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+  return request;
+}
+
+void Meepo::sendMetric(std::string metric, std::string value) {
+  QNetworkRequest request = getMetricRequest();
+  QString json = getMetricJson(metric, value);
+  network_manager_.post(request, QByteArray(json.toUtf8()));
 }
 
 void Meepo::handleMetricsReply(QNetworkReply* reply) {
