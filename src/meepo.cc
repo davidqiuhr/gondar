@@ -299,7 +299,13 @@ void Meepo::sendMetric(std::string metric, std::string value) {
   // description should become a combination of gondar version and value if it
   // exists
   QString version_string = gondar::getGondarVersion();
+  if (version_string.length() == 0) {
+    version_string = "none";
+  }
   QString value_string = QString::fromStdString(value);
+  if (value_string.length() == 0) {
+    value_string = "none";
+  }
   QString description_string = QString("version=%1,value=%2").arg(version_string).arg(value_string);
   inner_json.insert("description", description_string);
   const auto siteId = GetSiteId();
