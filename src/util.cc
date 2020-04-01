@@ -95,8 +95,4 @@ uint64_t getGigabyte() {
   return 1073741824LL;
 }
 
-QUrl createUrl(const QString& path) {
-  return QUrl("https://api." + getDomain() + "/poof" + path);
-}
-
 }  // namespace gondar

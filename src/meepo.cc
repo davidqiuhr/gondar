@@ -36,6 +36,10 @@ const char path_google_auth[] = "/google-auth";
 const char path_sites[] = "/sites";
 const char path_downloads[] = "/downloads";
 
+QUrl createUrl(const QString& path) {
+  return QUrl("https://api." + gondar::getDomain() + "/poof" + path);
+}
+
 int siteIdFromUrl(const QUrl& url) {
   const auto path = url.path();
   const auto parts = path.split('/');
@@ -66,21 +70,21 @@ int siteIdFromUrl(const QUrl& url) {
 }
 
 QNetworkRequest createAuthRequest() {
-  auto url = gondar::createUrl(path_auth);
+  auto url = createUrl(path_auth);
   QNetworkRequest request(url);
   request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
   return request;
 }
 
 QNetworkRequest createGoogleAuthRequest() {
-  auto url = gondar::createUrl(path_google_auth);
+  auto url = createUrl(path_google_auth);
   QNetworkRequest request(url);
   request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
   return request;
 }
 
 QNetworkRequest createSitesRequest(const QString& api_token, int page) {
-  auto url = gondar::createUrl(path_sites);
+  auto url = createUrl(path_sites);
   QUrlQuery query;
   query.addQueryItem("token", api_token);
   query.addQueryItem("page", QString::number(page));
@@ -92,7 +96,7 @@ QNetworkRequest createDownloadsRequest(const QString& api_token,
                                        const int site_id) {
   const auto path =
       QString("%1/%2%3").arg(path_sites).arg(site_id).arg(path_downloads);
-  auto url = gondar::createUrl(path);
+  auto url = createUrl(path);
   QUrlQuery query;
   query.addQueryItem("token", api_token);
   url.setQuery(query);
@@ -285,7 +289,7 @@ void Meepo::handleDownloadsReply(QNetworkReply* reply) {
 void Meepo::sendMetric(std::string metric, std::string value) {
   // TODO(ken): currently this is not called successfully until downloadAttempt
   // is this expected?
-  auto url = gondar::createUrl("/activity");
+  auto url = createUrl("/activity");
   QUrlQuery query;
   query.addQueryItem("token", api_token_);
   url.setQuery(query);

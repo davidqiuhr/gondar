@@ -34,7 +34,6 @@ QString getDomain();
 QString getGondarVersion();
 QJsonObject jsonFromReply(QNetworkReply* reply);
 uint64_t getGigabyte();
-QUrl createUrl(const QString& path);
 
 }  // namespace gondar
 
