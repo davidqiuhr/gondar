@@ -138,7 +138,7 @@ void SendMetricGondar(Metric metric, const std::string& value) {
   if (!shouldSendMetrics()) {
     return;
   }
-  LOG_WARNING << "sending a Klassic Metric";
+  LOG_INFO << "sending a Klassic Metric: " << getMetricString(metric);
   const auto api_key = getMetricsApiKey();
   std::string metricStr = getMetricString(metric);
   QNetworkAccessManager* manager = getNetworkManager();
@@ -185,18 +185,16 @@ static void SendMetricMeepo(Metric metric,
   if (!shouldSendMetrics()) {
     return;
   }
-  LOG_WARNING << "sending a Meepo Metric";
+  LOG_INFO << "sending a Meepo Metric: " << getMetricString(metric);
   wizard->meepo_.sendMetric(getMetricString(metric), value);
 }
 
 void SendMetric(GondarWizard* wizard, Metric metric, const std::string& value) {
-  LOG_WARNING << "HIT OUTER METRIC GUY";
   SendMetricGondar(metric, value);
   // if we have a token, also send the metric to meepo
   // FIXME(ken): seems like we could just send in the whole meepo instance,
   // then most of the handling could be in meepo
   if (wizard && wizard->meepo_.hasToken()) {
-    LOG_WARNING << "SENDING MEEPO METRIC";
     SendMetricMeepo(metric, value, wizard);
   }
 }
