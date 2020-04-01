@@ -287,8 +287,6 @@ void Meepo::handleDownloadsReply(QNetworkReply* reply) {
 }
 
 void Meepo::sendMetric(std::string metric, std::string value) {
-  // TODO(ken): currently this is not called successfully until downloadAttempt
-  // is this expected?
   auto url = createUrl("/activity");
   QUrlQuery query;
   query.addQueryItem("token", api_token_);
@@ -296,11 +294,6 @@ void Meepo::sendMetric(std::string metric, std::string value) {
   QJsonObject json;
   QJsonObject inner_json;
 
-  // FIXME(ken): try removing these extra values
-  // QString id = gondar::GetUuid();
-  // inner_json["identifier"] = id;
-  // metric becomes 'action'
-  // json.insert("action", QString::fromStdString(metricStr));
   inner_json.insert("activity", QString::fromStdString(metric));
   // value becomes "description"
   if (value.length() == 0) {
@@ -309,9 +302,9 @@ void Meepo::sendMetric(std::string metric, std::string value) {
     inner_json.insert("description", QString::fromStdString(value));
   }
   const auto siteId = GetSiteId();
-  // only show site when on chromeover and site id has been initialized
-  // TODO(ken): is this if really valuabe?  for meepo we'll only be
-  // handling this case
+  // note that for meepo, currently we will always hit this case
+  // but a day may come when we add stuff like this to beerover, so
+  // there's no harm in adding a guard here
   if (isChromeover() && siteId != 0) {
     inner_json.insert("site_id", siteId);
   }
@@ -320,12 +313,16 @@ void Meepo::sendMetric(std::string metric, std::string value) {
   request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
   QJsonDocument doc(json);
   QString strJson(doc.toJson(QJsonDocument::Compact));
-  LOG_WARNING << "sending json=" << strJson;
   network_manager_.post(request, QByteArray(strJson.toUtf8()));
 }
 
 void Meepo::handleMetricsReply(QNetworkReply* reply) {
-  LOG_WARNING << "KEN: meepo metrics reply: " << reply;
+  // TODO(ken): handle it
+  if (reply->error() == QNetworkReply::NoError) {
+    LOG_INFO << "Successfully sent meepo metric";
+  } else {
+    LOG_WARNING << "Received error response sending meepo metric";
+  }
 }
 
 void Meepo::dispatchReply(QNetworkReply* reply) {
