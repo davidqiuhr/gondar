@@ -25,6 +25,8 @@
 #include <QTextEdit>
 #include <QVBoxLayout>
 
+#include "gondarwizard.h"
+
 namespace gondar {
 
 class FeedbackDialog : public QDialog {
