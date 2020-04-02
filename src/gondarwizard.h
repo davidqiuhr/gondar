@@ -29,6 +29,7 @@
 #include "newest_image_url.h"
 #include "usb_insert_page.h"
 #include "write_operation_page.h"
+#include "feedback_dialog.h"
 
 class QCheckBox;
 class QGroupBox;
@@ -94,6 +95,7 @@ class GondarWizard : public QWizard {
 
  private:
   class Private;
+  gondar::FeedbackDialog feedbackDialog(this);
   std::unique_ptr<Private> p_;
   bool session_error;
 

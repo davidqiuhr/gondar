@@ -25,7 +25,8 @@
 
 namespace gondar {
 
-FeedbackDialog::FeedbackDialog() {
+FeedbackDialog::FeedbackDialog(GondarWizard* wizard_in) {
+  wizard = wizard_in;
   feedback_label_.setText("Tell us what you think");
   feedback_label_.setAlignment(Qt::AlignCenter);
 

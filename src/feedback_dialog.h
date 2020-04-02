@@ -33,7 +33,7 @@ class FeedbackDialog : public QDialog {
   Q_OBJECT
 
  public:
-  FeedbackDialog();
+  FeedbackDialog(GondarWizard & wizard_in);
   void submit();
   void maybeEnableSubmit();
 
@@ -44,6 +44,7 @@ class FeedbackDialog : public QDialog {
   QNetworkAccessManager network_manager_;
   QPushButton submit_button_;
   QVBoxLayout layout_;
+  GondarWizard* wizard;
 };
 }  // namespace gondar
 

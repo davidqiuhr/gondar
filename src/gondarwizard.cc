@@ -22,7 +22,6 @@
 #include "chromeover_login_page.h"
 #include "device_select_page.h"
 #include "error_page.h"
-#include "feedback_dialog.h"
 #include "log.h"
 #include "metric.h"
 #include "site_select_page.h"
@@ -35,7 +34,6 @@ class GondarWizard::Private {
 
   gondar::UpdateCheck updateCheck;
   gondar::AboutDialog aboutDialog;
-  gondar::FeedbackDialog feedbackDialog;
 
   AdminCheckPage adminCheckPage;
   DeviceSelectPage deviceSelectPage;
@@ -145,7 +143,7 @@ void GondarWizard::handleCustomButton(int buttonIndex) {
   } else if (buttonIndex == QWizard::CustomButton2) {
     p_->aboutDialog.show();
   } else if (buttonIndex == QWizard::CustomButton3) {
-    p_->feedbackDialog.show();
+    feedbackDialog.show();
   } else {
     LOG_ERROR << "Unknown custom button pressed";
   }
