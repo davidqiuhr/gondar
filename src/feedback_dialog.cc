@@ -87,7 +87,9 @@ void FeedbackDialog::submit() {
   QJsonObject json;
   json["feedback"] = feedback_field_.toPlainText();
   json["uuid"] = gondar::GetUuid();
-  json["site"] = gondar::GetSiteId();
+  // FIXME(ken): will have to set this somehow
+  // json["site"] = gondar::GetSiteId();
+  //json["site"] = gondar::GetSiteId();
   if (gondar::isChromeover()) {
     json["product"] = "chromeover";
   } else {

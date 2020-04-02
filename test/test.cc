@@ -18,6 +18,7 @@
 #include <QAbstractButton>
 
 #include "src/device_picker.h"
+#include "src/meepo.h"
 
 #if defined(Q_OS_WIN)
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
@@ -61,6 +62,11 @@ void Test::testDevicePicker() {
   btn->click();
 
   QCOMPARE(*picker.selectedDevice(), DeviceGuy(3, "c", getValidDiskSize()));
+}
+
+void Test::testMeepoMetric() {
+  Meepo meepo;
+  // QString metric_json =
 }
 
 }  // namespace gondar

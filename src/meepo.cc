@@ -308,12 +308,11 @@ QString Meepo::getMetricJson(std::string metric, std::string value) {
   QString description_string =
       QString("version=%1,value=%2").arg(version_string).arg(value_string);
   inner_json.insert("description", description_string);
-  const auto siteId = GetSiteId();
   // note that for meepo, currently we will always hit this case
   // but a day may come when we add stuff like this to beerover, so
   // there's no harm in adding a guard here
-  if (isChromeover() && siteId != 0) {
-    inner_json.insert("site_id", siteId);
+  if (isChromeover() && site_id != 0) {
+    inner_json.insert("site_id", site_id);
   }
   json["activity"] = inner_json;
   QJsonDocument doc(json);
@@ -384,6 +383,14 @@ GondarSite* Meepo::siteFromSiteId(const int site_id) {
     }
   }
   return nullptr;
+}
+
+int Meepo::getSiteId() {
+  return site_id;
+}
+
+void Meepo::setSiteId(int site_id_in) {
+  site_id = site_id_in;
 }
 
 }  // namespace gondar

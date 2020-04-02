@@ -205,3 +205,11 @@ bool GondarWizard::newestIsReady() {
 void GondarWizard::handleNewestImageUrlError() {
   postError("An error has occurred fetching the latest image");
 }
+
+int GondarWizard::getSiteId() {
+  return meepo_.getSiteId();
+}
+
+void GondarWizard::setSiteId(int site_id_in) {
+  meepo_.setSiteId(site_id_in);
+}

@@ -109,7 +109,8 @@ int ChromeoverLoginPage::nextId() const {
   } else {
     // populate the current site for metrics now as we'll be skipping the
     // site select page; OVER-11255
-    gondar::SetSiteId(siteList[0].getSiteId());
+    wizard()->setSiteId(siteList[0].getSiteId());
+    // gondar::SetSiteId(siteList[0].getSiteId());
     wizard()->imageSelectPage.addImages(siteList[0].getImages());
     return GondarWizard::Page_imageSelect;
   }

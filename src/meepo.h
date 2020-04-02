@@ -51,6 +51,8 @@ class Meepo : public QObject {
   const QString no_sites_error =
       "User has no sites.  Please visit <a "
       "href=\"https://try.neverware.com\">try.neverware.com</a> for a trial.";
+  int getSiteId();
+  void setSiteId(int site_id_in);
 
  signals:
   void finished();
@@ -86,6 +88,8 @@ class Meepo : public QObject {
   // whether or not the user is currently authenticating using
   // 'sign in with google'
   bool google_mode_ = false;
+  // the site for our images, if selected
+  int site_id;
 };
 
 }  // namespace gondar

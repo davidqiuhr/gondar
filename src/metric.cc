@@ -108,23 +108,6 @@ QString GetUuid() {
   return id;
 }
 
-// the metrics layer stores the site id to provide in later metrics
-// once it is available
-// TODO(ken): now that the metrics layer is passed a wizard instance
-// there is no real reason to have static state just for site_id
-// OVER-11807
-namespace {
-static int site_id = 0;
-}
-
-void SetSiteId(int site_id_in) {
-  site_id = site_id_in;
-}
-
-int GetSiteId() {
-  return site_id;
-}
-
 static bool shouldSendMetrics() {
   const auto api_key = getMetricsApiKey();
   if (api_key.isEmpty()) {
@@ -136,7 +119,7 @@ static bool shouldSendMetrics() {
 }
 
 // send regular gondar metrics
-void SendMetricGondar(Metric metric, const std::string& value) {
+void SendMetricGondar(Metric metric, const std::string& value, int site_id) {
   if (!shouldSendMetrics()) {
     return;
   }
@@ -164,10 +147,10 @@ void SendMetricGondar(Metric metric, const std::string& value) {
     product = "beerover";
   }
   json.insert("product", product);
-  const auto siteId = GetSiteId();
+  // const auto siteId = GetSiteId();
   // only show site when on chromeover and site id has been initialized
-  if (isChromeover() && siteId != 0) {
-    json.insert("site", siteId);
+  if (isChromeover() && site_id != 0) {
+    json.insert("site", site_id);
   }
   QNetworkRequest request(url);
   request.setRawHeader(QByteArray("x-api-key"), api_key);
@@ -192,7 +175,7 @@ static void SendMetricMeepo(Metric metric,
 }
 
 void SendMetric(GondarWizard* wizard, Metric metric, const std::string& value) {
-  SendMetricGondar(metric, value);
+  SendMetricGondar(metric, value, wizard->getSiteId());
   // if we have a token, also send the metric to meepo
   if (wizard && wizard->meepo_.hasToken()) {
     SendMetricMeepo(metric, value, wizard);

@@ -73,6 +73,8 @@ class GondarWizard : public QWizard {
   bool newestIsReady();
   void maybe_fetch();
   void handleNewestImageUrlError();
+  int getSiteId();
+  void setSiteId(int site_id_in);
 
   // this enum determines page order
   enum {
