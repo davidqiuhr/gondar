@@ -83,7 +83,7 @@ void Test::testMeepoGetMetricJson() {
   // then we test the url against expected for our meepo's state
   QString metric_json = meepo.getMetricJson("kewlmetric", "kewlvalue");
   QString expected = expected_doc.toJson(QJsonDocument::Compact);
-  QCOMPARE(expected, metric_json);
+  QCOMPARE(metric_json, expected);
 }
 
 // currently this just tests that the url is as expected
@@ -93,7 +93,7 @@ void Test::testMeepoGetMetricRequest() {
   auto expected_url =
       QUrl("https://api.grv.neverware.com/poof/activity?token=kewltok2");
   QNetworkRequest actual_request = meepo.getMetricRequest();
-  QCOMPARE(expected_url, actual_request.url());
+  QCOMPARE(actual_request.url(), expected_url);
 }
 
 }  // namespace gondar

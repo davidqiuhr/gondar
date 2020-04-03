@@ -313,10 +313,11 @@ QString Meepo::getMetricJson(std::string metric, std::string value) {
   QString description_string =
       QString("version=%1,value=%2").arg(version_string).arg(value_string);
   inner_json.insert("description", description_string);
-  // note that for meepo, currently we will always hit this case
-  // but a day may come when we add stuff like this to beerover, so
-  // there's no harm in adding a guard here
-  if (isChromeover() && site_id != 0) {
+  // removed explicit isChromeover() check here for tests
+  // because we already only send on non-zero site id, it was somewhat
+  // redundant to also check for chromeover.  also currently beerover
+  // has no meepo interaction so meaning of this case was not clear
+  if (site_id != 0) {
     inner_json.insert("site_id", site_id);
   }
   json["activity"] = inner_json;
