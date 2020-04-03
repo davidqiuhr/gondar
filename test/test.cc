@@ -16,8 +16,12 @@
 #include "test.h"
 
 #include <QAbstractButton>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 #include "src/device_picker.h"
+#include "src/log.h"
 #include "src/meepo.h"
 
 #if defined(Q_OS_WIN)
@@ -66,7 +70,20 @@ void Test::testDevicePicker() {
 
 void Test::testMeepoMetric() {
   Meepo meepo;
-  // QString metric_json =
+  meepo.setSiteId(3);
+  meepo.setToken(QString("kewltok"));
+  // then we test the json against expected for our meepo's state
+  QString expected_json_str = "{'activity':{'activity':'usb-maker-kewlmetric','description':'version=none,value=kewlvalue','site_id':3}}";
+  QJsonDocument expected_doc = QJsonDocument::fromJson(expected_json_str.toUtf8());
+  //QString expected_json = expected_doc
+
+  // then we test the url against expected for our meepo's state
+  QString metric_json = meepo.getMetricJson("kewlmetric", "kewlvalue");
+  //LOG_WARNING << metric_json;
+  //QFAIL(metric_json.toStdString().c_str());
+  //QCOMPARE(QString(expected_doc.object().toStdString()), metric_json.toStdString());
+  QString expected = expected_doc.toJson(QJsonDocument::Compact);
+  QCOMPARE(expected, metric_json);
 }
 
 }  // namespace gondar
