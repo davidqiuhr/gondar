@@ -74,10 +74,19 @@ void Test::testMeepoGetMetricJson() {
   Meepo meepo;
   meepo.setSiteId(3);
   meepo.setToken(QString("kewltok"));
+
+  QString version = getGondarVersion();
+  if (version.length() == 0) {
+    version = "none";
+  }
+
   // then we test the json against expected for our meepo's state
   QString expected_json_str =
-      "{\"activity\":{\"activity\":\"usb-maker-kewlmetric\",\"description\":"
-      "\"version=none,value=kewlvalue\",\"site_id\":3}}";
+      QString(
+          "{\"activity\":{\"activity\":\"usb-maker-kewlmetric\","
+          "\"description\":"
+          "\"version=%1,value=kewlvalue\",\"site_id\":3}}")
+          .arg(version);
   QJsonDocument expected_doc =
       QJsonDocument::fromJson(expected_json_str.toUtf8());
   // then we test the url against expected for our meepo's state
