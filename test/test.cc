@@ -73,7 +73,7 @@ void Test::testMeepoMetric() {
   meepo.setSiteId(3);
   meepo.setToken(QString("kewltok"));
   // then we test the json against expected for our meepo's state
-  QString expected_json_str = "{'activity':{'activity':'usb-maker-kewlmetric','description':'version=none,value=kewlvalue','site_id':3}}";
+  QString expected_json_str = "{\"activity\":{\"activity\":\"usb-maker-kewlmetric\",\"description\":\"version=none,value=kewlvalue\",\"site_id\":3}}";
   QJsonDocument expected_doc = QJsonDocument::fromJson(expected_json_str.toUtf8());
   //QString expected_json = expected_doc
 
