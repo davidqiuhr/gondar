@@ -22,11 +22,11 @@
 #include "chromeover_login_page.h"
 #include "device_select_page.h"
 #include "error_page.h"
+#include "feedback_dialog.h"
 #include "log.h"
 #include "metric.h"
 #include "site_select_page.h"
 #include "update_check.h"
-#include "feedback_dialog.h"
 
 class GondarWizard::Private {
  public:

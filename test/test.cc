@@ -19,6 +19,8 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QNetworkRequest>
+#include <QUrl>
 
 #include "src/device_picker.h"
 #include "src/log.h"
@@ -68,22 +70,25 @@ void Test::testDevicePicker() {
   QCOMPARE(*picker.selectedDevice(), DeviceGuy(3, "c", getValidDiskSize()));
 }
 
-void Test::testMeepoMetric() {
+void Test::testMeepoGetMetricJson() {
   Meepo meepo;
   meepo.setSiteId(3);
   meepo.setToken(QString("kewltok"));
   // then we test the json against expected for our meepo's state
-  QString expected_json_str = "{\"activity\":{\"activity\":\"usb-maker-kewlmetric\",\"description\":\"version=none,value=kewlvalue\",\"site_id\":3}}";
-  QJsonDocument expected_doc = QJsonDocument::fromJson(expected_json_str.toUtf8());
-  //QString expected_json = expected_doc
-
+  QString expected_json_str =
+      "{\"activity\":{\"activity\":\"usb-maker-kewlmetric\",\"description\":"
+      "\"version=none,value=kewlvalue\",\"site_id\":3}}";
+  QJsonDocument expected_doc =
+      QJsonDocument::fromJson(expected_json_str.toUtf8());
   // then we test the url against expected for our meepo's state
   QString metric_json = meepo.getMetricJson("kewlmetric", "kewlvalue");
-  //LOG_WARNING << metric_json;
-  //QFAIL(metric_json.toStdString().c_str());
-  //QCOMPARE(QString(expected_doc.object().toStdString()), metric_json.toStdString());
   QString expected = expected_doc.toJson(QJsonDocument::Compact);
   QCOMPARE(expected, metric_json);
+}
+
+void Test::testMeepoGetMetricRequest() {
+  auto expected_url = QUrl("https://api.grv.neverware.com/poof/activity");
+  QNetworkRequest request(expected_url);
 }
 
 }  // namespace gondar

@@ -26,7 +26,8 @@ class Test : public QObject {
 
  private slots:
   void testDevicePicker();
-  void testMeepoMetric();
+  void testMeepoGetMetricJson();
+  void testMeepoGetMetricRequest();
 };
 }  // namespace gondar
 
