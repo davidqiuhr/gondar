@@ -90,7 +90,8 @@ void Test::testMeepoGetMetricJson() {
 void Test::testMeepoGetMetricRequest() {
   Meepo meepo;
   meepo.setToken(QString("kewltok2"));
-  auto expected_url = QUrl("https://api.grv.neverware.com/poof/activity?token=kewltok2");
+  auto expected_url =
+      QUrl("https://api.grv.neverware.com/poof/activity?token=kewltok2");
   QNetworkRequest actual_request = meepo.getMetricRequest();
   QCOMPARE(expected_url, actual_request.url());
 }
