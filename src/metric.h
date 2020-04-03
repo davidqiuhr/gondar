@@ -19,6 +19,8 @@
 #include <QString>
 #include <string>
 
+#include "gondarwizard.h"
+
 namespace gondar {
 
 enum class Metric {
@@ -36,13 +38,16 @@ enum class Metric {
   Use,
 };
 
-void SetSiteId(int site_id);
-
-void SendMetric(Metric metric, const std::string& value = "");
+// send a metric just to gondar endpoint, not both gondar and meepo
+void SendMetricGondar(Metric metric,
+                      const std::string& value = "",
+                      int site_id = 0);
+// send a metric to gondar endpoint and meepo endpoint if we have a session
+void SendMetric(GondarWizard* wizard,
+                Metric metric,
+                const std::string& value = "");
 
 QString GetUuid();
-int GetSiteId();
-
 }  // namespace gondar
 
 #endif  // SRC_METRIC_H_

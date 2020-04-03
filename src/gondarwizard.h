@@ -25,6 +25,7 @@
 #include "device_picker.h"
 #include "download_progress_page.h"
 #include "image_select_page.h"
+#include "meepo.h"
 #include "newest_image_url.h"
 #include "usb_insert_page.h"
 #include "write_operation_page.h"
@@ -61,6 +62,8 @@ class GondarWizard : public QWizard {
   WriteOperationPage writeOperationPage;
   NewestImageUrl newestImageUrl;
 
+  gondar::Meepo meepo_;
+
   const std::vector<GondarSite>& sites() const;
   void setSites(const std::vector<GondarSite>& sites);
   bool isFormatOnly() const { return formatOnly; }
@@ -70,6 +73,8 @@ class GondarWizard : public QWizard {
   bool newestIsReady();
   void maybe_fetch();
   void handleNewestImageUrlError();
+  int getSiteId();
+  void setSiteId(int site_id_in);
 
   // this enum determines page order
   enum {

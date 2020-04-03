@@ -66,7 +66,7 @@ bool SiteSelectPage::validatePage() {
   } else {
     const auto site = selected->site();
     // metrics may now include site id
-    gondar::SetSiteId(site.getSiteId());
+    wizard()->setSiteId(site.getSiteId());
     QList<GondarImage> imageList = site.getImages();
     wizard()->imageSelectPage.addImages(imageList);
     return true;

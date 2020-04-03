@@ -24,6 +24,7 @@
 #include <QStringList>
 #include <QTimer>
 
+#include "gondarwizard.h"
 #include "log.h"
 #include "metric.h"
 
@@ -83,7 +84,7 @@ void DownloadManager::startNextDownload() {
   }
 
   QNetworkRequest request(url);
-  gondar::SendMetric(gondar::Metric::DownloadAttempt);
+  gondar::SendMetric(wizard, gondar::Metric::DownloadAttempt);
   currentDownload = manager.get(request);
   connect(currentDownload, &QNetworkReply::finished, this,
           &DownloadManager::downloadFinished);
@@ -103,11 +104,11 @@ void DownloadManager::downloadFinished() {
     // download failed
     LOG_ERROR << "download failed: " << currentDownload->errorString();
     error = true;
-    gondar::SendMetric(gondar::Metric::DownloadFailure);
+    gondar::SendMetric(wizard, gondar::Metric::DownloadFailure);
   } else {
     LOG_INFO << "download succeeded";
     ++downloadedCount;
-    gondar::SendMetric(gondar::Metric::DownloadSuccess);
+    gondar::SendMetric(wizard, gondar::Metric::DownloadSuccess);
   }
 
   currentDownload->deleteLater();
@@ -128,4 +129,8 @@ QFileInfo DownloadManager::outputFileInfo() const {
 
 bool DownloadManager::hasError() {
   return error;
+}
+
+void DownloadManager::setWizard(GondarWizard* wizard_in) {
+  wizard = wizard_in;
 }

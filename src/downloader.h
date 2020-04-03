@@ -60,6 +60,8 @@
 #include <QTime>
 #include <QUrl>
 
+class GondarWizard;
+
 class DownloadManager : public QObject {
   Q_OBJECT
 
@@ -73,6 +75,8 @@ class DownloadManager : public QObject {
 
   QFileInfo outputFileInfo() const;
   bool hasError();
+  // allow downloader to access wizard state
+  void setWizard(GondarWizard* wizard_in);
 
  signals:
   void started();
@@ -89,6 +93,7 @@ class DownloadManager : public QObject {
   QNetworkReply* currentDownload;
   QFile output;
   QTime downloadTime;
+  GondarWizard* wizard;
 
   bool error;
   int downloadedCount;

@@ -19,6 +19,7 @@
 #include <QJsonDocument>
 #include <stdexcept>
 
+#include "gondarwizard.h"
 #include "log.h"
 #include "metric.h"
 #include "util.h"
@@ -45,6 +46,13 @@ FeedbackDialog::FeedbackDialog() {
   setWindowTitle(tr("CloudReady USB Maker"));
   // submit button initially grayed out, there's no input yet
   submit_button_.setEnabled(false);
+  wizard = NULL;
+}
+
+// allow the feedback widget to access the wizard similar
+// to the way wizard pages do
+void FeedbackDialog::setWizard(GondarWizard* wizard_in) {
+  wizard = wizard_in;
 }
 
 static QNetworkRequest createFeedbackRequest() {
@@ -87,7 +95,10 @@ void FeedbackDialog::submit() {
   QJsonObject json;
   json["feedback"] = feedback_field_.toPlainText();
   json["uuid"] = gondar::GetUuid();
-  json["site"] = gondar::GetSiteId();
+  // wizard may not be well-initialized
+  if (wizard != NULL) {
+    json["site"] = wizard->getSiteId();
+  }
   if (gondar::isChromeover()) {
     json["product"] = "chromeover";
   } else {

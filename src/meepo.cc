@@ -26,10 +26,12 @@
 #include "config.h"
 #include "gondarsite.h"
 #include "log.h"
+#include "metric.h"
 #include "util.h"
 
 namespace {
 
+const char path_activity[] = "/activity";
 const char path_auth[] = "/auth";
 const char path_google_auth[] = "/google-auth";
 const char path_sites[] = "/sites";
@@ -159,6 +161,15 @@ void Meepo::startGoogle(QString id_token) {
   requestGoogleAuth(id_token);
 }
 
+bool Meepo::hasToken() {
+  return !api_token_.isEmpty();
+}
+
+// tests use this
+void Meepo::setToken(QString token_in) {
+  api_token_ = token_in;
+}
+
 QString Meepo::error() const {
   return error_;
 }
@@ -243,13 +254,13 @@ void Meepo::requestDownloads(const GondarSite& site) {
 }
 
 void Meepo::handleDownloadsReply(QNetworkReply* reply) {
-  const auto site_id = siteIdFromUrl(reply->url());
-  if (site_id == -1) {
+  const auto site_id_from_reply = siteIdFromUrl(reply->url());
+  if (site_id_from_reply == -1) {
     fail("missing site ID");
     return;
   }
 
-  GondarSite* site = siteFromSiteId(site_id);
+  GondarSite* site = siteFromSiteId(site_id_from_reply);
   if (!site) {
     fail("site not found");
     return;
@@ -281,13 +292,72 @@ void Meepo::handleDownloadsReply(QNetworkReply* reply) {
   }
 }
 
+QString Meepo::getMetricJson(std::string metric, std::string value) {
+  QJsonObject json;
+  QJsonObject inner_json;
+  QString activity_string =
+      QString("usb-maker-%1").arg(QString::fromStdString(metric));
+  inner_json.insert("activity", activity_string);
+  // meepo already knows the site.
+  // description should become a combination of gondar version and value if it
+  // exists
+  QString none_string = QString("none");
+  QString version_string = gondar::getGondarVersion();
+  if (version_string.length() == 0) {
+    version_string = none_string;
+  }
+  QString value_string = QString::fromStdString(value);
+  if (value_string.length() == 0) {
+    value_string = none_string;
+  }
+  QString description_string =
+      QString("version=%1,value=%2").arg(version_string).arg(value_string);
+  inner_json.insert("description", description_string);
+  // removed explicit isChromeover() check here for tests
+  // because we already only send on non-zero site id, it was somewhat
+  // redundant to also check for chromeover.  also currently beerover
+  // has no meepo interaction so meaning of this case was not clear
+  if (site_id != 0) {
+    inner_json.insert("site_id", site_id);
+  }
+  json["activity"] = inner_json;
+  QJsonDocument doc(json);
+  QString strJson(doc.toJson(QJsonDocument::Compact));
+  return doc.toJson(QJsonDocument::Compact);
+}
+
+QNetworkRequest Meepo::getMetricRequest() {
+  auto url = createUrl(path_activity);
+  QUrlQuery query;
+  query.addQueryItem("token", api_token_);
+  url.setQuery(query);
+  QNetworkRequest request(url);
+  request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+  return request;
+}
+
+void Meepo::sendMetric(std::string metric, std::string value) {
+  QNetworkRequest request = getMetricRequest();
+  QString json = getMetricJson(metric, value);
+  network_manager_.post(request, QByteArray(json.toUtf8()));
+}
+
+void Meepo::handleMetricsReply(QNetworkReply* reply) {
+  if (reply->error() == QNetworkReply::NoError) {
+    LOG_INFO << "Successfully sent meepo metric";
+  } else {
+    LOG_WARNING << "Received error response sending meepo metric";
+  }
+}
+
 void Meepo::dispatchReply(QNetworkReply* reply) {
   const auto error = reply->error();
   const auto url = reply->url();
 
   if (error != QNetworkReply::NoError) {
     // TODO(nicholasbishop): make this more readable
-    LOG_ERROR << "network error: " << url.toString() << ", error " << error;
+    LOG_ERROR << "network error: " << url.toString() << std::endl
+              << ", error " << error;
     // TODO(nicholasbishop): move the error handling into each of the
     // three handlers below so that errors can be more specific
     fail("network error");
@@ -300,8 +370,9 @@ void Meepo::dispatchReply(QNetworkReply* reply) {
     handleSitesReply(reply);
   } else if (url.path().endsWith("/downloads")) {
     handleDownloadsReply(reply);
+  } else if (url.path().endsWith("/activity")) {
+    handleMetricsReply(reply);
   }
-
   reply->deleteLater();
 }
 
@@ -311,13 +382,21 @@ void Meepo::fail(const QString& error) {
   emit failed(google_mode_);
 }
 
-GondarSite* Meepo::siteFromSiteId(const int site_id) {
+GondarSite* Meepo::siteFromSiteId(const int site_id_in) {
   for (auto& site : sites_) {
-    if (site.getSiteId() == site_id) {
+    if (site.getSiteId() == site_id_in) {
       return &site;
     }
   }
   return nullptr;
+}
+
+int Meepo::getSiteId() {
+  return site_id;
+}
+
+void Meepo::setSiteId(int site_id_in) {
+  site_id = site_id_in;
 }
 
 }  // namespace gondar
