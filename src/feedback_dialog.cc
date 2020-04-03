@@ -25,8 +25,7 @@
 
 namespace gondar {
 
-FeedbackDialog::FeedbackDialog(GondarWizard* wizard_in) {
-  wizard = wizard_in;
+FeedbackDialog::FeedbackDialog() {
   feedback_label_.setText("Tell us what you think");
   feedback_label_.setAlignment(Qt::AlignCenter);
 
@@ -46,6 +45,10 @@ FeedbackDialog::FeedbackDialog(GondarWizard* wizard_in) {
   setWindowTitle(tr("CloudReady USB Maker"));
   // submit button initially grayed out, there's no input yet
   submit_button_.setEnabled(false);
+}
+
+void FeedbackDialog::setWizard(GondarWizard* wizard_in) {
+  wizard = wizard_in;
 }
 
 static QNetworkRequest createFeedbackRequest() {
@@ -88,9 +91,7 @@ void FeedbackDialog::submit() {
   QJsonObject json;
   json["feedback"] = feedback_field_.toPlainText();
   json["uuid"] = gondar::GetUuid();
-  // FIXME(ken): will have to set this somehow
-  // json["site"] = gondar::GetSiteId();
-  //json["site"] = gondar::GetSiteId();
+  json["site"] = wizard->getSiteId();
   if (gondar::isChromeover()) {
     json["product"] = "chromeover";
   } else {

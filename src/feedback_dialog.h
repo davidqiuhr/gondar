@@ -33,7 +33,8 @@ class FeedbackDialog : public QDialog {
   Q_OBJECT
 
  public:
-  FeedbackDialog(GondarWizard & wizard_in);
+  FeedbackDialog();
+  void setWizard(GondarWizard* wizard_in);
   void submit();
   void maybeEnableSubmit();
 

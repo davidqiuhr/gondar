@@ -26,6 +26,7 @@
 #include "metric.h"
 #include "site_select_page.h"
 #include "update_check.h"
+#include "feedback_dialog.h"
 
 class GondarWizard::Private {
  public:
@@ -34,6 +35,7 @@ class GondarWizard::Private {
 
   gondar::UpdateCheck updateCheck;
   gondar::AboutDialog aboutDialog;
+  gondar::FeedbackDialog feedbackDialog;
 
   AdminCheckPage adminCheckPage;
   DeviceSelectPage deviceSelectPage;
@@ -105,6 +107,8 @@ void GondarWizard::init() {
 
   // resize the window (width, height)
   resize(720, 480);
+
+  p_->feedbackDialog.setWizard(this);
 }
 
 GondarWizard::~GondarWizard() {}
@@ -143,7 +147,7 @@ void GondarWizard::handleCustomButton(int buttonIndex) {
   } else if (buttonIndex == QWizard::CustomButton2) {
     p_->aboutDialog.show();
   } else if (buttonIndex == QWizard::CustomButton3) {
-    feedbackDialog.show();
+    p_->feedbackDialog.show();
   } else {
     LOG_ERROR << "Unknown custom button pressed";
   }

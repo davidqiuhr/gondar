@@ -249,13 +249,13 @@ void Meepo::requestDownloads(const GondarSite& site) {
 }
 
 void Meepo::handleDownloadsReply(QNetworkReply* reply) {
-  const auto site_id = siteIdFromUrl(reply->url());
-  if (site_id == -1) {
+  const auto site_id_from_reply = siteIdFromUrl(reply->url());
+  if (site_id_from_reply == -1) {
     fail("missing site ID");
     return;
   }
 
-  GondarSite* site = siteFromSiteId(site_id);
+  GondarSite* site = siteFromSiteId(site_id_from_reply);
   if (!site) {
     fail("site not found");
     return;
@@ -376,9 +376,9 @@ void Meepo::fail(const QString& error) {
   emit failed(google_mode_);
 }
 
-GondarSite* Meepo::siteFromSiteId(const int site_id) {
+GondarSite* Meepo::siteFromSiteId(const int site_id_in) {
   for (auto& site : sites_) {
-    if (site.getSiteId() == site_id) {
+    if (site.getSiteId() == site_id_in) {
       return &site;
     }
   }
