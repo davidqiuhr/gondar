@@ -94,7 +94,7 @@ def upload_file(prod_client, local_path, candidate, beerover):
 
 def parse_args():
   parser = argparse.ArgumentParser()
-  parser.add_argument('candidate', help='version number of release candidate (for example, 20)')
+  parser.add_argument('candidate', help='version number of release candidate (for example, release-20)')
   return parser.parse_args()
 
 def release(dev_client, prod_client, candidate, beerover):
