@@ -56,7 +56,6 @@ void FeedbackDialog::setWizard(GondarWizard* wizard_in) {
 }
 
 static QNetworkRequest createFeedbackRequest() {
-  // FIXME(ken): send to the real endpoint once it exists
   auto url = QUrl("https://feedback.neverware.com/gondar");
   QNetworkRequest request(url);
   request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
