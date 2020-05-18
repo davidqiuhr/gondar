@@ -5,11 +5,12 @@ phases:
     commands:
       - echo Logging in
       - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+      - export METRICS_API=$(aws ssm get-parameters --region us-east-1 --names gondar.codebuild.metricsapi --with-decryption --query Parameters[0].Value)
   build:
     commands:
       - echo Build started on `date`
       - git submodule update --init
-      - make jenkins
+      - make jenkins PACKAGE_FLAGS="--apikey $METRICS_API"
   post_build:
     commands:
       - echo Build completed on `date`
