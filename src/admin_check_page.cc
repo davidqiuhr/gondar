@@ -67,7 +67,7 @@ void AdminCheckPage::showIsAdmin() {
       "This utility will create a USB device that can be used to install "
       "CloudReady on any computer.");
   label.setText(
-      "<p>You will need:</p><ul><li>8GB or 16GB USB stick</li><li>20 minutes "
+      "<p>You will need:</p><ul><li>8GB or larger USB stick</li><li>20 minutes "
       "for USB installer creation</li></ul></p>");
   label.setWordWrap(true);
   formatLink.setText(
