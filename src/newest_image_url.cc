@@ -22,7 +22,7 @@
 #include "log.h"
 
 static QUrl getLatestUrl(QNetworkReply* reply) {
-  const char base[] = "https://ddnynf025unax.cloudfront.net/";
+  const char base[] = "https://cloudready-free-downloads.neverware.com/";
   const auto path = QString::fromUtf8(reply->readAll());
   return QUrl(base + path.trimmed());
 }
