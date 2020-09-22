@@ -82,7 +82,7 @@ QString getDomain() {
 }
 
 QString getGondarVersion() {
-  return QString("");
+  return QString("2.5");
 }
 
 QJsonObject jsonFromReply(QNetworkReply* reply) {
