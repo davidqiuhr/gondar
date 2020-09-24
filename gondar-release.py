@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 """
 This program will propagate the desired release candidate to the prod stable
 release folder.  This is predicated on having a ~/.aws/config file set up in
